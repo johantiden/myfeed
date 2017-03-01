@@ -1,0 +1,24 @@
+
+
+
+
+.item-box {
+    margin-left: 25vw;
+    margin-right: 25vw;
+    width: 50vw;
+
+    border-bottom: 1px solid #e1e8ed;
+    cursor: pointer;
+}
+
+.item-box:hover {
+    background-color: #f5f8fa;
+}
+
+.tweet {
+    background-color: red;
+}
+
+.reddit {
+    background-color: orange;
+}

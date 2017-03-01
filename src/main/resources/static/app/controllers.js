@@ -1,7 +1,6 @@
 
-app.controller('myCtrl', function($scope, bubbservice) {
-    //alert("hej myCtrl");
-    bubbservice.loadData(function(json) {
-        $scope.bullar = json;
+app.controller('myCtrl', function($scope, unreadservice) {
+    unreadservice.loadData(function(json) {
+        $scope.items = json;
     });
 });
