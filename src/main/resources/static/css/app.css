@@ -1,24 +1,101 @@
 
+body {
+    background-color: #EEEEEE;
+}
+a {
+    color: black;
+    text-decoration: none;
+}
 
+a:visited {
+    /*color: black;*/
+}
 
+a:hover {
+    text-decoration: underline;
+}
 
 .item-box {
+    padding: 0.5vw;
+    background-color: white;
     margin-left: 25vw;
     margin-right: 25vw;
     width: 50vw;
 
     border-bottom: 1px solid #e1e8ed;
     cursor: pointer;
+    word-wrap: break-word;
 }
 
 .item-box:hover {
     background-color: #f5f8fa;
 }
 
-.tweet {
-    background-color: red;
+.image-box {
+    width: 10vw;
+    display: inline-block;
+    /*border: 1px solid #DDDDDD;*/
+    background-color: white;
+    margin: 0;
+}
+
+.image-box > img {
+    width: 100%;
+}
+
+.content-box {
+    width: 39vw;
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+}
+
+.top-row {
+    /*background-color: BLUE;*/
+    /*width: 39vw;*/
+    margin: 0;
+    font-size: small;
+}
+
+.top-row > div {
+    display: inline-block;
+}
+
+.text {
+    display: inline-block;
+}
+.time-since {
+    float: right;
+    color: #666666;
+    font-size: smaller;
+}
+
+.comments-button {
+    width: 4vw;
+    height: 1.5vw;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+.twitter > * > * > .author {
+    font-weight: bold;
+}
+
+.reddit > * > * > .author, .reddit > * > * > .author > a {
+    color: #666666;
+    margin-left: 0.2vw;
+}
+
+.reddit > * > * > .tag {
+    color: #000000;
+    float: left;
+}
+
+.reddit > * > * > .title {
+    display: block;
 }
 
 .reddit {
-    background-color: orange;
+    /*background-color: orange;*/
 }
