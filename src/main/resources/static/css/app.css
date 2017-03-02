@@ -1,6 +1,7 @@
 
 body {
     background-color: #EEEEEE;
+    margin: 0;
 }
 a {
     color: black;
@@ -13,6 +14,17 @@ a:visited {
 
 a:hover {
     text-decoration: underline;
+}
+
+.navbar {
+    height: 30px;
+    /*background-color: red;*/
+    background-color: white;
+    border-bottom: 1px solid #EEEEFF;
+    alignment: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .item-box {

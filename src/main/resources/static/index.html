@@ -9,7 +9,9 @@
 </head>
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
-    <br />
+    <div class="navbar">
+        <!-- TODO: Add search -->
+    </div>
     <div class="item-box {{item.cssClass}}" ng-repeat="item in items">
         <div onclick="location.href='{{item.pageUrl}}';" >
 
