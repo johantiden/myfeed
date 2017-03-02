@@ -41,6 +41,7 @@ a:hover {
 
 .image-box > img {
     width: 100%;
+    max-height: 10vw;
 }
 
 .content-box {

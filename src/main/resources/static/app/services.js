@@ -1,13 +1,25 @@
 app.service('unreadservice', function($http) {
     this.loadData = function (callback) {
-        //
-        //$http.get("/rest/index")
-        //    .then(function(response) {
-        //        callback(response.data);
-        //    });
 
-        callback(
-            [
+
+
+        $http.get("/rest/index")
+            .then(function(response) {
+                callback(response.data);
+            });
+
+
+
+        //callback(getFakeData());
+
+
+
+
+
+
+
+        function getFakeData() {
+            return [
                 {
                     author:'Tyska Ambassaden',
                     text:'I närvaro av familj och vänner mottog Hédi Fried ikväll Förbundsrepubliken Tysklands Bundesverdienstkreuz I. Klasse av ambassadör Heimsoeth.',
@@ -43,7 +55,7 @@ app.service('unreadservice', function($http) {
                     imageUrl:'https://b.thumbs.redditmedia.com/ZSY4Uin_wRqEwjw7kqTsEkurdnM0UP5zplpkIdSyl6I.jpg',
                     timeSince:'2h'
                 }
-            ]
-        )
+            ];
+        }
     }
 });
