@@ -35,7 +35,7 @@ a:hover {
     width: 50vw;
 
     border-bottom: 1px solid #e1e8ed;
-    cursor: pointer;
+    /*cursor: pointer;*/
     word-wrap: break-word;
 }
 
@@ -86,7 +86,7 @@ a:hover {
 .comments-button {
     width: 4vw;
     height: 1.5vw;
-    cursor: pointer;
+    /*cursor: pointer;*/
     background-color: transparent;
     border: none;
 }
