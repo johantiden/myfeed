@@ -8,16 +8,40 @@ import static java.util.Objects.requireNonNull;
 
 public class OutputBean {
 
+    public final String feedName;
+    public final String feedUrl;
     public final String title;
+    public final String author;
+    public final String cssClass;
     public final String pageUrl;
     public final String imageUrl;
     public final Instant publishedDate;
 
-    public OutputBean(String title, String pageUrl, String imageUrl, Instant publishedDate) {
+    public OutputBean(String feedName, String feedUrl, String title, String author, String cssClass, String pageUrl, String imageUrl, Instant publishedDate) {
+        this.feedName = feedName;
+        this.feedUrl = feedUrl;
         this.title = title;
+        this.author = author;
+        this.cssClass = cssClass;
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
+    }
+
+    public String getFeedName() {
+        return feedName;
+    }
+
+    public String getFeedUrl() {
+        return feedUrl;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getCssClass() {
+        return cssClass;
     }
 
     public String getTitle() {
@@ -70,9 +94,14 @@ public class OutputBean {
     @Override
     public String toString() {
         return "OutputBean{" +
-                "title='" + title + '\'' +
+                "feedName='" + feedName + '\'' +
+                ", feedUrl='" + feedUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", publishedDate=" + publishedDate +
                 '}';
     }
 }

@@ -3,19 +3,14 @@ app.service('unreadservice', function($http) {
 
 
 
-        //$http.get("/rest/index")
-        //    .then(function(response) {
-        //        callback(response.data);
-        //    });
+        $http.get("/rest/index")
+            .then(function(response) {
+                callback(response.data);
+            });
 
 
 
-        callback(getFakeData());
-
-
-
-
-
+        //callback(getFakeData());
 
 
         function getFakeData() {

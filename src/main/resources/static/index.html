@@ -11,26 +11,25 @@
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
         <!-- TODO: Add search -->
+        MF
     </div>
     <div class="item-box {{item.cssClass}}" ng-repeat="item in items">
-        <div onclick="location.href='{{item.pageUrl}}';" >
-
+        <div>
             <div class="image-box">
                 <img src="{{item.imageUrl}}" />
             </div>
             <div class="content-box">
                 <div class="top-row">
+                    <div class="feedName"><a href="{{item.feedUrl}}">{{item.feedName}}</a></div>
                     <div class="author"><a href="{{item.authorUrl}}">{{item.author}}</a></div>
-                    <div class="tag"><a href="{{item.tagUrl}}" >{{item.tag}}</a></div>
-                    <div class="title"><a href="{{item.pageUrl}}">{{item.title}}</a></div>
                     <div class="time-since">{{item.publishedDateShort}}</div>
                 </div>
-
+                <div class="title"><a href="{{item.pageUrl}}">{{item.title}}</a></div>
                 <div class="text"><a href="{{item.pageUrl}}">{{item.text}}</a></div>
 
-                <div class="bottom-row">
-                    <button class="comments-button"></button>
-                </div>
+                <!--<div class="bottom-row">-->
+                    <!--<button class="comments-button"></button>-->
+                <!--</div>-->
 
             </div>
 

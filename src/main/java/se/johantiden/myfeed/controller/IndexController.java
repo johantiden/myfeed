@@ -34,8 +34,8 @@ public class IndexController {
 
     private ArrayList<OutputBean> getFakeOutput() {
         return Lists.newArrayList(
-                new OutputBean("hej1", "http://www.google.com", "http://www.google.com/thumb.png", Instant.now()),
-                new OutputBean("hej2", "http://www.google.com", "http://www.google.com/thumb.png", Instant.now().minusSeconds(2))
+                new OutputBean("@Kalle", null, "hej1", "Kalle", ".twitter", "http://www.google.com", "http://www.google.com/thumb.png", Instant.now()),
+                new OutputBean("/r/poopie", null, "hej2", "Knutsson", ".reddit", "http://www.google.com", "http://www.google.com/thumb.png", Instant.now().minusSeconds(2))
         );
     }
 
@@ -44,9 +44,16 @@ public class IndexController {
         List<OutputBean> all = new ArrayList<>();
 
         all.addAll(new TheLocalReader().readAll());
-        all.addAll(new RssReader("http://computersweden.idg.se/rss/systemutveckling").readAll());
+        all.addAll(new RssReader(
+                "http://computersweden.idg.se/rss/systemutveckling",
+                ".computersweden",
+                "ComputerSweden:Systemutveckling",
+                "http://computersweden.idg.se/systemutveckling").readAll());
 //        all.addAll(new RssReader("http://computersweden.idg.se/rss/forskning").readAll());
-        all.addAll(new RssReader("http://computersweden.idg.se/rss/prylar").readAll());
+        all.addAll(new RssReader(
+                "http://computersweden.idg.se/rss/prylar",
+                ".computersweden", "ComputerSweden:Prylar",
+                "http://computersweden.idg.se/prylar").readAll());
 
         Collections.sort(all, Comparator.comparing(OutputBean::getPublishedDate).reversed());
         return all;

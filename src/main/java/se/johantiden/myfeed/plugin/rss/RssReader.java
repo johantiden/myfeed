@@ -22,9 +22,15 @@ public class RssReader {
 
 
     private final String rssUrl;
+    private final String cssClass;
+    private final String feedName;
+    private final String feedWebUrl;
 
-    public RssReader(String rssUrl) {
+    public RssReader(String rssUrl, String cssClass, String feedName, String feedWebUrl) {
+        this.feedName = feedName;
+        this.feedWebUrl = feedWebUrl;
         this.rssUrl = requireNonNull(rssUrl);
+        this.cssClass = cssClass;
     }
 
     public List<OutputBean> readAll() {
@@ -37,9 +43,10 @@ public class RssReader {
             String title = e.getTitle();
             String link = e.getLink();
             String imageUrl = getImageUrl(e);
+            String author = e.getAuthor();
             Instant publishedDate = e.getPublishedDate().toInstant();
 
-            return new OutputBean(title, link, imageUrl, publishedDate);
+            return new OutputBean(feedName, feedWebUrl, title, author, cssClass, link, imageUrl, publishedDate);
         });
     }
 
