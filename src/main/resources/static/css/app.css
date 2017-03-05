@@ -30,40 +30,52 @@ a:hover {
 .item-box {
     padding: 0.5vw;
     background-color: white;
-    margin-left: 25vw;
-    margin-right: 25vw;
-    width: 50vw;
+    margin-left: 30vw;
+    margin-right: 30vw;
+    width: 40vw;
+    min-width: 40vw;
+    max-width: 90vw;
 
-    border-bottom: 1px solid #e1e8ed;
-    /*cursor: pointer;*/
+    /*border-bottom: 1px solid #e1e8ed;*/
+    margin-bottom: 1px;
+    cursor: pointer;
     word-wrap: break-word;
+    box-shadow: 6px 6px 20px #DDDDDD;
 }
 
 .item-box:hover {
     background-color: #f5f8fa;
 }
 
-.image-box {
+
+.image-box.large {
+    width: 100%;
+}
+.image-box.small {
     width: 10vw;
+}
+.image-box {
     display: inline-block;
     /*border: 1px solid #DDDDDD;*/
     background-color: white;
     margin: 0;
 }
 
+.image-box.small > img {
+    max-height: 10vw;
+}
 .image-box > img {
     width: 100%;
-    max-height: 10vw;
 }
 
 .content-box {
-    width: 39vw;
-    display: inline-block;
+    /*width: 39vw;*/
+    display: block;
     vertical-align: top;
     margin: 0;
 }
 
-.top-row {
+.top-row > *, .top-row > * > * {
     /*background-color: BLUE;*/
     /*width: 39vw;*/
     margin: 0;
@@ -80,13 +92,10 @@ a:hover {
 }
 
 .time-since:before {
-    content: '-';
+    content: ' - ';
 }
 .time-since {
-    font-style: italic;
-    color: #666666;
-    font-size: smaller;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
 }
 
 .comments-button {
@@ -100,6 +109,7 @@ a:hover {
 .twitter > * > * > .author {
     font-weight: bold;
 }
+
 
 .reddit > * > * > .author, .reddit > * > * > .author > a {
     color: #666666;

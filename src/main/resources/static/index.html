@@ -9,32 +9,29 @@
 </head>
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
-    <div class="navbar">
-        <!-- TODO: Add search -->
-        MF
-    </div>
-    <div class="item-box {{item.cssClass}}" ng-repeat="item in items">
-        <div>
-            <div class="image-box">
+    <!--<div class="navbar">-->
+        <!--&lt;!&ndash; TODO: Add search &ndash;&gt;-->
+    <!--</div>-->
+    <div class="item-box {{item.cssClass}}" data-item="{{item}}" ng-repeat="item in items">
+
+        <div class="content-box">
+            <div class="top-row">
+                <div class="feedName" ng-if="item.feedName"><a href="{{item.feedUrl}}">{{item.feedName}}</a></div>
+                <div class="author" ng-if="item.author"><a href="{{item.authorUrl}}">{{item.author}}</a></div>
+                <div class="time-since">{{item.publishedDateShort}}</div>
+            </div>
+            <div class="title" ng-if="item.title"><a href="{{item.pageUrl}}">{{item.title}}</a></div>
+            <div class="text" ng-if="item.text"><a href="{{item.pageUrl}}">{{item.text}}</a></div>
+
+            <div class="image-box large">
                 <img src="{{item.imageUrl}}" ng-if="item.imageUrl" />
             </div>
-            <div class="content-box">
-                <div class="top-row">
-                    <div class="feedName"><a href="{{item.feedUrl}}">{{item.feedName}}</a></div>
-                    <div class="author"><a href="{{item.authorUrl}}">{{item.author}}</a></div>
-                    <div class="time-since">{{item.publishedDateShort}}</div>
-                </div>
-                <div class="title"><a href="{{item.pageUrl}}">{{item.title}}</a></div>
-                <div class="text"><a href="{{item.pageUrl}}">{{item.text}}</a></div>
 
-                <!--<div class="bottom-row">-->
-                    <!--<button class="comments-button"></button>-->
-                <!--</div>-->
-
-            </div>
+            <!--<div class="bottom-row">-->
+                <!--<button class="comments-button"></button>-->
+            <!--</div>-->
 
         </div>
-
     </div>
 </div>
 </body>
