@@ -68,6 +68,7 @@ a:hover {
     /*width: 39vw;*/
     margin: 0;
     font-size: small;
+    color: #666666;
 }
 
 .top-row > div {
@@ -76,6 +77,10 @@ a:hover {
 
 .text {
     display: inline-block;
+}
+
+.time-since:before {
+    content: '-';
 }
 .time-since {
     font-style: italic;

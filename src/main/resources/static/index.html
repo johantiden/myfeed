@@ -16,7 +16,7 @@
     <div class="item-box {{item.cssClass}}" ng-repeat="item in items">
         <div>
             <div class="image-box">
-                <img src="{{item.imageUrl}}" />
+                <img src="{{item.imageUrl}}" ng-if="item.imageUrl" />
             </div>
             <div class="content-box">
                 <div class="top-row">
