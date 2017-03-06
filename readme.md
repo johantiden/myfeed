@@ -16,8 +16,9 @@ This repo will mostly be a base for prototyping. In the future, site scrapers sh
 ---
 Get started:
 
-sudo npm install -g bower
+mvn clean install exec:java
 
-bower install
+This will start a web app running locally at port 8080.
+http://localhost:8080
 
-mvn clean install
+
