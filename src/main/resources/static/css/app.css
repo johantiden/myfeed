@@ -31,11 +31,9 @@ a:hover {
 .item-box {
     padding: 0.5vw;
     background-color: white;
-    margin-left: 30vw;
-    margin-right: 30vw;
-    width: 40vw;
-    min-width: 40vw;
-    max-width: 90vw;
+    /*margin-left: 30vw;*/
+    /*margin-right: 30vw;*/
+    width: 100%;
 
     /*border-bottom: 1px solid #e1e8ed;*/
     margin-bottom: 3px;
@@ -48,7 +46,8 @@ a:hover {
 }
 
 .image-box.large {
-    width: 100%;
+    max-height: 300px;
+    max-width: 300px;
     margin-bottom: 2vh;
 }
 .image-box.small {
