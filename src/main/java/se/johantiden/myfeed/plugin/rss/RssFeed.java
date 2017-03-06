@@ -7,7 +7,8 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import se.johantiden.myfeed.output.OutputBean;
+import se.johantiden.myfeed.plugin.Entry;
+import se.johantiden.myfeed.plugin.Feed;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -18,22 +19,22 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-public class RssReader {
-
+public class RssFeed implements Feed {
 
     private final String rssUrl;
     private final String cssClass;
     private final String feedName;
     private final String feedWebUrl;
 
-    public RssReader(String rssUrl, String cssClass, String feedName, String feedWebUrl) {
+    public RssFeed(String rssUrl, String cssClass, String feedName, String feedWebUrl) {
         this.feedName = feedName;
         this.feedWebUrl = feedWebUrl;
         this.rssUrl = requireNonNull(rssUrl);
         this.cssClass = cssClass;
     }
 
-    public List<OutputBean> readAll() {
+    @Override
+    public List<Entry> readAllAvailable() {
 
         SyndFeed feed = getFeed();
 
@@ -46,11 +47,11 @@ public class RssReader {
             String author = e.getAuthor();
             Instant publishedDate = e.getPublishedDate().toInstant();
 
-            return new OutputBean(feedName, feedWebUrl, title, author, cssClass, link, imageUrl, publishedDate);
+            return new Entry(feedName, feedWebUrl, title, author, cssClass, link, imageUrl, publishedDate);
         });
     }
 
-    private String getImageUrl(SyndEntry e) {
+    private static String getImageUrl(SyndEntry e) {
         List<SyndEnclosure> enclosures = e.getEnclosures();
 
         if (enclosures.isEmpty()) {
@@ -62,21 +63,23 @@ public class RssReader {
 
     private SyndFeed getFeed() {
         SyndFeedInput input = new SyndFeedInput();
-        XmlReader reader = getXmlReader();
-        return getFeed(input, reader);
+        return getFeed(input);
     }
 
-    private SyndFeed getFeed(SyndFeedInput input, XmlReader reader) {
-        try {
+    private SyndFeed getFeed(SyndFeedInput input) {
+
+
+        try(XmlReader reader = getXmlReader()) {
             return input.build(reader);
-        } catch (FeedException e) {
+        } catch (FeedException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private XmlReader getXmlReader() {
         try {
-            return new XmlReader(getUrl());
+            URL url = getUrl();
+            return new XmlReader(url);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

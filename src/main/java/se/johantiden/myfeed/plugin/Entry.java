@@ -1,12 +1,10 @@
-package se.johantiden.myfeed.output;
+package se.johantiden.myfeed.plugin;
 
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import static java.util.Objects.requireNonNull;
-
-public class OutputBean {
+public class Entry {
 
     public final String feedName;
     public final String feedUrl;
@@ -17,7 +15,7 @@ public class OutputBean {
     public final String imageUrl;
     public final Instant publishedDate;
 
-    public OutputBean(String feedName, String feedUrl, String title, String author, String cssClass, String pageUrl, String imageUrl, Instant publishedDate) {
+    public Entry(String feedName, String feedUrl, String title, String author, String cssClass, String pageUrl, String imageUrl, Instant publishedDate) {
         this.feedName = feedName;
         this.feedUrl = feedUrl;
         this.title = title;

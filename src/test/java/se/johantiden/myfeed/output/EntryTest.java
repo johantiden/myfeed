@@ -3,15 +3,12 @@ package se.johantiden.myfeed.output;
 import org.junit.Test;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static se.johantiden.myfeed.output.OutputBean.dateToShortString;
+import static se.johantiden.myfeed.plugin.Entry.dateToShortString;
 
-public class OutputBeanTest {
+public class EntryTest {
 
 
     @Test

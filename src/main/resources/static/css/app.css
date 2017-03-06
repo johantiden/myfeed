@@ -2,6 +2,7 @@
 body {
     background-color: #EEEEEE;
     margin: 0;
+    font-size: 2em;
 }
 a {
     color: black;
@@ -37,19 +38,18 @@ a:hover {
     max-width: 90vw;
 
     /*border-bottom: 1px solid #e1e8ed;*/
-    margin-bottom: 1px;
+    margin-bottom: 3px;
     cursor: pointer;
     word-wrap: break-word;
-    box-shadow: 6px 6px 20px #DDDDDD;
+    box-shadow: 6px 6px 20px #EEEEEE;
 }
-
 .item-box:hover {
-    background-color: #f5f8fa;
+    background-color: #f0f0fa;
 }
-
 
 .image-box.large {
     width: 100%;
+    margin-bottom: 2vh;
 }
 .image-box.small {
     width: 10vw;

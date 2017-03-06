@@ -9,10 +9,10 @@
 </head>
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
-    <!--<div class="navbar">-->
-        <!--&lt;!&ndash; TODO: Add search &ndash;&gt;-->
-    <!--</div>-->
-    <div class="item-box {{item.cssClass}}" data-item="{{item}}" ng-repeat="item in items">
+    <div class="navbar">
+        <label ><input ng-model="searchText"></label>
+    </div>
+    <div class="item-box {{item.cssClass}}" data-item="{{item}}" ng-repeat="item in items | filter:searchText | limitTo:100">
 
         <div class="content-box">
             <div class="top-row">
@@ -20,12 +20,13 @@
                 <div class="author" ng-if="item.author"><a href="{{item.authorUrl}}">{{item.author}}</a></div>
                 <div class="time-since">{{item.publishedDateShort}}</div>
             </div>
-            <div class="title" ng-if="item.title"><a href="{{item.pageUrl}}">{{item.title}}</a></div>
-            <div class="text" ng-if="item.text"><a href="{{item.pageUrl}}">{{item.text}}</a></div>
-
             <div class="image-box large">
                 <img src="{{item.imageUrl}}" ng-if="item.imageUrl" />
             </div>
+            <div class="title" ng-if="item.title"><a href="{{item.pageUrl}}">{{item.title}}</a></div>
+            <div class="text" ng-if="item.text"><a href="{{item.pageUrl}}">{{item.text}}</a></div>
+
+
 
             <!--<div class="bottom-row">-->
                 <!--<button class="comments-button"></button>-->

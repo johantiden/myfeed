@@ -1,30 +1,29 @@
 package se.johantiden.myfeed.controller;
 
-import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.johantiden.myfeed.output.OutputBean;
-import se.johantiden.myfeed.plugin.reddit.TheLocalReader;
-import se.johantiden.myfeed.plugin.rss.RssReader;
+import se.johantiden.myfeed.plugin.Entry;
+import se.johantiden.myfeed.plugin.Feed;
+import se.johantiden.myfeed.user.User;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static se.johantiden.myfeed.util.JCollections.flatMap;
 
 @RestController
 @EnableAutoConfiguration
 public class IndexController {
 
     @RequestMapping("/rest/index")
-    List<OutputBean> index() {
+    List<Entry> index() {
 
-        List<OutputBean> outputs = getRealOutput();
+        List<Entry> outputs = getRealOutput();
 
 
-        for (OutputBean entry : outputs) {
+        for (Entry entry : outputs) {
             System.out.println(entry);
         }
 
@@ -32,31 +31,18 @@ public class IndexController {
         return outputs;
     }
 
-    private ArrayList<OutputBean> getFakeOutput() {
-        return Lists.newArrayList(
-                new OutputBean("@Kalle", null, "hej1", "Kalle", ".twitter", "http://www.google.com", "http://www.google.com/thumb.png", Instant.now()),
-                new OutputBean("/r/poopie", null, "hej2", "Knutsson", ".reddit", "http://www.google.com", "http://www.google.com/thumb.png", Instant.now().minusSeconds(2))
-        );
-    }
+    private List<Entry> getRealOutput() {
 
-    private List<OutputBean> getRealOutput() {
+        User johan = User.johan();
 
-        List<OutputBean> all = new ArrayList<>();
+        List<Feed> feeds = johan.getFeeds();
+        List<Entry> entries = flatMap(feeds, Feed::readAllAvailable);
 
-        all.addAll(new TheLocalReader().readAll());
-        all.addAll(new RssReader(
-                "http://computersweden.idg.se/rss/systemutveckling",
-                ".computersweden",
-                "ComputerSweden:Systemutveckling",
-                "http://computersweden.idg.se/systemutveckling").readAll());
-//        all.addAll(new RssReader("http://computersweden.idg.se/rss/forskning").readAll());
-        all.addAll(new RssReader(
-                "http://computersweden.idg.se/rss/prylar",
-                ".computersweden", "ComputerSweden:Prylar",
-                "http://computersweden.idg.se/prylar").readAll());
 
-        Collections.sort(all, Comparator.comparing(OutputBean::getPublishedDate).reversed());
-        return all;
+        Comparator<Entry> comparator = Comparator.comparing(Entry::getPublishedDate);
+        Comparator<Entry> reversed = comparator.reversed();
+        Collections.sort(entries, reversed);
+        return entries;
     }
 
 
