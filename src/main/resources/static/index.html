@@ -1,8 +1,9 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="css/app.css">
-    <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="./bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-cookies/angular-cookies.js"></script>
     <script type="text/javascript" src="./app/app.js"></script>
     <script type="text/javascript" src="./app/controllers.js"></script>
     <script type="text/javascript" src="./app/services.js"></script>
@@ -10,7 +11,7 @@
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
-        <label ><input ng-model="searchText"></label>
+        <input ng-model="searchText" placeholder="Search">
     </div>
     <div class="item-box {{item.cssClass}}" data-item="{{item}}" ng-repeat="item in items | filter:searchText | limitTo:100">
 
