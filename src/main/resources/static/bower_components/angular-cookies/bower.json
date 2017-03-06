@@ -1,8 +1,8 @@
 {
-  "name": "angular-resource",
+  "name": "angular-cookies",
   "version": "1.6.2",
   "license": "MIT",
-  "main": "./angular-resource.js",
+  "main": "./angular-cookies.js",
   "ignore": [],
   "dependencies": {
     "angular": "1.6.2"
