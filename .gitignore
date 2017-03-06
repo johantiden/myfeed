@@ -10,4 +10,3 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 *.iml
-src/main/resources/static/bower_components/
