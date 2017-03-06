@@ -36,9 +36,8 @@ public class User {
                 ".computersweden", "ComputerSweden:Prylar",
                 "http://computersweden.idg.se/prylar"));
         user.addFeed(new SvenskaDagbladetFeed());
-        user.addFeed(DagensNyheterFeed.nyheter());
-        user.addFeed(DagensNyheterFeed.worldNews());
 
+        user.addFeed(DagensNyheterFeed.worldNews());
 
         return user;
     }
