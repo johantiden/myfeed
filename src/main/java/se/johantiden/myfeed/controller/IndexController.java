@@ -38,7 +38,6 @@ public class IndexController {
         List<Feed> feeds = johan.getFeeds();
         List<Entry> entries = flatMap(feeds, Feed::readAllAvailable);
 
-
         Comparator<Entry> comparator = Comparator.comparing(Entry::getPublishedDate);
         Comparator<Entry> reversed = comparator.reversed();
         Collections.sort(entries, reversed);

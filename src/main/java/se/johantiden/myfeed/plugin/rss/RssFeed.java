@@ -1,12 +1,14 @@
 package se.johantiden.myfeed.plugin.rss;
 
 import com.google.common.collect.Lists;
+import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEnclosure;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import org.jsoup.Jsoup;
 import se.johantiden.myfeed.plugin.Entry;
 import se.johantiden.myfeed.plugin.Feed;
 
@@ -45,10 +47,17 @@ public class RssFeed implements Feed {
             String link = e.getLink();
             String imageUrl = getImageUrl(e);
             String author = e.getAuthor();
+            String authorUrl = null;//e.getAuthors().get(0).getUri();
+            SyndContent description = e.getDescription();
+            String text = html2text(description.getValue());
             Instant publishedDate = e.getPublishedDate().toInstant();
 
-            return new Entry(feedName, feedWebUrl, title, author, cssClass, link, imageUrl, publishedDate);
+            return new Entry(feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate);
         });
+    }
+
+    public static String html2text(String html) {
+        return Jsoup.parse(html).text();
     }
 
     private static String getImageUrl(SyndEntry e) {

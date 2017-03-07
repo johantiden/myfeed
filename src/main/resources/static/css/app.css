@@ -2,7 +2,6 @@
 body {
     background-color: #EEEEEE;
     margin: 0;
-    font-size: 2em;
 }
 a {
     color: black;
@@ -86,8 +85,12 @@ a:hover {
     display: inline-block;
 }
 
-.text {
+div.text {
     display: inline-block;
+}
+
+.text > a {
+    font-size: small;
 }
 
 .time-since:before {
@@ -105,23 +108,31 @@ a:hover {
     border: none;
 }
 
-.twitter > * > * > .author {
+.twitter > * > * > * > .author {
     font-weight: bold;
+    background-color: red;
 }
 
+.twitter > * > * > * > .text {
+    display: none;
+}
 
-.reddit > * > * > .author, .reddit > * > * > .author > a {
+.reddit > * > * > * > .author, .reddit > * > * > * > .author > a {
     color: #666666;
     margin-left: 0.2vw;
 }
 
-.reddit > * > * > .tag {
+.reddit > * > * > * > .tag {
     color: #000000;
     float: left;
 }
 
-.reddit > * > * > .title {
+.reddit > * > * > * > .title {
     display: block;
+}
+
+.title > a {
+    font-size: large;
 }
 
 .reddit {

@@ -5,6 +5,7 @@ import se.johantiden.myfeed.plugin.rss.DagensNyheterFeed;
 import se.johantiden.myfeed.plugin.rss.RssFeed;
 import se.johantiden.myfeed.plugin.rss.SvenskaDagbladetFeed;
 import se.johantiden.myfeed.plugin.rss.TheLocalFeed;
+import se.johantiden.myfeed.plugin.twitter.TwitterUserFeed;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +39,13 @@ public class User {
         user.addFeed(new SvenskaDagbladetFeed());
 
         user.addFeed(DagensNyheterFeed.worldNews());
+
+
+        user.addFeed(new TwitterUserFeed("pwolodarski"));
+        user.addFeed(new TwitterUserFeed("BillGates"));
+        user.addFeed(new TwitterUserFeed("github"));
+        user.addFeed(new TwitterUserFeed("Timcast"));
+        user.addFeed(new TwitterUserFeed("polisen_riks"));
 
         return user;
     }

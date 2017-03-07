@@ -6,20 +6,24 @@ import java.time.temporal.ChronoUnit;
 
 public class Entry {
 
-    public final String feedName;
-    public final String feedUrl;
-    public final String title;
-    public final String author;
-    public final String cssClass;
-    public final String pageUrl;
-    public final String imageUrl;
-    public final Instant publishedDate;
+    public String feedName;
+    public String feedUrl;
+    public String title;
+    public String text;
+    public String author;
+    public String authorUrl;
+    public String cssClass;
+    public String pageUrl;
+    public String imageUrl;
+    public Instant publishedDate;
 
-    public Entry(String feedName, String feedUrl, String title, String author, String cssClass, String pageUrl, String imageUrl, Instant publishedDate) {
+    public Entry(String feedName, String feedUrl, String title, String text, String author, String authorUrl, String cssClass, String pageUrl, String imageUrl, Instant publishedDate) {
         this.feedName = feedName;
         this.feedUrl = feedUrl;
         this.title = title;
+        this.text = text;
         this.author = author;
+        this.authorUrl = this.authorUrl;
         this.cssClass = cssClass;
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
@@ -44,6 +48,10 @@ public class Entry {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public String getPageUrl() {
@@ -95,6 +103,7 @@ public class Entry {
                 "feedName='" + feedName + '\'' +
                 ", feedUrl='" + feedUrl + '\'' +
                 ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
                 ", author='" + author + '\'' +
                 ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
