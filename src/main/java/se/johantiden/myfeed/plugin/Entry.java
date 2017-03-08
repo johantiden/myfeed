@@ -23,7 +23,7 @@ public class Entry {
         this.title = title;
         this.text = text;
         this.author = author;
-        this.authorUrl = this.authorUrl;
+        this.authorUrl = authorUrl;
         this.cssClass = cssClass;
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;

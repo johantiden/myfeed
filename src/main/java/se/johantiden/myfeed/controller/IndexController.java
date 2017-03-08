@@ -7,9 +7,12 @@ import se.johantiden.myfeed.plugin.Entry;
 import se.johantiden.myfeed.plugin.Feed;
 import se.johantiden.myfeed.user.User;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 import static se.johantiden.myfeed.util.JCollections.flatMap;
 
@@ -36,7 +39,7 @@ public class IndexController {
         User johan = User.johan();
 
         List<Feed> feeds = johan.getFeeds();
-        List<Entry> entries = flatMap(feeds, Feed::readAllAvailable);
+        List<Entry> entries = flatMap(feeds, tryGetEntries());
 
         Comparator<Entry> comparator = Comparator.comparing(Entry::getPublishedDate);
         Comparator<Entry> reversed = comparator.reversed();
@@ -44,5 +47,15 @@ public class IndexController {
         return entries;
     }
 
+    private Function<Feed, Collection<Entry>> tryGetEntries() {
+        return f -> {
+            try {
+                return f.readAllAvailable();
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                return new ArrayList<>();
+            }
+        };
+    }
 
 }

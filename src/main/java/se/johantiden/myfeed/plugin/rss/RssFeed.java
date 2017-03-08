@@ -43,9 +43,7 @@ public class RssFeed implements Feed {
         try {
             return tryReadAllAvailable();
         } catch (RuntimeException e) {
-            Entry entry = new Entry(feedName, feedWebUrl, feedName + " rss failed. See log for details", null, null, null, ".failed", null, null, Instant.now());
-            e.printStackTrace();
-            return Lists.newArrayList(entry);
+            throw new RuntimeException("RssFeed '"+feedName+"' failed:", e);
         }
     }
 
@@ -95,7 +93,8 @@ public class RssFeed implements Feed {
     }
 
     private SyndFeed getFeed(SyndFeedInput input) {
-
+        input.setAllowDoctypes(true);
+        input.setXmlHealerOn(true);
 
         try(XmlReader reader = getXmlReader()) {
             return input.build(reader);
