@@ -38,7 +38,16 @@ public class RssFeed implements Feed {
     @Override
     public List<Entry> readAllAvailable() {
 
-        SyndFeed feed = getFeed();
+        try {
+            return tryReadAllAvailable();
+        } catch (RuntimeException e) {
+            Entry entry = new Entry(feedName, feedWebUrl, feedName + " rss failed. See log for details", null, null, null, ".failed", null, null, Instant.now());
+            e.printStackTrace();
+            return Lists.newArrayList(entry);
+        }
+    }
+
+    private List<Entry> tryReadAllAvailable() {SyndFeed feed = getFeed();
 
         List<SyndEntry> entries = feed.getEntries();
 
