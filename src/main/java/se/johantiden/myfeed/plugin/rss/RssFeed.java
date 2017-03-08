@@ -61,7 +61,7 @@ public class RssFeed implements Feed {
             String text = html2text(description.getValue());
             Instant publishedDate = e.getPublishedDate().toInstant();
 
-            return new Entry(feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate);
+            return new Entry(feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString());
         });
     }
 

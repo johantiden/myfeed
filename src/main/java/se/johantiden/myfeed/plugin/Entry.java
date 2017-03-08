@@ -16,8 +16,20 @@ public class Entry {
     public String pageUrl;
     public String imageUrl;
     public Instant publishedDate;
+    public String fullSourceEntryForSearch;
 
-    public Entry(String feedName, String feedUrl, String title, String text, String author, String authorUrl, String cssClass, String pageUrl, String imageUrl, Instant publishedDate) {
+    public Entry(
+            String feedName,
+            String feedUrl,
+            String title,
+            String text,
+            String author,
+            String authorUrl,
+            String cssClass,
+            String pageUrl,
+            String imageUrl,
+            Instant publishedDate,
+            String fullSourceEntryForSearch) {
         this.feedName = feedName;
         this.feedUrl = feedUrl;
         this.title = title;
@@ -28,6 +40,7 @@ public class Entry {
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
+        this.fullSourceEntryForSearch = fullSourceEntryForSearch;
     }
 
     public String getFeedName() {
@@ -68,6 +81,14 @@ public class Entry {
 
     public String getPublishedDateShort() {
         return dateToShortString(publishedDate);
+    }
+
+    public String getAuthorUrl() {
+        return authorUrl;
+    }
+
+    public String getFullSourceEntryForSearch() {
+        return fullSourceEntryForSearch;
     }
 
     public static String dateToShortString(Instant instant) {
