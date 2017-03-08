@@ -79,16 +79,16 @@ public class User {
         user.addFeed(new TheLocalFeed());
         user.addFeed(new RssFeed(
                 "http://computersweden.idg.se/rss/systemutveckling",
-                ".computersweden",
+                "computersweden",
                 "ComputerSweden:Systemutveckling",
                 "http://computersweden.idg.se/systemutveckling"));
         user.addFeed(new RssFeed(
                 "http://computersweden.idg.se/rss/prylar",
-                ".computersweden", "ComputerSweden:Prylar",
+                "computersweden", "ComputerSweden:Prylar",
                 "http://computersweden.idg.se/prylar"));
         user.addFeed(new RssFeed(
                 "http://rss.slashdot.org/Slashdot/slashdotMainatom",
-                ".slashdot", "Slashdot",
+                "slashdot", "Slashdot",
                 "https://slashdot.org"));
         user.addFeed(new SvenskaDagbladetFeed());
 

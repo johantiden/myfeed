@@ -3,7 +3,7 @@ package se.johantiden.myfeed.plugin.rss;
 public class DagensNyheterFeed extends RssFeed {
 
     public DagensNyheterFeed(String rssUrl, String feedName) {
-        super(rssUrl, ".dn", feedName, "https://www.dn.se");
+        super(rssUrl, "dn", feedName, "https://www.dn.se");
     }
 
 

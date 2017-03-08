@@ -21,7 +21,7 @@ public class TwitterUserFeed implements Feed {
     }
 
     private static RssFeed createFeed(String username) {
-        return new RssFeed("https://twitrss.me/twitter_user_to_rss/?user="+username, ".twitter", "Twitter", "https://twitter.com/"+username);
+        return new RssFeed("https://twitrss.me/twitter_user_to_rss/?user="+username, "twitter", "Twitter", "https://twitter.com/"+username);
     }
 
     private static Function<Entry, Entry> createEntryMapper(String username) {

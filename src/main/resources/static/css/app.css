@@ -28,20 +28,20 @@ a:hover {
 }
 
 .item-box {
-    padding: 0.5vw;
+    padding: 8px;
     background-color: white;
     /*margin-left: 30vw;*/
     /*margin-right: 30vw;*/
     width: 100%;
 
     /*border-bottom: 1px solid #e1e8ed;*/
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     cursor: pointer;
     word-wrap: break-word;
     box-shadow: 6px 6px 20px #EEEEEE;
 }
 .item-box:hover {
-    background-color: #f0f0fa;
+    background-color: #f5f5ff;
 }
 
 .image-box.large {
@@ -112,12 +112,12 @@ div.text {
     border: none;
 }
 
-.twitter > * > * > * > .author {
+div.twitter > div.content-box > div.top-row  > div.author > a {
     font-weight: bold;
-    background-color: red;
+    color: black;
 }
 
-.twitter > * > * > * > .text {
+div.twitter > div.content-box > div.text {
     display: none;
 }
 
