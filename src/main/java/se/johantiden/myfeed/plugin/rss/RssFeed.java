@@ -5,6 +5,7 @@ import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEnclosure;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.feed.synd.SyndPerson;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
@@ -18,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -56,13 +58,21 @@ public class RssFeed implements Feed {
             String link = e.getLink();
             String imageUrl = getImageUrl(e);
             String author = e.getAuthor();
-            String authorUrl = null;//e.getAuthors().get(0).getUri();
+            String authorUrl = getAuthorUrl(e);
             SyndContent description = e.getDescription();
             String text = html2text(description.getValue());
             Instant publishedDate = e.getPublishedDate().toInstant();
 
             return new Entry(feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate);
         });
+    }
+
+    private static String getAuthorUrl(SyndEntry entry) {
+        return Optional.ofNullable(entry)
+                .map(SyndEntry::getAuthors)
+                .flatMap(l -> l.isEmpty() ? Optional.empty() : Optional.ofNullable(l.get(0)))
+                .map(SyndPerson::getUri)
+                .orElse(null);
     }
 
     public static String html2text(String html) {
