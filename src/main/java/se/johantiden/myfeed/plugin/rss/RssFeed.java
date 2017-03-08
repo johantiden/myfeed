@@ -18,6 +18,7 @@ import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,10 +60,24 @@ public class RssFeed implements Feed {
             String authorUrl = getAuthorUrl(e);
             SyndContent description = e.getDescription();
             String text = html2text(description.getValue());
-            Instant publishedDate = e.getPublishedDate().toInstant();
+            Instant publishedDate = getDate(e);
 
             return new Entry(feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString());
         });
+    }
+
+    private static Instant getDate(SyndEntry e) {
+        Date date = e.getPublishedDate();
+
+        if (date == null) {
+            date = e.getUpdatedDate();
+        }
+
+        if (date == null) {
+            return Instant.now();
+        }
+
+        return date.toInstant();
     }
 
     private static String getAuthorUrl(SyndEntry entry) {
