@@ -1,3 +1,7 @@
+/*TODO: import ALL css files dynamically (maybe maven filter a property) */
+@import "plugin/se/johantiden/myfeed/plugin/twitter/twitter.css";
+@import "plugin/se/johantiden/myfeed/plugin/reddit/reddit.css";
+
 
 body {
     background-color: #EEEEEE;
@@ -112,35 +116,10 @@ div.text {
     border: none;
 }
 
-div.twitter > div.content-box > div.top-row  > div.author > a {
-    font-weight: bold;
-    color: black;
-}
 
-div.twitter > div.content-box > div.text {
-    display: none;
-}
-
-.reddit > * > * > * > .author, .reddit > * > * > * > .author > a {
-    color: #666666;
-    margin-left: 0.2vw;
-}
-
-.reddit > * > * > * > .tag {
-    color: #000000;
-    float: left;
-}
-
-.reddit > * > * > * > .title {
-    display: block;
-}
 
 .title > a {
     font-size: large;
-}
-
-.reddit {
-    /*background-color: orange;*/
 }
 
 .navbar {

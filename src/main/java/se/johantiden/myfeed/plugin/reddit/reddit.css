@@ -1,0 +1,20 @@
+
+
+
+.reddit > * > * > * > .author, .reddit > * > * > * > .author > a {
+    color: #666666;
+    margin-left: 0.2vw;
+}
+
+.reddit > * > * > * > .tag {
+    color: #000000;
+    float: left;
+}
+
+.reddit > * > * > * > .title {
+    display: block;
+}
+
+.reddit {
+    /*background-color: orange;*/
+}
