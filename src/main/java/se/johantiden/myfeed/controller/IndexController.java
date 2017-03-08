@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
+import static se.johantiden.myfeed.util.JCollections.filter;
 import static se.johantiden.myfeed.util.JCollections.flatMap;
 
 @RestController
@@ -40,14 +41,15 @@ public class IndexController {
 
         List<Feed> feeds = johan.getFeeds();
         List<Entry> entries = flatMap(feeds, tryGetEntries());
+        List<Entry> filteredEntries = filter(entries, johan.getFilters());
 
         Comparator<Entry> comparator = Comparator.comparing(Entry::getPublishedDate);
         Comparator<Entry> reversed = comparator.reversed();
-        Collections.sort(entries, reversed);
-        return entries;
+        Collections.sort(filteredEntries, reversed);
+        return filteredEntries;
     }
 
-    private Function<Feed, Collection<Entry>> tryGetEntries() {
+    private static Function<Feed, Collection<Entry>> tryGetEntries() {
         return f -> {
             try {
                 return f.readAllAvailable();
