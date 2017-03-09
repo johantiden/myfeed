@@ -10,7 +10,7 @@ Content should work like they do at the original site without an extra click to 
 
 
 
-This repo will mostly be a base for prototyping. In the future, site scrapers should be put in separate repos.
+This repo will mostly be a base for prototyping. In the future, plugins should be put in separate repos.
 
 
 ---
