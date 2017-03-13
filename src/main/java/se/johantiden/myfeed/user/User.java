@@ -47,9 +47,10 @@ public class User {
 
         user.addFilter(filter(s -> {
                     boolean kultur = s.contains("kultur");
+                    boolean mode = s.contains("name=mode");
                     boolean svd = s.contains("svd.se");
-                    boolean svdKultur = svd && kultur;
-                    return !svdKultur;
+                    boolean svdCrap = svd && (kultur || mode);
+                    return !svdCrap;
                 }
         ));
 
