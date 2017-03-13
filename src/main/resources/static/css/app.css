@@ -40,12 +40,8 @@ a:hover {
 
     /*border-bottom: 1px solid #e1e8ed;*/
     margin-bottom: 4px;
-    cursor: pointer;
     word-wrap: break-word;
     box-shadow: 6px 6px 20px #EEEEEE;
-}
-.item-box:hover {
-    background-color: #f5f5ff;
 }
 
 .image-box.large {
@@ -63,10 +59,7 @@ a:hover {
     margin: 0;
 }
 
-.image-box.small > img {
-    max-height: 10vw;
-}
-.image-box > img {
+.image-box-image {
     width: 100%;
 }
 

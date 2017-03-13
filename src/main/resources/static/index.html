@@ -21,9 +21,13 @@
                 <div class="author" ng-if="item.author"><a href="{{item.authorUrl}}">{{item.author}}</a></div>
                 <div class="time-since">{{item.publishedDateShort}}</div>
             </div>
+
             <div class="image-box large">
-                <img src="{{item.imageUrl}}" ng-if="item.imageUrl" />
+                <a href="{{item.pageUrl}}">
+                    <img class="image-box-image" src="{{item.imageUrl}}" ng-if="item.imageUrl" />
+                </a>
             </div>
+
             <div class="title" ng-if="item.title"><a href="{{item.pageUrl}}">{{item.title}}</a></div>
             <div class="text" ng-if="item.text"><a href="{{item.pageUrl}}">{{item.text}}</a></div>
 
