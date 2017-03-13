@@ -46,7 +46,7 @@ public class User {
     private static void johanFilters(User user) {
 
         user.addFilter(filter(s -> {
-                    boolean kultur = s.contains("kultur");
+                    boolean kultur = s.contains("name=kultur");
                     boolean mode = s.contains("name=mode");
                     boolean resa = s.contains("name=resa");
                     boolean svd = s.contains("svd.se");
