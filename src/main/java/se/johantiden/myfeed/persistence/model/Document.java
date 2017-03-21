@@ -1,10 +1,10 @@
-package se.johantiden.myfeed.plugin;
+package se.johantiden.myfeed.persistence.model;
 
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-public class Entry {
+public class Document {
 
     public String feedName;
     public String feedUrl;
@@ -17,8 +17,9 @@ public class Entry {
     public String imageUrl;
     public Instant publishedDate;
     public String fullSourceEntryForSearch;
+    private User user;
 
-    public Entry(
+    public Document(
             String feedName,
             String feedUrl,
             String title,
@@ -131,5 +132,9 @@ public class Entry {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
                 '}';
+    }
+
+    public User getUser() {
+        return user;
     }
 }

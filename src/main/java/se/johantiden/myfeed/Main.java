@@ -2,13 +2,24 @@ package se.johantiden.myfeed;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import se.johantiden.myfeed.persistence.DocumentRepository;
+import se.johantiden.myfeed.service.DocumentService;
 
 @SpringBootApplication
 public class Main {
 
-	public static void main(String[] args) {
+    @Bean
+    public DocumentRepository documentRepository() {
+        return new DocumentRepository();
+    }
 
+    @Bean
+    public DocumentService documentService() {
+        return new DocumentService();
+    }
 
-		SpringApplication.run(Main.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
 }
