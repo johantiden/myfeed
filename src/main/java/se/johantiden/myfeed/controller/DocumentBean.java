@@ -1,50 +1,36 @@
-package se.johantiden.myfeed.plugin;
+package se.johantiden.myfeed.controller;
 
+import se.johantiden.myfeed.persistence.Document;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-public class Entry {
+public class DocumentBean {
 
-    public String feedName;
-    public String feedUrl;
-    public String title;
-    public String text;
-    public String author;
-    public String authorUrl;
-    public String cssClass;
-    public String pageUrl;
-    public String imageUrl;
-    public Instant publishedDate;
-    public String fullSourceEntryForSearch;
+    public final String feedUrl;
+    public final String title;
+    public final String text;
+    public final String author;
+    public final String authorUrl;
+    public final String cssClass;
+    public final String pageUrl;
+    public final String imageUrl;
+    public final Instant publishedDate;
+    public final String fullSourceEntryForSearch;
+    public final String html;
 
-    public Entry(
-            String feedName,
-            String feedUrl,
-            String title,
-            String text,
-            String author,
-            String authorUrl,
-            String cssClass,
-            String pageUrl,
-            String imageUrl,
-            Instant publishedDate,
-            String fullSourceEntryForSearch) {
-        this.feedName = feedName;
-        this.feedUrl = feedUrl;
-        this.title = title;
-        this.text = text;
-        this.author = author;
-        this.authorUrl = authorUrl;
-        this.cssClass = cssClass;
-        this.pageUrl = pageUrl;
-        this.imageUrl = imageUrl;
-        this.publishedDate = publishedDate;
-        this.fullSourceEntryForSearch = fullSourceEntryForSearch;
-    }
-
-    public String getFeedName() {
-        return feedName;
+    public DocumentBean(Document document) {
+        this.feedUrl = document.feedUrl;
+        this.title = document.title;
+        this.text = document.text;
+        this.author = document.author;
+        this.authorUrl = document.authorUrl;
+        this.cssClass = document.cssClass;
+        this.pageUrl = document.pageUrl;
+        this.imageUrl = document.imageUrl;
+        this.publishedDate = document.publishedDate;
+        this.fullSourceEntryForSearch = document.fullSourceEntryForSearch;
+        this.html = document.html;
     }
 
     public String getFeedUrl() {
@@ -67,6 +53,9 @@ public class Entry {
         return text;
     }
 
+    public String getHtml() {
+        return html;
+    }
     public String getPageUrl() {
         return pageUrl;
     }
@@ -121,7 +110,6 @@ public class Entry {
     @Override
     public String toString() {
         return "OutputBean{" +
-                "feedName='" + feedName + '\'' +
                 ", feedUrl='" + feedUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
@@ -132,4 +120,5 @@ public class Entry {
                 ", publishedDate=" + publishedDate +
                 '}';
     }
+
 }
