@@ -65,8 +65,9 @@ public class RssFeedReader implements FeedReader {
             SyndContent description = e.getDescription();
             String text = html2text(description.getValue());
             Instant publishedDate = getDate(e);
+            String html = e.getDescription().getValue();
 
-            return new Document(feed, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString());
+            return new Document(feed, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), html);
         });
     }
 

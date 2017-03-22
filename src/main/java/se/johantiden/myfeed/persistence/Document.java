@@ -7,15 +7,16 @@ import java.time.temporal.ChronoUnit;
 public class Document {
 
     public String feedUrl;
-    public String title;
-    public String text;
+    public final String title;
+    public final String text;
     public String author;
     public String authorUrl;
-    public String cssClass;
-    public String pageUrl;
-    public String imageUrl;
-    public Instant publishedDate;
-    public String fullSourceEntryForSearch;
+    public final String cssClass;
+    public final String pageUrl;
+    public final String imageUrl;
+    public final Instant publishedDate;
+    public final String fullSourceEntryForSearch;
+    public final String html;
     private Feed feed;
 
     public Document(
@@ -29,7 +30,8 @@ public class Document {
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
-            String fullSourceEntryForSearch) {
+            String fullSourceEntryForSearch,
+            String html) {
         this.feed = feed;
         this.feedUrl = feedUrl;
         this.title = title;
@@ -41,50 +43,7 @@ public class Document {
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.fullSourceEntryForSearch = fullSourceEntryForSearch;
-    }
-
-    public String getFeedUrl() {
-        return feedUrl;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getPageUrl() {
-        return pageUrl;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public Instant getPublishedDate() {
-        return publishedDate;
-    }
-
-    public String getPublishedDateShort() {
-        return dateToShortString(publishedDate);
-    }
-
-    public String getAuthorUrl() {
-        return authorUrl;
-    }
-
-    public String getFullSourceEntryForSearch() {
-        return fullSourceEntryForSearch;
+        this.html = html;
     }
 
     public static String dateToShortString(Instant instant) {

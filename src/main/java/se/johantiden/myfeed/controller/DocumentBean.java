@@ -17,6 +17,7 @@ public class DocumentBean {
     public final String imageUrl;
     public final Instant publishedDate;
     public final String fullSourceEntryForSearch;
+    public final String html;
 
     public DocumentBean(Document document) {
         this.feedUrl = document.feedUrl;
@@ -29,6 +30,7 @@ public class DocumentBean {
         this.imageUrl = document.imageUrl;
         this.publishedDate = document.publishedDate;
         this.fullSourceEntryForSearch = document.fullSourceEntryForSearch;
+        this.html = document.html;
     }
 
     public String getFeedUrl() {
@@ -51,6 +53,9 @@ public class DocumentBean {
         return text;
     }
 
+    public String getHtml() {
+        return html;
+    }
     public String getPageUrl() {
         return pageUrl;
     }

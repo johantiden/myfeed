@@ -13,7 +13,7 @@
     <div class="navbar">
         <input ng-model="searchText" placeholder="Search">
     </div>
-    <div class="item-box {{item.cssClass}}" data-item="{{item}}" ng-repeat="item in items | filter:searchText | limitTo:100">
+    <div class="item-box {{item.cssClass}}" data-item="{{item}}" ng-repeat="item in items | filter:searchText">
 
         <div class="content-box">
             <div class="top-row">
@@ -32,6 +32,7 @@
             <div class="text" ng-if="item.text"><a href="{{item.pageUrl}}">{{item.text}}</a></div>
 
 
+            <span class="htmlContent" ng-bind-html="$sce.trustAsHtml(item.html)"></span>
 
             <!--<div class="bottom-row">-->
                 <!--<button class="comments-button"></button>-->

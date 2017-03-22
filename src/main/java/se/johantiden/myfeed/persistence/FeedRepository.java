@@ -25,18 +25,6 @@ public class FeedRepository {
         List<Feed> feeds = new ArrayList<>();
         RssPlugin rss = new RssPlugin();
         feeds.add(rss.createFeed(
-                "ComputerSweden:Systemutveckling",
-                "http://computersweden.idg.se/rss/systemutveckling",
-                "computersweden",
-                newHashMap("rssUrl", "http://computersweden.idg.se/systemutveckling")));
-
-        feeds.add(rss.createFeed(
-                "TheLocal",
-                "http://www.thelocal.se",
-                "thelocal",
-                newHashMap("rssUrl", "http://www.thelocal.se/feeds/rss.php")));
-
-        feeds.add(rss.createFeed(
                 "Slashdot",
                 "https://slashdot.org",
                 "slashdot",
@@ -59,6 +47,15 @@ public class FeedRepository {
                 "https://www.dn.se",
                 "dn",
                 newHashMap("rssUrl", "http://www.dn.se/nyheter/varlden/rss/")));
+
+
+        feeds.add(rss.createFeed(
+                "xkcd",
+                "https://xkcd.com",
+                "xkcd",
+                newHashMap("rssUrl", "https://xkcd.com/atom.xml")));
+
+
 
         feeds.add(createTwitter("pwolodarski"));
         feeds.add(createTwitter("BillGates"));

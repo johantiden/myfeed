@@ -1,5 +1,7 @@
 
-app.controller('myCtrl', function($scope, $cookies, unreadservice) {
+app.controller('myCtrl', function($scope, $sce, $cookies, unreadservice) {
+
+    $scope.$sce = $sce;
 
     $scope.getCookieValue = function () {
         return $cookies.get('searchText');

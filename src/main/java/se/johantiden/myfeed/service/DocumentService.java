@@ -20,7 +20,7 @@ public class DocumentService {
 
         List<UserDocument> documents = documentRepository.getUnreadDocuments(user);
 
-        Comparator<UserDocument> comparator = Comparator.comparing(ud -> ud.getDocument().getPublishedDate());
+        Comparator<UserDocument> comparator = Comparator.comparing(ud -> ud.getDocument().publishedDate);
         Comparator<UserDocument> reversed = comparator.reversed();
         Collections.sort(documents, reversed);
         return documents;
@@ -31,7 +31,7 @@ public class DocumentService {
     }
 
     public void put(Document document) {
-        String pageUrl = document.getPageUrl();
+        String pageUrl = document.pageUrl;
         Optional<Document> oldDocument = documentRepository.findByPageUrl(pageUrl);
         if (!oldDocument.isPresent()) {
             documentRepository.add(document);
