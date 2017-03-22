@@ -10,7 +10,8 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import org.jsoup.Jsoup;
-import se.johantiden.myfeed.persistence.model.Document;
+import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.plugin.FeedReader;
 
 import java.io.IOException;
@@ -26,12 +27,14 @@ import static java.util.Objects.requireNonNull;
 
 public class RssFeedReader implements FeedReader {
 
+    private final Feed feed;
     private final String rssUrl;
     private final String cssClass;
     private final String feedName;
     private final String feedWebUrl;
 
-    public RssFeedReader(String rssUrl, String cssClass, String feedName, String feedWebUrl) {
+    public RssFeedReader(String rssUrl, String cssClass, String feedName, String feedWebUrl, Feed feed) {
+        this.feed = feed;
         this.feedName = feedName;
         this.feedWebUrl = feedWebUrl;
         this.rssUrl = requireNonNull(rssUrl);
@@ -48,9 +51,10 @@ public class RssFeedReader implements FeedReader {
         }
     }
 
-    private List<Document> tryReadAllAvailable() {SyndFeed feed = getFeed();
+    private List<Document> tryReadAllAvailable() {
+        SyndFeed syndFeed = getFeed();
 
-        List<SyndEntry> entries = feed.getEntries();
+        List<SyndEntry> entries = syndFeed.getEntries();
 
         return Lists.transform(entries, e -> {
             String title = e.getTitle();
@@ -62,7 +66,7 @@ public class RssFeedReader implements FeedReader {
             String text = html2text(description.getValue());
             Instant publishedDate = getDate(e);
 
-            return new Document(feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString());
+            return new Document(feed, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString());
         });
     }
 

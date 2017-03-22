@@ -1,8 +1,8 @@
 package se.johantiden.myfeed.plugin.twitter;
 
-import se.johantiden.myfeed.persistence.model.Document;
-import se.johantiden.myfeed.persistence.model.Feed;
-import se.johantiden.myfeed.persistence.model.PluginType;
+import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssFeedReader;
@@ -22,15 +22,15 @@ public class TwitterPlugin implements Plugin{
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
-        String username = feed.getFeedReaderParameters().get("username");
-        return new TwitterAsRssFeedReader(username);
+        String twitterUsername = feed.getFeedReaderParameters().get("username");
+        return new TwitterAsRssFeedReader(twitterUsername, feed);
     }
 
     private static class TwitterAsRssFeedReader extends RssFeedReader {
         private final String username;
 
-        TwitterAsRssFeedReader(String username) {
-            super("https://twitrss.me/twitter_user_to_rss/?user=" + username, "twitter", "Twitter", "https://twitter.com/" + username);
+        TwitterAsRssFeedReader(String username, Feed feed) {
+            super("https://twitrss.me/twitter_user_to_rss/?user=" + username, "twitter", "Twitter", "https://twitter.com/" + username, feed);
             this.username = username;
         }
 

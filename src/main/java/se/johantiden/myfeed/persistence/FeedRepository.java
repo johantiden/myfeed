@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.persistence.model;
+package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
@@ -10,8 +10,15 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
+    private List<Feed> allFeeds = null;
+
+
     public List<Feed> allFeeds() {
-        return allFeedsHack();
+        if (allFeeds == null) {
+            allFeeds = allFeedsHack();
+        }
+
+        return allFeeds;
     }
 
     private static List<Feed> allFeedsHack() {
@@ -56,6 +63,9 @@ public class FeedRepository {
         feeds.add(createTwitter("pwolodarski"));
         feeds.add(createTwitter("BillGates"));
         feeds.add(createTwitter("github"));
+
+        User johan = User.johan();
+        feeds.forEach(f -> f.getFeedUsers().add(new FeedUser(f, johan)));
         return feeds;
     }
 

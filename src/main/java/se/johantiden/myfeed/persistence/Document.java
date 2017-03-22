@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.persistence.model;
+package se.johantiden.myfeed.persistence;
 
 
 import java.time.Instant;
@@ -6,7 +6,6 @@ import java.time.temporal.ChronoUnit;
 
 public class Document {
 
-    public String feedName;
     public String feedUrl;
     public String title;
     public String text;
@@ -17,10 +16,10 @@ public class Document {
     public String imageUrl;
     public Instant publishedDate;
     public String fullSourceEntryForSearch;
-    private User user;
+    private Feed feed;
 
     public Document(
-            String feedName,
+            Feed feed,
             String feedUrl,
             String title,
             String text,
@@ -31,7 +30,7 @@ public class Document {
             String imageUrl,
             Instant publishedDate,
             String fullSourceEntryForSearch) {
-        this.feedName = feedName;
+        this.feed = feed;
         this.feedUrl = feedUrl;
         this.title = title;
         this.text = text;
@@ -42,10 +41,6 @@ public class Document {
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.fullSourceEntryForSearch = fullSourceEntryForSearch;
-    }
-
-    public String getFeedName() {
-        return feedName;
     }
 
     public String getFeedUrl() {
@@ -122,7 +117,6 @@ public class Document {
     @Override
     public String toString() {
         return "OutputBean{" +
-                "feedName='" + feedName + '\'' +
                 ", feedUrl='" + feedUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
@@ -134,7 +128,7 @@ public class Document {
                 '}';
     }
 
-    public User getUser() {
-        return user;
+    public Feed getFeed() {
+        return feed;
     }
 }

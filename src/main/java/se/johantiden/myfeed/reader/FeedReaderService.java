@@ -1,4 +1,30 @@
 package se.johantiden.myfeed.reader;
 
+import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.persistence.PluginType;
+import se.johantiden.myfeed.plugin.FeedReader;
+import se.johantiden.myfeed.plugin.rss.RssPlugin;
+import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
+
+import java.util.List;
+
 public class FeedReaderService {
+
+    public List<Document> readAll(Feed feed) {
+        FeedReader reader = findFeedReader(feed);
+        return reader.readAllAvailable();
+    }
+
+    private FeedReader findFeedReader(Feed feed) {
+        PluginType type = feed.getType();
+        switch (type) {
+            case RSS:
+                return new RssPlugin().createFeedReader(feed);
+            case TWITTER:
+                return new TwitterPlugin().createFeedReader(feed);
+            default:
+                throw new IllegalArgumentException("Plugin support not implemented! plugin:" + type.name());
+        }
+    }
 }

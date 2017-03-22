@@ -1,7 +1,7 @@
 package se.johantiden.myfeed.plugin.rss;
 
-import se.johantiden.myfeed.persistence.model.Feed;
-import se.johantiden.myfeed.persistence.model.PluginType;
+import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 
@@ -18,6 +18,6 @@ public class RssPlugin implements Plugin {
     public FeedReader createFeedReader(Feed feed) {
         String rssUrlKey = "rssUrl";
         String rssUrl = feed.getFeedReaderParameters().get(rssUrlKey);
-        return new RssFeedReader(rssUrl, feed.getCssClass(), feed.getName(), feed.getWebUrl());
+        return new RssFeedReader(rssUrl, feed.getCssClass(), feed.getName(), feed.getWebUrl(), feed);
     }
 }

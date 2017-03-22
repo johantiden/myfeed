@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.persistence.model;
+package se.johantiden.myfeed.persistence;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class Feed {
     private final Map<String, String> feedReaderParameters;
     private final List<FeedUser> feedUsers;
     private final String cssClass;
-    private Instant lastRead;
+    private Instant lastRead = Instant.EPOCH;
 
     public Feed(PluginType type, String name, String webUrl, Map<String, String> feedReaderParameters, String cssClass) {
         this.name = name;
@@ -51,5 +51,9 @@ public class Feed {
 
     public String getWebUrl() {
         return webUrl;
+    }
+
+    public void setLastRead(Instant lastRead) {
+        this.lastRead = lastRead;
     }
 }

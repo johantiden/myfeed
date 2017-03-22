@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.johantiden.myfeed.persistence.model.Document;
-import se.johantiden.myfeed.persistence.model.User;
-import se.johantiden.myfeed.persistence.model.UserDocument;
+import se.johantiden.myfeed.persistence.User;
+import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.service.DocumentService;
 
 import java.util.List;
@@ -20,12 +19,12 @@ public class IndexController {
     private DocumentService documentService;
 
     @RequestMapping("/rest/index")
-    List<Document> index() {
+    List<DocumentBean> index() {
 
-        List<Document> outputs = getRealOutput();
+        List<DocumentBean> outputs = getRealOutput();
 
 
-        for (Document document : outputs) {
+        for (DocumentBean document : outputs) {
             System.out.println(document);
         }
 
@@ -33,13 +32,13 @@ public class IndexController {
         return outputs;
     }
 
-    private List<Document> getRealOutput() {
+    private List<DocumentBean> getRealOutput() {
 
         User johan = User.johan();
 
         List<UserDocument> userDocuments = documentService.getUnreadDocumentsFor(johan);
 
 
-        return userDocuments.stream().map(UserDocument::getDocument).collect(Collectors.toList());
+        return userDocuments.stream().map(UserDocument::getDocument).map(DocumentBean::new).collect(Collectors.toList());
     }
 }

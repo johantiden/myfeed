@@ -6,7 +6,7 @@ import java.time.Instant;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static se.johantiden.myfeed.persistence.model.Document.dateToShortString;
+import static se.johantiden.myfeed.persistence.Document.dateToShortString;
 
 public class DocumentTest {
 

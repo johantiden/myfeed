@@ -1,6 +1,6 @@
 package se.johantiden.myfeed.plugin;
 
-import se.johantiden.myfeed.persistence.model.Feed;
+import se.johantiden.myfeed.persistence.Feed;
 
 import java.util.Map;
 

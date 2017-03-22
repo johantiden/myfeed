@@ -1,7 +1,7 @@
 package se.johantiden.myfeed.plugin;
 
 
-import se.johantiden.myfeed.persistence.model.Document;
+import se.johantiden.myfeed.persistence.Document;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.persistence.model;
+package se.johantiden.myfeed.persistence;
 
 public class UserDocument {
 

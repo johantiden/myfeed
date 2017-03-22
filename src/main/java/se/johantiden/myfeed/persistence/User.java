@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.persistence.model;
+package se.johantiden.myfeed.persistence;
 
 import com.google.common.collect.Lists;
 
@@ -9,11 +9,13 @@ import java.util.stream.Collectors;
 
 public class User {
 
+    private final long id;
     private final List<UserDocument> documents;
     private final List<FeedUser> feedsForUser;
     private Filter userGlobalFilter;
 
-    public User() {
+    public User(long id) {
+        this.id = id;
         this.documents = new ArrayList<>();
         this.feedsForUser = new ArrayList<>();
     }
@@ -38,15 +40,10 @@ public class User {
         this.userGlobalFilter = userGlobalFilter;
     }
 
-    private static void johanFeeds(User user) {
-
-    }
-
     public static User johan() {
 
-        User user = new User();
+        User user = new User(1337);
 
-        johanFeeds(user);
         johanFilters(user);
 
         return user;
@@ -77,5 +74,25 @@ public class User {
             String document = e.fullSourceEntryForSearch.toLowerCase();
             return searchPredicate.test(document);
         };
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+
+        return id == user.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ id >>> 32);
     }
 }
