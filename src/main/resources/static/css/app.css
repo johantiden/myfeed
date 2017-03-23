@@ -83,8 +83,8 @@ a:hover {
     display: inline-block;
     vertical-align: top;
     margin: 0;
-    width: 30px;
-    height: 20px;
+    width: 10vw;
+    height: 10vw;
 }
 
 .read {
@@ -92,8 +92,8 @@ a:hover {
 }
 
 .read-input {
-    width: 20px;
-    height: 20px;
+    width: 10vw;
+    height: 10vw;
 }
 
 .content-box {
