@@ -14,27 +14,30 @@
     <div class="navbar">
         <input ng-model="searchText" placeholder="Search">
     </div>
-    <div class="item-box {{item.cssClass}}" data-item="{{item}}" ng-repeat="item in items | filter:searchText">
-
+    <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}}" data-item="{{item}}" ng-repeat="item in items | filter:searchText">
+        <div class="input-box">
+            <input class="read-input" type="checkbox" ng-model="item.read">
+        </div>
         <div class="content-box">
+
             <div class="top-row">
                 <div class="feedName" ng-if="item.feedName"><a href="{{item.feedUrl}}">{{item.feedName}}</a></div>
                 <div class="author" ng-if="item.author"><a href="{{item.authorUrl}}">{{item.author}}</a></div>
                 <div class="time-since">{{item.publishedDateShort}}</div>
             </div>
 
-            <div class="image-box large">
-                <a href="{{item.pageUrl}}">
-                    <img class="image-box-image" src="{{item.imageUrl}}" ng-if="item.imageUrl" />
-                </a>
-            </div>
 
+            <!--<input class="read-input" type="checkbox" ng-model="item.read">-->
             <div class="title" ng-if="item.title"><a href="{{item.pageUrl}}">{{item.title}}</a></div>
             <div class="text" ng-if="item.text && not item.html"><a href="{{item.pageUrl}}">{{item.text}}</a></div>
 
 
             <span class="htmlContent" ng-bind-html="$sce.trustAsHtml(item.html)"></span>
-
+            <div class="image-box large">
+                <a href="{{item.pageUrl}}">
+                    <img class="image-box-image" src="{{item.imageUrl}}" ng-if="item.imageUrl" />
+                </a>
+            </div>
             <!--<div class="bottom-row">-->
                 <!--<button class="comments-button"></button>-->
             <!--</div>-->
