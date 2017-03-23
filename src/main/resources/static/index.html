@@ -33,7 +33,7 @@
 
 
             <span class="htmlContent" ng-bind-html="$sce.trustAsHtml(item.html)"></span>
-            <div class="image-box large">
+            <div ng-if="{{item.imageUrl}}" class="image-box large">
                 <a href="{{item.pageUrl}}">
                     <img class="image-box-image" src="{{item.imageUrl}}" ng-if="item.imageUrl" />
                 </a>
