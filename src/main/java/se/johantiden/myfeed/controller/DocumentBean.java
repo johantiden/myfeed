@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 
 public class DocumentBean {
 
+    public final String feedName;
     public final String feedUrl;
     public final String title;
     public final String text;
@@ -20,6 +21,7 @@ public class DocumentBean {
     public final String html;
 
     public DocumentBean(Document document) {
+        this.feedName = document.getFeed().getName();
         this.feedUrl = document.feedUrl;
         this.title = document.title;
         this.text = document.text;
@@ -31,6 +33,10 @@ public class DocumentBean {
         this.publishedDate = document.publishedDate;
         this.fullSourceEntryForSearch = document.fullSourceEntryForSearch;
         this.html = document.html;
+    }
+
+    public String getFeedName() {
+        return feedName;
     }
 
     public String getFeedUrl() {
