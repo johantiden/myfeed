@@ -6,3 +6,7 @@ div.twitter > div.content-box > div.top-row  > div.author > a {
 div.twitter > div.content-box > div.text {
     display: none;
 }
+
+.Emoji { /*lolz*/
+    display: none;
+}
