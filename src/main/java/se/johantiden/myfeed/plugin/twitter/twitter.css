@@ -7,6 +7,6 @@ div.twitter > div.content-box > div.text {
     display: none;
 }
 
-.Emoji { /*lolz*/
+.Emoji, .twitter-hashflag { /*lolz*/
     display: none;
 }
