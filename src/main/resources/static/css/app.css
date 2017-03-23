@@ -101,7 +101,7 @@ a:hover {
     display: inline-block;
     vertical-align: top;
     margin: 0;
-    max-width: 90%;
+    width: 88vw;
 }
 
 .top-row > *, .top-row > * > * {
