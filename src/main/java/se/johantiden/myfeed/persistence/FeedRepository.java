@@ -56,6 +56,13 @@ public class FeedRepository {
                 newHashMap("rssUrl", "https://xkcd.com/atom.xml")));
 
 
+        feeds.add(rss.createFeed(
+                "Ars Technica",
+                "https://arstechnica.com/",
+                "arstechnica",
+                newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index")));
+
+
 
         feeds.add(createTwitter("pwolodarski"));
         feeds.add(createTwitter("BillGates"));
