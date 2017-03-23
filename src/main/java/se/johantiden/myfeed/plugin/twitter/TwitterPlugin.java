@@ -44,6 +44,7 @@ public class TwitterPlugin implements Plugin{
 
         private static Function<Document, Document> createEntryMapper(String username) {
             return entry ->  {
+                entry.title = null;
                 entry.author = "@" + username;
                 entry.authorUrl = entry.feedUrl;
                 entry.feedUrl = "https://www.twitter.com";

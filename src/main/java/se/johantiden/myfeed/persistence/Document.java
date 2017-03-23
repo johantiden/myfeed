@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 public class Document {
 
     public String feedUrl;
-    public final String title;
+    public String title;
     public final String text;
     public String author;
     public String authorUrl;
