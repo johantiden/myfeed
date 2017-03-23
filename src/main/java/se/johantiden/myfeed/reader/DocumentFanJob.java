@@ -31,7 +31,10 @@ public class DocumentFanJob {
     private void consume(Document document) {
         log.info("DocumentFanJob consuming '{}'", document.pageUrl);
         Feed feed = document.getFeed();
-        feed.getFeedUsers().stream().map(FeedUser::getUser).forEach(user -> {
+        feed.getFeedUsers().stream()
+                .map(FeedUser::getUser)
+                .filter(u -> u.getUserGlobalFilter().test(document))
+                .forEach(user -> {
             documentService.put(new UserDocument(user, document));
         });
     }
