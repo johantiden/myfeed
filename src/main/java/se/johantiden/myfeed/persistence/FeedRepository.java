@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
     private List<Feed> allFeeds = null;
     public static final long INVALIDATION_PERIOD = 1;
-    public static final TemporalUnit INVALIDATION_PERIOD_UNIT = ChronoUnit.MINUTES;
+    public static final TemporalUnit INVALIDATION_PERIOD_UNIT = MINUTES;
 
 
     public List<Feed> allFeeds() {
@@ -66,6 +67,14 @@ public class FeedRepository {
                 "https://arstechnica.com/",
                 "arstechnica",
                 newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
+
+
+
+        feeds.add(rss.createFeed(
+                "Reddit - World News",
+                "https://reddit.com/r/worldnews",
+                "reddit",
+                newHashMap("rssUrl", "https://www.reddit.com/r/worldnews.rss"), 1, MINUTES));
 
 
 

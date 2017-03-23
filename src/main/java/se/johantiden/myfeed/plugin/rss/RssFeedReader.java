@@ -10,6 +10,8 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.plugin.FeedReader;
@@ -27,6 +29,7 @@ import static java.util.Objects.requireNonNull;
 
 public class RssFeedReader implements FeedReader {
 
+    private static final Logger log = LoggerFactory.getLogger(RssFeedReader.class);
     private final Feed feed;
     private final String rssUrl;
     private final String cssClass;
@@ -63,16 +66,16 @@ public class RssFeedReader implements FeedReader {
             String author = e.getAuthor();
             String authorUrl = getAuthorUrl(e);
             SyndContent description = e.getDescription();
-            String text = html2text(description.getValue());
+            String text = description == null ? null : html2text(description.getValue());
             Instant publishedDate = getDate(e);
-            String html = e.getDescription().getValue();
+            String html = description == null ? null : description.getValue();
 
             return new Document(feed, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), html);
         });
     }
 
     private static Instant getDate(SyndEntry e) {
-        Date date = e.getPublishedDate();
+        @SuppressWarnings("UseOfObsoleteDateTimeApi") Date date = e.getPublishedDate();
 
         if (date == null) {
             date = e.getUpdatedDate();
