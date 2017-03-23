@@ -16,7 +16,7 @@
     </div>
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}}" data-item="{{item}}" ng-repeat="item in items | filter:searchText">
         <div class="input-box">
-            <input class="read-input" type="checkbox" ng-model="item.read">
+            <input class="read-input" type="checkbox" ng-model="item.read" ng-change="setDocumentRead(item)">
         </div>
         <div class="content-box">
 

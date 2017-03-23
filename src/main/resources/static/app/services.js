@@ -1,5 +1,11 @@
-app.service('unreadservice', function($http) {
-    this.loadData = function (callback) {
+app.service('documentService', function($http) {
+
+    this.putItem = function (item) {
+        $http.put("/rest/documents", item);
+    };
+
+
+    this.getUnread = function (callback) {
 
 
 

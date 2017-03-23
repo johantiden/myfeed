@@ -23,6 +23,7 @@ public class DocumentRepository {
     public List<UserDocument> getUnreadDocuments(User user) {
         return getUserDocuments(user)
                 .stream()
+                .filter(UserDocument::isUnread)
                 .collect(Collectors.toList());
 
     }
@@ -54,6 +55,16 @@ public class DocumentRepository {
         return userDocument;
     }
 
+
+    public Optional<UserDocument> findUserDocumentByPageUrl(String pageUrl) {
+        Predicate<UserDocument> documentPredicate = d -> Objects.equals(d.getDocument().pageUrl, pageUrl);
+
+        return allUserDocumentsInMemory.values().stream()
+                .flatMap(Collection::stream)
+                .filter(documentPredicate)
+                .findAny();
+    }
+
     public void add(Document document) {
         // TODO: Thread safe collection (or external queue e.g. rabbit)
         unfannedDocumentsQueue.add(document);
@@ -69,4 +80,5 @@ public class DocumentRepository {
     public void add(UserDocument userDocument) {
         getUserDocuments(userDocument.getUser()).add(userDocument);
     }
+
 }

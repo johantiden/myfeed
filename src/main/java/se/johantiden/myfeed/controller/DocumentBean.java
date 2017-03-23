@@ -1,6 +1,6 @@
 package se.johantiden.myfeed.controller;
 
-import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.UserDocument;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -19,20 +19,22 @@ public class DocumentBean {
     public final Instant publishedDate;
     public final String fullSourceEntryForSearch;
     public final String html;
+    public final boolean read;
 
-    public DocumentBean(Document document) {
-        this.feedName = document.getFeed().getName();
-        this.feedUrl = document.feedUrl;
-        this.title = document.title;
-        this.text = document.text;
-        this.author = document.author;
-        this.authorUrl = document.authorUrl;
-        this.cssClass = document.cssClass;
-        this.pageUrl = document.pageUrl;
-        this.imageUrl = document.imageUrl;
-        this.publishedDate = document.publishedDate;
-        this.fullSourceEntryForSearch = document.fullSourceEntryForSearch;
-        this.html = document.html;
+    public DocumentBean(UserDocument userDocument) {
+        this.feedName = userDocument.getDocument().getFeed().getName();
+        this.feedUrl = userDocument.getDocument().feedUrl;
+        this.title = userDocument.getDocument().title;
+        this.text = userDocument.getDocument().text;
+        this.author = userDocument.getDocument().author;
+        this.authorUrl = userDocument.getDocument().authorUrl;
+        this.cssClass = userDocument.getDocument().cssClass;
+        this.pageUrl = userDocument.getDocument().pageUrl;
+        this.imageUrl = userDocument.getDocument().imageUrl;
+        this.publishedDate = userDocument.getDocument().publishedDate;
+        this.fullSourceEntryForSearch = userDocument.getDocument().fullSourceEntryForSearch;
+        this.html = userDocument.getDocument().html;
+        this.read = userDocument.isRead();
     }
 
     public String getFeedName() {
@@ -84,6 +86,10 @@ public class DocumentBean {
 
     public String getFullSourceEntryForSearch() {
         return fullSourceEntryForSearch;
+    }
+
+    public boolean isRead() {
+        return read;
     }
 
     public static String dateToShortString(Instant instant) {

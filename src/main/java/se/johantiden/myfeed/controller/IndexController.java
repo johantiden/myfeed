@@ -19,26 +19,12 @@ public class IndexController {
     private DocumentService documentService;
 
     @RequestMapping("/rest/index")
-    List<DocumentBean> index() {
-
-        List<DocumentBean> outputs = getRealOutput();
-
-
-        for (DocumentBean document : outputs) {
-            System.out.println(document);
-        }
-
-
-        return outputs;
-    }
-
-    private List<DocumentBean> getRealOutput() {
+    public List<DocumentBean> index() {
 
         User johan = User.johan();
-
         List<UserDocument> userDocuments = documentService.getUnreadDocumentsFor(johan);
 
-
-        return userDocuments.stream().map(UserDocument::getDocument).map(DocumentBean::new).collect(Collectors.toList());
+        return userDocuments.stream().map(DocumentBean::new).collect(Collectors.toList());
     }
+
 }
