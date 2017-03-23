@@ -22,7 +22,7 @@ public class DocumentFanJob {
     private DocumentService documentService;
 
 
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 50)
     public void consumeOne() {
         Optional<Document> document = documentService.popNewestUnfanned();
         document.ifPresent(this::consume);

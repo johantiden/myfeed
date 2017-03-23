@@ -23,6 +23,8 @@ public class FeedReaderService {
                 return new RssPlugin().createFeedReader(feed);
             case TWITTER:
                 return new TwitterPlugin().createFeedReader(feed);
+            case NONE:
+                return new EmptyReader();
             default:
                 throw new IllegalArgumentException("Plugin support not implemented! plugin:" + type.name());
         }

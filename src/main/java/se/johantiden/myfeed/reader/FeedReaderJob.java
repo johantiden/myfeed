@@ -24,16 +24,18 @@ public class FeedReaderJob {
     @Autowired
     private DocumentService documentService;
 
-    @Scheduled(fixedRate = 5_000)
+    @Scheduled(fixedRate = 100)
     public void myRunnable() {
-        consume(feedService.popOldestFeed());
+        consume(feedService.popOldestInvalidatedFeed());
     }
 
     private void consume(Feed feed) {
-        log.info("Reading feed '{}'...", feed.getName());
+
         List<Document> documents = feedReaderService.readAll(feed);
         documentService.put(documents);
-        log.info("Done reading feed '{}'...", feed.getName());
+        if (!documents.isEmpty()) {
+            log.info("Done reading feed '{}'. Found a total of {} documents.", feed.getName(), documents.size());
+        }
     }
 
 }

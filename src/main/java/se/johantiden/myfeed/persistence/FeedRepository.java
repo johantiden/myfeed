@@ -3,14 +3,19 @@ package se.johantiden.myfeed.persistence;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
     private List<Feed> allFeeds = null;
+    public static final long INVALIDATION_PERIOD = 1;
+    public static final TemporalUnit INVALIDATION_PERIOD_UNIT = ChronoUnit.MINUTES;
 
 
     public List<Feed> allFeeds() {
@@ -28,39 +33,39 @@ public class FeedRepository {
                 "Slashdot",
                 "https://slashdot.org",
                 "slashdot",
-                newHashMap("rssUrl", "http://rss.slashdot.org/Slashdot/slashdotMainatom")));
+                newHashMap("rssUrl", "http://rss.slashdot.org/Slashdot/slashdotMainatom"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
         feeds.add(rss.createFeed(
                 "Svenska Dagbladet",
                 "https://www.svd.se",
                 "svd",
-                newHashMap("rssUrl", "https://www.svd.se/?service=rss")));
+                newHashMap("rssUrl", "https://www.svd.se/?service=rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
         feeds.add(rss.createFeed(
                 "Svenska Dagbladet",
                 "https://www.svd.se",
                 "svd",
-                newHashMap("rssUrl", "https://www.svd.se/?service=rss")));
+                newHashMap("rssUrl", "https://www.svd.se/?service=rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
         feeds.add(rss.createFeed(
                 "Dagens Nyheter - Världen",
                 "https://www.dn.se",
                 "dn",
-                newHashMap("rssUrl", "http://www.dn.se/nyheter/varlden/rss/")));
+                newHashMap("rssUrl", "http://www.dn.se/nyheter/varlden/rss/"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
 
         feeds.add(rss.createFeed(
                 "xkcd",
                 "https://xkcd.com",
                 "xkcd",
-                newHashMap("rssUrl", "https://xkcd.com/atom.xml")));
+                newHashMap("rssUrl", "https://xkcd.com/atom.xml"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
 
         feeds.add(rss.createFeed(
                 "Ars Technica",
                 "https://arstechnica.com/",
                 "arstechnica",
-                newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index")));
+                newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
 
 
@@ -79,7 +84,12 @@ public class FeedRepository {
                 "Twitter",
                 "https://twitter.com/"+username,
                 "twitter",
-                newHashMap("username", username));
+                newHashMap("username", username), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT);
     }
 
+    public List<Feed> invalidatedFeeds() {
+        return allFeeds().stream()
+                .filter(Feed::isInvalidated)
+                .collect(Collectors.toList());
+    }
 }

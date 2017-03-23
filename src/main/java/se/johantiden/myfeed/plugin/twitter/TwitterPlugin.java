@@ -2,11 +2,13 @@ package se.johantiden.myfeed.plugin.twitter;
 
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssFeedReader;
 
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -16,8 +18,8 @@ import static se.johantiden.myfeed.util.JCollections.map;
 public class TwitterPlugin implements Plugin{
 
     @Override
-    public Feed createFeed(String feedName, String webUrl, String cssClass, Map<String, String> readerParameters) {
-        return new Feed(PluginType.TWITTER, feedName, webUrl, readerParameters, "twitter");
+    public Feed createFeed(String feedName, String webUrl, String cssClass, Map<String, String> readerParameters, long invalidationPeriod, TemporalUnit invalidationPeriodUnit) {
+        return new FeedImpl(PluginType.TWITTER, feedName, webUrl, readerParameters, "twitter", invalidationPeriod, invalidationPeriodUnit);
     }
 
     @Override
