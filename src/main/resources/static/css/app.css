@@ -6,6 +6,7 @@
 body {
     background-color: #EEEEEE;
     margin: 0;
+    font-family: 'Roboto', sans-serif;
 }
 a {
     color: black;
@@ -113,6 +114,7 @@ div.text {
 
 .title > a {
     font-size: large;
+    font-weight: bold;
 }
 
 .navbar {
