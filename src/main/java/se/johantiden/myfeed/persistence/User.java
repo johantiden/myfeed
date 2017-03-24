@@ -1,31 +1,25 @@
 package se.johantiden.myfeed.persistence;
 
 import com.google.common.collect.Lists;
+import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-public class User {
+public class User implements Persistable<User> {
 
-    private final long id;
     private final List<UserDocument> documents;
     private final List<FeedUser> feedsForUser;
+    private final Key<User> key;
     private Filter userGlobalFilter;
 
-    public User(long id) {
-        this.id = id;
+    public User(Key<User> key) {
+        this.key = key;
         this.documents = new ArrayList<>();
         this.feedsForUser = new ArrayList<>();
-    }
-
-    public List<UserDocument> getDocuments() {
-        return documents;
-    }
-
-    public List<UserDocument> getUnreadEntries() {
-        return documents.stream().filter(UserDocument::isUnread).collect(Collectors.toList());
     }
 
     public Filter getUserGlobalFilter() {
@@ -37,12 +31,12 @@ public class User {
     }
 
     public void setUserGlobalFilter(Filter userGlobalFilter) {
-        this.userGlobalFilter = userGlobalFilter;
+        this.userGlobalFilter = Objects.requireNonNull(userGlobalFilter);
     }
 
     public static User johan() {
 
-        User user = new User(1337);
+        User user = new User(Keys.user("johan"));
 
         johanFilters(user);
 
@@ -87,12 +81,30 @@ public class User {
 
         User user = (User) o;
 
-        return id == user.id;
+        if (!documents.equals(user.documents)) {
+            return false;
+        }
+        if (!feedsForUser.equals(user.feedsForUser)) {
+            return false;
+        }
+        if (!key.equals(user.key)) {
+            return false;
+        }
+        return userGlobalFilter.equals(user.userGlobalFilter);
 
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ id >>> 32);
+        int result = documents.hashCode();
+        result = 31 * result + feedsForUser.hashCode();
+        result = 31 * result + key.hashCode();
+        result = 31 * result + userGlobalFilter.hashCode();
+        return result;
+    }
+
+    @Override
+    public Key<User> getKey() {
+        return key;
     }
 }

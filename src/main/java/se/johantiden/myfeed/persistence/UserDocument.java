@@ -1,6 +1,9 @@
 package se.johantiden.myfeed.persistence;
 
-public class UserDocument {
+import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.persistence.redis.Keys;
+
+public class UserDocument implements Persistable<UserDocument> {
 
     private final User user;
     private final Document document;
@@ -29,5 +32,10 @@ public class UserDocument {
 
     public boolean isUnread() {
         return !read;
+    }
+
+    @Override
+    public Key<UserDocument> getKey() {
+        return Keys.userDocument(user.getKey(), document.getKey());
     }
 }

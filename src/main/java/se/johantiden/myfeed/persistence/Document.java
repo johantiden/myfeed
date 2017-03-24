@@ -1,10 +1,13 @@
 package se.johantiden.myfeed.persistence;
 
 
+import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.persistence.redis.Keys;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-public class Document {
+public class Document implements Persistable<Document> {
 
     public String feedUrl;
     public String title;
@@ -89,5 +92,10 @@ public class Document {
 
     public Feed getFeed() {
         return feed;
+    }
+
+    @Override
+    public Key<Document> getKey() {
+        return Keys.document(this);
     }
 }

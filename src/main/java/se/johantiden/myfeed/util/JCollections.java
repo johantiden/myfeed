@@ -1,7 +1,10 @@
 package se.johantiden.myfeed.util;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -16,8 +19,8 @@ public final class JCollections {
         return list.stream()
                 .flatMap(e -> children.apply(e).stream())
                 .collect(Collectors.toList());
-
     }
+
     public static <T, R> List<R> map(Collection<T> list, Function<T, R> mapper) {
         return list.stream()
                 .map(mapper)
@@ -44,4 +47,9 @@ public final class JCollections {
                 .orElse(emptyObject);
     }
 
+    public static <E> E getSingle(Collection<E> collection) {
+        Objects.requireNonNull(collection);
+        Preconditions.checkArgument(collection.size() == 1, "There must be 1 and only 1 element!");
+        return collection.iterator().next();
+    }
 }

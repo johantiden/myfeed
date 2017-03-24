@@ -10,6 +10,7 @@ import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedUser;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.service.DocumentService;
+import se.johantiden.myfeed.service.UserDocumentService;
 
 import java.util.Optional;
 
@@ -20,6 +21,8 @@ public class DocumentFanJob {
 
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private UserDocumentService userDocumentService;
 
 
     @Scheduled(fixedRate = 50)
@@ -35,7 +38,7 @@ public class DocumentFanJob {
                 .map(FeedUser::getUser)
                 .filter(u -> u.getUserGlobalFilter().test(document))
                 .forEach(user -> {
-            documentService.put(new UserDocument(user, document));
-        });
+                    userDocumentService.put(new UserDocument(user, document));
+                });
     }
 }

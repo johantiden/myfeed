@@ -6,9 +6,6 @@ app.service('documentService', function($http) {
 
 
     this.getUnread = function (callback) {
-
-
-
         $http.get("/rest/index")
             .then(function(response) {
                 callback(response.data);

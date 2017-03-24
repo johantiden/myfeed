@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.User;
 import se.johantiden.myfeed.persistence.UserDocument;
-import se.johantiden.myfeed.service.DocumentService;
+import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.persistence.redis.Keys;
+import se.johantiden.myfeed.service.UserDocumentService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,13 +19,13 @@ import java.util.stream.Collectors;
 public class IndexController {
 
     @Autowired
-    private DocumentService documentService;
+    private UserDocumentService userDocumentService;
 
     @RequestMapping("/rest/index")
-    public List<DocumentBean> index() {
+    public List<DocumentBean> index(HttpServletRequest req  ) {
 
-        User johan = User.johan();
-        List<UserDocument> userDocuments = documentService.getUnreadDocumentsFor(johan);
+        Key<User> johan = Keys.user("johan");
+        List<UserDocument> userDocuments = userDocumentService.getUnreadDocumentsFor(johan);
 
         return userDocuments.stream().map(DocumentBean::new).collect(Collectors.toList());
     }
