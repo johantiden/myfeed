@@ -13,6 +13,7 @@
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
         <input ng-model="searchText" placeholder="Search">
+        {{(items | filter:searchText).length}}
     </div>
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}}" data-item="{{item}}" ng-repeat="item in items | filter:searchText">
         <div class="input-box">
