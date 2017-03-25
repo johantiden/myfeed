@@ -46,10 +46,8 @@ public class User implements Persistable<User> {
     private static void johanFilters(User user) {
 
         Predicate<Document> notKultur = filter(s -> {
-            boolean kultur = s.contains("kultur");
-            boolean svd = s.contains("svd.se");
-            boolean svdKultur = svd && kultur;
-            return !svdKultur;
+            boolean kultur = s.contains("categories[0].name=kultur");
+            return !kultur;
         });
         Predicate<Document> notZlatan = filter(s -> {
             boolean isZlatan = s.contains("zlatan");
@@ -60,7 +58,23 @@ public class User implements Persistable<User> {
             boolean trump = s.contains("trump");
             return !trump;
         });
-        user.setUserGlobalFilter(new Filter(Lists.newArrayList(notKultur, notZlatan, notTrump)));
+        Predicate<Document> notDnMedanDuSov = filter(s -> {
+            boolean medanDuSov = s.contains("dn.se") && s.contains("medan du sov");
+            return !medanDuSov;
+        });
+
+        Predicate<Document> notSvdMatOchDryck = filter(s -> {
+            boolean matOchDryck = s.contains("svd.se") && s.contains("categories[0].name=mat &#38; dryck");
+            return !matOchDryck;
+        });
+        Predicate<Document> notSport = filter(s -> {
+            boolean sport = s.contains("categories[0].name=sport") || s.contains("nhl") || s.contains("premier league")
+                    || s.contains("allsvenskan");
+            return !sport;
+        });
+
+        user.setUserGlobalFilter(new Filter(Lists.newArrayList(
+                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport)));
     }
 
     private static Predicate<Document> filter(Predicate<String> searchPredicate) {
