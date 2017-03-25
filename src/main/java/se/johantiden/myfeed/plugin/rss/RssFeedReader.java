@@ -31,6 +31,7 @@ import static java.util.Objects.requireNonNull;
 
 public class RssFeedReader implements FeedReader {
 
+    private static final Logger log = LoggerFactory.getLogger(RssFeedReader.class);
     private final Feed feed;
     private final String rssUrl;
     private final String cssClass;
@@ -69,12 +70,37 @@ public class RssFeedReader implements FeedReader {
             Instant publishedDate = getDate(e);
             String categoryNames = getCategoryNamesString(e);
             String categoryUrl = getCategoryUrl(e);
-            SyndContent description = e.getDescription();
-            String text = description == null ? null : html2text(description.getValue());
-            String html = description == null ? null : description.getValue();
-
+            String descriptionHtml = getDescription(e);
+            String contentHtml = getContentHtml(e);
+            String text = descriptionHtml == null ? null : html2text(descriptionHtml);
+            String html = descriptionHtml == null ? null : descriptionHtml;
+            if (html == null) {
+                html = contentHtml;
+            }
             return new Document(feed, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), categoryNames, html, categoryUrl);
         });
+    }
+
+    private static String getDescription(SyndEntry e) {
+        SyndContent description = e.getDescription();
+        if (description == null) {
+            return null;
+        }
+        return description.getValue();
+    }
+
+    private static String getContentHtml(SyndEntry e) {
+        List<SyndContent> contents = e.getContents();
+        if (contents.isEmpty()) {
+            return null;
+        }
+        if (contents.size() > 1) {
+            log.warn("More than one content!");
+        }
+
+        SyndContent syndContent = contents.get(0);
+        return syndContent.getValue();
+
     }
 
     private static String getCategoryUrl(SyndEntry e) {
