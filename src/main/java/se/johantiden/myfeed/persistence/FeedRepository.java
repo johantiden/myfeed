@@ -43,12 +43,6 @@ public class FeedRepository {
                 newHashMap("rssUrl", "https://www.svd.se/?service=rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
         feeds.add(rss.createFeed(
-                "Svenska Dagbladet",
-                "https://www.svd.se",
-                "svd",
-                newHashMap("rssUrl", "https://www.svd.se/?service=rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
-
-        feeds.add(rss.createFeed(
                 "Dagens Nyheter - Världen",
                 "https://www.dn.se",
                 "dn",
@@ -75,6 +69,12 @@ public class FeedRepository {
                 "https://reddit.com/r/worldnews",
                 "reddit",
                 newHashMap("rssUrl", "https://www.reddit.com/r/worldnews.rss"), 1, MINUTES));
+
+        feeds.add(rss.createFeed(
+                "TheLocal",
+                "https://www.thelocal.se/",
+                "thelocal",
+                newHashMap("rssUrl", "https://www.thelocal.se/feeds/rss.php"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
 
 
