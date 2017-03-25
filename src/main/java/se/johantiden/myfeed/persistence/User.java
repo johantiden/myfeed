@@ -66,7 +66,17 @@ public class User {
             boolean trump = s.contains("trump");
             return !trump;
         });
-        user.setUserGlobalFilter(new Filter(Lists.newArrayList(notKultur, notZlatan, notTrump)));
+        Predicate<Document> notDnMedanDuSov = filter(s -> {
+            boolean medanDuSov = s.contains("dn.se") && s.contains("medan du sov");
+            return !medanDuSov;
+        });
+
+        Predicate<Document> notSvdMatOchDryck = filter(s -> {
+            boolean matOchDryck = s.contains("svd.se") && s.contains("categories[0].name=mat &#38; dryck");
+            return !matOchDryck;
+        });
+
+        user.setUserGlobalFilter(new Filter(Lists.newArrayList(notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck)));
     }
 
     private static Predicate<Document> filter(Predicate<String> searchPredicate) {
