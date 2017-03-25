@@ -52,10 +52,8 @@ public class User {
     private static void johanFilters(User user) {
 
         Predicate<Document> notKultur = filter(s -> {
-            boolean kultur = s.contains("kultur");
-            boolean svd = s.contains("svd.se");
-            boolean svdKultur = svd && kultur;
-            return !svdKultur;
+            boolean kultur = s.contains("categories[0].name=kultur");
+            return !kultur;
         });
         Predicate<Document> notZlatan = filter(s -> {
             boolean isZlatan = s.contains("zlatan");
@@ -75,8 +73,13 @@ public class User {
             boolean matOchDryck = s.contains("svd.se") && s.contains("categories[0].name=mat &#38; dryck");
             return !matOchDryck;
         });
+        Predicate<Document> notSport = filter(s -> {
+            boolean sport = s.contains("categories[0].name=sport");
+            return !sport;
+        });
 
-        user.setUserGlobalFilter(new Filter(Lists.newArrayList(notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck)));
+        user.setUserGlobalFilter(new Filter(Lists.newArrayList(
+                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport)));
     }
 
     private static Predicate<Document> filter(Predicate<String> searchPredicate) {
