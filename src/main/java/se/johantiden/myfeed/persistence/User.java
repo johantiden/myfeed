@@ -74,7 +74,8 @@ public class User {
             return !matOchDryck;
         });
         Predicate<Document> notSport = filter(s -> {
-            boolean sport = s.contains("categories[0].name=sport") || s.contains("nhl");
+            boolean sport = s.contains("categories[0].name=sport") || s.contains("nhl") || s.contains("premier league")
+                    || s.contains("allsvenskan");
             return !sport;
         });
 
