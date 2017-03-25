@@ -84,7 +84,7 @@ public class User {
         });
 
         user.setUserGlobalFilter(new Filter(Lists.newArrayList(
-                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport)));
+                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport, notResor)));
     }
 
     private static Predicate<Document> filter(Predicate<String> searchPredicate) {
