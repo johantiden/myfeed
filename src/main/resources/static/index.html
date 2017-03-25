@@ -33,14 +33,11 @@
 
 
             <span class="htmlContent" ng-bind-html="$sce.trustAsHtml(item.html)"></span>
-            <div ng-if="{{item.imageUrl}}" class="image-box large">
+            <div ng-if="item.imageUrl" class="image-box">
                 <a href="{{item.pageUrl}}">
                     <img class="image-box-image" src="{{item.imageUrl}}" ng-if="item.imageUrl" />
                 </a>
             </div>
-            <!--<div class="bottom-row">-->
-                <!--<button class="comments-button"></button>-->
-            <!--</div>-->
 
         </div>
     </div>
