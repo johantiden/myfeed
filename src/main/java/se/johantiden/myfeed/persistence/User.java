@@ -51,6 +51,10 @@ public class User {
 
     private static void johanFilters(User user) {
 
+        Predicate<Document> notResor = filter(s -> {
+            boolean resor = s.contains("www.dn.se/resor");
+            return !resor;
+        });
         Predicate<Document> notKultur = filter(s -> {
             boolean kultur = s.contains("categories[0].name=kultur");
             return !kultur;
