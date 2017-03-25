@@ -75,7 +75,7 @@ public class User {
         });
         Predicate<Document> notSport = filter(s -> {
             boolean sport = s.contains("categories[0].name=sport") || s.contains("nhl") || s.contains("premier league")
-                    || s.contains("allsvenskan");
+                    || s.contains("allsvenskan") || s.contains("dn.se/sport");
             return !sport;
         });
 

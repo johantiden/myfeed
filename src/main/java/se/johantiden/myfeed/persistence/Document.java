@@ -17,6 +17,8 @@ public class Document {
     public final Instant publishedDate;
     public final String fullSourceEntryForSearch;
     public final String html;
+    public String category;
+    public String categoryUrl;
     private Feed feed;
 
     public Document(
@@ -31,7 +33,9 @@ public class Document {
             String imageUrl,
             Instant publishedDate,
             String fullSourceEntryForSearch,
-            String html) {
+            String category,
+            String html,
+            String categoryUrl) {
         this.feed = feed;
         this.feedUrl = feedUrl;
         this.title = title;
@@ -43,12 +47,19 @@ public class Document {
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.fullSourceEntryForSearch = fullSourceEntryForSearch;
+        this.category = category;
         this.html = html;
+        this.categoryUrl = categoryUrl;
     }
 
     public static String dateToShortString(Instant instant) {
 
         Instant now = Instant.now();
+
+        long weeks = instant.until(now, ChronoUnit.WEEKS);
+        if (weeks >= 1) {
+            return weeks + "d";
+        }
 
         long days = instant.until(now, ChronoUnit.DAYS);
         if (days >= 1) {

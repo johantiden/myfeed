@@ -4,6 +4,7 @@ import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.plugin.FeedReader;
+import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
@@ -23,6 +24,8 @@ public class FeedReaderService {
                 return new RssPlugin().createFeedReader(feed);
             case TWITTER:
                 return new TwitterPlugin().createFeedReader(feed);
+            case DAGENS_NYHETER:
+                return new DagensNyheterPlugin().createFeedReader(feed);
             case NONE:
                 return new EmptyReader();
             default:

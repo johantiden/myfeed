@@ -19,7 +19,7 @@ public class RssPlugin implements Plugin {
             Map<String, String> readerParameters,
             long invalidationPeriod,
             TemporalUnit invalidationPeriodUnit) {
-        return new FeedImpl(PluginType.RSS, feedName, webUrl, readerParameters, cssClass, invalidationPeriod, invalidationPeriodUnit);
+        return new FeedImpl(PluginType.RSS, feedName, webUrl, cssClass, readerParameters, invalidationPeriod, invalidationPeriodUnit);
     }
 
     @Override

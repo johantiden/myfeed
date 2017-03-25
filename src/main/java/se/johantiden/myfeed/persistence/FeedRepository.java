@@ -1,9 +1,9 @@
 package se.johantiden.myfeed.persistence;
 
+import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +42,12 @@ public class FeedRepository {
                 "svd",
                 newHashMap("rssUrl", "https://www.svd.se/?service=rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
-        feeds.add(rss.createFeed(
-                "Dagens Nyheter - Världen",
+        DagensNyheterPlugin dn = new DagensNyheterPlugin();
+        feeds.add(dn.createFeed(
+                "Dagens Nyheter",
                 "https://www.dn.se",
                 "dn",
-                newHashMap("rssUrl", "http://www.dn.se/nyheter/varlden/rss/"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
-
+                newHashMap("rssUrl", "http://www.dn.se/nyheter/rss/"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
         feeds.add(rss.createFeed(
                 "xkcd",
@@ -55,14 +55,11 @@ public class FeedRepository {
                 "xkcd",
                 newHashMap("rssUrl", "https://xkcd.com/atom.xml"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
-
         feeds.add(rss.createFeed(
                 "Ars Technica",
                 "https://arstechnica.com/",
                 "arstechnica",
                 newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
-
-
 
         feeds.add(rss.createFeed(
                 "Reddit - World News",
@@ -75,8 +72,6 @@ public class FeedRepository {
                 "https://www.thelocal.se/",
                 "thelocal",
                 newHashMap("rssUrl", "https://www.thelocal.se/feeds/rss.php"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
-
-
 
         feeds.add(createTwitter("pwolodarski"));
         feeds.add(createTwitter("BillGates"));

@@ -23,8 +23,7 @@ public class FeedImpl implements Feed {
             PluginType type,
             String name,
             String webUrl,
-            Map<String, String> feedReaderParameters,
-            String cssClass,
+            String cssClass, Map<String, String> feedReaderParameters,
             long invalidationPeriod,
             TemporalUnit invalidationPeriodUnit) {
         this.name = name;
