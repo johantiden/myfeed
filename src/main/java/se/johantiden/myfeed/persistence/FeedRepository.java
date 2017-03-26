@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
+import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
@@ -14,7 +15,7 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
-    private List<Feed> allFeeds = null;
+    private List<Feed> allFeeds;
     public static final long INVALIDATION_PERIOD = 1;
     public static final TemporalUnit INVALIDATION_PERIOD_UNIT = MINUTES;
 
@@ -61,11 +62,11 @@ public class FeedRepository {
                 "arstechnica",
                 newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
-        feeds.add(createReddit(rss, "r/worldnews"));
-        feeds.add(createReddit(rss, "r/AskReddit"));
-        feeds.add(createReddit(rss, "r/Futurology"));
-        feeds.add(createReddit(rss, "r/science"));
-        feeds.add(createReddit(rss, "top"));
+        feeds.add(createReddit("r/worldnews"));
+        feeds.add(createReddit("r/AskReddit"));
+        feeds.add(createReddit("r/Futurology"));
+        feeds.add(createReddit("r/science"));
+        feeds.add(createReddit("top"));
 
         feeds.add(rss.createFeed(
                 "TheLocal",
@@ -82,8 +83,8 @@ public class FeedRepository {
         return feeds;
     }
 
-    private static Feed createReddit(RssPlugin rss, String subreddit) {
-        return rss.createFeed(
+    private static Feed createReddit(String subreddit) {
+        return new RedditPlugin().createFeed(
                 "Reddit",
                 "https://www.reddit.com/"+subreddit,
                 "reddit",
