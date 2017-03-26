@@ -61,11 +61,12 @@ public class FeedRepository {
                 "arstechnica",
                 newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
-        feeds.add(rss.createFeed(
-                "Reddit",
-                "https://reddit.com/r/worldnews",
-                "reddit",
-                newHashMap("rssUrl", "https://www.reddit.com/r/worldnews.rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
+        feeds.add(createReddit(rss, "r/worldnews"));
+//        feeds.add(createReddit(rss, "r/AskReddit"));
+//        feeds.add(createReddit(rss, "r/UpliftingNews"));
+//        feeds.add(createReddit(rss, "r/Futurology"));
+//        feeds.add(createReddit(rss, "r/science"));
+//        feeds.add(createReddit(rss, "top"));
 
         feeds.add(rss.createFeed(
                 "TheLocal",
@@ -80,6 +81,14 @@ public class FeedRepository {
         User johan = User.johan();
         feeds.forEach(f -> f.getFeedUsers().add(new FeedUser(f, johan)));
         return feeds;
+    }
+
+    private static Feed createReddit(RssPlugin rss, String subreddit) {
+        return rss.createFeed(
+                "Reddit",
+                "https://www.reddit.com/"+subreddit,
+                "reddit",
+                newHashMap("rssUrl", "https://www.reddit.com/"+subreddit+"/.rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT);
     }
 
     private static Feed createTwitter(String username) {
