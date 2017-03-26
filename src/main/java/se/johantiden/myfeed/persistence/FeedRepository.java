@@ -62,11 +62,10 @@ public class FeedRepository {
                 newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
         feeds.add(createReddit(rss, "r/worldnews"));
-//        feeds.add(createReddit(rss, "r/AskReddit"));
-//        feeds.add(createReddit(rss, "r/UpliftingNews"));
-//        feeds.add(createReddit(rss, "r/Futurology"));
-//        feeds.add(createReddit(rss, "r/science"));
-//        feeds.add(createReddit(rss, "top"));
+        feeds.add(createReddit(rss, "r/AskReddit"));
+        feeds.add(createReddit(rss, "r/Futurology"));
+        feeds.add(createReddit(rss, "r/science"));
+        feeds.add(createReddit(rss, "top"));
 
         feeds.add(rss.createFeed(
                 "TheLocal",
