@@ -7,6 +7,7 @@ import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.persistence.redis.RedisSet;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class DocumentRepository {
 
@@ -20,10 +21,19 @@ public class DocumentRepository {
     }
 
     public Optional<Document> getNextUnfanned() {
-        return getDocuments().popRandomElement(Document.class);
+        return getDocuments().popAnyElement(Document.class);
     }
 
     public void put(Document document) {
         getDocuments().put(document, Document::getKey, Document.class);
+    }
+
+    public Optional<Document> find(Document document) {
+        return find(doc -> doc.getKey().equals(document.getKey()));
+    }
+
+    public Optional<Document> find(Predicate<Document> predicate) {
+        return getDocuments().find(predicate, Document.class);
+
     }
 }

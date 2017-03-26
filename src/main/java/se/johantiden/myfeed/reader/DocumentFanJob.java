@@ -31,8 +31,13 @@ public class DocumentFanJob {
 
     @Scheduled(fixedRate = 50)
     public void consumeOne() {
-        Optional<Document> document = documentService.popNewestUnfanned();
-        document.ifPresent(this::consume);
+        Optional<Document> documentOptional = documentService.find(Document::isUnfanned);
+
+        documentOptional.ifPresent(document -> {
+            consume(document);
+            document.setFanned(true);
+            documentService.put(document);
+        });
     }
 
     private void consume(Document document) {

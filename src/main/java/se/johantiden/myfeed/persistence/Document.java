@@ -26,6 +26,8 @@ public class Document implements Persistable<Document> {
     private Key<Feed> feed;
     public String categoryName;
     public String categoryUrl;
+    public boolean fanned;
+
 
     public Document(
             Key<Feed> feed,
@@ -119,6 +121,18 @@ public class Document implements Persistable<Document> {
 
     public Key<Feed> getFeed() {
         return feed;
+    }
+
+    public boolean isFanned() {
+        return fanned;
+    }
+
+    public boolean isUnfanned() {
+        return !fanned;
+    }
+
+    public void setFanned(boolean fanned) {
+        this.fanned = fanned;
     }
 
     @Override

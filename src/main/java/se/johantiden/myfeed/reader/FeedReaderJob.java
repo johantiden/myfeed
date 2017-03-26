@@ -36,7 +36,7 @@ public class FeedReaderJob {
 
         List<Document> filtered = documents.stream().filter(feed.getFilter()).collect(Collectors.toList());
 
-        documentService.put(filtered);
+        documentService.putIfNew(filtered);
         if (!filtered.isEmpty()) {
             log.info("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter",
                     feed.getName(), filtered.size(), documents.size()-filtered.size());

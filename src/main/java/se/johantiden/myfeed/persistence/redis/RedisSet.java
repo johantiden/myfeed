@@ -31,7 +31,7 @@ public class RedisSet<T> {
     /**
      * spop
      */
-    public Optional<T> popRandomElement(Type type) {
+    public Optional<T> popAnyElement(Type type) {
         return openJedis(j -> {
             String spop = j.spop(myKey);
             return Optional.ofNullable(spop).map(s -> fromJson(s, type));
