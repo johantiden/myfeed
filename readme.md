@@ -1,6 +1,4 @@
 
-WORK IN PROGRESS!
-
 *myfeed* aggregates your news flows into a single feed.
 There are many aggregators like this, but this one is mine. 
 
@@ -16,7 +14,12 @@ This repo will mostly be a base for prototyping. In the future, plugins should b
 ---
 Get started:
 
-mvn clean install exec:java
+
+Install a local redis
+https://redis.io/topics/quickstart
+run with *redis-server* (i.e. not in sentinel mode)
+
+./start.sh
 
 This will start a web app running locally at port 8080.
 http://localhost:8080

@@ -1,18 +1,21 @@
 package se.johantiden.myfeed.persistence;
 
 
+import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.util.JString;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.function.Predicate;
 
-public class Document {
+public class Document implements Persistable<Document> {
 
+    public final String feedName;
     public String feedUrl;
     public String title;
     public final String text;
-    public String author;
+    public String authorName;
     public String authorUrl;
     public final String cssClass;
     public final String pageUrl;
@@ -20,37 +23,41 @@ public class Document {
     public final Instant publishedDate;
     public final String fullSourceEntryForSearch;
     public final String html;
-    public String category;
+    private Key<Feed> feed;
+    public String categoryName;
     public String categoryUrl;
-    private Feed feed;
+    public boolean fanned;
+
 
     public Document(
-            Feed feed,
+            Key<Feed> feed,
+            String feedName,
             String feedUrl,
             String title,
             String text,
-            String author,
+            String authorName,
             String authorUrl,
             String cssClass,
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
             String fullSourceEntryForSearch,
-            String category,
-            String html,
+            String html, String categoryName,
             String categoryUrl) {
+
+        this.feedName = feedName;
         this.feed = feed;
         this.feedUrl = feedUrl;
         this.title = title;
         this.text = text;
-        this.author = author;
+        this.authorName = authorName;
         this.authorUrl = authorUrl;
         this.cssClass = cssClass;
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.fullSourceEntryForSearch = fullSourceEntryForSearch;
-        this.category = category;
+        this.categoryName = categoryName;
         this.html = html;
         this.categoryUrl = categoryUrl;
     }
@@ -87,27 +94,49 @@ public class Document {
         return "";
     }
 
-
     public static Predicate<Document> hasCategory(String category) {
-        return document -> JString.containsIgnoreCase(document.category, category);
+        return document -> JString.containsIgnoreCase(document.categoryName, category);
     }
-
 
     @Override
     public String toString() {
-        return "OutputBean{" +
+        return "Document{" +
+                "feedName='" + feedName + '\'' +
                 ", feedUrl='" + feedUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
-                ", author='" + author + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", authorUrl='" + authorUrl + '\'' +
                 ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
+                ", fullSourceEntryForSearch='" + fullSourceEntryForSearch + '\'' +
+                ", html='" + html + '\'' +
+                ", feed=" + feed +
+                ", categoryName='" + categoryName + '\'' +
+                ", categoryUrl='" + categoryUrl + '\'' +
                 '}';
     }
 
-    public Feed getFeed() {
+    public Key<Feed> getFeed() {
         return feed;
+    }
+
+    public boolean isFanned() {
+        return fanned;
+    }
+
+    public boolean isUnfanned() {
+        return !fanned;
+    }
+
+    public void setFanned(boolean fanned) {
+        this.fanned = fanned;
+    }
+
+    @Override
+    public Key<Document> getKey() {
+        return Keys.document(this);
     }
 }

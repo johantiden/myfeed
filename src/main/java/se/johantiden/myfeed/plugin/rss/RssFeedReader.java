@@ -77,7 +77,8 @@ public class RssFeedReader implements FeedReader {
             if (html == null) {
                 html = contentHtml;
             }
-            return new Document(feed, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), categoryNames, html, categoryUrl);
+            return new Document(feed.getKey(), feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), html, categoryNames, categoryUrl);
+        
         });
     }
 
@@ -111,6 +112,7 @@ public class RssFeedReader implements FeedReader {
         return categories.get(0).getTaxonomyUri();
     }
 
+           
     private static String getCategoryNamesString(SyndEntry e) {
         List<String> categoryNames = e.getCategories().stream().map(SyndCategory::getName).collect(Collectors.toList());
         return String.join(", ", categoryNames);

@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.persistence;
 
 import com.google.common.collect.Lists;
+import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -50,6 +51,11 @@ public class EmptyFeed implements Feed {
     @Override
     public boolean isInvalidated() {
         return false;
+    }
+
+    @Override
+    public Key<Feed> getKey() {
+        return null;
     }
 
     @Override

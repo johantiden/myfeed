@@ -34,7 +34,7 @@ public class RedditPlugin implements Plugin {
 
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
-            entry.author = null;
+            entry.authorName = null;
             entry.authorUrl = null;
             return entry;
         };

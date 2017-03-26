@@ -1,6 +1,8 @@
 
 app.controller('myCtrl', function($scope, $sce, $cookies, documentService) {
 
+
+
     $scope.$sce = $sce;
 
     $scope.getCookieValue = function () {

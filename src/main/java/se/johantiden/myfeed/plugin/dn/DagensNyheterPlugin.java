@@ -36,7 +36,7 @@ public class DagensNyheterPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
             String category = parseFirstFolder(entry.pageUrl);
-            entry.category = category;
+            entry.categoryName = category;
             entry.categoryUrl = "https://www.dn.se/"+category;
             return entry;
         };

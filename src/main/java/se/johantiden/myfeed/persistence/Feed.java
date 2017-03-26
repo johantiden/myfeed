@@ -1,10 +1,12 @@
 package se.johantiden.myfeed.persistence;
 
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-public interface Feed {
+public interface Feed extends Persistable<Feed> {
+
     PluginType getType();
 
     Map<String, String> getFeedReaderParameters();

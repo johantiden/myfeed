@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
  import org.springframework.web.bind.annotation.RestController;
-import se.johantiden.myfeed.service.DocumentService;
+import se.johantiden.myfeed.persistence.User;
+import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.persistence.redis.Keys;
+import se.johantiden.myfeed.service.UserDocumentService;
 
 
 @RestController
@@ -17,7 +20,7 @@ public class UserDocumentController {
 
     private static final Logger log = LoggerFactory.getLogger(UserDocumentController.class);
     @Autowired
-    private DocumentService documentService;
+    private UserDocumentService userDocumentService;
 
     @RequestMapping(value = "/rest/documents", method = RequestMethod.PUT)
     public void putDocument(@RequestBody UserDocumentPutBean userDocumentPutBean) {
@@ -25,7 +28,8 @@ public class UserDocumentController {
 
         log.info("Received PUT document: {}", userDocumentPutBean);
 
-        documentService.setRead(userDocumentPutBean.pageUrl, userDocumentPutBean.read);
+        Key<User> johan = Keys.user("johan");
+        userDocumentService.setRead(johan, Keys.document(userDocumentPutBean.pageUrl), userDocumentPutBean.read);
 
 
     }
