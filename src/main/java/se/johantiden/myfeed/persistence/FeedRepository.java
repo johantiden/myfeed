@@ -65,7 +65,7 @@ public class FeedRepository {
                 "Reddit - World News",
                 "https://reddit.com/r/worldnews",
                 "reddit",
-                newHashMap("rssUrl", "https://www.reddit.com/r/worldnews.rss"), 1, MINUTES));
+                newHashMap("rssUrl", "https://www.reddit.com/r/worldnews.rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
         feeds.add(rss.createFeed(
                 "TheLocal",
