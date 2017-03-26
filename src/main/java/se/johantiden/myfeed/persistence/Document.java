@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 
 public class Document implements Persistable<Document> {
 
+    public final String feedName;
     public String feedUrl;
     public String title;
     public final String text;
@@ -20,10 +21,11 @@ public class Document implements Persistable<Document> {
     public final Instant publishedDate;
     public final String fullSourceEntryForSearch;
     public final String html;
-    private Feed feed;
+    private Key<Feed> feed;
 
     public Document(
-            Feed feed,
+            Key<Feed> feed,
+            String feedName,
             String feedUrl,
             String title,
             String text,
@@ -35,6 +37,7 @@ public class Document implements Persistable<Document> {
             Instant publishedDate,
             String fullSourceEntryForSearch,
             String html) {
+        this.feedName = feedName;
         this.feed = feed;
         this.feedUrl = feedUrl;
         this.title = title;
@@ -90,7 +93,7 @@ public class Document implements Persistable<Document> {
                 '}';
     }
 
-    public Feed getFeed() {
+    public Key<Feed> getFeed() {
         return feed;
     }
 

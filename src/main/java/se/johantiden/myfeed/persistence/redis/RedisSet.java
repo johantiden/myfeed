@@ -4,13 +4,16 @@ package se.johantiden.myfeed.persistence.redis;
 import com.google.gson.Gson;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.ScanResult;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class RedisSet<T> {
 
@@ -28,13 +31,10 @@ public class RedisSet<T> {
     /**
      * spop
      */
-    public Optional<T> popRandomElement() {
+    public Optional<T> popRandomElement(Type type) {
         return withJedis(j -> {
             String spop = j.spop(myKey);
-            return Optional.ofNullable(spop).map(s -> {
-                Type typeOfT = this.getClass().getGenericInterfaces()[0];
-                return gson.fromJson(s, typeOfT);
-            });
+            return Optional.ofNullable(spop).map(s -> fromJson(s, type));
         });
     }
 
@@ -59,14 +59,18 @@ public class RedisSet<T> {
      * sismember
      */
     public boolean isMember(T member) {
-        throw new RuntimeException("Not implemneted");
+        return withJedis(j -> j.sismember(myKey, gson.toJson(member)));
     }
 
     /**
      * smembers
+     * @param type
      */
-    public Set<T> getAll() {
-        throw new RuntimeException("Not implemneted");
+    public Set<T> getAll(Type type) {
+        return withJedis(j -> {
+            Set<String> smembers = j.smembers(myKey);
+            return smembers.stream().map(json -> fromJson(json, type)).collect(Collectors.toSet());
+        });
     }
 
     /**
@@ -76,8 +80,33 @@ public class RedisSet<T> {
         throw new RuntimeException("Not implemneted");
     }
 
-    public Optional<T> find(Predicate<T> predicate) {
-        throw new RuntimeException("Not implemneted");
+    public Optional<T> find(Predicate<T> predicate, Type type) {
+        return withJedis(j -> scanUntilFound(predicate, j, "0", type));
+    }
+
+    private Optional<T> scanUntilFound(Predicate<T> predicate, Jedis j, String cursor, Type type) {
+        ScanResult<String> scan = j.sscan(myKey, cursor);
+        List<String> currentPage = scan.getResult();
+
+        if (currentPage.isEmpty()) {
+            return Optional.empty();
+        }
+
+
+        for (String json : currentPage) {
+            T t = fromJson(json, type);
+            if (predicate.test(t)) {
+                return Optional.of(t);
+            }
+        }
+
+        // Still not found.
+        // Beware of tail recursion. It might get stackoverflow.
+        String stringCursor = scan.getStringCursor();
+        if ("0".equals(stringCursor)) {
+            return Optional.empty();
+        }
+        return scanUntilFound(predicate, j, stringCursor, type);
     }
 
     private <T> T withJedis(Function<Jedis, T> function) {
@@ -86,22 +115,26 @@ public class RedisSet<T> {
         }
     }
 
-    public boolean removeIf(Predicate<T> predicate) {
-        Optional<T> t = find(predicate);
+    public boolean removeIf(Predicate<T> predicate, Type type) {
+        Optional<T> t = find(predicate, type);
         if (t.isPresent()) {
             remove(t.get());
-            removeIf(predicate); // Find more and remove them too. Beware of stack overflow :D
+            removeIf(predicate, type); // Find more and remove them too. Beware of stack overflow :D
             return true;
         }
         return false;
     }
 
-    public void put(T member, Function<T, Object> equatableProperty) {
+    public void put(T member, Function<T, Object> equatableProperty, Type type) {
         if (isMember(member)) {
             return; // no change needed
         }
-        removeIf(t -> equatableProperty.apply(t).equals(equatableProperty.apply(member)));
+        removeIf(t -> equatableProperty.apply(t).equals(equatableProperty.apply(member)), type);
 
         add(member);
+    }
+
+    private T fromJson(String json, Type type) {
+        return gson.fromJson(json, type);
     }
 }

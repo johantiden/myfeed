@@ -25,7 +25,7 @@ public class UserDocumentService {
 
         List<UserDocument> documents = userDocumentRepository.getUnreadDocuments(user);
 
-        Comparator<UserDocument> comparator = Comparator.comparing(ud -> ud.getDocument().publishedDate);
+        Comparator<UserDocument> comparator = Comparator.comparing(ud -> ud.getPublishedDate());
         Comparator<UserDocument> reversed = comparator.reversed();
         Collections.sort(documents, reversed);
         return documents;

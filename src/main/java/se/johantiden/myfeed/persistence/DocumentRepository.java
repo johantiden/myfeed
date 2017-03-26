@@ -20,10 +20,10 @@ public class DocumentRepository {
     }
 
     public Optional<Document> getNextUnfanned() {
-        return getDocuments().popRandomElement();
+        return getDocuments().popRandomElement(Document.class);
     }
 
     public void put(Document document) {
-        getDocuments().put(document, Document::getKey);
+        getDocuments().put(document, Document::getKey, Document.class);
     }
 }

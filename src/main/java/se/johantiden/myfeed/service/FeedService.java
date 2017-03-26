@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.persistence.FeedRepository;
+import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Instant;
 import java.util.Comparator;
@@ -25,5 +26,9 @@ public class FeedService {
                 .orElse(FeedImpl.EMPTY);
         feed.setLastRead(Instant.now());
         return feed;
+    }
+
+    public Feed getFeed(Key<Feed> feed) {
+        return feedRepository.get(feed);
     }
 }

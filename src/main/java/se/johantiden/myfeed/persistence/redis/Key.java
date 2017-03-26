@@ -18,4 +18,24 @@ public class Key<T> {
     public static <T> Key<T> create(String fullKey) {
         return new Key<T>(fullKey);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Key<?> key1 = (Key<?>) o;
+
+        return key.equals(key1.key);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return key.hashCode();
+    }
 }

@@ -3,7 +3,6 @@ package se.johantiden.myfeed.persistence;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisPool;
-import se.johantiden.myfeed.persistence.redis.JedisClient;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.persistence.redis.RedisSet;
@@ -30,7 +29,7 @@ public class UserDocumentRepository {
     }
 
     private Set<UserDocument> getUserDocuments(Key<User> user) {
-        return getRedisSet(user).getAll();
+        return getRedisSet(user).getAll(UserDocument.class);
     }
 
     public void add(UserDocument userDocument) {
@@ -38,11 +37,11 @@ public class UserDocumentRepository {
     }
 
     public void put(UserDocument userDocument) {
-        throw new RuntimeException("Not implemented");
+        getRedisSet(userDocument.getUser().getKey()).put(userDocument, UserDocument::getKey, UserDocument.class);
     }
 
     public Optional<UserDocument> find(Key<User> user, Key<Document> documentKey) {
-       return getRedisSet(user).find(ud -> ud.getDocument().getKey().equals(documentKey));
+       return getRedisSet(user).find(ud -> ud.getDocument().getKey().equals(documentKey), UserDocument.class);
     }
 
     private RedisSet<UserDocument> getRedisSet(Key<User> user) {

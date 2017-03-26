@@ -10,8 +10,6 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import org.jsoup.Jsoup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.plugin.FeedReader;
@@ -29,7 +27,6 @@ import static java.util.Objects.requireNonNull;
 
 public class RssFeedReader implements FeedReader {
 
-    private static final Logger log = LoggerFactory.getLogger(RssFeedReader.class);
     private final Feed feed;
     private final String rssUrl;
     private final String cssClass;
@@ -70,7 +67,7 @@ public class RssFeedReader implements FeedReader {
             Instant publishedDate = getDate(e);
             String html = description == null ? null : description.getValue();
 
-            return new Document(feed, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), html);
+            return new Document(feed.getKey(), feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), html);
         });
     }
 

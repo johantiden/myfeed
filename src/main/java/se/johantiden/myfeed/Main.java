@@ -61,6 +61,10 @@ public class Main {
     @Bean
     public JedisPool getPool() throws URISyntaxException {
         String redis_url = System.getenv("REDIS_URL");
+        if (redis_url == null) {
+            redis_url = "redis://localhost:6379/0";
+        }
+
         Objects.requireNonNull(redis_url, "Could not read REDIS_URL environment variable.");
         URI redisURI = new URI(redis_url);
         JedisPoolConfig poolConfig = new JedisPoolConfig();

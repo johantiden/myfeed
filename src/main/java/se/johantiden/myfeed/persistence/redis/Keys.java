@@ -1,6 +1,8 @@
 package se.johantiden.myfeed.persistence.redis;
 
 import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.persistence.User;
 import se.johantiden.myfeed.persistence.UserDocument;
 
@@ -40,5 +42,12 @@ public class Keys {
 
     public static Key<UserDocument> userDocument(Key<User> user, Key<Document> document) {
         return Key.create("" + user + document);
+    }
+
+    public static Key<Feed> feed(Feed feed) {
+
+        String uniqueness = feed.getName() + feed.getFeedReaderParameters();
+        return new Key<>(uniqueness);
+
     }
 }

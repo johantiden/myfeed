@@ -3,23 +3,22 @@ package se.johantiden.myfeed.persistence;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
+import java.time.Instant;
+import java.util.Objects;
+
 public class UserDocument implements Persistable<UserDocument> {
 
-    private final User user;
-    private final Document document;
+    private final Key<User> userKey;
+    private final Key<Document> documentKey;
+    private final Instant publishedDate;
     private boolean read;
+    public String feedName;
 
-    public UserDocument(User user, Document document) {
-        this.user = user;
-        this.document = document;
-    }
+    public UserDocument(Key<User> userKey, Document document) {
 
-    public User getUser() {
-        return user;
-    }
-
-    public Document getDocument() {
-        return document;
+        this.userKey = Objects.requireNonNull(userKey);
+        this.documentKey = Objects.requireNonNull(document).getKey();
+        this.publishedDate = document.publishedDate;
     }
 
     public void setRead(boolean read) {
@@ -36,6 +35,10 @@ public class UserDocument implements Persistable<UserDocument> {
 
     @Override
     public Key<UserDocument> getKey() {
-        return Keys.userDocument(user.getKey(), document.getKey());
+        return Keys.userDocument(userKey, documentKey);
+    }
+
+    public Instant getPublishedDate() {
+        return publishedDate;
     }
 }

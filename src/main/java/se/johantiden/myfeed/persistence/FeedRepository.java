@@ -1,9 +1,9 @@
 package se.johantiden.myfeed.persistence;
 
+import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
-    private List<Feed> allFeeds = null;
+    private List<Feed> allFeeds;
     public static final long INVALIDATION_PERIOD = 1;
     public static final TemporalUnit INVALIDATION_PERIOD_UNIT = MINUTES;
 
@@ -100,5 +100,18 @@ public class FeedRepository {
         return allFeeds().stream()
                 .filter(Feed::isInvalidated)
                 .collect(Collectors.toList());
+    }
+
+    public Feed get(Key<Feed> feedKey) {
+        return allFeeds().stream()
+                .filter(
+                        f -> {
+                            Key<Feed> key = f.getKey();
+                            boolean equals = feedKey.equals(key);
+                            return equals;
+                        }
+                )
+                .findAny()
+                .orElseThrow(() -> new IllegalStateException("Could not find feed with key " + feedKey));
     }
 }
