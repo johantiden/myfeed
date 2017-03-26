@@ -32,7 +32,7 @@ public class RedisSet<T> {
      * spop
      */
     public Optional<T> popRandomElement(Type type) {
-        return withJedis(j -> {
+        return openJedis(j -> {
             String spop = j.spop(myKey);
             return Optional.ofNullable(spop).map(s -> fromJson(s, type));
         });
@@ -42,7 +42,7 @@ public class RedisSet<T> {
      * sadd
      */
     public void add(T member) {
-        withJedis(j -> {
+        openJedis(j -> {
             j.sadd(myKey, gson.toJson(member));
             return VOID;
         });
@@ -59,7 +59,7 @@ public class RedisSet<T> {
      * sismember
      */
     public boolean isMember(T member) {
-        return withJedis(j -> j.sismember(myKey, gson.toJson(member)));
+        return openJedis(j -> j.sismember(myKey, gson.toJson(member)));
     }
 
     /**
@@ -67,7 +67,7 @@ public class RedisSet<T> {
      * @param type
      */
     public Set<T> getAll(Type type) {
-        return withJedis(j -> {
+        return openJedis(j -> {
             Set<String> smembers = j.smembers(myKey);
             return smembers.stream().map(json -> fromJson(json, type)).collect(Collectors.toSet());
         });
@@ -77,11 +77,11 @@ public class RedisSet<T> {
      * srem
      */
     public void remove(T member) {
-        throw new RuntimeException("Not implemneted");
+        openJedis(j -> j.srem(myKey, gson.toJson(member)));
     }
 
     public Optional<T> find(Predicate<T> predicate, Type type) {
-        return withJedis(j -> scanUntilFound(predicate, j, "0", type));
+        return openJedis(j -> scanUntilFound(predicate, j, "0", type));
     }
 
     private Optional<T> scanUntilFound(Predicate<T> predicate, Jedis j, String cursor, Type type) {
@@ -109,7 +109,7 @@ public class RedisSet<T> {
         return scanUntilFound(predicate, j, stringCursor, type);
     }
 
-    private <T> T withJedis(Function<Jedis, T> function) {
+    private <T> T openJedis(Function<Jedis, T> function) {
         try (Jedis jedis = jedisPool.getResource()){
             return function.apply(jedis);
         }

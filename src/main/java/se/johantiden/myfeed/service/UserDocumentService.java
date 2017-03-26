@@ -25,7 +25,7 @@ public class UserDocumentService {
 
         List<UserDocument> documents = userDocumentRepository.getUnreadDocuments(user);
 
-        Comparator<UserDocument> comparator = Comparator.comparing(ud -> ud.getPublishedDate());
+        Comparator<UserDocument> comparator = Comparator.comparing(UserDocument::getPublishedDate);
         Comparator<UserDocument> reversed = comparator.reversed();
         Collections.sort(documents, reversed);
         return documents;
@@ -44,5 +44,14 @@ public class UserDocumentService {
         doc.setRead(read);
         put(doc);
 
+    }
+
+    public void putIfNew(UserDocument userDocument) {
+        Optional<UserDocument> optional = userDocumentRepository.find(userDocument.getUserKey(), userDocument.getDocumentKey());
+        if (optional.isPresent()) {
+            log.warn("putIfNew but was not new. (This can probably be optimized)");
+        } else {
+            put(userDocument);
+        }
     }
 }

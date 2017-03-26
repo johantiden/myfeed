@@ -15,7 +15,7 @@ public class Document implements Persistable<Document> {
     public String feedUrl;
     public String title;
     public final String text;
-    public String author;
+    public String authorName;
     public String authorUrl;
     public final String cssClass;
     public final String pageUrl;
@@ -24,7 +24,7 @@ public class Document implements Persistable<Document> {
     public final String fullSourceEntryForSearch;
     public final String html;
     private Key<Feed> feed;
-    public String category;
+    public String categoryName;
     public String categoryUrl;
 
     public Document(
@@ -33,15 +33,14 @@ public class Document implements Persistable<Document> {
             String feedUrl,
             String title,
             String text,
-            String author,
+            String authorName,
             String authorUrl,
             String cssClass,
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
             String fullSourceEntryForSearch,
-            String category,
-            String html,
+            String html, String categoryName,
             String categoryUrl) {
 
         this.feedName = feedName;
@@ -49,14 +48,14 @@ public class Document implements Persistable<Document> {
         this.feedUrl = feedUrl;
         this.title = title;
         this.text = text;
-        this.author = author;
+        this.authorName = authorName;
         this.authorUrl = authorUrl;
         this.cssClass = cssClass;
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.fullSourceEntryForSearch = fullSourceEntryForSearch;
-        this.category = category;
+        this.categoryName = categoryName;
         this.html = html;
         this.categoryUrl = categoryUrl;
     }
@@ -93,23 +92,28 @@ public class Document implements Persistable<Document> {
         return "";
     }
 
-
     public static Predicate<Document> hasCategory(String category) {
-        return document -> JString.containsIgnoreCase(document.category, category);
+        return document -> JString.containsIgnoreCase(document.categoryName, category);
     }
-
 
     @Override
     public String toString() {
-        return "OutputBean{" +
+        return "Document{" +
+                "feedName='" + feedName + '\'' +
                 ", feedUrl='" + feedUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
-                ", author='" + author + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", authorUrl='" + authorUrl + '\'' +
                 ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
+                ", fullSourceEntryForSearch='" + fullSourceEntryForSearch + '\'' +
+                ", html='" + html + '\'' +
+                ", feed=" + feed +
+                ", categoryName='" + categoryName + '\'' +
+                ", categoryUrl='" + categoryUrl + '\'' +
                 '}';
     }
 

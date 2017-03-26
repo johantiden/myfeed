@@ -5,7 +5,6 @@ import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -13,8 +12,6 @@ import java.util.function.Predicate;
 import static se.johantiden.myfeed.persistence.Document.*;
 
 public class User implements Persistable<User> {
-
-public class User {
 
     private final List<UserDocument> documents;
     private final List<FeedUser> feedsForUser;

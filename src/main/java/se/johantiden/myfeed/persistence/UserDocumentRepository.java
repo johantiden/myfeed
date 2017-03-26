@@ -37,11 +37,11 @@ public class UserDocumentRepository {
     }
 
     public void put(UserDocument userDocument) {
-        getRedisSet(userDocument.getUser().getKey()).put(userDocument, UserDocument::getKey, UserDocument.class);
+        getRedisSet(userDocument.getUserKey()).put(userDocument, UserDocument::getKey, UserDocument.class);
     }
 
     public Optional<UserDocument> find(Key<User> user, Key<Document> documentKey) {
-       return getRedisSet(user).find(ud -> ud.getDocument().getKey().equals(documentKey), UserDocument.class);
+       return getRedisSet(user).find(ud -> ud.getDocumentKey().equals(documentKey), UserDocument.class);
     }
 
     private RedisSet<UserDocument> getRedisSet(Key<User> user) {

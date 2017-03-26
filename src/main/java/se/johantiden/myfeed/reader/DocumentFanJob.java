@@ -41,8 +41,6 @@ public class DocumentFanJob {
         feed.getFeedUsers().stream()
                 .map(FeedUser::getUser)
                 .filter(u -> u.getUserGlobalFilter().test(document))
-                .forEach(user -> {
-                    userDocumentService.put(new UserDocument(user.getKey(), document));
-                });
+                .forEach(user -> userDocumentService.putIfNew(new UserDocument(user.getKey(), document)));
     }
 }

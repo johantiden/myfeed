@@ -21,25 +21,19 @@ public class DocumentBean {
     public final boolean read;
 
     public DocumentBean(UserDocument userDocument) {
-        this.feed = new NameAndUrlBean(
-                userDocument.getDocument().getFeed().getName(),
-                userDocument.getDocument().feedUrl);
-        this.category = new NameAndUrlBean(
-                userDocument.getDocument().category,
-                userDocument.getDocument().categoryUrl);
+        this.feed = userDocument.feedBean;
+        this.category = userDocument.category;
 
-        this.title = userDocument.getDocument().title;
-        this.text = userDocument.getDocument().text;
-        this.author = new NameAndUrlBean(
-                userDocument.getDocument().author,
-                userDocument.getDocument().authorUrl);
+        this.title = userDocument.title;
+        this.text = userDocument.text;
+        this.author = userDocument.author;
 
-        this.cssClass = userDocument.getDocument().cssClass;
-        this.pageUrl = userDocument.getDocument().pageUrl;
-        this.imageUrl = userDocument.getDocument().imageUrl;
-        this.publishedDate = userDocument.getDocument().publishedDate;
-        this.fullSourceEntryForSearch = userDocument.getDocument().fullSourceEntryForSearch;
-        this.html = userDocument.getDocument().html;
+        this.cssClass = userDocument.cssClass;
+        this.pageUrl = userDocument.pageUrl;
+        this.imageUrl = userDocument.imageUrl;
+        this.publishedDate = userDocument.publishedDate;
+        this.fullSourceEntryForSearch = userDocument.fullSourceEntryForSearch;
+        this.html = userDocument.html;
         this.read = userDocument.isRead();
     }
 
