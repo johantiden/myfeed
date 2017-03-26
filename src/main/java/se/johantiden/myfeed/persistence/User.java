@@ -3,6 +3,7 @@ package se.johantiden.myfeed.persistence;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -51,10 +52,10 @@ public class User {
 
     private static void johanFilters(User user) {
 
-        Predicate<Document> notResor = document -> !"resor".equalsIgnoreCase(document.category);
-        Predicate<Document> notWebbTv = document -> !"webb-tv".equalsIgnoreCase(document.category);
-        Predicate<Document> notKultur = document -> !"kultur".equalsIgnoreCase(document.category);
-        Predicate<Document> notSvdMatOchDryck = document -> !"mat &#38; dryck".equalsIgnoreCase(document.category);
+        Predicate<Document> notResor = document -> !hasCategory(document, "resor");
+        Predicate<Document> notWebbTv = document -> !hasCategory(document, "webb-tv");
+        Predicate<Document> notKultur = document -> !hasCategory(document, "kultur");
+        Predicate<Document> notSvdMatOchDryck = document -> !hasCategory(document, "mat &#38; dryck");
 
         Predicate<Document> notZlatan = freeSearch(s -> {
             boolean isZlatan = s.contains("zlatan");
@@ -76,8 +77,21 @@ public class User {
             return !sport;
         });
 
-        user.setUserGlobalFilter(new Filter(Lists.newArrayList(
+        user.setUserGlobalFilter(new Filter(Lists.<Predicate<Document>>newArrayList(
                 notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport, notResor, notWebbTv)));
+    }
+
+    private static boolean hasCategory(Document document, String category) {
+        return containsIgnoreCase(document.category, category);
+    }
+
+    private static boolean containsIgnoreCase(String fullString, String substring) {
+        if (fullString == null) {
+            return false;
+        }
+
+        return fullString.toLowerCase().contains(substring.toLowerCase());
+
     }
 
     private static Predicate<Document> freeSearch(Predicate<String> searchPredicate) {
