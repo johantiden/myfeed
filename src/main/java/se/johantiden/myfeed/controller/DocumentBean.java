@@ -7,12 +7,11 @@ import java.time.temporal.ChronoUnit;
 
 public class DocumentBean {
 
-    public final String feedName;
-    public final String feedUrl;
+    public final NameAndUrlBean feed;
+    public final NameAndUrlBean category;
     public final String title;
     public final String text;
-    public final String author;
-    public final String authorUrl;
+    public final NameAndUrlBean author;
     public final String cssClass;
     public final String pageUrl;
     public final String imageUrl;
@@ -22,12 +21,19 @@ public class DocumentBean {
     public final boolean read;
 
     public DocumentBean(UserDocument userDocument) {
-        this.feedName = userDocument.getDocument().getFeed().getName();
-        this.feedUrl = userDocument.getDocument().feedUrl;
+        this.feed = new NameAndUrlBean(
+                userDocument.getDocument().getFeed().getName(),
+                userDocument.getDocument().feedUrl);
+        this.category = new NameAndUrlBean(
+                userDocument.getDocument().category,
+                userDocument.getDocument().categoryUrl);
+
         this.title = userDocument.getDocument().title;
         this.text = userDocument.getDocument().text;
-        this.author = userDocument.getDocument().author;
-        this.authorUrl = userDocument.getDocument().authorUrl;
+        this.author = new NameAndUrlBean(
+                userDocument.getDocument().author,
+                userDocument.getDocument().authorUrl);
+
         this.cssClass = userDocument.getDocument().cssClass;
         this.pageUrl = userDocument.getDocument().pageUrl;
         this.imageUrl = userDocument.getDocument().imageUrl;
@@ -35,18 +41,6 @@ public class DocumentBean {
         this.fullSourceEntryForSearch = userDocument.getDocument().fullSourceEntryForSearch;
         this.html = userDocument.getDocument().html;
         this.read = userDocument.isRead();
-    }
-
-    public String getFeedName() {
-        return feedName;
-    }
-
-    public String getFeedUrl() {
-        return feedUrl;
-    }
-
-    public String getAuthor() {
-        return author;
     }
 
     public String getCssClass() {
@@ -80,8 +74,16 @@ public class DocumentBean {
         return dateToShortString(publishedDate);
     }
 
-    public String getAuthorUrl() {
-        return authorUrl;
+    public NameAndUrlBean getFeed() {
+        return feed;
+    }
+
+    public NameAndUrlBean getCategory() {
+        return category;
+    }
+
+    public NameAndUrlBean getAuthor() {
+        return author;
     }
 
     public String getFullSourceEntryForSearch() {
@@ -121,16 +123,19 @@ public class DocumentBean {
 
     @Override
     public String toString() {
-        return "OutputBean{" +
-                ", feedUrl='" + feedUrl + '\'' +
+        return "DocumentBean{" +
+                "feed=" + feed +
+                ", category=" + category +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
-                ", author='" + author + '\'' +
+                ", author=" + author +
                 ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
+                ", fullSourceEntryForSearch='" + fullSourceEntryForSearch + '\'' +
+                ", html='" + html + '\'' +
+                ", read=" + read +
                 '}';
     }
-
 }

@@ -20,16 +20,17 @@ public class FeedImpl implements Feed {
     private final String cssClass;
     private final long invalidationPeriod;
     private final TemporalUnit invalidationPeriodUnit;
+    private final Filter filter;
     private Instant lastRead = Instant.EPOCH;
 
     public FeedImpl(
             PluginType type,
             String name,
             String webUrl,
-            Map<String, String> feedReaderParameters,
-            String cssClass,
+            String cssClass, Map<String, String> feedReaderParameters,
             long invalidationPeriod,
-            TemporalUnit invalidationPeriodUnit) {
+            TemporalUnit invalidationPeriodUnit,
+            Filter filter) {
         this.name = name;
         this.webUrl = webUrl;
         this.type = type;
@@ -37,6 +38,7 @@ public class FeedImpl implements Feed {
         this.cssClass = cssClass;
         this.invalidationPeriod = invalidationPeriod;
         this.invalidationPeriodUnit = invalidationPeriodUnit;
+        this.filter = filter  == null ? Filter.TRUE : filter;
         this.feedUsers = new ArrayList<>();
     }
 
@@ -142,5 +144,10 @@ public class FeedImpl implements Feed {
     @Override
     public Key<Feed> getKey() {
         return Keys.feed(this);
+    }
+    
+    @Override
+    public Filter getFilter() {
+        return filter;
     }
 }

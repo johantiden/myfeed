@@ -3,9 +3,11 @@ package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
+import se.johantiden.myfeed.util.JString;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.function.Predicate;
 
 public class Document implements Persistable<Document> {
 
@@ -22,6 +24,8 @@ public class Document implements Persistable<Document> {
     public final String fullSourceEntryForSearch;
     public final String html;
     private Key<Feed> feed;
+    public String category;
+    public String categoryUrl;
 
     public Document(
             Key<Feed> feed,
@@ -36,7 +40,10 @@ public class Document implements Persistable<Document> {
             String imageUrl,
             Instant publishedDate,
             String fullSourceEntryForSearch,
-            String html) {
+            String category,
+            String html,
+            String categoryUrl) {
+
         this.feedName = feedName;
         this.feed = feed;
         this.feedUrl = feedUrl;
@@ -49,12 +56,19 @@ public class Document implements Persistable<Document> {
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.fullSourceEntryForSearch = fullSourceEntryForSearch;
+        this.category = category;
         this.html = html;
+        this.categoryUrl = categoryUrl;
     }
 
     public static String dateToShortString(Instant instant) {
 
         Instant now = Instant.now();
+
+        long weeks = instant.until(now, ChronoUnit.WEEKS);
+        if (weeks >= 1) {
+            return weeks + "d";
+        }
 
         long days = instant.until(now, ChronoUnit.DAYS);
         if (days >= 1) {
@@ -78,6 +92,12 @@ public class Document implements Persistable<Document> {
 
         return "";
     }
+
+
+    public static Predicate<Document> hasCategory(String category) {
+        return document -> JString.containsIgnoreCase(document.category, category);
+    }
+
 
     @Override
     public String toString() {

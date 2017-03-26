@@ -11,6 +11,7 @@ import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class FeedReaderJob {
@@ -32,9 +33,13 @@ public class FeedReaderJob {
     private void consume(Feed feed) {
 
         List<Document> documents = feedReaderService.readAll(feed);
-        documentService.put(documents);
-        if (!documents.isEmpty()) {
-            log.info("Done reading feed '{}'. Found a total of {} documents.", feed.getName(), documents.size());
+
+        List<Document> filtered = documents.stream().filter(feed.getFilter()).collect(Collectors.toList());
+
+        documentService.put(filtered);
+        if (!filtered.isEmpty()) {
+            log.info("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter",
+                    feed.getName(), filtered.size(), documents.size()-filtered.size());
         }
     }
 

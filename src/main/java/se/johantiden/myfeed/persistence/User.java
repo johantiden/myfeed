@@ -5,11 +5,16 @@ import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import static se.johantiden.myfeed.persistence.Document.*;
+
 public class User implements Persistable<User> {
+
+public class User {
 
     private final List<UserDocument> documents;
     private final List<FeedUser> feedsForUser;
@@ -45,39 +50,38 @@ public class User implements Persistable<User> {
 
     private static void johanFilters(User user) {
 
-        Predicate<Document> notKultur = filter(s -> {
-            boolean kultur = s.contains("categories[0].name=kultur");
-            return !kultur;
-        });
-        Predicate<Document> notZlatan = filter(s -> {
+        Predicate<Document> notResor = hasCategory("resor").negate();
+        Predicate<Document> notWebbTv = hasCategory("webb-tv").negate();
+        Predicate<Document> notKultur = hasCategory("kultur").negate();
+        Predicate<Document> notSvdMatOchDryck = hasCategory("mat &#38; dryck").negate();
+
+        Predicate<Document> notZlatan = freeSearch(s -> {
             boolean isZlatan = s.contains("zlatan");
             boolean isIbrahimovic = s.contains("ibrahimovic");
             return !isZlatan && !isIbrahimovic;
         });
-        Predicate<Document> notTrump = filter(s -> {
+        Predicate<Document> notTrump = freeSearch(s -> {
             boolean trump = s.contains("trump");
             return !trump;
         });
-        Predicate<Document> notDnMedanDuSov = filter(s -> {
+        Predicate<Document> notDnMedanDuSov = freeSearch(s -> {
             boolean medanDuSov = s.contains("dn.se") && s.contains("medan du sov");
             return !medanDuSov;
         });
 
-        Predicate<Document> notSvdMatOchDryck = filter(s -> {
-            boolean matOchDryck = s.contains("svd.se") && s.contains("categories[0].name=mat &#38; dryck");
-            return !matOchDryck;
-        });
-        Predicate<Document> notSport = filter(s -> {
+        Predicate<Document> notSport = freeSearch(s -> {
             boolean sport = s.contains("categories[0].name=sport") || s.contains("nhl") || s.contains("premier league")
-                    || s.contains("allsvenskan");
+                    || s.contains("allsvenskan") || s.contains("dn.se/sport");
             return !sport;
         });
 
-        user.setUserGlobalFilter(new Filter(Lists.newArrayList(
-                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport)));
+        user.setUserGlobalFilter(new Filter(Lists.<Predicate<Document>>newArrayList(
+                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport, notResor, notWebbTv)));
     }
 
-    private static Predicate<Document> filter(Predicate<String> searchPredicate) {
+
+
+    private static Predicate<Document> freeSearch(Predicate<String> searchPredicate) {
         return e -> {
             String document = e.fullSourceEntryForSearch.toLowerCase();
             return searchPredicate.test(document);

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Instant;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,5 +56,10 @@ public class EmptyFeed implements Feed {
     @Override
     public Key<Feed> getKey() {
         return null;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter(d -> true);
     }
 }

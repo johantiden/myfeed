@@ -24,4 +24,6 @@ public interface Feed extends Persistable<Feed> {
     void setLastRead(Instant lastRead);
 
     boolean isInvalidated();
+
+    Filter getFilter();
 }

@@ -1,12 +1,15 @@
 package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
+import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -18,64 +21,58 @@ public class FeedRepository {
     public static final long INVALIDATION_PERIOD = 1;
     public static final TemporalUnit INVALIDATION_PERIOD_UNIT = MINUTES;
 
-
-    public List<Feed> allFeeds() {
-        if (allFeeds == null) {
-            allFeeds = allFeedsHack();
-        }
-
-        return allFeeds;
-    }
-
     private static List<Feed> allFeedsHack() {
         List<Feed> feeds = new ArrayList<>();
-        RssPlugin rss = new RssPlugin();
-        feeds.add(rss.createFeed(
+
+        feeds.add(createRss(
                 "Slashdot",
-                "https://slashdot.org",
                 "slashdot",
-                newHashMap("rssUrl", "http://rss.slashdot.org/Slashdot/slashdotMainatom"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
+                "https://slashdot.org",
+                "http://rss.slashdot.org/Slashdot/slashdotMainatom"));
 
-        feeds.add(rss.createFeed(
+        feeds.add(createRss(
                 "Svenska Dagbladet",
-                "https://www.svd.se",
                 "svd",
-                newHashMap("rssUrl", "https://www.svd.se/?service=rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
+                "https://www.svd.se",
+                "https://www.svd.se/?service=rss"));
 
-        feeds.add(rss.createFeed(
-                "Dagens Nyheter - Världen",
-                "https://www.dn.se",
+        DagensNyheterPlugin dn = new DagensNyheterPlugin();
+        feeds.add(dn.createFeed(
+                "Dagens Nyheter",
                 "dn",
-                newHashMap("rssUrl", "http://www.dn.se/nyheter/varlden/rss/"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
+                "https://www.dn.se",
+                newHashMap("rssUrl", "http://www.dn.se/nyheter/rss/"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null));
 
-
-        feeds.add(rss.createFeed(
+        feeds.add(createRss(
+                "xkcd",
                 "xkcd",
                 "https://xkcd.com",
-                "xkcd",
-                newHashMap("rssUrl", "https://xkcd.com/atom.xml"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
+                "https://xkcd.com/atom.xml"));
 
-
-        feeds.add(rss.createFeed(
+        feeds.add(createRss(
                 "Ars Technica",
-                "https://arstechnica.com/",
                 "arstechnica",
-                newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
+                "https://arstechnica.com/",
+                "http://feeds.arstechnica.com/arstechnica/index"));
 
+        feeds.add(createReddit("r/worldnews"));
+        feeds.add(createReddit("r/AskReddit"));
+        feeds.add(createReddit("r/Futurology"));
+        feeds.add(createReddit("r/science"));
+        feeds.add(createReddit("top"));
 
-
-        feeds.add(rss.createFeed(
-                "Reddit - World News",
-                "https://reddit.com/r/worldnews",
-                "reddit",
-                newHashMap("rssUrl", "https://www.reddit.com/r/worldnews.rss"), 1, MINUTES));
-
-        feeds.add(rss.createFeed(
+        feeds.add(createRss(
                 "TheLocal",
-                "https://www.thelocal.se/",
                 "thelocal",
-                newHashMap("rssUrl", "https://www.thelocal.se/feeds/rss.php"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
+                "https://www.thelocal.se/",
+                "https://www.thelocal.se/feeds/rss.php"));
 
+        feeds.add(createRss(
+                "Aftonbladet",
+                "aftonbladet",
+                "https://www.aftonbladet.se",
+                "http://www.aftonbladet.se/nyheter/rss.xml",
+                Document.hasCategory("ledare")));
 
 
         feeds.add(createTwitter("pwolodarski"));
@@ -87,13 +84,46 @@ public class FeedRepository {
         return feeds;
     }
 
+    private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl, Predicate<Document> filter) {
+        RssPlugin rss = new RssPlugin();
+        return rss.createFeed(
+                feedName,
+                cssClass,
+                webUrl,
+                newHashMap("rssUrl", rssUrl),
+                INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT,
+                new Filter(filter));
+    }
+    private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl) {
+        RssPlugin rss = new RssPlugin();
+        return rss.createFeed(
+                feedName,
+                cssClass,
+                webUrl,
+                newHashMap("rssUrl", rssUrl), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null);
+    }
+
+    private static Feed createReddit(String subreddit) {
+        return new RedditPlugin().createFeed(
+                "Reddit",
+                "reddit", "https://www.reddit.com/" + subreddit,
+                newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null);
+    }
+
     private static Feed createTwitter(String username) {
         TwitterPlugin twitter = new TwitterPlugin();
         return twitter.createFeed(
                 "Twitter",
-                "https://twitter.com/"+username,
-                "twitter",
-                newHashMap("username", username), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT);
+                "twitter", "https://twitter.com/" + username,
+                newHashMap("username", username), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null);
+    }
+
+    public List<Feed> allFeeds() {
+        if (allFeeds == null) {
+            allFeeds = allFeedsHack();
+        }
+
+        return allFeeds;
     }
 
     public List<Feed> invalidatedFeeds() {

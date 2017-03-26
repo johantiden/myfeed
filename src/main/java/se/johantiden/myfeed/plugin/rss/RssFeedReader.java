@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.plugin.rss;
 
 import com.google.common.collect.Lists;
+import com.rometools.rome.feed.synd.SyndCategory;
 import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEnclosure;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -22,6 +23,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
@@ -62,13 +64,55 @@ public class RssFeedReader implements FeedReader {
             String imageUrl = getImageUrl(e);
             String author = e.getAuthor();
             String authorUrl = getAuthorUrl(e);
-            SyndContent description = e.getDescription();
-            String text = description == null ? null : html2text(description.getValue());
             Instant publishedDate = getDate(e);
-            String html = description == null ? null : description.getValue();
-
+            String categoryNames = getCategoryNamesString(e);
+            String categoryUrl = getCategoryUrl(e);
+            String descriptionHtml = getDescription(e);
+            String contentHtml = getContentHtml(e);
+            String text = descriptionHtml == null ? null : html2text(descriptionHtml);
+            String html = descriptionHtml == null ? null : descriptionHtml;
+            if (html == null) {
+                html = contentHtml;
+            }
             return new Document(feed.getKey(), feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), html);
+        
         });
+    }
+
+    private static String getDescription(SyndEntry e) {
+        SyndContent description = e.getDescription();
+        if (description == null) {
+            return null;
+        }
+        return description.getValue();
+    }
+
+    private static String getContentHtml(SyndEntry e) {
+        List<SyndContent> contents = e.getContents();
+        if (contents.isEmpty()) {
+            return null;
+        }
+        if (contents.size() > 1) {
+            log.warn("More than one content!");
+        }
+
+        SyndContent syndContent = contents.get(0);
+        return syndContent.getValue();
+
+    }
+
+    private static String getCategoryUrl(SyndEntry e) {
+        List<SyndCategory> categories = e.getCategories();
+        if (categories.isEmpty()) {
+            return null;
+        }
+        return categories.get(0).getTaxonomyUri();
+    }
+
+           
+    private static String getCategoryNamesString(SyndEntry e) {
+        List<String> categoryNames = e.getCategories().stream().map(SyndCategory::getName).collect(Collectors.toList());
+        return String.join(", ", categoryNames);
     }
 
     private static Instant getDate(SyndEntry e) {

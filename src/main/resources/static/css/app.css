@@ -75,6 +75,9 @@ a:hover {
     width: 100%;
 }
 
+.category a {
+    text-transform: capitalize;
+}
 
 .input-box {
     /*background-color: red;*/
@@ -126,12 +129,12 @@ div.text {
     font-size: small;
 }
 
-.time-since:before {
-    content: ' - ';
-}
-.time-since {
+/*.time-since:before {*/
+    /*content: ' | ';*/
+/*}*/
+/*.time-since {*/
     /*margin-left: 10px;*/
-}
+/*}*/
 
 .comments-button {
     width: 4vw;
