@@ -2,6 +2,7 @@ package se.johantiden.myfeed.plugin.rss;
 
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
+import se.johantiden.myfeed.persistence.Filter;
 import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
@@ -14,12 +15,11 @@ public class RssPlugin implements Plugin {
     @Override
     public Feed createFeed(
             String feedName,
-            String webUrl,
-            String cssClass,
+            String cssClass, String webUrl,
             Map<String, String> readerParameters,
             long invalidationPeriod,
-            TemporalUnit invalidationPeriodUnit) {
-        return new FeedImpl(PluginType.RSS, feedName, webUrl, cssClass, readerParameters, invalidationPeriod, invalidationPeriodUnit);
+            TemporalUnit invalidationPeriodUnit, Filter filter) {
+        return new FeedImpl(PluginType.RSS, feedName, webUrl, cssClass, readerParameters, invalidationPeriod, invalidationPeriodUnit, filter);
     }
 
     @Override

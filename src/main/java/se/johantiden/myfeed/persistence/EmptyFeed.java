@@ -3,7 +3,6 @@ package se.johantiden.myfeed.persistence;
 import com.google.common.collect.Lists;
 
 import java.time.Instant;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,5 +50,10 @@ public class EmptyFeed implements Feed {
     @Override
     public boolean isInvalidated() {
         return false;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter(d -> true);
     }
 }

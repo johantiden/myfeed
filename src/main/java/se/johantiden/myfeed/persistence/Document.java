@@ -1,8 +1,11 @@
 package se.johantiden.myfeed.persistence;
 
 
+import se.johantiden.myfeed.util.JString;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.function.Predicate;
 
 public class Document {
 
@@ -83,6 +86,12 @@ public class Document {
 
         return "";
     }
+
+
+    public static Predicate<Document> hasCategory(String category) {
+        return document -> JString.containsIgnoreCase(document.category, category);
+    }
+
 
     @Override
     public String toString() {

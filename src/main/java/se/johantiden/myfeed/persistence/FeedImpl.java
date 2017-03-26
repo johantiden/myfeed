@@ -17,6 +17,7 @@ public class FeedImpl implements Feed {
     private final String cssClass;
     private final long invalidationPeriod;
     private final TemporalUnit invalidationPeriodUnit;
+    private final Filter filter;
     private Instant lastRead = Instant.EPOCH;
 
     public FeedImpl(
@@ -25,7 +26,8 @@ public class FeedImpl implements Feed {
             String webUrl,
             String cssClass, Map<String, String> feedReaderParameters,
             long invalidationPeriod,
-            TemporalUnit invalidationPeriodUnit) {
+            TemporalUnit invalidationPeriodUnit,
+            Filter filter) {
         this.name = name;
         this.webUrl = webUrl;
         this.type = type;
@@ -33,6 +35,7 @@ public class FeedImpl implements Feed {
         this.cssClass = cssClass;
         this.invalidationPeriod = invalidationPeriod;
         this.invalidationPeriodUnit = invalidationPeriodUnit;
+        this.filter = filter  == null ? Filter.TRUE : filter;
         this.feedUsers = new ArrayList<>();
     }
 
@@ -80,5 +83,10 @@ public class FeedImpl implements Feed {
     @Override
     public boolean isInvalidated() {
         return lastRead == null || lastRead.plus(invalidationPeriod, invalidationPeriodUnit).isBefore(Instant.now());
+    }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
     }
 }

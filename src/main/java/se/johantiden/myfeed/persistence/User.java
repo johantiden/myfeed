@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static se.johantiden.myfeed.persistence.Document.*;
+
 public class User {
 
     private final long id;
@@ -52,10 +54,10 @@ public class User {
 
     private static void johanFilters(User user) {
 
-        Predicate<Document> notResor = document -> !hasCategory(document, "resor");
-        Predicate<Document> notWebbTv = document -> !hasCategory(document, "webb-tv");
-        Predicate<Document> notKultur = document -> !hasCategory(document, "kultur");
-        Predicate<Document> notSvdMatOchDryck = document -> !hasCategory(document, "mat &#38; dryck");
+        Predicate<Document> notResor = hasCategory("resor").negate();
+        Predicate<Document> notWebbTv = hasCategory("webb-tv").negate();
+        Predicate<Document> notKultur = hasCategory("kultur").negate();
+        Predicate<Document> notSvdMatOchDryck = hasCategory("mat &#38; dryck").negate();
 
         Predicate<Document> notZlatan = freeSearch(s -> {
             boolean isZlatan = s.contains("zlatan");
@@ -81,18 +83,7 @@ public class User {
                 notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport, notResor, notWebbTv)));
     }
 
-    private static boolean hasCategory(Document document, String category) {
-        return containsIgnoreCase(document.category, category);
-    }
 
-    private static boolean containsIgnoreCase(String fullString, String substring) {
-        if (fullString == null) {
-            return false;
-        }
-
-        return fullString.toLowerCase().contains(substring.toLowerCase());
-
-    }
 
     private static Predicate<Document> freeSearch(Predicate<String> searchPredicate) {
         return e -> {

@@ -22,4 +22,6 @@ public interface Feed {
     void setLastRead(Instant lastRead);
 
     boolean isInvalidated();
+
+    Filter getFilter();
 }
