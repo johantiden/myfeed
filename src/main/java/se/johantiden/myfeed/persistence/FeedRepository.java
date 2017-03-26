@@ -62,7 +62,7 @@ public class FeedRepository {
                 newHashMap("rssUrl", "http://feeds.arstechnica.com/arstechnica/index"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
 
         feeds.add(rss.createFeed(
-                "Reddit - World News",
+                "Reddit",
                 "https://reddit.com/r/worldnews",
                 "reddit",
                 newHashMap("rssUrl", "https://www.reddit.com/r/worldnews.rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT));
