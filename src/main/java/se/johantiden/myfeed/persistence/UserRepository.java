@@ -58,6 +58,8 @@ public class UserRepository {
         Predicate<Document> notWebbTv = hasCategory("webb-tv").negate();
         Predicate<Document> notKultur = hasCategory("kultur").negate();
         Predicate<Document> notSvdMatOchDryck = hasCategory("mat &#38; dryck").negate();
+        Predicate<Document> notDnBok = hasCategory("dnbok").negate();
+
 
         Predicate<Document> notZlatan = freeSearch(s -> {
             boolean isZlatan = s.contains("zlatan");
@@ -80,7 +82,7 @@ public class UserRepository {
         });
 
         user.setUserGlobalFilter(new Filter(Lists.<Predicate<Document>>newArrayList(
-                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport, notResor, notWebbTv)));
+                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport, notResor, notWebbTv, notDnBok)));
     }
 
 
