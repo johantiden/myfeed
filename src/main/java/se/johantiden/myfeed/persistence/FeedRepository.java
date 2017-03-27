@@ -79,8 +79,13 @@ public class FeedRepository {
         feeds.add(createTwitter("BillGates"));
         feeds.add(createTwitter("github"));
 
-        User johan = User.johan();
+        User johan = UserRepository.johan();
         feeds.forEach(f -> f.getFeedUsers().add(new FeedUser(f, johan)));
+
+        User jocke = UserRepository.jocke();
+        feeds.forEach(f -> f.getFeedUsers().add(new FeedUser(f, jocke)));
+
+
         return feeds;
     }
 

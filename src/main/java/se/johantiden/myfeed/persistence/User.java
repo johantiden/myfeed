@@ -1,27 +1,28 @@
 package se.johantiden.myfeed.persistence;
 
-import com.google.common.collect.Lists;
 import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-
-import static se.johantiden.myfeed.persistence.Document.*;
 
 public class User implements Persistable<User> {
 
     private final List<UserDocument> documents;
     private final List<FeedUser> feedsForUser;
     private final Key<User> key;
-    private Filter userGlobalFilter;
+    private final String username;
+    private Filter userGlobalFilter = Filter.TRUE;
 
-    public User(Key<User> key) {
+    public User(Key<User> key, String username) {
         this.key = key;
+        this.username = username;
         this.documents = new ArrayList<>();
         this.feedsForUser = new ArrayList<>();
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public Filter getUserGlobalFilter() {

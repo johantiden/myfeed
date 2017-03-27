@@ -28,8 +28,8 @@ public class UserDocumentController {
 
         log.info("Received PUT document: {}", userDocumentPutBean);
 
-        Key<User> johan = Keys.user("johan");
-        userDocumentService.setRead(johan, Keys.document(userDocumentPutBean.pageUrl), userDocumentPutBean.read);
+        Key<User> userKey = Keys.user(userDocumentPutBean.getUsername());
+        userDocumentService.setRead(userKey, Keys.document(userDocumentPutBean.pageUrl), userDocumentPutBean.read);
 
 
     }

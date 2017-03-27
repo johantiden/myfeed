@@ -8,6 +8,7 @@ public class UserDocumentPutBean {
     public String text;
     public String cssClass;
     public String pageUrl;
+    public String username;
     public boolean read;
 
     public String getFeedName() {
@@ -34,19 +35,24 @@ public class UserDocumentPutBean {
         return pageUrl;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public boolean isRead() {
         return read;
     }
 
     @Override
     public String toString() {
-        return "DocumentPutBean{" +
+        return "UserDocumentPutBean{" +
                 "feedName='" + feedName + '\'' +
                 ", feedUrl='" + feedUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
                 ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
+                ", username='" + username + '\'' +
                 ", read=" + read +
                 '}';
     }
