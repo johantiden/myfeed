@@ -18,6 +18,7 @@ app.controller('myCtrl', function($scope, $sce, $cookies, documentService) {
     $scope.setDocumentRead = function(item){
         //alert("item '"+ item.pageUrl +"' READ was changed to:"+item.read);
         documentService.putItem(item);
+        item.hide = true;
     };
 
 
