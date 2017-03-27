@@ -66,11 +66,6 @@ public class Document implements Persistable<Document> {
 
         Instant now = Instant.now();
 
-        long weeks = instant.until(now, ChronoUnit.WEEKS);
-        if (weeks >= 1) {
-            return weeks + "d";
-        }
-
         long days = instant.until(now, ChronoUnit.DAYS);
         if (days >= 1) {
             return days + "d";

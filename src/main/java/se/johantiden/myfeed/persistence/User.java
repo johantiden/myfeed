@@ -1,10 +1,13 @@
 package se.johantiden.myfeed.persistence;
 
+import com.google.common.collect.Lists;
 import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class User implements Persistable<User> {
 
@@ -35,6 +38,13 @@ public class User implements Persistable<User> {
 
     public void setUserGlobalFilter(Filter userGlobalFilter) {
         this.userGlobalFilter = Objects.requireNonNull(userGlobalFilter);
+    }
+
+    private static Predicate<Document> freeSearch(Predicate<String> searchPredicate) {
+        return e -> {
+            String document = e.fullSourceEntryForSearch.toLowerCase();
+            return searchPredicate.test(document);
+        };
     }
 
     @Override
