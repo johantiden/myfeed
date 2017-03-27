@@ -5,6 +5,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, documentSer
 
     $scope.$sce = $sce;
     $scope.$location = $location;
+    var user = getParameterByName('user');
 
     $scope.getCookieValue = function () {
         return $cookies.get('searchText');
@@ -24,11 +25,12 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, documentSer
 
     $scope.setDocumentRead = function(item){
         //alert("item '"+ item.pageUrl +"' READ was changed to:"+item.read);
+        item.username = user;
         documentService.putItem(item);
+        item.hide = true;
     };
 
 
-    var user = getParameterByName('user');
     documentService.getUnread(user, function(json) {
         $scope.items = json;
     });
