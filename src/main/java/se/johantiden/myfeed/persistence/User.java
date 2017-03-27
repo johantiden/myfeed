@@ -47,23 +47,10 @@ public class User implements Persistable<User> {
 
     private static void johanFilters(User user) {
 
-        Predicate<Document> notResor = hasCategory("resor").negate();
-        Predicate<Document> notWebbTv = hasCategory("webb-tv").negate();
-        Predicate<Document> notKultur = hasCategory("kultur").negate();
-        Predicate<Document> notSvdMatOchDryck = hasCategory("mat &#38; dryck").negate();
-
         Predicate<Document> notZlatan = freeSearch(s -> {
             boolean isZlatan = s.contains("zlatan");
             boolean isIbrahimovic = s.contains("ibrahimovic");
             return !isZlatan && !isIbrahimovic;
-        });
-        Predicate<Document> notTrump = freeSearch(s -> {
-            boolean trump = s.contains("trump");
-            return !trump;
-        });
-        Predicate<Document> notDnMedanDuSov = freeSearch(s -> {
-            boolean medanDuSov = s.contains("dn.se") && s.contains("medan du sov");
-            return !medanDuSov;
         });
 
         Predicate<Document> notSport = freeSearch(s -> {
@@ -73,7 +60,15 @@ public class User implements Persistable<User> {
         });
 
         user.setUserGlobalFilter(new Filter(Lists.<Predicate<Document>>newArrayList(
-                notKultur, notZlatan, notTrump, notDnMedanDuSov, notSvdMatOchDryck, notSport, notResor, notWebbTv)));
+            notZlatan,
+            notSport,
+            hasCategory("kultur").negate(),
+            freeSearch(s -> !s.contains("trump")),
+            freeSearch(s -> !(s.contains("dn.se") && s.contains("medan du sov"))),
+            hasCategory("mat &#38; dryck").negate(),
+            hasCategory("resor").negate(),
+            hasCategory("webb-tv").negate(),
+            hasCategory("dnbok").negate())));
     }
 
 
