@@ -56,6 +56,7 @@ a:hover {
     margin-bottom: 4px;
     word-wrap: break-word;
     box-shadow: 6px 6px 20px #EEEEEE;
+    transform-origin: left top;
 }
 
 .image-box {
@@ -152,13 +153,6 @@ div.text {
 .navbar {
     padding: 5px;
 }
-
-
-
-
-
-
-
 
 
 /*HACKS - THESE SHOULD BE EITHER REMOVED OR MOVED TO PLUGIN FOLDERS*/
