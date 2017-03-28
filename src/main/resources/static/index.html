@@ -7,6 +7,7 @@
     <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.js"></script>
     <script type="text/javascript" src="./bower_components/angular-cookies/angular-cookies.js"></script>
     <script type="text/javascript" src="./bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="./bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
     <script type="text/javascript" src="./app/app.js"></script>
     <script type="text/javascript" src="./app/controllers.js"></script>
     <script type="text/javascript" src="./app/services.js"></script>
@@ -15,13 +16,14 @@
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
         <input ng-model="searchText" placeholder="Search">
-        {{(items | filter:searchText).length}}
+        {{(items | filter:searchText).length}} - limit = {{itemLimit}}
     </div>
+    <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}}" 
         data-item="{{item}}" 
-        ng-repeat="item in items | filter:searchText"
-        ng-hide="item.hide"
-        >
+        ng-repeat="item in items | filter:searchText | limitTo:itemLimit | limitTo:1000"
+        ng-hide="item.hide">
+        
 
         <div class="input-box">
             <input class="read-input" type="checkbox" ng-model="item.read" ng-change="setDocumentRead(item)">
@@ -49,6 +51,7 @@
             </div>
 
         </div>
+    </div>
     </div>
 </div>
 </body>
