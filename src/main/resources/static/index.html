@@ -19,7 +19,7 @@
     </div>
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}}" 
         data-item="{{item}}" 
-        ng-repeat="item in items | filter:searchText"
+        ng-repeat="item in items | filter:searchText | limitTo:50"
         ng-hide="item.hide"
         >
 
