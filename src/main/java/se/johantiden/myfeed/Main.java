@@ -13,6 +13,7 @@ import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.FeedRepository;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.redis.JedisClient;
+import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.reader.FeedReaderService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
@@ -56,6 +57,11 @@ public class Main {
     @Bean
     public UserDocumentService userDocumentService() {
         return new UserDocumentService();
+    }
+
+    @Bean
+    public UserRepository userRepository() {
+        return new UserRepository();
     }
 
     @Bean

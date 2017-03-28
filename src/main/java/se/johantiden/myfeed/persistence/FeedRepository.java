@@ -1,6 +1,9 @@
 package se.johantiden.myfeed.persistence;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.persistence.user.User;
+import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
 import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
@@ -8,6 +11,7 @@ import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -21,7 +25,10 @@ public class FeedRepository {
     public static final long INVALIDATION_PERIOD = 1;
     public static final TemporalUnit INVALIDATION_PERIOD_UNIT = MINUTES;
 
-    private static List<Feed> allFeedsHack() {
+    @Autowired
+    private UserRepository userRepository;
+
+    private static List<Feed> allFeedsHack(UserRepository userRepository) {
         List<Feed> feeds = new ArrayList<>();
 
         feeds.add(createRss(
@@ -79,14 +86,19 @@ public class FeedRepository {
         feeds.add(createTwitter("BillGates"));
         feeds.add(createTwitter("github"));
 
-        User johan = UserRepository.johan();
-        feeds.forEach(f -> f.getFeedUsers().add(new FeedUser(f, johan)));
-
-        User jocke = UserRepository.jocke();
-        feeds.forEach(f -> f.getFeedUsers().add(new FeedUser(f, jocke)));
-
+        Collection<User> allUsers = userRepository.getAllUsers();
+        allUsersHasAllFeedsHack(allUsers, feeds);
 
         return feeds;
+    }
+
+    private static void allUsersHasAllFeedsHack(Collection<User> allUsers, List<Feed> feeds) {
+        for (Feed feed : feeds) {
+            for (User user : allUsers) {
+                feed.getFeedUsers().add(new FeedUser(feed, user));
+            }
+
+        }
     }
 
     private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl, Predicate<Document> filter) {
@@ -125,7 +137,7 @@ public class FeedRepository {
 
     public List<Feed> allFeeds() {
         if (allFeeds == null) {
-            allFeeds = allFeedsHack();
+            allFeeds = allFeedsHack(userRepository);
         }
 
         return allFeeds;

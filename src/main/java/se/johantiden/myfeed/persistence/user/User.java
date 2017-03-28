@@ -1,8 +1,11 @@
-package se.johantiden.myfeed.persistence;
+package se.johantiden.myfeed.persistence.user;
 
-import com.google.common.collect.Lists;
+import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.FeedUser;
+import se.johantiden.myfeed.persistence.Filter;
+import se.johantiden.myfeed.persistence.Persistable;
+import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +41,6 @@ public class User implements Persistable<User> {
 
     public void setUserGlobalFilter(Filter userGlobalFilter) {
         this.userGlobalFilter = Objects.requireNonNull(userGlobalFilter);
-    }
-
-    private static Predicate<Document> freeSearch(Predicate<String> searchPredicate) {
-        return e -> {
-            String document = e.fullSourceEntryForSearch.toLowerCase();
-            return searchPredicate.test(document);
-        };
     }
 
     @Override

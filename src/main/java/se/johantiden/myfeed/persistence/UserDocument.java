@@ -3,6 +3,7 @@ package se.johantiden.myfeed.persistence;
 import se.johantiden.myfeed.controller.NameAndUrlBean;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
+import se.johantiden.myfeed.persistence.user.User;
 
 import java.time.Instant;
 import java.util.Objects;

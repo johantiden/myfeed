@@ -6,6 +6,7 @@ import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.persistence.redis.RedisSet;
+import se.johantiden.myfeed.persistence.user.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,10 +31,6 @@ public class UserDocumentRepository {
 
     private Set<UserDocument> getUserDocuments(Key<User> user) {
         return getRedisSet(user).getAll(UserDocument.class);
-    }
-
-    public void add(UserDocument userDocument) {
-        throw new RuntimeException("Not implemented");
     }
 
     public void put(UserDocument userDocument) {

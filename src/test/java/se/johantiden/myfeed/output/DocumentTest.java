@@ -26,7 +26,7 @@ public class DocumentTest {
 
     }
 
-    private Instant millisBeforeNow(long millis) {
+    private static Instant millisBeforeNow(long millis) {
         return Instant.now().minusMillis(millis);
     }
 }

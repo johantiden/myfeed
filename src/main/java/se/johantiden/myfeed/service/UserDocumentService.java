@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.User;
+import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.redis.Key;
