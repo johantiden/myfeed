@@ -2,8 +2,7 @@ package se.johantiden.myfeed.persistence.redis;
 
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.persistence.User;
+import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.UserDocument;
 
 public class Keys {

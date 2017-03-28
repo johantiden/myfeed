@@ -21,7 +21,7 @@
     <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}}" 
         data-item="{{item}}" 
-        ng-repeat="item in items | filter:searchText | limitTo:itemLimit"
+        ng-repeat="item in items | filter:searchText | limitTo:itemLimit | limitTo:1000"
         ng-hide="item.hide">
         
 

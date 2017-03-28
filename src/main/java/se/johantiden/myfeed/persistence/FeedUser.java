@@ -1,5 +1,7 @@
 package se.johantiden.myfeed.persistence;
 
+import se.johantiden.myfeed.persistence.user.User;
+
 public class FeedUser {
     private final User user;
     private final Feed feed;

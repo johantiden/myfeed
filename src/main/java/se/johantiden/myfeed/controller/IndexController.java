@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import se.johantiden.myfeed.persistence.User;
+import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
@@ -16,7 +15,6 @@ import se.johantiden.myfeed.service.UserDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,15 +39,6 @@ public class IndexController {
         List<UserDocument> userDocuments = userDocumentService.getUnreadDocumentsFor(user);
 
         return userDocuments.stream().map(DocumentBean::new).collect(Collectors.toList());
-    }
-
-    private Optional<String> getQueryStringPart(String part, String queryString) {
-        String[] split = queryString.split(part + "=");
-        if (split.length != 2) {
-            return Optional.empty();
-        }
-        return Optional.of(split[1]);
-
     }
 
 }
