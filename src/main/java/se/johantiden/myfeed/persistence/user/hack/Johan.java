@@ -30,12 +30,13 @@ public class Johan extends User {
         });
 
         Predicate<Document> notSport = freeSearch(s -> {
-            boolean sport = s.contains("categories[0].name=sport") || s.contains("nhl") || s.contains("premier league")
-                    || s.contains("allsvenskan") || s.contains("dn.se/sport");
+            boolean sport = s.contains("nhl") || s.contains("premier league")
+                    || s.contains("allsvenskan");
             return !sport;
         });
 
         return new Filter(Lists.<Predicate<Document>>newArrayList(
+                hasCategory("sport").negate(),
                 notSport,
                 notZlatan,
                 hasCategory("kultur").negate(),

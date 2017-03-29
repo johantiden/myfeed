@@ -27,14 +27,13 @@ public class Jocke extends User {
         });
 
         Predicate<Document> notSport = freeSearch(s -> {
-            boolean sport = s.contains("categories[0].name=sport") || s.contains("nhl") || s.contains("premier league")
-                    || s.contains("allsvenskan") || s.contains("dn.se/sport");
+            boolean sport = s.contains("nhl") || s.contains("premier league")
+                    || s.contains("allsvenskan");
             return !sport;
         });
 
         return new Filter(Lists.<Predicate<Document>>newArrayList(
-                notSport,
-                notZlatan,
+                hasCategory("sport").negate(),
                 hasCategory("kultur").negate(),
                 hasCategory("mat &#38; dryck").negate(),
                 hasCategory("resor").negate(),
@@ -43,6 +42,8 @@ public class Jocke extends User {
                 hasCategory("familj").negate(),
                 and(isFrom("reddit"), hasCategory("gaming")).negate(),
                 and(isFrom("svenska dagbladet"), hasCategory("perfect guide")).negate(),
+                notZlatan,
+                notSport,
                 freeSearch(s -> !(s.contains("dn.se") && s.contains("medan du sov"))),
                 freeSearch(s -> !s.contains("trump"))
         ));
