@@ -34,11 +34,7 @@ public final class JCollections {
     }
 
     public static <E> Predicate<E> and(Collection<Predicate<E>> filters) {
-        return reduce(filters, and(), e -> true);
-    }
-
-    private static <T> BinaryOperator<Predicate<T>> and() {
-        return (a, b) -> e -> a.test(e) && b.test(e);
+        return reduce(filters, JPredicates.and(), e -> true);
     }
 
     public static <E> E reduce(Collection<E> collection, BinaryOperator<E> reducer, E emptyObject) {

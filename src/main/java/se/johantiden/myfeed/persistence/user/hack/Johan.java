@@ -9,6 +9,7 @@ import se.johantiden.myfeed.persistence.user.User;
 import java.util.function.Predicate;
 
 import static se.johantiden.myfeed.persistence.Document.hasCategory;
+import static se.johantiden.myfeed.util.JPredicates.and;
 
 public class Johan extends User {
     public Johan() {
@@ -43,11 +44,15 @@ public class Johan extends User {
                 hasCategory("webb-tv").negate(),
                 hasCategory("dnbok").negate(),
                 hasCategory("familj").negate(),
+                and(isFrom("reddit"), hasCategory("gaming")).negate(),
                 freeSearch(s -> !(s.contains("dn.se") && s.contains("medan du sov"))),
                 freeSearch(s -> !s.contains("trump"))
         ));
     }
 
+    private static Predicate<Document> isFrom(String feedName) {
+        return document -> document.feedName.toLowerCase().equals(feedName);
+    }
 
     private static Predicate<Document> freeSearch(Predicate<String> searchPredicate) {
         return e -> {
