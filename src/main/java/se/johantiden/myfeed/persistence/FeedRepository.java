@@ -17,14 +17,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
-import static java.time.temporal.ChronoUnit.SECONDS;
 import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
     private List<Feed> allFeeds;
-    public static final long INVALIDATION_PERIOD = 10;
-    public static final TemporalUnit INVALIDATION_PERIOD_UNIT = SECONDS;
+    public static final long INVALIDATION_PERIOD = 1;
+    public static final TemporalUnit INVALIDATION_PERIOD_UNIT = MINUTES;
 
     @Autowired
     private UserRepository userRepository;
