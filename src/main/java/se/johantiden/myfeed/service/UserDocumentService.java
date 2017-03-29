@@ -30,6 +30,11 @@ public class UserDocumentService {
 
     public void setRead(Key<User> user, Key<Document> document, boolean read) {
 
+        if (user == null) {
+            log.info("No user: No check");
+            return;
+        }
+
         Optional<UserDocument> documentOptional = userDocumentRepository.find(user, document);
 
         UserDocument doc = documentOptional.orElseThrow(() -> new IllegalStateException("Could not find " + Keys.userDocument(user, document)));

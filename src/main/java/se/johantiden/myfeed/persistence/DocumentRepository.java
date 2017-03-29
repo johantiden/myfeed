@@ -6,7 +6,6 @@ import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.persistence.redis.RedisSortedSet;
-import se.johantiden.myfeed.persistence.user.User;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -23,7 +22,7 @@ public class DocumentRepository {
 
 
     public void put(Document document) {
-        getProxy().put(document);
+        getProxy().put(document, Document::getKey, Document.class);
     }
 
     public Optional<Document> find(Document document) {

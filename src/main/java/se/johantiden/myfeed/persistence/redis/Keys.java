@@ -16,7 +16,11 @@ public class Keys {
     }
 
     public static Key<Document> document(String pageUrl) {
-        return Key.create("document:"+pageUrl);
+        return Key.create("document:"+hash(pageUrl));
+    }
+
+    private static String hash(String hashMe) {
+        return "" + hashMe.hashCode(); // TODO: Better hashcode wanted (e.g. truncated SHA1)
     }
 
     public static Key<RedisSortedSet<UserDocument>> userDocuments(Key<User> user) {
@@ -32,7 +36,7 @@ public class Keys {
     }
 
     public static Key<UserDocument> userDocument(Key<User> user, Key<Document> document) {
-        return Key.create("" + user + document);
+        return Key.create("" + user + ":" + document);
     }
 
     public static Key<Feed> feed(Feed feed) {

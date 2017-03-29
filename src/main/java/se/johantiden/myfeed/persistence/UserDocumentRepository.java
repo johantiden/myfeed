@@ -29,7 +29,7 @@ public class UserDocumentRepository {
     }
 
     public void put(UserDocument userDocument) {
-        getProxy(userDocument.getUserKey()).put(userDocument);
+        getProxy(userDocument.getUserKey()).put(userDocument, UserDocument::getKey, UserDocument.class);
     }
 
     public Optional<UserDocument> find(Key<User> user, Key<Document> documentKey) {

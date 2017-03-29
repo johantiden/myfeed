@@ -31,12 +31,35 @@ public class RedisSortedSet<T> {
         this.scoreMapper = Objects.requireNonNull(scoreMapper);
     }
 
-    public void put(T member) {
+    public void add(T member) {
         openJedis(j -> {
             double score = scoreMapper.apply(member);
-            j.zadd(myKey, score, gson.toJson(member));
+            Long added = j.zadd(myKey, score, gson.toJson(member));
             return VOID;
         });
+    }
+
+    public void put(T member, Function<T, Object> equatableProperty, Type type) {
+        if (isMember(member)) {
+            return; // no change needed
+        }
+        removeIf(t -> equatableProperty.apply(t).equals(equatableProperty.apply(member)), type);
+
+        add(member);
+    }
+
+    public boolean removeIf(Predicate<T> predicate, Type type) {
+        Optional<T> t = find(predicate, type);
+        if (t.isPresent()) {
+            remove(t.get());
+            removeIf(predicate, type); // Find more and remove them too. Beware of stack overflow :D
+            return true;
+        }
+        return false;
+    }
+
+    public void remove(T member) {
+        openJedis(j -> j.zrem(myKey, gson.toJson(member)));
     }
 
     public List<T> getAll(Type type) {
@@ -77,7 +100,8 @@ public class RedisSortedSet<T> {
 
     private boolean isMember(T member) {
         return openJedis(j -> {
-            Long rank = j.zrank(myKey, gson.toJson(member));
+            String json = gson.toJson(member);
+            Long rank = j.zrank(myKey, json);
             return rank != null;
         });
     }
