@@ -16,9 +16,9 @@ import se.johantiden.myfeed.service.UserDocumentService;
 import java.util.Optional;
 
 @Component
-public class DocumentFanJob {
+public class DocumentFanoutJob {
 
-    private static final Logger log = LoggerFactory.getLogger(DocumentFanJob.class);
+    private static final Logger log = LoggerFactory.getLogger(DocumentFanoutJob.class);
 
     @Autowired
     private DocumentService documentService;
@@ -29,7 +29,7 @@ public class DocumentFanJob {
     private FeedService feedService;
 
 
-    @Scheduled(fixedRate = 50)
+    @Scheduled(fixedRate = 20)
     public void consumeOne() {
         Optional<Document> documentOptional = documentService.find(Document::isUnfanned);
 

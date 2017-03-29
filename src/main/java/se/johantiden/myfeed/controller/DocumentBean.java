@@ -16,7 +16,6 @@ public class DocumentBean {
     public final String pageUrl;
     public final String imageUrl;
     public final Instant publishedDate;
-    public final String fullSourceEntryForSearch;
     public final String html;
     public final boolean read;
 
@@ -32,7 +31,6 @@ public class DocumentBean {
         this.pageUrl = userDocument.pageUrl;
         this.imageUrl = userDocument.imageUrl;
         this.publishedDate = userDocument.publishedDate;
-        this.fullSourceEntryForSearch = userDocument.fullSourceEntryForSearch;
         this.html = userDocument.html;
         this.read = userDocument.isRead();
     }
@@ -80,10 +78,6 @@ public class DocumentBean {
         return author;
     }
 
-    public String getFullSourceEntryForSearch() {
-        return fullSourceEntryForSearch;
-    }
-
     public boolean isRead() {
         return read;
     }
@@ -127,7 +121,6 @@ public class DocumentBean {
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
-                ", fullSourceEntryForSearch='" + fullSourceEntryForSearch + '\'' +
                 ", html='" + html + '\'' +
                 ", read=" + read +
                 '}';

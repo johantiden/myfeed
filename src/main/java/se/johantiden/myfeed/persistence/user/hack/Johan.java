@@ -46,13 +46,14 @@ public class Johan extends User {
                 hasCategory("familj").negate(),
                 and(isFrom("reddit"), hasCategory("gaming")).negate(),
                 and(isFrom("svenska dagbladet"), hasCategory("perfect guide")).negate(),
+                and(isFrom("ars"), hasCategory("opposable thumbs")).negate(),
                 freeSearch(s -> !(s.contains("dn.se") && s.contains("medan du sov"))),
                 freeSearch(s -> !s.contains("trump"))
         ));
     }
 
     private static Predicate<Document> isFrom(String feedName) {
-        return document -> document.feedName.toLowerCase().equals(feedName);
+        return document -> document.feedName.toLowerCase().contains(feedName);
     }
 
     private static Predicate<Document> freeSearch(Predicate<String> searchPredicate) {

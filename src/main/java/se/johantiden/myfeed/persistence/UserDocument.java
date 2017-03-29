@@ -22,7 +22,6 @@ public class UserDocument implements Persistable<UserDocument> {
     public final String cssClass;
     public final String pageUrl;
     public final String imageUrl;
-    public final String fullSourceEntryForSearch;
     public final String html;
     private boolean read;
 
@@ -39,7 +38,6 @@ public class UserDocument implements Persistable<UserDocument> {
         this.cssClass = document.cssClass;
         this.pageUrl = document.pageUrl;
         this.imageUrl = document.imageUrl;
-        this.fullSourceEntryForSearch = document.fullSourceEntryForSearch;
         this.html = document.html;
     }
 

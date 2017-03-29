@@ -32,6 +32,7 @@ public class DocumentService {
         if (optional.isPresent()) {
 //            log.warn("putIfNew but was not new. (This can probably be optimized)");
         } else {
+            log.info("Adding new document: {}", document.pageUrl);
             put(document);
         }
     }
