@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.controller;
 
+import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.UserDocument;
 
 import java.time.Instant;
@@ -19,19 +20,19 @@ public class DocumentBean {
     public final String html;
     public final boolean read;
 
-    public DocumentBean(UserDocument userDocument) {
-        this.feed = userDocument.feedBean;
-        this.category = userDocument.category;
+    public DocumentBean(UserDocument userDocument, Document document) {
+        this.feed = new NameAndUrlBean(document.feedName, document.feedUrl);
+        this.category = new NameAndUrlBean(document.categoryName, document.categoryUrl);
 
-        this.title = userDocument.title;
-        this.text = userDocument.text;
-        this.author = userDocument.author;
+        this.title = document.title;
+        this.text = document.text;
+        this.author = new NameAndUrlBean(document.authorName, document.authorUrl);
 
-        this.cssClass = userDocument.cssClass;
-        this.pageUrl = userDocument.pageUrl;
-        this.imageUrl = userDocument.imageUrl;
-        this.publishedDate = userDocument.publishedDate;
-        this.html = userDocument.html;
+        this.cssClass = document.cssClass;
+        this.pageUrl = document.pageUrl;
+        this.imageUrl = document.imageUrl;
+        this.publishedDate = document.publishedDate;
+        this.html = document.html;
         this.read = userDocument.isRead();
     }
 

@@ -10,8 +10,7 @@ import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,13 +21,7 @@ public class UserDocumentService {
     private UserDocumentRepository userDocumentRepository;
 
     public List<UserDocument> getUnreadDocumentsFor(Key<User> user) {
-
-        List<UserDocument> documents = userDocumentRepository.getUnreadDocuments(user);
-
-        Comparator<UserDocument> comparator = Comparator.comparing(UserDocument::getPublishedDate);
-        Comparator<UserDocument> reversed = comparator.reversed();
-        Collections.sort(documents, reversed);
-        return documents;
+        return userDocumentRepository.getUnreadDocuments(user);
     }
 
     public void put(UserDocument userDocument) {
@@ -53,5 +46,9 @@ public class UserDocumentService {
         } else {
             put(userDocument);
         }
+    }
+
+    public long purgeOlderThan(Key<User> user, Duration duration) {
+        return userDocumentRepository.purgeOlderThan(user, duration);
     }
 }

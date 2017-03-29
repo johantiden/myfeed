@@ -21,12 +21,10 @@ public class Document implements Persistable<Document> {
     public final String pageUrl;
     public final String imageUrl;
     public final Instant publishedDate;
-    public final String fullSourceEntryForSearch;
     public final String html;
     private Key<Feed> feed;
     public String categoryName;
     public String categoryUrl;
-    public boolean fanned;
 
 
     public Document(
@@ -41,7 +39,6 @@ public class Document implements Persistable<Document> {
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
-            String fullSourceEntryForSearch,
             String html, String categoryName,
             String categoryUrl) {
 
@@ -56,7 +53,6 @@ public class Document implements Persistable<Document> {
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
-        this.fullSourceEntryForSearch = fullSourceEntryForSearch;
         this.categoryName = categoryName;
         this.html = html;
         this.categoryUrl = categoryUrl;
@@ -89,6 +85,10 @@ public class Document implements Persistable<Document> {
         return "";
     }
 
+    public String getPublishedShortString() {
+        return dateToShortString(publishedDate);
+    }
+
     public static Predicate<Document> hasCategory(String category) {
         return document -> JString.containsIgnoreCase(document.categoryName, category);
     }
@@ -106,7 +106,6 @@ public class Document implements Persistable<Document> {
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
-                ", fullSourceEntryForSearch='" + fullSourceEntryForSearch + '\'' +
                 ", html='" + html + '\'' +
                 ", feed=" + feed +
                 ", categoryName='" + categoryName + '\'' +
@@ -118,20 +117,12 @@ public class Document implements Persistable<Document> {
         return feed;
     }
 
-    public boolean isFanned() {
-        return fanned;
-    }
-
-    public boolean isUnfanned() {
-        return !fanned;
-    }
-
-    public void setFanned(boolean fanned) {
-        this.fanned = fanned;
-    }
-
     @Override
     public Key<Document> getKey() {
         return Keys.document(this);
+    }
+
+    public Instant getPublishDate() {
+        return publishedDate;
     }
 }

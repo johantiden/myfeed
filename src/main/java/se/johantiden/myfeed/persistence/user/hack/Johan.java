@@ -58,8 +58,16 @@ public class Johan extends User {
 
     private static Predicate<Document> freeSearch(Predicate<String> searchPredicate) {
         return e -> {
-            String document = e.fullSourceEntryForSearch.toLowerCase();
-            return searchPredicate.test(document);
+            String mergedString = "";
+            mergedString += e.authorName;
+            mergedString += e.categoryName;
+            mergedString += e.cssClass;
+            mergedString += e.feedName;
+            mergedString += e.html;
+            mergedString += e.text;
+            mergedString += e.title;
+            mergedString = mergedString.toLowerCase();
+            return searchPredicate.test(mergedString);
         };
     }
 

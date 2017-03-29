@@ -11,12 +11,15 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.FeedRepository;
+import se.johantiden.myfeed.persistence.InboxRepository;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
+import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.persistence.redis.JedisClient;
 import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.reader.FeedReaderService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
+import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
 import java.net.URI;
@@ -84,6 +87,16 @@ public class Main {
     }
 
     @Bean
+    public InboxService inboxService() {
+        return new InboxService();
+    }
+
+    @Bean
+    public InboxRepository inboxRepository() {
+        return new InboxRepository();
+    }
+
+    @Bean
     public Gson gson() {
         return new Gson();
     }
@@ -96,6 +109,11 @@ public class Main {
     @Bean
     public UserDocumentRepository userDocumentRepository() {
         return new UserDocumentRepository();
+    }
+
+    @Bean
+    public UserService userService() {
+        return new UserService();
     }
 
     public static void main(String[] args) {

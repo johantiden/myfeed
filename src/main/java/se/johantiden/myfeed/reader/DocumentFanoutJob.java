@@ -11,6 +11,7 @@ import se.johantiden.myfeed.persistence.FeedUser;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
+import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
 import java.util.Optional;
@@ -21,22 +22,21 @@ public class DocumentFanoutJob {
     private static final Logger log = LoggerFactory.getLogger(DocumentFanoutJob.class);
 
     @Autowired
-    private DocumentService documentService;
+    private InboxService inboxService;
     @Autowired
     private UserDocumentService userDocumentService;
-
     @Autowired
     private FeedService feedService;
-
+    @Autowired
+    private DocumentService documentService;
 
     @Scheduled(fixedRate = 20)
     public void consumeOne() {
-        Optional<Document> documentOptional = documentService.find(Document::isUnfanned);
+        Optional<Document> documentOptional = inboxService.pop();
 
         documentOptional.ifPresent(document -> {
-            consume(document);
-            document.setFanned(true);
             documentService.put(document);
+            consume(document);
         });
     }
 
@@ -48,7 +48,7 @@ public class DocumentFanoutJob {
                 .filter(u -> u.getUserGlobalFilter().test(document))
                 .forEach(user -> {
                     log.info("  -> {}", user.getUsername());
-                    userDocumentService.putIfNew(new UserDocument(user.getKey(), document));
+                    userDocumentService.putIfNew(new UserDocument(user.getKey(), document.getKey(), document.publishedDate));
                 });
     }
 }
