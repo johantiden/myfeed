@@ -39,6 +39,7 @@ public class Jocke extends User {
                 hasCategory("resor").negate(),
                 hasCategory("webb-tv").negate(),
                 hasCategory("dnbok").negate(),
+                hasCategory("familj").negate(),
                 freeSearch(s -> !(s.contains("dn.se") && s.contains("medan du sov"))),
                 freeSearch(s -> !s.contains("trump"))
         ));
