@@ -42,6 +42,7 @@ public class Jocke extends User {
                 hasCategory("dnbok").negate(),
                 hasCategory("familj").negate(),
                 and(isFrom("reddit"), hasCategory("gaming")).negate(),
+                and(isFrom("svenska dagbladet"), hasCategory("perfect guide")).negate(),
                 freeSearch(s -> !(s.contains("dn.se") && s.contains("medan du sov"))),
                 freeSearch(s -> !s.contains("trump"))
         ));
