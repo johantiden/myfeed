@@ -8,11 +8,9 @@ import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.service.DocumentService;
-import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.UserDocumentService;
 import se.johantiden.myfeed.settings.GlobalSettings;
 
-import java.time.Duration;
 import java.util.Collection;
 
 @Component
@@ -27,7 +25,7 @@ public class DocumentPurgeOldJob {
     @Autowired
     private UserService userService;
 
-    @Scheduled(fixedRate = 10_000)
+    @Scheduled(fixedRate = 3600*1000)
     public void consumeOne() {
         log.info("Purging documents!");
 
