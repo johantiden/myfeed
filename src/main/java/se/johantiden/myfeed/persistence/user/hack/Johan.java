@@ -39,6 +39,7 @@ public class Johan extends User {
                 categoryContains("sport").negate(),
                 categoryContains("kultur").negate(),
                 and(categoryContains("mat"), categoryContains("dryck")).negate(),
+                and(categoryContains("mat"), categoryContains("vin")).negate(),
                 categoryContains("resor").negate(),
                 categoryContains("webb-tv").negate(),
                 categoryContains("dnbok").negate(),

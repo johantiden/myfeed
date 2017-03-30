@@ -62,11 +62,10 @@ public class FeedRepository {
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index"));
 
-        feeds.add(createReddit("r/worldnews"));
-        feeds.add(createReddit("r/AskReddit"));
-//        feeds.add(createReddit("r/Futurology"));
-        feeds.add(createReddit("r/science"));
-        feeds.add(createReddit("top"));
+        feeds.add(createReddit("r/worldnews", 1000));
+        feeds.add(createReddit("r/AskReddit", 1000));
+        feeds.add(createReddit("r/science", 1000));
+        feeds.add(createReddit("top", 1000));
 
         feeds.add(createRss(
                 "TheLocal",
@@ -74,15 +73,7 @@ public class FeedRepository {
                 "https://www.thelocal.se/",
                 "https://www.thelocal.se/feeds/rss.php"));
 
-        feeds.add(createRss(
-                "Aftonbladet",
-                "aftonbladet",
-                "https://www.aftonbladet.se",
-                "http://www.aftonbladet.se/nyheter/rss.xml",
-                Document.categoryContains("ledare")));
-
-
-//        feeds.add(createTwitter("pwolodarski"));
+        feeds.add(createTwitter("pwolodarski"));
         feeds.add(createTwitter("BillGates"));
         feeds.add(createTwitter("github"));
 
@@ -120,11 +111,15 @@ public class FeedRepository {
                 newHashMap("rssUrl", rssUrl), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null);
     }
 
-    private static Feed createReddit(String subreddit) {
-        return new RedditPlugin().createFeed(
+    private static Feed createReddit(String subreddit, int minScore) {
+        Predicate<Document> votesPredicate = d -> (int) d.getExtra("votes") > minScore;
+
+        Feed feed = new RedditPlugin().createFeed(
                 "Reddit",
                 "reddit", "https://www.reddit.com/" + subreddit,
-                newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null);
+                newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT,
+                new Filter(votesPredicate));
+        return feed;
     }
 
     private static Feed createTwitter(String username) {

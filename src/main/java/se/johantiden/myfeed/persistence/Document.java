@@ -1,12 +1,14 @@
 package se.johantiden.myfeed.persistence;
 
 
+import com.google.common.collect.Maps;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.util.JString;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class Document implements Persistable<Document> {
@@ -25,6 +27,7 @@ public class Document implements Persistable<Document> {
     private Key<Feed> feed;
     public String categoryName;
     public String categoryUrl;
+    private final Map<String, Object> extra;
 
 
     public Document(
@@ -56,6 +59,7 @@ public class Document implements Persistable<Document> {
         this.categoryName = categoryName;
         this.html = html;
         this.categoryUrl = categoryUrl;
+        extra = Maps.newHashMap();
     }
 
     public static String dateToShortString(Instant instant) {
@@ -124,5 +128,13 @@ public class Document implements Persistable<Document> {
 
     public Instant getPublishDate() {
         return publishedDate;
+    }
+
+    public void putExtra(String key, Object value) {
+        this.extra.put(key, value);
+    }
+
+    public Object getExtra(String key) {
+        return extra.get(key);
     }
 }
