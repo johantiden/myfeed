@@ -64,7 +64,7 @@ public class FeedRepository {
 
         feeds.add(createReddit("r/worldnews"));
         feeds.add(createReddit("r/AskReddit"));
-        feeds.add(createReddit("r/Futurology"));
+//        feeds.add(createReddit("r/Futurology"));
         feeds.add(createReddit("r/science"));
         feeds.add(createReddit("top"));
 
@@ -79,10 +79,10 @@ public class FeedRepository {
                 "aftonbladet",
                 "https://www.aftonbladet.se",
                 "http://www.aftonbladet.se/nyheter/rss.xml",
-                Document.hasCategory("ledare")));
+                Document.categoryContains("ledare")));
 
 
-        feeds.add(createTwitter("pwolodarski"));
+//        feeds.add(createTwitter("pwolodarski"));
         feeds.add(createTwitter("BillGates"));
         feeds.add(createTwitter("github"));
 

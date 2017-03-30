@@ -8,7 +8,7 @@ import se.johantiden.myfeed.persistence.user.User;
 
 import java.util.function.Predicate;
 
-import static se.johantiden.myfeed.persistence.Document.hasCategory;
+import static se.johantiden.myfeed.persistence.Document.categoryContains;
 import static se.johantiden.myfeed.util.JPredicates.and;
 
 public class Johan extends User {
@@ -36,19 +36,20 @@ public class Johan extends User {
         });
 
         return new Filter(Lists.<Predicate<Document>>newArrayList(
-                hasCategory("sport").negate(),
-                notSport,
+                categoryContains("sport").negate(),
+                categoryContains("kultur").negate(),
+                and(categoryContains("mat"), categoryContains("dryck")).negate(),
+                categoryContains("resor").negate(),
+                categoryContains("webb-tv").negate(),
+                categoryContains("dnbok").negate(),
+                categoryContains("familj").negate(),
+                and(isFrom("reddit"), categoryContains("gaming")).negate(),
+                and(isFrom("ars"), categoryContains("dealmaster")).negate(),
+                and(isFrom("ars"), categoryContains("opposable thumbs")).negate(),
+                and(isFrom("svenska dagbladet"), categoryContains("perfect guide")).negate(),
                 notZlatan,
-                hasCategory("kultur").negate(),
-                hasCategory("mat &#38; dryck").negate(),
-                hasCategory("resor").negate(),
-                hasCategory("webb-tv").negate(),
-                hasCategory("dnbok").negate(),
-                hasCategory("familj").negate(),
-                and(isFrom("reddit"), hasCategory("gaming")).negate(),
-                and(isFrom("svenska dagbladet"), hasCategory("perfect guide")).negate(),
-                and(isFrom("ars"), hasCategory("opposable thumbs")).negate(),
-                freeSearch(s -> !(s.contains("dn.se") && s.contains("medan du sov"))),
+                notSport,
+                freeSearch(s -> !s.contains("medan du sov")),
                 freeSearch(s -> !s.contains("trump"))
         ));
     }

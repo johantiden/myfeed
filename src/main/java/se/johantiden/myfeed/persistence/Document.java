@@ -89,7 +89,7 @@ public class Document implements Persistable<Document> {
         return dateToShortString(publishedDate);
     }
 
-    public static Predicate<Document> hasCategory(String category) {
+    public static Predicate<Document> categoryContains(String category) {
         return document -> JString.containsIgnoreCase(document.categoryName, category);
     }
 
