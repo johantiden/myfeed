@@ -36,6 +36,7 @@ public class Johan extends User {
         });
 
         return new Filter(Lists.<Predicate<Document>>newArrayList(
+                isNotPaywalled(),
                 categoryContains("sport").negate(),
                 categoryContains("kultur").negate(),
                 and(categoryContains("mat"), categoryContains("dryck")).negate(),
@@ -53,6 +54,10 @@ public class Johan extends User {
                 freeSearch(s -> !s.contains("medan du sov")),
                 freeSearch(s -> !s.contains("trump"))
         ));
+    }
+
+    private static Predicate<Document> isNotPaywalled() {
+        return document -> !document.isPaywalled;
     }
 
     private static Predicate<Document> isFrom(String feedName) {

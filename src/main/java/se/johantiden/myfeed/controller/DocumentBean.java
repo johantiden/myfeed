@@ -12,6 +12,7 @@ public class DocumentBean {
     public final NameAndUrlBean category;
     public final String title;
     public final String text;
+    public final Double score;
     public final NameAndUrlBean author;
     public final String cssClass;
     public final String pageUrl;
@@ -34,6 +35,7 @@ public class DocumentBean {
         this.publishedDate = document.publishedDate;
         this.html = document.html;
         this.read = userDocument.isRead();
+        this.score = document.score;
     }
 
     public String getCssClass() {
@@ -81,6 +83,10 @@ public class DocumentBean {
 
     public boolean isRead() {
         return read;
+    }
+
+    public Double getScore() {
+        return score;
     }
 
     public static String dateToShortString(Instant instant) {

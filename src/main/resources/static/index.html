@@ -32,6 +32,7 @@
 
             <div class="top-row">
                 <div class="feedName" ng-if="item.feed.name"><a href="{{item.feed.url}}">{{item.feed.name}}</a></div>
+                <div class="score" ng-if="item.score"> | {{item.score}}</div>
                 <div class="category" ng-if="item.category.name"> | <a href="{{item.category.url}}">{{item.category.name}}</a></div>
                 <div class="author" ng-if="item.author.name"> | <a href="{{item.author.url}}">{{item.author.name}}</a></div>
                 <div class="time-since"> | {{item.publishedDateShort}}</div>

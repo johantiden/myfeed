@@ -7,7 +7,7 @@ import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 
-import java.time.temporal.TemporalUnit;
+import java.time.Duration;
 import java.util.Map;
 
 public class RssPlugin implements Plugin {
@@ -17,9 +17,8 @@ public class RssPlugin implements Plugin {
             String feedName,
             String cssClass, String webUrl,
             Map<String, String> readerParameters,
-            long invalidationPeriod,
-            TemporalUnit invalidationPeriodUnit, Filter filter) {
-        return new FeedImpl(PluginType.RSS, feedName, webUrl, cssClass, readerParameters, invalidationPeriod, invalidationPeriodUnit, filter);
+            Duration ttl, Filter filter) {
+        return new FeedImpl(PluginType.RSS, feedName, webUrl, cssClass, readerParameters, ttl, filter);
     }
 
     @Override

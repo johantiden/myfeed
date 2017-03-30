@@ -1,5 +1,7 @@
 package se.johantiden.myfeed.persistence;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.User;
@@ -7,8 +9,10 @@ import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
 import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
+import se.johantiden.myfeed.plugin.svd.SvenskaDagbladetPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
+import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,9 +25,9 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(FeedRepository.class);
     private List<Feed> allFeeds;
-    public static final long INVALIDATION_PERIOD = 1;
-    public static final TemporalUnit INVALIDATION_PERIOD_UNIT = MINUTES;
+    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(1);
 
     @Autowired
     private UserRepository userRepository;
@@ -37,18 +41,20 @@ public class FeedRepository {
                 "https://slashdot.org",
                 "http://rss.slashdot.org/Slashdot/slashdotMainatom"));
 
-        feeds.add(createRss(
+        feeds.add(new SvenskaDagbladetPlugin().createFeed(
                 "Svenska Dagbladet",
                 "svd",
                 "https://www.svd.se",
-                "https://www.svd.se/?service=rss"));
+                newHashMap("rssUrl", "https://www.svd.se/?service=rss"),
+                INVALIDATION_PERIOD,
+                new Filter(d -> !d.isPaywalled)));
 
         DagensNyheterPlugin dn = new DagensNyheterPlugin();
         feeds.add(dn.createFeed(
                 "Dagens Nyheter",
                 "dn",
                 "https://www.dn.se",
-                newHashMap("rssUrl", "http://www.dn.se/nyheter/rss/"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null));
+                newHashMap("rssUrl", "http://www.dn.se/nyheter/rss/"), INVALIDATION_PERIOD, null));
 
         feeds.add(createRss(
                 "xkcd",
@@ -99,7 +105,7 @@ public class FeedRepository {
                 cssClass,
                 webUrl,
                 newHashMap("rssUrl", rssUrl),
-                INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT,
+                INVALIDATION_PERIOD,
                 new Filter(filter));
     }
     private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl) {
@@ -108,18 +114,21 @@ public class FeedRepository {
                 feedName,
                 cssClass,
                 webUrl,
-                newHashMap("rssUrl", rssUrl), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null);
+                newHashMap("rssUrl", rssUrl), INVALIDATION_PERIOD, null);
     }
 
-    private static Feed createReddit(String subreddit, int minScore) {
-        Predicate<Document> votesPredicate = d -> (int) d.getExtra("votes") > minScore;
+    private static Feed createReddit(String subreddit, double minScore) {
+        Predicate<Document> votesPredicate = d -> {
+            boolean ok = d.getScore() != null && d.getScore() > minScore;
+            log.info("{} : {}", d.pageUrl, ok);
+            return ok;
+        };
 
-        Feed feed = new RedditPlugin().createFeed(
+        return new RedditPlugin().createFeed(
                 "Reddit",
                 "reddit", "https://www.reddit.com/" + subreddit,
-                newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT,
+                newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), INVALIDATION_PERIOD,
                 new Filter(votesPredicate));
-        return feed;
     }
 
     private static Feed createTwitter(String username) {
@@ -127,7 +136,7 @@ public class FeedRepository {
         return twitter.createFeed(
                 "Twitter",
                 "twitter", "https://twitter.com/" + username,
-                newHashMap("username", username), INVALIDATION_PERIOD, INVALIDATION_PERIOD_UNIT, null);
+                newHashMap("username", username), INVALIDATION_PERIOD, null);
     }
 
     public List<Feed> allFeeds() {
