@@ -26,6 +26,11 @@ public class UserDocumentController {
     public void putDocument(@RequestBody UserDocumentPutBean userDocumentPutBean) {
 
 
+        if (userDocumentPutBean.getUsername() == null) {
+            log.warn("Not 'logged in'. Can't check documents as read.");
+            return;
+        }
+        
         log.info("Received PUT document: {}", userDocumentPutBean);
 
         Key<User> userKey = Keys.user(userDocumentPutBean.getUsername());
