@@ -70,7 +70,7 @@ public class FeedRepository {
 //        feeds.add(createReddit("r/AskReddit", 1000));
 //        feeds.add(createReddit("r/science", 1000));
 //        feeds.add(createReddit("top", 1000));
-        feeds.add(createReddit("/r/all", 1000));
+        feeds.add(createReddit("r/all", 1000));
         feeds.add(createReddit("r/announcements/", 1000));
         feeds.add(createReddit("r/random", 1000, Duration.ofSeconds(20)));
 
