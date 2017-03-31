@@ -24,7 +24,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, documentSer
         $cookies.put('searchText', newValue);
     });
 
-    $scope.setDocumentRead = function(item){
+    $scope.setDocumentRead = function(item) {
         //alert("item '"+ item.pageUrl +"' READ was changed to:"+item.read);
         item.username = user;
         documentService.putItem(item);

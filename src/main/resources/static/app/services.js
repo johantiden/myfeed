@@ -1,4 +1,4 @@
-app.service('documentService', function($http) {
+app.service('documentService', function($http, $cacheFactory) {
 
     this.putItem = function (item) {
         $http.put("/rest/documents", item);
@@ -6,10 +6,16 @@ app.service('documentService', function($http) {
 
 
     this.getUnread = function (username, callback) {
-        $http.get("/rest/index/"+username)
-            .then(function(response) {
-                callback(response.data);
-            });
+        $http({
+            method: 'GET',
+            url: '/rest/index/'+username,
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        }).then(function(response) {
+            callback(response.data);
+        });
 
 
 
