@@ -34,6 +34,7 @@ public class IndexController {
     public List<DocumentBean> index(
             @PathVariable("username") String username,
             HttpServletRequest req  ) {
+        log.info("ENTER index");
 
         if (username == null || "null".equals(username)) {
             username = "johan";
@@ -42,11 +43,15 @@ public class IndexController {
         log.info("User: " + username);
         Key<User> user = Keys.user(username);
         List<UserDocument> userDocuments = userDocumentService.getUnreadDocumentsFor(user);
+        log.info("     index foo");
 
-        return userDocuments.stream().map(ud -> documentService.find(ud.getDocumentKey()).map(d -> new DocumentBean(ud, d)))
+        List<DocumentBean> documentBeans = userDocuments.stream().map(ud -> documentService.find(ud.getDocumentKey()).map(d -> new DocumentBean(ud, d)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
+
+        log.info("EXIT  index");
+        return documentBeans;
     }
 
 }
