@@ -29,11 +29,11 @@ public class UserDocumentRepository {
     }
 
     public void put(UserDocument userDocument) {
-        getProxy(userDocument.getUserKey()).put(userDocument, UserDocument::getKey, UserDocument.class);
+        getProxy(userDocument.getUserKey()).put(userDocument, userDocument.getKey(), UserDocument.class);
     }
 
     public Optional<UserDocument> find(Key<User> user, Key<Document> documentKey) {
-       return getProxy(user).find(ud -> ud.getDocumentKey().equals(documentKey), UserDocument.class);
+       return getProxy(user).find(Keys.userDocument(user, documentKey), UserDocument.class);
     }
 
     private RedisSortedSet<UserDocument> getProxy(Key<User> user) {

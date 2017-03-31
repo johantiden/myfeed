@@ -43,14 +43,16 @@ public class IndexController {
         log.info("User: " + username);
         Key<User> user = Keys.user(username);
         List<UserDocument> userDocuments = userDocumentService.getUnreadDocumentsFor(user);
-        log.info("     index foo");
+        log.info("     index foo"); // 100 ms from ENTER
 
-        List<DocumentBean> documentBeans = userDocuments.stream().map(ud -> documentService.find(ud.getDocumentKey()).map(d -> new DocumentBean(ud, d)))
+        List<DocumentBean> documentBeans =
+                userDocuments.stream()
+                        .map(ud -> documentService.find(ud.getDocumentKey()).map(d -> new DocumentBean(ud, d)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        log.info("EXIT  index");
+        log.info("EXIT  index"); // 9 seconds from foo
         return documentBeans;
     }
 

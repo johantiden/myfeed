@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.user.User;
 
 import java.time.Duration;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public class DocumentService {
 
@@ -30,10 +28,6 @@ public class DocumentService {
             log.info("Adding new document: {}", document.pageUrl);
             documentRepository.put(document);
         }
-    }
-
-    public Optional<Document> find(Predicate<Document> predicate) {
-        return documentRepository.find(predicate);
     }
 
     public boolean hasDocument(Key<Document> documentKey) {

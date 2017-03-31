@@ -11,10 +11,6 @@ public class Keys {
         return Key.create("user:"+userName);
     }
 
-    public static Key<Document> document(Document document) {
-        return document(document.pageUrl);
-    }
-
     public static Key<Document> document(String pageUrl) {
         return Key.create("document:"+hash(pageUrl));
     }

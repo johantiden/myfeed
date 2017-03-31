@@ -11,7 +11,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class DocumentRepository {
 
@@ -22,19 +21,15 @@ public class DocumentRepository {
 
 
     public void put(Document document) {
-        getProxy().put(document, Document::getKey, Document.class);
+        getProxy().put(document, document.getKey(), Document.class);
     }
 
     public Optional<Document> find(Document document) {
         return find(document.getKey());
     }
 
-    public Optional<Document> find(Predicate<Document> predicate) {
-        return getProxy().find(predicate, Document.class);
-    }
-
     public Optional<Document> find(Key<Document> documentKey) {
-        return find(doc -> doc.getKey().equals(documentKey));
+        return getProxy().find(documentKey, Document.class);
     }
 
 

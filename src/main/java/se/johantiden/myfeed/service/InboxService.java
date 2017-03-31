@@ -40,8 +40,8 @@ public class InboxService {
         }
     }
 
-    public Optional<Document> find(Predicate<Document> predicate) {
-        return inboxRepository.find(predicate);
+    public Optional<Document> find(Key<Document> documentKey) {
+        return inboxRepository.find(documentKey);
     }
 
     public boolean hasDocument(Key<Document> documentKey) {
