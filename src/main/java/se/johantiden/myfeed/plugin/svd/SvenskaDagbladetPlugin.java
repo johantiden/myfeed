@@ -53,7 +53,7 @@ public class SvenskaDagbladetPlugin implements Plugin {
 
             Elements select = parse.select(".paywall-loader");
             if (!select.isEmpty()) {
-                log.info("SVD Paywall: {}", document.pageUrl);
+                log.debug("SVD Paywall: {}", document.pageUrl);
                 return true;
             }
 

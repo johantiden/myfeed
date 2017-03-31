@@ -125,7 +125,7 @@ public class FeedRepository {
     private static Feed createReddit(String subreddit, double minScore, Duration invalidationPeriod) {
         Predicate<Document> votesPredicate = d -> {
             boolean ok = d.getScore() != null && d.getScore() > minScore;
-            log.info("{} : score>{} ? {}", d.pageUrl, minScore, ok);
+//            log.info("{} : score>{} ? {}", d.pageUrl, minScore, ok);
             return ok;
         };
 

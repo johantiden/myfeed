@@ -1,5 +1,5 @@
 
-app.controller('myCtrl', function($scope, $location, $sce, $cookies, documentService) {
+app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, documentService) {
 
     var limitStep = 10;
     $scope.itemLimit = limitStep;
@@ -24,11 +24,27 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, documentSer
         $cookies.put('searchText', newValue);
     });
 
-    $scope.setDocumentRead = function(item) {
+    $scope.setDocumentRead = function(item, read, callback) {
         //alert("item '"+ item.pageUrl +"' READ was changed to:"+item.read);
+        item.read = read;
         item.username = user;
-        documentService.putItem(item);
-        item.hide = true;
+        documentService.putItem(item, callback);
+
+        var isAnimate = callback === undefined; // only animate if there is no other callback (e.g. open link)
+        if (isAnimate) {
+            item.hide = true;
+        }
+    };
+
+
+    $scope.goFunc = function(url) { // lambdas please.   () => go(url)
+        return function() {
+            $scope.go(url);
+        };
+    };
+
+    $scope.go = function(url) {
+        $window.location.href = url;
     };
 
 

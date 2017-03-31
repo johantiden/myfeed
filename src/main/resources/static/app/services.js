@@ -1,7 +1,7 @@
 app.service('documentService', function($http, $cacheFactory) {
 
-    this.putItem = function (item) {
-        $http.put("/rest/documents", item);
+    this.putItem = function (item, callback) {
+        $http.put("/rest/documents", item).then(callback);
     };
 
 

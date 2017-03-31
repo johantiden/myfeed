@@ -44,7 +44,7 @@ public class FeedReaderJob {
 
 
         if (!filtered.isEmpty()) {
-            log.info("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter. Oldest: {}",
+            log.debug("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter. Oldest: {}",
                     feed.getName(), filtered.size(), documents.size()-filtered.size(), oldestInstant(filtered));
         }
         inboxService.putIfNew(filtered);

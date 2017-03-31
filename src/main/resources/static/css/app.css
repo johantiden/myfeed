@@ -130,21 +130,6 @@ div.text {
     font-size: small;
 }
 
-/*.time-since:before {*/
-    /*content: ' | ';*/
-/*}*/
-/*.time-since {*/
-    /*margin-left: 10px;*/
-/*}*/
-
-.comments-button {
-    width: 4vw;
-    height: 1.5vw;
-    /*cursor: pointer;*/
-    background-color: transparent;
-    border: none;
-}
-
 .title > a {
     font-size: large;
     font-weight: bold;
@@ -156,6 +141,10 @@ div.text {
 
 .navbar {
     padding: 5px;
+}
+
+.link {
+    cursor: pointer;
 }
 
 
