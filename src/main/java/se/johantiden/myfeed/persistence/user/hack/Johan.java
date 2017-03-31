@@ -43,11 +43,7 @@ public class Johan extends User {
                 categoryContains("webb-tv").negate(),
                 categoryContains("dnbok").negate(),
                 categoryContains("familj").negate(),
-                isFrom("reddit").and(categoryContains("iama")).negate(),
-                isFrom("reddit").and(categoryContains("wholesomememes")).negate(),
-                isFrom("reddit").and(categoryContains("art")).negate(),
-                isFrom("reddit").and(categoryContains("aww")).negate(),
-                isFrom("reddit").and(categoryContains("gaming")).negate(),
+                redditCategories(),
                 isFrom("ars").and(categoryContains("dealmaster")).negate(),
                 isFrom("ars").and(categoryContains("opposable thumbs")).negate(),
                 isFrom("svenska dagbladet").and(categoryContains("perfect guide")).negate(),
@@ -59,14 +55,31 @@ public class Johan extends User {
         return JCollections.reduce(predicates, Predicate::and, d->true);
     }
 
+    private static Predicate<Document> redditCategories() {
+        ArrayList<Predicate<Document>> predicates = Lists.<Predicate<Document>>newArrayList(
+                categoryContains("totalwar"),
+                categoryContains("roomporn"),
+                categoryContains("donald"),
+                categoryContains("wholesomememes"),
+                categoryContains("iama"),
+                categoryContains("art"),
+                categoryContains("aww"),
+                categoryContains("gaming"),
+                categoryContains("natureisfuckinglit")
+
+        );
+
+        Predicate<Document> anyBadCategory = JCollections.reduce(predicates, Predicate::or, d -> true);
+
+        return isFrom("reddit").and(anyBadCategory).negate();
+    }
+
 
     /**
      * Anything that is "flagged" will still show up in the feed (unless it is also killed by the main filter), but it
      * will be shown as flagged so that the user can quickly realise that it might be good to skip it.
      *
      * Add stuff here that might be too ambiguous to put in a hard filter, or use it to test out future filters.
-     *
-     * @return
      */
     public static Predicate<Document> flagFilter() {
         ArrayList<Predicate<Document>> clickBaityPhrases = Lists.<Predicate<Document>>newArrayList(
