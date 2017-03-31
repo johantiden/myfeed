@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.persistence.Filter;
 import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
@@ -17,10 +16,10 @@ import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RedditPlugin implements Plugin {
@@ -28,7 +27,7 @@ public class RedditPlugin implements Plugin {
     private static final Logger log = LoggerFactory.getLogger(RedditPlugin.class);
 
     @Override
-    public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Filter filter) {
+    public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
         return new FeedImpl(PluginType.REDDIT, feedName, webUrl, cssClass, readerParameters, ttl, filter);
     }
 

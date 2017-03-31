@@ -2,14 +2,12 @@ package se.johantiden.myfeed.persistence.user;
 
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.FeedUser;
-import se.johantiden.myfeed.persistence.Filter;
 import se.johantiden.myfeed.persistence.Persistable;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public class User implements Persistable<User> {
@@ -18,11 +16,14 @@ public class User implements Persistable<User> {
     private final List<FeedUser> feedsForUser;
     private final Key<User> key;
     private final String username;
-    private Filter userGlobalFilter = Filter.TRUE;
+    private final Predicate<Document> userGlobalFilter;
+    private final Predicate<Document> userFlagFilter;
 
-    public User(Key<User> key, String username) {
+    public User(Key<User> key, String username, Predicate<Document> userGlobalFilter, Predicate<Document> userFlagFilter) {
         this.key = key;
         this.username = username;
+        this.userGlobalFilter = userGlobalFilter;
+        this.userFlagFilter = userFlagFilter;
         this.documents = new ArrayList<>();
         this.feedsForUser = new ArrayList<>();
     }
@@ -31,7 +32,7 @@ public class User implements Persistable<User> {
         return username;
     }
 
-    public Filter getUserGlobalFilter() {
+    public Predicate<Document> getUserGlobalFilter() {
         return userGlobalFilter;
     }
 
@@ -39,8 +40,8 @@ public class User implements Persistable<User> {
         return feedsForUser;
     }
 
-    public void setUserGlobalFilter(Filter userGlobalFilter) {
-        this.userGlobalFilter = Objects.requireNonNull(userGlobalFilter);
+    public Predicate<Document> getFlagFilter() {
+        return userFlagFilter;
     }
 
     @Override

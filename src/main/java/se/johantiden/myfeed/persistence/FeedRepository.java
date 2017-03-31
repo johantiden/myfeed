@@ -13,14 +13,12 @@ import se.johantiden.myfeed.plugin.svd.SvenskaDagbladetPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.time.temporal.ChronoUnit.MINUTES;
 import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
@@ -47,7 +45,7 @@ public class FeedRepository {
                 "https://www.svd.se",
                 newHashMap("rssUrl", "https://www.svd.se/?service=rss"),
                 INVALIDATION_PERIOD,
-                new Filter(d -> !d.isPaywalled)));
+                d -> !d.isPaywalled));
 
         DagensNyheterPlugin dn = new DagensNyheterPlugin();
         feeds.add(dn.createFeed(
@@ -68,10 +66,13 @@ public class FeedRepository {
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index"));
 
-        feeds.add(createReddit("r/worldnews", 1000));
-        feeds.add(createReddit("r/AskReddit", 1000));
-        feeds.add(createReddit("r/science", 1000));
-        feeds.add(createReddit("top", 1000));
+//        feeds.add(createReddit("r/worldnews", 1000));
+//        feeds.add(createReddit("r/AskReddit", 1000));
+//        feeds.add(createReddit("r/science", 1000));
+//        feeds.add(createReddit("top", 1000));
+        feeds.add(createReddit("/r/all", 1000));
+        feeds.add(createReddit("r/announcements/", 1000));
+        feeds.add(createReddit("r/random", 1000, Duration.ofSeconds(20)));
 
         feeds.add(createRss(
                 "TheLocal",
@@ -106,7 +107,7 @@ public class FeedRepository {
                 webUrl,
                 newHashMap("rssUrl", rssUrl),
                 INVALIDATION_PERIOD,
-                new Filter(filter));
+                filter);
     }
     private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl) {
         RssPlugin rss = new RssPlugin();
@@ -118,17 +119,21 @@ public class FeedRepository {
     }
 
     private static Feed createReddit(String subreddit, double minScore) {
+        return createReddit(subreddit, minScore, INVALIDATION_PERIOD);
+    }
+
+    private static Feed createReddit(String subreddit, double minScore, Duration invalidationPeriod) {
         Predicate<Document> votesPredicate = d -> {
             boolean ok = d.getScore() != null && d.getScore() > minScore;
-            log.info("{} : {}", d.pageUrl, ok);
+            log.info("{} : score>{} ? {}", d.pageUrl, minScore, ok);
             return ok;
         };
 
         return new RedditPlugin().createFeed(
                 "Reddit",
                 "reddit", "https://www.reddit.com/" + subreddit,
-                newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), INVALIDATION_PERIOD,
-                new Filter(votesPredicate));
+                newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), invalidationPeriod,
+                votesPredicate);
     }
 
     private static Feed createTwitter(String username) {

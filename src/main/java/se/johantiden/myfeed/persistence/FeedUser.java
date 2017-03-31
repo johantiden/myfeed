@@ -5,7 +5,6 @@ import se.johantiden.myfeed.persistence.user.User;
 public class FeedUser {
     private final User user;
     private final Feed feed;
-    private Filter feedFilter;
 
     public FeedUser(Feed feed, User user) {
         this.user = user;

@@ -5,9 +5,7 @@ import se.johantiden.myfeed.persistence.user.User;
 
 public class Jocke extends User {
     public Jocke() {
-        super(Keys.user("jocke"), "jocke");
-
-        setUserGlobalFilter(Johan.johanFilter());
+        super(Keys.user("jocke"), "jocke", Johan.johanFilter(), Johan.flagFilter());
     }
 
 }

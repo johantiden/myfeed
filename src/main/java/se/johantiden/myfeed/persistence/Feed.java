@@ -4,6 +4,7 @@ package se.johantiden.myfeed.persistence;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public interface Feed extends Persistable<Feed> {
 
@@ -25,5 +26,5 @@ public interface Feed extends Persistable<Feed> {
 
     boolean isInvalidated();
 
-    Filter getFilter();
+    Predicate<Document> getFilter();
 }

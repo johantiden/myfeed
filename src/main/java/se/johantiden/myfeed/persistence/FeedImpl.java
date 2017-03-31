@@ -5,10 +5,10 @@ import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class FeedImpl implements Feed {
 
@@ -20,7 +20,7 @@ public class FeedImpl implements Feed {
     private final List<FeedUser> feedUsers;
     private final String cssClass;
     private final Duration ttl;
-    private final Filter filter;
+    private final Predicate<Document> filter;
     private Instant lastRead = Instant.EPOCH;
 
     public FeedImpl(
@@ -29,14 +29,14 @@ public class FeedImpl implements Feed {
             String webUrl,
             String cssClass, Map<String, String> feedReaderParameters,
             Duration ttl,
-            Filter filter) {
+            Predicate<Document> filter) {
         this.name = name;
         this.webUrl = webUrl;
         this.type = type;
         this.feedReaderParameters = feedReaderParameters;
         this.cssClass = cssClass;
         this.ttl = ttl;
-        this.filter = filter  == null ? Filter.TRUE : filter;
+        this.filter = filter  == null ? d -> true : filter;
         this.feedUsers = new ArrayList<>();
     }
 
@@ -145,7 +145,7 @@ public class FeedImpl implements Feed {
     }
     
     @Override
-    public Filter getFilter() {
+    public Predicate<Document> getFilter() {
         return filter;
     }
 }

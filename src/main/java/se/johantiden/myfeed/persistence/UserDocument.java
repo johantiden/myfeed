@@ -13,9 +13,11 @@ public class UserDocument implements Persistable<UserDocument> {
     private final Key<User> userKey;
     private final Key<Document> documentKey;
     private boolean read;
+    private boolean isFlagged;
 
-    public UserDocument(Key<User> userKey, Key<Document> documentKey, Instant publishDate) {
+    public UserDocument(Key<User> userKey, Key<Document> documentKey, Instant publishDate, boolean isFlagged) {
         this.publishDate = publishDate;
+        this.isFlagged = isFlagged;
         this.userKey = Objects.requireNonNull(userKey);
         this.documentKey = Objects.requireNonNull(documentKey);
     }
@@ -47,5 +49,9 @@ public class UserDocument implements Persistable<UserDocument> {
 
     public Key<Document> getDocumentKey() {
         return documentKey;
+    }
+
+    public boolean isFlagged() {
+        return isFlagged;
     }
 }

@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class EmptyFeed implements Feed {
     @Override
@@ -59,7 +60,7 @@ public class EmptyFeed implements Feed {
     }
 
     @Override
-    public Filter getFilter() {
-        return new Filter(d -> true);
+    public Predicate<Document> getFilter() {
+        return d -> true;
     }
 }
