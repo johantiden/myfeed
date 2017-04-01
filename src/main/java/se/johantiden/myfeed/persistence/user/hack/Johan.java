@@ -65,7 +65,8 @@ public class Johan extends User {
                 categoryContains("art"),
                 categoryContains("aww"),
                 categoryContains("gaming"),
-                categoryContains("natureisfuckinglit")
+                categoryContains("natureisfuckinglit"),
+                categoryContains("instant_regret")
 
         );
 
