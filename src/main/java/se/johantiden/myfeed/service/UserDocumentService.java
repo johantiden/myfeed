@@ -11,7 +11,7 @@ import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.time.Duration;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 public class UserDocumentService {
@@ -20,8 +20,8 @@ public class UserDocumentService {
     @Autowired
     private UserDocumentRepository userDocumentRepository;
 
-    public List<UserDocument> getUnreadDocumentsFor(Key<User> user) {
-        return userDocumentRepository.getUnreadDocuments(user);
+    public Collection<String> getAllDocumentsFor(Key<User> user) {
+        return userDocumentRepository.getAllKeys(user);
     }
 
     public void put(UserDocument userDocument) {

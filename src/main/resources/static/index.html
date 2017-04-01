@@ -20,22 +20,23 @@
     </div>
     <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}}"
-        data-item="{{item}}" 
-        ng-repeat="item in items | filter:searchText | limitTo:itemLimit | limitTo:1000"
+        data-item="{{item}}"
+        ng-repeat="key in keys | limitTo:itemLimit | limitTo:1000"
+        ng-init="item = getItem(key)"
         ng-hide="item.hide">
-        
+
 
         <div class="input-box">
             <input class="read-input" type="checkbox" ng-model="item.read" ng-change="setDocumentRead(item, item.read)">
         </div>
         <div class="content-box">
-
+            {{key}}
             <div class="top-row">
                 <div class="feedName" ng-if="item.feed.name"><a href="{{item.feed.url}}">{{item.feed.name}}</a></div>
                 <div class="score" ng-if="item.score"> | {{item.score}}</div>
                 <div class="category" ng-if="item.category.name"> | <a href="{{item.category.url}}">{{item.category.name}}</a></div>
                 <div class="author" ng-if="item.author.name"> | <a href="{{item.author.url}}">{{item.author.name}}</a></div>
-                <div class="time-since"> | {{item.publishedDateShort}}</div>
+                <div class="time-since" ng-if="item.publishedDateShort"> | {{item.publishedDateShort}}</div>
             </div>
 
 

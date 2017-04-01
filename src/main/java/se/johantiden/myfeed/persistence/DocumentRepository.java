@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.persistence.redis.RedisSortedSet;
+import se.johantiden.myfeed.persistence.redis.RedisMap;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -21,11 +21,8 @@ public class DocumentRepository {
 
 
     public void put(Document document) {
-        getProxy().put(document, document.getKey(), Document.class);
-    }
-
-    public Optional<Document> find(Document document) {
-        return find(document.getKey());
+        Double score = youngestFirst().apply(document);
+        getProxy().put(document, score, document.getKey());
     }
 
     public Optional<Document> find(Key<Document> documentKey) {
@@ -36,8 +33,8 @@ public class DocumentRepository {
 
 
 
-    private RedisSortedSet<Document> getProxy() {
-        return new RedisSortedSet<>(Keys.documents(), jedisPool, gson, youngestFirst());
+    private RedisMap<Document> getProxy() {
+        return new RedisMap<>(Keys.documents(), jedisPool, gson, Document::getKey);
     }
 
     private static Function<Document, Double> youngestFirst() {
@@ -53,8 +50,8 @@ public class DocumentRepository {
         // We want to remove older that the youngest i.e. larger values.
 
         Instant minus = Instant.now().minus(duration);
-        Double min = youngestFirstInstant().apply(minus);
-        double maxValue = Double.MAX_VALUE;
+        String min = youngestFirstInstant().apply(minus).toString();
+        String maxValue = "inf";
         return getProxy().removeByScore(min, maxValue);
     }
 }

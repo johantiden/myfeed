@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.persistence.redis.RedisSortedSet;
+import se.johantiden.myfeed.persistence.redis.RedisMap;
 import se.johantiden.myfeed.persistence.user.User;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -22,22 +22,21 @@ public class UserDocumentRepository {
     @Autowired
     private Gson gson;
 
-    public List<UserDocument> getUnreadDocuments(Key<User> user) {
-        List<UserDocument> userDocuments = getProxy(user).getAll(UserDocument.class);
-        userDocuments.removeIf(UserDocument::isRead);
-        return userDocuments;
+    public Collection<String> getAllKeys(Key<User> user) {
+        return getProxy(user).getAllKeys();
     }
 
     public void put(UserDocument userDocument) {
-        getProxy(userDocument.getUserKey()).put(userDocument, userDocument.getKey(), UserDocument.class);
+        Double score = youngestFirst().apply(userDocument);
+        getProxy(userDocument.getUserKey()).put(userDocument, score, userDocument.getKey());
     }
 
     public Optional<UserDocument> find(Key<User> user, Key<Document> documentKey) {
        return getProxy(user).find(Keys.userDocument(user, documentKey), UserDocument.class);
     }
 
-    private RedisSortedSet<UserDocument> getProxy(Key<User> user) {
-        return new RedisSortedSet<>(Keys.userDocuments(user), jedisPool, gson, youngestFirst());
+    private RedisMap<UserDocument> getProxy(Key<User> userKey) {
+        return new RedisMap<>(Keys.userDocuments(userKey), jedisPool, gson, UserDocument::getKey);
     }
 
     private static Function<UserDocument, Double> youngestFirst() {
@@ -53,15 +52,15 @@ public class UserDocumentRepository {
         // We want to remove older that the youngest i.e. larger values.
 
         Instant minus = Instant.now().minus(duration);
-        Double min = youngestFirstInstant().apply(minus);
-        double maxValue = Double.MAX_VALUE;
+        String min = youngestFirstInstant().apply(minus).toString();
+        String maxValue = "inf";
         return getProxy(user).removeByScore(min, maxValue);
     }
 
     public void remove(Key<User> userKey, Key<Document> documentKey) {
         Optional<UserDocument> userDocumentOptional = find(userKey, documentKey);
         if (userDocumentOptional.isPresent()) {
-            getProxy(userKey).remove(userDocumentOptional.get());
+            getProxy(userKey).remove(userDocumentOptional.get().getKey());
         }
     }
 }

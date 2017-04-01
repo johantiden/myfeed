@@ -16,7 +16,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class RedisSortedSet<T> {
+
+public class RedisSortedSet2<T> {
 
     private static final Void VOID = null;
     private final String myKey;
@@ -24,7 +25,7 @@ public class RedisSortedSet<T> {
     private final Gson gson;
     private final Function<T, Double> scoreMapper;
 
-    public RedisSortedSet(Key<RedisSortedSet<T>> key, JedisPool jedisPool, Gson gson, Function<T, Double> scoreMapper) {
+    public RedisSortedSet2(Key<RedisSortedSet2<T>> key, JedisPool jedisPool, Gson gson, Function<T, Double> scoreMapper) {
         this.myKey = Objects.requireNonNull(key).toString();
         this.jedisPool = Objects.requireNonNull(jedisPool);
         this.gson = Objects.requireNonNull(gson);

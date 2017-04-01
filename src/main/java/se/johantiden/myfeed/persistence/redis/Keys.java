@@ -8,31 +8,28 @@ import se.johantiden.myfeed.persistence.UserDocument;
 public class Keys {
 
     public static Key<User> user(String userName) {
-        return Key.create("user:"+userName);
+        return Key.create(userName);
     }
 
     public static Key<Document> document(String pageUrl) {
-        return Key.create("document:"+hash(pageUrl));
+        return Key.create("d:"+hash(pageUrl));
     }
 
     private static String hash(String hashMe) {
-        return "" + hashMe.hashCode(); // TODO: Better hashcode wanted (e.g. truncated SHA1)
+        return hashMe;//"" + hashMe.hashCode(); // TODO: Better hashcode wanted (e.g. truncated SHA1)
     }
 
-    public static Key<RedisSortedSet<UserDocument>> userDocuments(Key<User> user) {
-        return sortedSet(user + ":userDocuments");
+    public static Key<RedisMap<UserDocument>> userDocuments(Key<User> user) {
+        return indexedMap("ud:"+ user);
     }
 
-    public static Key<RedisSortedSet<UserDocument>> userDocuments(User user) {
-        return userDocuments(user.getKey());
+    public static Key<RedisMap<Document>> documents() {
+        return indexedMap("d");
     }
 
-    public static Key<RedisSortedSet<Document>> documents() {
-        return sortedSet("documents");
-    }
 
     public static Key<UserDocument> userDocument(Key<User> user, Key<Document> document) {
-        return Key.create("" + user + ":" + document);
+        return Key.create(user + ":" + document);
     }
 
     public static Key<Feed> feed(Feed feed) {
@@ -53,11 +50,11 @@ public class Keys {
 
 
 
+    private static <T> Key<RedisMap<T>> indexedMap(String mapName) {
+        return Key.create("maps:"+mapName);
+    }
 
     public static <T> Key<RedisSet<T>> set(String setName) {
         return Key.create("sets:"+setName);
-    }
-    public static <T> Key<RedisSortedSet<T>> sortedSet(String setName) {
-        return Key.create("zets:"+setName);
     }
 }

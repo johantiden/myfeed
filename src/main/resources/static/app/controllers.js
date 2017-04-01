@@ -49,8 +49,15 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
 
     documentService.getUnread(user, function(json) {
-        $scope.items = json;
+        $scope.keys = json;
     });
+
+    $scope.getItem = function(key) {
+        documentService.getItem(key, function(item) {
+            alert("hej");
+
+        })
+    }
 
     $scope.increaseLimit = function() {
         limitStep = limitStep + 1;
