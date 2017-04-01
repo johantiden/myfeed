@@ -85,7 +85,8 @@ public class Johan extends User {
         ArrayList<Predicate<Document>> clickBaityPhrases = Lists.<Predicate<Document>>newArrayList(
                 freeSearch(s -> s.contains("bästa")),
                 freeSearch(s -> s.contains("tipsen")),
-                freeSearch(s -> s.contains("här är"))
+                freeSearch(s -> s.contains("här är")),
+                freeSearch(s -> s.contains("upvote"))
         );
         return JCollections.reduce(clickBaityPhrases, Predicate::or, d->false);
     }
