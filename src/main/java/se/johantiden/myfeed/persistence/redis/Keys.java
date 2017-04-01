@@ -16,11 +16,11 @@ public class Keys {
     }
 
     private static String hash(String hashMe) {
-        return hashMe;//"" + hashMe.hashCode(); // TODO: Better hashcode wanted (e.g. truncated SHA1)
+        return Sha1Hex.makeSHA1Hash(hashMe);
     }
 
     public static Key<RedisMap<UserDocument>> userDocuments(Key<User> user) {
-        return indexedMap("ud:"+ user);
+        return indexedMap("ud:" + user);
     }
 
     public static Key<RedisMap<Document>> documents() {

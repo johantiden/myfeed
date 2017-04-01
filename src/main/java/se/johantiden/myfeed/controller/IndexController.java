@@ -16,8 +16,7 @@ import se.johantiden.myfeed.service.UserDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @EnableAutoConfiguration
@@ -49,7 +48,7 @@ public class IndexController {
 
 //        List<DocumentBean> documentBeans =
 //                userDocuments.stream()
-//                        .map(ud -> documentService.find(ud.getDocumentKey()).map(d -> new DocumentBean(ud, d)))
+//                        .map(ud -> )
 //                .filter(Optional::isPresent)
 //                .map(Optional::get)
 //                .collect(Collectors.toList());
@@ -58,4 +57,21 @@ public class IndexController {
 //        return documentBeans;
     }
 
+    @RequestMapping("/rest/userdocument/{userDocumentKey}")
+    public DocumentBean userDocument(@PathVariable("userDocumentKey") String userDocumentKey) {
+
+        String user = userDocumentKey.split(":")[0];
+        Key<User> userKey = Key.create(user);
+        Optional<UserDocument> documentOptional = userDocumentService.get(userKey, Key.<UserDocument>create(userDocumentKey));
+
+        Optional<DocumentBean> documentBean = documentOptional.flatMap(ud -> documentService.find(ud.getDocumentKey()))
+                .map(d -> new DocumentBean(documentOptional.get(), d));
+
+        if (!documentBean.isPresent()) {
+            throw new RuntimeException("Not found");
+        }
+
+        return documentBean.get();
+
+    }
 }

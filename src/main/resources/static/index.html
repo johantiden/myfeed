@@ -16,13 +16,11 @@
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
         <input ng-model="searchText" placeholder="Search">
-        {{(items | filter:searchText).length}} - limit = {{itemLimit}}
+        Keys:{{keys.length}} | Items:{{(items | filter:searchText).length}} | limit:{{itemLimit}}
     </div>
     <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}}"
-        data-item="{{item}}"
-        ng-repeat="key in keys | limitTo:itemLimit | limitTo:1000"
-        ng-init="item = getItem(key)"
+        ng-repeat="item in items | filter:searchText | limitTo:itemLimit | limitTo:1000 | orderBy:'publishedDate'"
         ng-hide="item.hide">
 
 

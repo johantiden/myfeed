@@ -31,8 +31,9 @@ public class UserDocumentRepository {
         getProxy(userDocument.getUserKey()).put(userDocument, score, userDocument.getKey());
     }
 
-    public Optional<UserDocument> find(Key<User> user, Key<Document> documentKey) {
-       return getProxy(user).find(Keys.userDocument(user, documentKey), UserDocument.class);
+    public Optional<UserDocument> find(Key<User> userKey, Key<UserDocument> userDocumentKey) {
+        return getProxy(userKey).find(userDocumentKey, UserDocument.class);
+
     }
 
     private RedisMap<UserDocument> getProxy(Key<User> userKey) {
@@ -55,12 +56,5 @@ public class UserDocumentRepository {
         String min = youngestFirstInstant().apply(minus).toString();
         String maxValue = "inf";
         return getProxy(user).removeByScore(min, maxValue);
-    }
-
-    public void remove(Key<User> userKey, Key<Document> documentKey) {
-        Optional<UserDocument> userDocumentOptional = find(userKey, documentKey);
-        if (userDocumentOptional.isPresent()) {
-            getProxy(userKey).remove(userDocumentOptional.get().getKey());
-        }
     }
 }
