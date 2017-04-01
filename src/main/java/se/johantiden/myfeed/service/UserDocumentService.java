@@ -28,6 +28,11 @@ public class UserDocumentService {
         userDocumentRepository.put(userDocument);
     }
 
+
+    public void remove(Key<User> userKey, Key<Document> documentKey) {
+        userDocumentRepository.remove(userKey, documentKey);
+    }
+
     public void setRead(Key<User> user, Key<Document> document, boolean read) {
 
         if (user == null) {

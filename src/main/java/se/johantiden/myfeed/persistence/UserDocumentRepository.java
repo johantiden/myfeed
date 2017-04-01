@@ -57,4 +57,11 @@ public class UserDocumentRepository {
         double maxValue = Double.MAX_VALUE;
         return getProxy(user).removeByScore(min, maxValue);
     }
+
+    public void remove(Key<User> userKey, Key<Document> documentKey) {
+        Optional<UserDocument> userDocumentOptional = find(userKey, documentKey);
+        if (userDocumentOptional.isPresent()) {
+            getProxy(userKey).remove(userDocumentOptional.get());
+        }
+    }
 }
