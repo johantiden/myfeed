@@ -71,8 +71,8 @@ public class FeedRepository {
 //        feeds.add(createReddit("r/science", 1000));
 //        feeds.add(createReddit("top", 1000));
         feeds.add(createReddit("r/all", 1000));
-        feeds.add(createReddit("r/announcements/", 1000));
-        feeds.add(createReddit("r/random", 1000, Duration.ofSeconds(20)));
+        feeds.add(createReddit("r/announcements/", 3000));
+        feeds.add(createReddit("r/random", 3000, Duration.ofMillis(1)));
 
         feeds.add(createRss(
                 "TheLocal",
@@ -80,8 +80,12 @@ public class FeedRepository {
                 "https://www.thelocal.se/",
                 "https://www.thelocal.se/feeds/rss.php"));
 
-        feeds.add(createTwitter("pwolodarski"));
-        feeds.add(createTwitter("BillGates"));
+//        feeds.add(createTwitter("pwolodarski"));
+        feeds.add(createTwitter("kinbergbatra"));
+        feeds.add(createTwitter("annieloof"));
+        feeds.add(createTwitter("deepdarkfears"));
+        feeds.add(createTwitter("tastapod"));
+        feeds.add(createTwitter("elonmusk"));
         feeds.add(createTwitter("github"));
 
         Collection<User> allUsers = userRepository.getAllUsers();
