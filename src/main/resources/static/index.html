@@ -20,7 +20,7 @@
     </div>
     <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}}"
-        ng-repeat="item in items | filter:searchText | limitTo:itemLimit | limitTo:1000 | orderBy:'publishedDate'"
+        ng-repeat="item in items | filter:{read:false} | filter:searchText | limitTo:itemLimit | limitTo:1000 | orderBy:'publishedDate'"
         ng-hide="item.hide">
 
 
