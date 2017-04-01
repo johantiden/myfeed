@@ -4,6 +4,7 @@ package se.johantiden.myfeed.persistence.redis;
 import com.google.gson.Gson;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
 
 import java.lang.reflect.Type;
@@ -12,7 +13,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RedisSet<T> {
@@ -49,13 +49,6 @@ public class RedisSet<T> {
     }
 
     /**
-     * scard
-     */
-    public int scard() {
-        throw new RuntimeException("Not implemneted");
-    }
-
-    /**
      * sismember
      */
     public boolean isMember(T member) {
@@ -80,24 +73,18 @@ public class RedisSet<T> {
         openJedis(j -> j.srem(myKey, gson.toJson(member)));
     }
 
-    public Optional<T> find(Predicate<T> predicate, Type type) {
-        return openJedis(j -> scanUntilFound(predicate, j, "0", type));
+    private Optional<T> scanUntilFound(Jedis j, Key<T> key, Type type) {
+        String matcher = toMatcher(key);
+        return scanUntilFound(j, matcher, "0", type);
     }
 
-    private Optional<T> scanUntilFound(Predicate<T> predicate, Jedis j, String cursor, Type type) {
-        ScanResult<String> scan = j.sscan(myKey, cursor);
+    private Optional<T> scanUntilFound(Jedis j, String match, String cursor, Type type) {
+        ScanResult<String> scan = j.sscan(myKey, cursor, new ScanParams().match(match));
         List<String> currentPage = scan.getResult();
 
-        if (currentPage.isEmpty()) {
-            return Optional.empty();
-        }
-
-
-        for (String json : currentPage) {
-            T t = fromJson(json, type);
-            if (predicate.test(t)) {
-                return Optional.of(t);
-            }
+        if (!currentPage.isEmpty()) {
+            T t = fromJson(currentPage.get(0), type);
+            return Optional.of(t);
         }
 
         // Still not found.
@@ -106,7 +93,13 @@ public class RedisSet<T> {
         if ("0".equals(stringCursor)) {
             return Optional.empty();
         }
-        return scanUntilFound(predicate, j, stringCursor, type);
+        return scanUntilFound(j, match, stringCursor, type);
+    }
+
+    private String toMatcher(Key<T> key) {
+        String json = gson.toJson(key);
+        json = json.replaceAll("\\\"", "\\\\\"");
+        return json;
     }
 
     private <T> T openJedis(Function<Jedis, T> function) {
@@ -115,21 +108,28 @@ public class RedisSet<T> {
         }
     }
 
-    public boolean removeIf(Predicate<T> predicate, Type type) {
-        Optional<T> t = find(predicate, type);
+    public boolean removeIfPresent(Key<T> key, Type type) {
+        Optional<T> t = find(key, type);
         if (t.isPresent()) {
             remove(t.get());
-            removeIf(predicate, type); // Find more and remove them too. Beware of stack overflow :D
+            removeIfPresent(key, type); // Find more and remove them too. Beware of stack overflow :D
             return true;
         }
         return false;
     }
 
-    public void put(T member, Function<T, Object> equatableProperty, Type type) {
+    public Optional<T> find(Key<T> key, Type type) {
+        return openJedis(j -> {
+            Optional<T> t = scanUntilFound(j, key, type);
+            return t;
+        });
+    }
+
+    public void put(T member, Key<T> key, Type type) {
         if (isMember(member)) {
             return; // no change needed
         }
-        removeIf(t -> equatableProperty.apply(t).equals(equatableProperty.apply(member)), type);
+        removeIfPresent(key, type);
 
         add(member);
     }

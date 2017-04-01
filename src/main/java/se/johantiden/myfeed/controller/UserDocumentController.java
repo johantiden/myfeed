@@ -34,7 +34,8 @@ public class UserDocumentController {
         log.info("Received PUT document: {}", userDocumentPutBean);
 
         Key<User> userKey = Keys.user(userDocumentPutBean.getUsername());
-        userDocumentService.remove(userKey, Keys.document(userDocumentPutBean.pageUrl));
+        userDocumentService.setRead(userKey, Key.create(userDocumentPutBean.userDocumentKey), userDocumentPutBean.read);
+
 
 
     }

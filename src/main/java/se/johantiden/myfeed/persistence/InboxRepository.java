@@ -8,7 +8,6 @@ import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.persistence.redis.RedisSet;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public class InboxRepository {
 
@@ -17,29 +16,24 @@ public class InboxRepository {
     @Autowired
     private Gson gson;
 
-    private RedisSet<Document> getDocuments() {
+    private RedisSet<Document> getProxy() {
         return new RedisSet<>(Keys.inbox(), jedisPool, gson);
     }
 
     public Optional<Document> pop() {
-        return getDocuments().popAnyElement(Document.class);
+        return getProxy().popAnyElement(Document.class);
     }
 
     public void put(Document document) {
-        getDocuments().put(document, Document::getKey, Document.class);
+        getProxy().put(document, document.getKey(), Document.class);
     }
 
     public Optional<Document> find(Document document) {
         return find(document.getKey());
     }
 
-    public Optional<Document> find(Predicate<Document> predicate) {
-        return getDocuments().find(predicate, Document.class);
-
-    }
-
     public Optional<Document> find(Key<Document> documentKey) {
-        return find(doc -> doc.getKey().equals(documentKey));
+        return getProxy().find(documentKey, Document.class);
     }
 
     public boolean hasDocument(Key<Document> key) {

@@ -5,7 +5,7 @@ app.service('documentService', function($http, $cacheFactory) {
     };
 
 
-    this.getUnread = function (username, callback) {
+    this.getAllKeys = function (username, callback) {
         $http({
             method: 'GET',
             url: '/rest/index/'+username,
@@ -17,6 +17,14 @@ app.service('documentService', function($http, $cacheFactory) {
             callback(response.data);
         });
 
+    this.getItem = function (key, callback) {
+        $http({
+            method: 'GET',
+            url: '/rest/userdocument/'+key
+        }).then(function(response) {
+            callback(response.data);
+        });
+    };
 
 
         //callback(getFakeData());

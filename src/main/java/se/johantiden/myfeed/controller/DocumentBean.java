@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 
 public class DocumentBean {
 
+    public final String userDocumentKey;
     public final NameAndUrlBean feed;
     public final NameAndUrlBean category;
     public final String title;
@@ -38,6 +39,7 @@ public class DocumentBean {
         this.read = userDocument.isRead();
         this.score = document.score;
         flagged = userDocument.isFlagged();
+        userDocumentKey = userDocument.getKey().toString();
     }
 
     public String getCssClass() {
@@ -89,6 +91,14 @@ public class DocumentBean {
 
     public Double getScore() {
         return score;
+    }
+
+    public String getUserDocumentKey() {
+        return userDocumentKey;
+    }
+
+    public boolean isFlagged() {
+        return flagged;
     }
 
     public static String dateToShortString(Instant instant) {

@@ -1,6 +1,8 @@
 
 app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, documentService) {
 
+    $scope.items = [];
+
     var limitStep = 10;
     $scope.itemLimit = limitStep;
 
@@ -48,9 +50,26 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
 
-    documentService.getUnread(user, function(json) {
-        $scope.items = json;
+    documentService.getAllKeys(user, function(json) {
+        $scope.keys = json;
     });
+
+    $scope.$watch('keys', function(keys) {
+        if (keys === undefined) {
+            return;
+        }
+        keys.forEach(function(key) {
+            documentService.getItem(key, function(item) {
+                $scope.items.push(item);
+            });
+        });
+    });
+
+    $scope.getItem = function(key) {
+        documentService.getItem(key, function(item) {
+            $scope.items.push(item);
+        })
+    };
 
     $scope.increaseLimit = function() {
         limitStep = limitStep + 1;

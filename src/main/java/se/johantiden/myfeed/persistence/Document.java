@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 public class Document implements Persistable<Document> {
 
+    public final Key<Document> key;
     public final String feedName;
     public String feedUrl;
     public String title;
@@ -57,6 +58,7 @@ public class Document implements Persistable<Document> {
         this.categoryName = categoryName;
         this.html = html;
         this.categoryUrl = categoryUrl;
+        this.key = Keys.document(this.pageUrl);
     }
 
     public static String dateToShortString(Instant instant) {
@@ -120,7 +122,7 @@ public class Document implements Persistable<Document> {
 
     @Override
     public Key<Document> getKey() {
-        return Keys.document(this);
+        return key;
     }
 
     public Instant getPublishDate() {
