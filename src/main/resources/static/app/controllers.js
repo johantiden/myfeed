@@ -36,6 +36,13 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         if (isAnimate) {
             item.hide = true;
         }
+
+        var index = $scope.items.indexOf(item);
+        $scope.items.splice(index, 1);
+
+        var index = $scope.keys.indexOf(item.userDocumentKey);
+        $scope.keys.splice(index, 1);
+
     };
 
 
