@@ -92,6 +92,10 @@ public class Document implements Persistable<Document> {
         return dateToShortString(publishedDate);
     }
 
+    public static Predicate<Document> categoryEquals(String category) {
+        return document -> category.equals(document.categoryName);
+    }
+
     public static Predicate<Document> categoryContains(String category) {
         return document -> JString.containsIgnoreCase(document.categoryName, category);
     }

@@ -66,11 +66,11 @@ public class FeedRepository {
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index"));
 
-//        feeds.add(createReddit("r/worldnews", 1000));
-//        feeds.add(createReddit("r/AskReddit", 1000));
-//        feeds.add(createReddit("r/science", 1000));
-//        feeds.add(createReddit("top", 1000));
-        feeds.add(createReddit("r/all", 1000));
+        feeds.add(createReddit("r/worldnews", 3000));
+        feeds.add(createReddit("r/AskReddit", 3000));
+        feeds.add(createReddit("r/science", 3000));
+        feeds.add(createReddit("top", 3000));
+        feeds.add(createReddit("r/all", 3000));
         feeds.add(createReddit("r/announcements/", 3000));
         feeds.add(createReddit("r/random", 3000, Duration.ofMillis(1)));
 

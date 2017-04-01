@@ -9,6 +9,7 @@ import se.johantiden.myfeed.util.JCollections;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
+import static se.johantiden.myfeed.persistence.Document.*;
 import static se.johantiden.myfeed.persistence.Document.categoryContains;
 
 public class Johan extends User {
@@ -66,7 +67,10 @@ public class Johan extends User {
                 categoryContains("aww"),
                 categoryContains("gaming"),
                 categoryContains("natureisfuckinglit"),
-                categoryContains("instant_regret")
+                categoryContains("instant_regret"),
+                categoryContains("gifrecipes"),
+                categoryContains("leagueoflegends"),
+                categoryEquals("Trees")
 
         );
 
