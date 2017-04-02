@@ -20,7 +20,11 @@ app.service('documentService', function($http, $cacheFactory) {
     this.getItem = function (key, callback) {
         $http({
             method: 'GET',
-            url: '/rest/userdocument/'+key
+            url: '/rest/userdocument/'+key,
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
         }).then(function(response) {
             callback(response.data);
         });
