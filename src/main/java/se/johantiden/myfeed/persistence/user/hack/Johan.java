@@ -42,6 +42,7 @@ public class Johan extends User {
                 categoryContains("mat").and(categoryContains("vin")).negate(),
                 categoryContains("resor").negate(),
                 categoryContains("webb-tv").negate(),
+                categoryContains("motor").negate(),
                 categoryContains("dnbok").negate(),
                 categoryContains("familj").negate(),
                 redditCategories(),
@@ -81,6 +82,7 @@ public class Johan extends User {
                 categoryContains("rickandmorty"),
                 categoryContains("mademesmile"),
                 categoryContains("meirl"),
+                categoryContains("memes"),
                 categoryContains("_irl"),
                 categoryEquals("Trees"),
                 categoryEquals("Gifs"),
@@ -88,6 +90,7 @@ public class Johan extends User {
                 categoryEquals("DunderMifflin"),
                 categoryEquals("OldSchoolCool"),
                 categoryEquals("Me_irl"),
+                categoryEquals("BlackPeopleTwitter"),
                 categoryEquals("WTF")
 
         );
