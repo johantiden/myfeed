@@ -72,7 +72,7 @@ public class FeedRepository {
         feeds.add(createReddit("r/science", REDDIT_MIN_SCORE));
         feeds.add(createReddit("top", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("r/announcements/", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/announcements", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/random", REDDIT_MIN_SCORE, Duration.ofMillis(1)));
 
         feeds.add(createRss(
@@ -135,7 +135,7 @@ public class FeedRepository {
         };
 
         return new RedditPlugin().createFeed(
-                "Reddit",
+                "Reddit::"+subreddit,
                 "reddit", "https://www.reddit.com/" + subreddit,
                 newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), invalidationPeriod,
                 votesPredicate);

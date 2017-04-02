@@ -86,6 +86,7 @@ public class Johan extends User {
                 categoryEquals("Gifs"),
                 categoryEquals("HighQualityGifs"),
                 categoryEquals("DunderMifflin"),
+                categoryEquals("OldSchoolCool"),
                 categoryEquals("Me_irl"),
                 categoryEquals("WTF")
 
