@@ -44,10 +44,6 @@ public class Johan extends User {
                 categoryContains("webb-tv").negate(),
                 categoryContains("dnbok").negate(),
                 categoryContains("familj").negate(),
-                categoryContains("soccer").negate(),
-                categoryContains("nba").negate(),
-                categoryContains("nba").negate(),
-                categoryContains("rickandmorty").negate(),
                 redditCategories(),
                 isFrom("reddit").and(freeSearch(s -> s.contains("upvote"))).negate(),
                 isFrom("ars").and(categoryContains("dealmaster")).negate(),
@@ -79,7 +75,19 @@ public class Johan extends User {
                 categoryContains("shit"),
                 categoryContains("fuck"),
                 categoryContains("boner"),
-                categoryEquals("Trees")
+                categoryContains("soccer"),
+                categoryContains("nba"),
+                categoryContains("nba"),
+                categoryContains("rickandmorty"),
+                categoryContains("mademesmile"),
+                categoryContains("meirl"),
+                categoryContains("_irl"),
+                categoryEquals("Trees"),
+                categoryEquals("Gifs"),
+                categoryEquals("HighQualityGifs"),
+                categoryEquals("DunderMifflin"),
+                categoryEquals("Me_irl"),
+                categoryEquals("WTF")
 
         );
 

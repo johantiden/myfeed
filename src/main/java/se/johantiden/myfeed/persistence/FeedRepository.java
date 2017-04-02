@@ -24,6 +24,7 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 public class FeedRepository {
 
     private static final Logger log = LoggerFactory.getLogger(FeedRepository.class);
+    public static final int REDDIT_MIN_SCORE = 5000;
     private List<Feed> allFeeds;
     public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(1);
 
@@ -66,13 +67,13 @@ public class FeedRepository {
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index"));
 
-        feeds.add(createReddit("r/worldnews", 3000));
-        feeds.add(createReddit("r/AskReddit", 3000));
-        feeds.add(createReddit("r/science", 3000));
-        feeds.add(createReddit("top", 3000));
-        feeds.add(createReddit("r/all", 3000));
-        feeds.add(createReddit("r/announcements/", 3000));
-        feeds.add(createReddit("r/random", 3000, Duration.ofMillis(1)));
+        feeds.add(createReddit("r/worldnews", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/AskReddit", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/science", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("top", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/announcements/", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/random", REDDIT_MIN_SCORE, Duration.ofMillis(1)));
 
         feeds.add(createRss(
                 "TheLocal",
