@@ -30,8 +30,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         $cookies.put('showRead', newValue);
     });
 
-
-
     $scope.setDocumentRead = function(item, read, callback) {
         //alert("item '"+ item.pageUrl +"' READ was changed to:"+item.read);
         item.read = read;
@@ -42,26 +40,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         if (isAnimate) {
             item.hide = true;
         }
-
-        var index = $scope.items.indexOf(item);
-        $scope.items.splice(index, 1);
-
-        var index = $scope.keys.indexOf(item.userDocumentKey);
-        $scope.keys.splice(index, 1);
-
     };
-
-
-    $scope.goFunc = function(url) { // lambdas please.   () => go(url)
-        return function() {
-            $scope.go(url);
-        };
-    };
-
-    $scope.go = function(url) {
-        $window.location.href = url;
-    };
-
 
     documentService.getAllKeys(user, function(json) {
         $scope.keys = json;
@@ -89,6 +68,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         $scope.itemLimit = limitStep;
     };
 
+    $scope.filterReadExceptIfSearchTextPresent = function(item) {
+        return !item.read || $scope.searchText.length > 0;
+    };
 
     /**
      * Gets a query parameter.

@@ -16,13 +16,15 @@
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
         <input ng-model="searchText" placeholder="Search">
-        <label for="show-read">Hide read</label>
+        <label for="show-read">Show read:</label>
         <input id="show-read" class="show-read" type="checkbox" ng-model="showRead">
-        Keys:{{keys.length}} | Items:{{(items | filter:searchText).length}} | unread:{{(items | filter:{read:false}).length}} | limit:{{itemLimit}}
+        <div style="float: right;" >
+            Keys:{{keys.length}} | Items:{{(items | filter:searchText).length}} | unread:{{(items | filter:{read:false}).length}} | limit:{{itemLimit}}
+        </div>
     </div>
     <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}}"
-        ng-repeat="item in items | filter:({read:showRead}  | filter:searchText | limitTo:itemLimit | limitTo:1000"
+        ng-repeat="item in items | filter:filterReadExceptIfSearchTextPresent | filter:searchText | limitTo:itemLimit | limitTo:1000"
         ng-hide="item.hide">
 
         <!--orderBy:'-publishedDate.epochSecond' | -->
