@@ -83,6 +83,7 @@ public class Johan extends User {
                 categoryContains("mademesmile"),
                 categoryContains("meirl"),
                 categoryContains("memes"),
+                categoryContains("reactiongifs"),
                 categoryContains("_irl"),
                 categoryEquals("Trees"),
                 categoryEquals("Gifs"),
@@ -109,7 +110,6 @@ public class Johan extends User {
      */
     public static Predicate<Document> flagFilter() {
         ArrayList<Predicate<Document>> clickBaityPhrases = Lists.<Predicate<Document>>newArrayList(
-                freeSearch(s -> s.contains("bästa")),
                 freeSearch(s -> s.contains("tipsen")),
                 freeSearch(s -> s.contains("här är")),
                 freeSearch(s -> s.contains("up vote")),
