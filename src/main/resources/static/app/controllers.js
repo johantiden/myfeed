@@ -10,21 +10,27 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.$location = $location;
     var user = getParameterByName('user');
 
-    $scope.getCookieValue = function () {
-        return $cookies.get('searchText');
-    };
-
     var search = getParameterByName('search');
     if (search) {
         $scope.searchText = search;
     } else {
-        $scope.searchText = $scope.getCookieValue();
+        $scope.searchText = $cookies.get('searchText');
+    }
 
+    $scope.showRead = $cookies.get('showRead');
+    if ($scope.showRead === undefined) {
+        $scope.showRead = false;
     }
 
     $scope.$watch('searchText', function(newValue) {
         $cookies.put('searchText', newValue);
     });
+
+    $scope.$watch('showRead', function(newValue) {
+        $cookies.put('showRead', newValue);
+    });
+
+
 
     $scope.setDocumentRead = function(item, read, callback) {
         //alert("item '"+ item.pageUrl +"' READ was changed to:"+item.read);
