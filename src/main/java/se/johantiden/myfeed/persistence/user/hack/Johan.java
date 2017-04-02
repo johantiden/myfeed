@@ -45,6 +45,7 @@ public class Johan extends User {
                 categoryContains("dnbok").negate(),
                 categoryContains("familj").negate(),
                 redditCategories(),
+                isFrom("reddit").and(freeSearch(s -> s.contains("upvote"))),
                 isFrom("ars").and(categoryContains("dealmaster")).negate(),
                 isFrom("ars").and(categoryContains("opposable thumbs")).negate(),
                 isFrom("svenska dagbladet").and(categoryContains("perfect guide")).negate(),
@@ -70,6 +71,10 @@ public class Johan extends User {
                 categoryContains("instant_regret"),
                 categoryContains("gifrecipes"),
                 categoryContains("leagueoflegends"),
+                categoryContains("porn"),
+                categoryContains("shit"),
+                categoryContains("fuck"),
+                categoryContains("boner"),
                 categoryEquals("Trees")
 
         );
@@ -91,7 +96,7 @@ public class Johan extends User {
                 freeSearch(s -> s.contains("bästa")),
                 freeSearch(s -> s.contains("tipsen")),
                 freeSearch(s -> s.contains("här är")),
-                freeSearch(s -> s.contains("upvote"))
+                freeSearch(s -> s.contains("up vote"))
         );
         return JCollections.reduce(clickBaityPhrases, Predicate::or, d->false);
     }
