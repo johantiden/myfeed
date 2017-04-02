@@ -109,7 +109,8 @@ public class Johan extends User {
                 freeSearch(s -> s.contains("bästa")),
                 freeSearch(s -> s.contains("tipsen")),
                 freeSearch(s -> s.contains("här är")),
-                freeSearch(s -> s.contains("up vote"))
+                freeSearch(s -> s.contains("up vote")),
+                freeSearch(s -> s.contains("-- number of people"))
         );
         return JCollections.reduce(clickBaityPhrases, Predicate::or, d->false);
     }
