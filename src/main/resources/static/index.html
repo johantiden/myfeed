@@ -16,7 +16,7 @@
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
         <input ng-model="searchText" placeholder="Search">
-        <input class="show-read" type="checkbox" ng-model="showRead">
+        <input class="show-read" type="checkbox" ng-model="showRead" ng-init="showRead = false">
         Keys:{{keys.length}} | Items:{{(items | filter:searchText).length}} | unread:{{(items | filter:{read:false}).length}} | limit:{{itemLimit}}
     </div>
     <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
