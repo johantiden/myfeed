@@ -9,6 +9,9 @@
 }
 
 /* Can not get this to change element height :( maybe only use transition instead? */
+
+/*http://stackoverflow.com/questions/3508605/how-can-i-transition-height-0-to-height-auto-using-css*/
+
 @keyframes shrink {
   0% {
     opacity: 1;
@@ -32,25 +35,27 @@
 @-webkit-keyframes lightSpeedOut {
   from {
     opacity: 1;
+    max-height: 500px;
   }
 
   to {
-    -webkit-transform: scale(0) translate3d(0, -100px, 0) skewX(0deg);
-    transform: scale(0) translate3d(0, -100px, 0) skewX(0deg);
+    -webkit-transform: translate3d(200px, -1000px, 150px);
+    transform: translate3d(200px, -1000px, 150px);
     opacity: 0;
+    max-height: 0;
   }
 }
 
 @keyframes lightSpeedOut {
   from {
     opacity: 1;
-    height: 100px;
+    max-height: 500px;
   }
 
   to {
-    -webkit-transform: translate3d(200px, -1000px, 150px) skewX(0deg);
-    transform: translate3d(200px, -1000px, 150px) skewX(0deg);
+    -webkit-transform: translate3d(200px, -1000px, 150px);
+    transform: translate3d(200px, -1000px, 150px);
     opacity: 0;
-    height: 0;
+    max-height: 0;
   }
 }
