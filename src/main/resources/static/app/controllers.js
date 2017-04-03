@@ -31,15 +31,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     });
 
     $scope.setDocumentRead = function(item, read, callback) {
-        //alert("item '"+ item.pageUrl +"' READ was changed to:"+item.read);
         item.read = read;
         item.username = user;
+        item.hide = true;
         documentService.putItem(item, callback);
-
-        var isAnimate = callback === undefined; // only animate if there is no other callback (e.g. open link)
-        if (isAnimate) {
-            item.hide = true;
-        }
     };
 
     documentService.getAllKeys(user, function(json) {
@@ -69,7 +64,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     $scope.filterReadExceptIfSearchTextPresent = function(item) {
-        return !item.read || $scope.searchText.length > 0;
+        return !item.read || $scope.searchText.length > 0 || item.hide;
     };
 
     /**

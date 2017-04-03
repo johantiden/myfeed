@@ -1,9 +1,17 @@
 
-.ng-hide-add { 
-  animation:0.5s lightSpeedOut ease; 
+
+.ng-hide-add {
+
+  -webkit-animation: lightSpeedOut 0.5s;
+  -webkit-animation-fill-mode: forwards;
+  animation: lightSpeedOut 0.5s;
+  animation-fill-mode: forwards;
 }
 
 /* Can not get this to change element height :( maybe only use transition instead? */
+
+/*http://stackoverflow.com/questions/3508605/how-can-i-transition-height-0-to-height-auto-using-css*/
+
 @keyframes shrink {
   0% {
     opacity: 1;
@@ -27,23 +35,27 @@
 @-webkit-keyframes lightSpeedOut {
   from {
     opacity: 1;
+    max-height: 500px;
   }
 
   to {
-    -webkit-transform: translate3d(100%, 0, 0) skewX(30deg);
-    transform: translate3d(100%, 0, 0) skewX(30deg);
+    -webkit-transform: translate3d(200px, -1000px, 150px);
+    transform: translate3d(200px, -1000px, 150px);
     opacity: 0;
+    max-height: 0;
   }
 }
 
 @keyframes lightSpeedOut {
   from {
     opacity: 1;
+    max-height: 500px;
   }
 
   to {
-    -webkit-transform: translate3d(100%, 0, 0) skewX(30deg);
-    transform: translate3d(100%, 0, 0) skewX(30deg);
+    -webkit-transform: translate3d(200px, -1000px, 150px);
+    transform: translate3d(200px, -1000px, 150px);
     opacity: 0;
+    max-height: 0;
   }
 }

@@ -45,24 +45,25 @@ a:hover {
     margin-right: auto;
 }
 
+
 .item-box {
-    padding: 8px;
     background-color: white;
     /*margin-left: 30vw;*/
     /*margin-right: 30vw;*/
-    width: 100%;
+    max-width: 100%;
 
     /*border-bottom: 1px solid #e1e8ed;*/
     margin-bottom: 4px;
     word-wrap: break-word;
     box-shadow: 6px 6px 20px #EEEEEE;
     transform-origin: left top;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .image-box {
     max-height: 300px;
-    max-width: 300px;
-    margin-bottom: 2vh;
+    max-width: 100%;
 }
 
 .image-box {
@@ -84,18 +85,16 @@ a:hover {
     /*background-color: red;*/
     display: inline-block;
     vertical-align: top;
-    margin: 0;
-    width: 10vw;
-    height: 10vw;
+    width: 40px;
+}
+
+.input-box.right {
+    position: relative;
+    right: 0;
 }
 
 .read {
     background-color: #DDDDDD;
-}
-
-.read-input {
-    width: 10vw;
-    height: 10vw;
 }
 
 .content-box {
@@ -103,7 +102,9 @@ a:hover {
     display: inline-block;
     vertical-align: top;
     margin: 0;
-    width: 88vw;
+    padding-left: 2px;
+    padding-right: 2px;
+    width: auto;
 }
 
 .top-row > *, .top-row > * > * {
@@ -130,6 +131,15 @@ div.text {
     font-size: small;
 }
 
+.read-input {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #BBBBBB;
+    background-color: #DDDDDD;
+    border-radius: 20px;
+    margin: 0;
+}
+
 .title > a {
     font-size: large;
     font-weight: bold;
@@ -142,11 +152,6 @@ div.text {
 .navbar {
     padding: 5px;
 }
-
-.link {
-    cursor: pointer;
-}
-
 
 /*HACKS - THESE SHOULD BE EITHER REMOVED OR MOVED TO PLUGIN FOLDERS*/
 .slashdot > div.content-box > span.htmlContent > div,
