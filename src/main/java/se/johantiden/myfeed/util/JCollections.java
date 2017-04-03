@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.util;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicates;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,24 +28,10 @@ public final class JCollections {
                 .collect(Collectors.toList());
     }
 
-    public static <E> List<E> filter(Collection<E> collection, Collection<Predicate<E>> filters) {
-        return collection.stream()
-                .filter(and(filters))
-                .collect(Collectors.toList());
-    }
-
-    public static <E> Predicate<E> and(Collection<Predicate<E>> filters) {
-        return reduce(filters, and(), e -> true);
-    }
-
-    private static <T> BinaryOperator<Predicate<T>> and() {
-        return (a, b) -> e -> a.test(e) && b.test(e);
-    }
-
-    public static <E> E reduce(Collection<E> collection, BinaryOperator<E> reducer, E emptyObject) {
+    public static <E> E reduce(Collection<E> collection, BinaryOperator<E> reducer, E valueIfEmpty) {
         return collection.stream()
                 .reduce(reducer)
-                .orElse(emptyObject);
+                .orElse(valueIfEmpty);
     }
 
     public static <E> E getSingle(Collection<E> collection) {

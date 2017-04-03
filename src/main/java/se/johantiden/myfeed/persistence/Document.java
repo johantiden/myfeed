@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 public class Document implements Persistable<Document> {
 
+    public final Key<Document> key;
     public final String feedName;
     public String feedUrl;
     public String title;
@@ -21,13 +22,12 @@ public class Document implements Persistable<Document> {
     public final String pageUrl;
     public final String imageUrl;
     public final Instant publishedDate;
-    public final String fullSourceEntryForSearch;
     public final String html;
     private Key<Feed> feed;
     public String categoryName;
     public String categoryUrl;
-    public boolean fanned;
-
+    public Double score;
+    public boolean isPaywalled;
 
     public Document(
             Key<Feed> feed,
@@ -41,7 +41,6 @@ public class Document implements Persistable<Document> {
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
-            String fullSourceEntryForSearch,
             String html, String categoryName,
             String categoryUrl) {
 
@@ -56,10 +55,10 @@ public class Document implements Persistable<Document> {
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
-        this.fullSourceEntryForSearch = fullSourceEntryForSearch;
         this.categoryName = categoryName;
         this.html = html;
         this.categoryUrl = categoryUrl;
+        this.key = Keys.document(this.pageUrl);
     }
 
     public static String dateToShortString(Instant instant) {
@@ -89,7 +88,15 @@ public class Document implements Persistable<Document> {
         return "";
     }
 
-    public static Predicate<Document> hasCategory(String category) {
+    public String getPublishedShortString() {
+        return dateToShortString(publishedDate);
+    }
+
+    public static Predicate<Document> categoryEquals(String category) {
+        return document -> category.equals(document.categoryName);
+    }
+
+    public static Predicate<Document> categoryContains(String category) {
         return document -> JString.containsIgnoreCase(document.categoryName, category);
     }
 
@@ -106,7 +113,6 @@ public class Document implements Persistable<Document> {
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
-                ", fullSourceEntryForSearch='" + fullSourceEntryForSearch + '\'' +
                 ", html='" + html + '\'' +
                 ", feed=" + feed +
                 ", categoryName='" + categoryName + '\'' +
@@ -118,20 +124,20 @@ public class Document implements Persistable<Document> {
         return feed;
     }
 
-    public boolean isFanned() {
-        return fanned;
-    }
-
-    public boolean isUnfanned() {
-        return !fanned;
-    }
-
-    public void setFanned(boolean fanned) {
-        this.fanned = fanned;
-    }
-
     @Override
     public Key<Document> getKey() {
-        return Keys.document(this);
+        return key;
+    }
+
+    public Instant getPublishDate() {
+        return publishedDate;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
     }
 }

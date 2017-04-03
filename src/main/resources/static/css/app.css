@@ -145,6 +145,10 @@ div.text {
     font-weight: bold;
 }
 
+.flagged {
+    background-color: #FFFFDD;
+}
+
 .navbar {
     padding: 5px;
 }

@@ -7,10 +7,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
+import se.johantiden.myfeed.service.InboxService;
+import se.johantiden.myfeed.settings.GlobalSettings;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,7 +26,7 @@ public class FeedReaderJob {
     @Autowired
     private FeedReaderService feedReaderService;
     @Autowired
-    private DocumentService documentService;
+    private InboxService inboxService;
 
     @Scheduled(fixedRate = 100)
     public void myRunnable() {
@@ -34,13 +37,25 @@ public class FeedReaderJob {
 
         List<Document> documents = feedReaderService.readAll(feed);
 
-        List<Document> filtered = documents.stream().filter(feed.getFilter()).collect(Collectors.toList());
+        List<Document> filtered = documents.stream()
+                .filter(feed.getFilter())
+                .filter(GlobalSettings.DOCUMENT_MAX_AGE_PREDICATE)
+                .collect(Collectors.toList());
 
-        documentService.putIfNew(filtered);
+
         if (!filtered.isEmpty()) {
-            log.info("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter",
-                    feed.getName(), filtered.size(), documents.size()-filtered.size());
+            log.debug("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter. Oldest: {}",
+                    feed.getName(), filtered.size(), documents.size()-filtered.size(), oldestInstant(filtered));
         }
+        inboxService.putIfNew(filtered);
+    }
+
+    private String oldestInstant(List<Document> filtered) {
+
+        Optional<Document> max = filtered.stream().max(Comparator.comparing(Document::getPublishDate).reversed());
+
+        return max.map(Document::getPublishedShortString).orElse("null");
+
     }
 
 }

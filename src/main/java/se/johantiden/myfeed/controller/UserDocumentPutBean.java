@@ -10,6 +10,7 @@ public class UserDocumentPutBean {
     public String pageUrl;
     public String username;
     public boolean read;
+    public String userDocumentKey;
 
     public String getFeedName() {
         return feedName;

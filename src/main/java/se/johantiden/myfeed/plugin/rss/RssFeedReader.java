@@ -77,7 +77,7 @@ public class RssFeedReader implements FeedReader {
             if (html == null) {
                 html = contentHtml;
             }
-            return new Document(feed.getKey(), feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, e.toString(), html, categoryNames, categoryUrl);
+            return new Document(feed.getKey(), feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, html, categoryNames, categoryUrl);
         
         });
     }

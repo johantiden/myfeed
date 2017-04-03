@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentRepository;
+import se.johantiden.myfeed.persistence.redis.Key;
 
+import java.time.Duration;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public class DocumentService {
 
@@ -20,23 +21,24 @@ public class DocumentService {
     }
 
     public void put(Document document) {
-        documentRepository.put(document);
-    }
-
-    public void putIfNew(Iterable<Document> documents) {
-        documents.forEach(this::putIfNew);
-    }
-
-    public void putIfNew(Document document) {
-        Optional<Document> optional = documentRepository.find(document);
+        Optional<Document> optional = documentRepository.find(document.getKey());
         if (optional.isPresent()) {
-//            log.warn("putIfNew but was not new. (This can probably be optimized)");
+//            log.warn("put but was not new. You must remove the old document first! Not putting.");
         } else {
-            put(document);
+            log.info("Adding new document: {}", document.pageUrl);
+            documentRepository.put(document);
         }
     }
 
-    public Optional<Document> find(Predicate<Document> predicate) {
-        return documentRepository.find(predicate);
+    public boolean hasDocument(Key<Document> documentKey) {
+        return find(documentKey).isPresent();
+    }
+
+    public Optional<Document> find(Key<Document> documentKey) {
+        return documentRepository.find(documentKey);
+    }
+
+    public long purgeOlderThan(Duration duration) {
+        return documentRepository.purgeOlderThan(duration);
     }
 }

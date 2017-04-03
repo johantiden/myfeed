@@ -5,5 +5,6 @@ public enum PluginType {
     TWITTER,
     DAGENS_NYHETER,
     REDDIT,
+    SVENSKA_DAGBLADET,
     RSS
 }

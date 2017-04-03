@@ -5,13 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.persistence.redis.RedisSet;
+import se.johantiden.myfeed.persistence.redis.RedisMap;
 import se.johantiden.myfeed.persistence.user.User;
 
-import java.util.List;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 public class UserDocumentRepository {
 
@@ -21,28 +22,39 @@ public class UserDocumentRepository {
     @Autowired
     private Gson gson;
 
-    public List<UserDocument> getUnreadDocuments(Key<User> user) {
-        return getUserDocuments(user)
-                .stream()
-                .filter(UserDocument::isUnread)
-                .collect(Collectors.toList());
-
-    }
-
-    private Set<UserDocument> getUserDocuments(Key<User> user) {
-        return getRedisSet(user).getAll(UserDocument.class);
+    public Collection<String> getAllKeys(Key<User> user) {
+        return getProxy(user).getAllKeys();
     }
 
     public void put(UserDocument userDocument) {
-        getRedisSet(userDocument.getUserKey()).put(userDocument, UserDocument::getKey, UserDocument.class);
+        Double score = youngestFirst().apply(userDocument);
+        getProxy(userDocument.getUserKey()).put(userDocument, score, userDocument.getKey());
     }
 
-    public Optional<UserDocument> find(Key<User> user, Key<Document> documentKey) {
-       return getRedisSet(user).find(ud -> ud.getDocumentKey().equals(documentKey), UserDocument.class);
+    public Optional<UserDocument> find(Key<User> userKey, Key<UserDocument> userDocumentKey) {
+        return getProxy(userKey).find(userDocumentKey, UserDocument.class);
+
     }
 
-    private RedisSet<UserDocument> getRedisSet(Key<User> user) {
-        return new RedisSet<>(Keys.userDocuments(user), jedisPool, gson);
+    private RedisMap<UserDocument> getProxy(Key<User> userKey) {
+        return new RedisMap<>(Keys.userDocuments(userKey), jedisPool, gson, UserDocument::getKey);
     }
 
+    private static Function<UserDocument, Double> youngestFirst() {
+        return d -> youngestFirstInstant().apply(d.getPublishDate());
+    }
+
+    private static Function<Instant, Double> youngestFirstInstant() {
+        return i -> (double) -i.toEpochMilli();
+    }
+
+    public long purgeOlderThan(Key<User> user, Duration duration) {
+        // Note that score is calculated as MINUS epochMillis. The youngest elements are the most negative,
+        // We want to remove older that the youngest i.e. larger values.
+
+        Instant minus = Instant.now().minus(duration);
+        String min = youngestFirstInstant().apply(minus).toString();
+        String maxValue = "inf";
+        return getProxy(user).removeByScore(min, maxValue);
+    }
 }

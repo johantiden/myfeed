@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.controller;
 
+import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.UserDocument;
 
 import java.time.Instant;
@@ -7,34 +8,38 @@ import java.time.temporal.ChronoUnit;
 
 public class DocumentBean {
 
+    public final String userDocumentKey;
     public final NameAndUrlBean feed;
     public final NameAndUrlBean category;
     public final String title;
     public final String text;
+    public final Double score;
     public final NameAndUrlBean author;
     public final String cssClass;
     public final String pageUrl;
     public final String imageUrl;
     public final Instant publishedDate;
-    public final String fullSourceEntryForSearch;
     public final String html;
+    public final boolean flagged;
     public final boolean read;
 
-    public DocumentBean(UserDocument userDocument) {
-        this.feed = userDocument.feedBean;
-        this.category = userDocument.category;
+    public DocumentBean(UserDocument userDocument, Document document) {
+        this.feed = new NameAndUrlBean(document.feedName, document.feedUrl);
+        this.category = new NameAndUrlBean(document.categoryName, document.categoryUrl);
 
-        this.title = userDocument.title;
-        this.text = userDocument.text;
-        this.author = userDocument.author;
+        this.title = document.title;
+        this.text = document.text;
+        this.author = new NameAndUrlBean(document.authorName, document.authorUrl);
 
-        this.cssClass = userDocument.cssClass;
-        this.pageUrl = userDocument.pageUrl;
-        this.imageUrl = userDocument.imageUrl;
-        this.publishedDate = userDocument.publishedDate;
-        this.fullSourceEntryForSearch = userDocument.fullSourceEntryForSearch;
-        this.html = userDocument.html;
+        this.cssClass = document.cssClass;
+        this.pageUrl = document.pageUrl;
+        this.imageUrl = document.imageUrl;
+        this.publishedDate = document.publishedDate;
+        this.html = document.html;
         this.read = userDocument.isRead();
+        this.score = document.score;
+        flagged = userDocument.isFlagged();
+        userDocumentKey = userDocument.getKey().toString();
     }
 
     public String getCssClass() {
@@ -80,12 +85,20 @@ public class DocumentBean {
         return author;
     }
 
-    public String getFullSourceEntryForSearch() {
-        return fullSourceEntryForSearch;
-    }
-
     public boolean isRead() {
         return read;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public String getUserDocumentKey() {
+        return userDocumentKey;
+    }
+
+    public boolean isFlagged() {
+        return flagged;
     }
 
     public static String dateToShortString(Instant instant) {
@@ -127,7 +140,6 @@ public class DocumentBean {
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
-                ", fullSourceEntryForSearch='" + fullSourceEntryForSearch + '\'' +
                 ", html='" + html + '\'' +
                 ", read=" + read +
                 '}';

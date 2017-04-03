@@ -1,16 +1,34 @@
-app.service('documentService', function($http) {
+app.service('documentService', function($http, $cacheFactory) {
 
-    this.putItem = function (item) {
-        $http.put("/rest/documents", item);
+    this.putItem = function (item, callback) {
+        $http.put("/rest/documents", item).then(callback);
     };
 
 
-    this.getUnread = function (username, callback) {
-        $http.get("/rest/index/"+username)
-            .then(function(response) {
-                callback(response.data);
-            });
+    this.getAllKeys = function (username, callback) {
+        $http({
+            method: 'GET',
+            url: '/rest/index/'+username,
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        }).then(function(response) {
+            callback(response.data);
+        });
 
+    this.getItem = function (key, callback) {
+        $http({
+            method: 'GET',
+            url: '/rest/userdocument/'+key,
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        }).then(function(response) {
+            callback(response.data);
+        });
+    };
 
 
         //callback(getFakeData());

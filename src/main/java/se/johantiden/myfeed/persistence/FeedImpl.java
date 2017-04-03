@@ -3,11 +3,12 @@ package se.johantiden.myfeed.persistence;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
+import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class FeedImpl implements Feed {
 
@@ -18,9 +19,8 @@ public class FeedImpl implements Feed {
     private final Map<String, String> feedReaderParameters;
     private final List<FeedUser> feedUsers;
     private final String cssClass;
-    private final long invalidationPeriod;
-    private final TemporalUnit invalidationPeriodUnit;
-    private final Filter filter;
+    private final Duration ttl;
+    private final Predicate<Document> filter;
     private Instant lastRead = Instant.EPOCH;
 
     public FeedImpl(
@@ -28,17 +28,15 @@ public class FeedImpl implements Feed {
             String name,
             String webUrl,
             String cssClass, Map<String, String> feedReaderParameters,
-            long invalidationPeriod,
-            TemporalUnit invalidationPeriodUnit,
-            Filter filter) {
+            Duration ttl,
+            Predicate<Document> filter) {
         this.name = name;
         this.webUrl = webUrl;
         this.type = type;
         this.feedReaderParameters = feedReaderParameters;
         this.cssClass = cssClass;
-        this.invalidationPeriod = invalidationPeriod;
-        this.invalidationPeriodUnit = invalidationPeriodUnit;
-        this.filter = filter  == null ? Filter.TRUE : filter;
+        this.ttl = ttl;
+        this.filter = filter  == null ? d -> true : filter;
         this.feedUsers = new ArrayList<>();
     }
 
@@ -85,7 +83,7 @@ public class FeedImpl implements Feed {
 
     @Override
     public boolean isInvalidated() {
-        return lastRead == null || lastRead.plus(invalidationPeriod, invalidationPeriodUnit).isBefore(Instant.now());
+        return lastRead == null || lastRead.plus(ttl).isBefore(Instant.now());
     }
 
     @Override
@@ -99,45 +97,45 @@ public class FeedImpl implements Feed {
 
         FeedImpl feed = (FeedImpl) o;
 
-        if (invalidationPeriod != feed.invalidationPeriod) {
+        if (name != null ? !name.equals(feed.name) : feed.name != null) {
             return false;
         }
-        if (!name.equals(feed.name)) {
-            return false;
-        }
-        if (!webUrl.equals(feed.webUrl)) {
+        if (webUrl != null ? !webUrl.equals(feed.webUrl) : feed.webUrl != null) {
             return false;
         }
         if (type != feed.type) {
             return false;
         }
-        if (!feedReaderParameters.equals(feed.feedReaderParameters)) {
+        if (feedReaderParameters != null ? !feedReaderParameters.equals(feed.feedReaderParameters) : feed.feedReaderParameters != null) {
             return false;
         }
-        if (!feedUsers.equals(feed.feedUsers)) {
+        if (feedUsers != null ? !feedUsers.equals(feed.feedUsers) : feed.feedUsers != null) {
             return false;
         }
         if (cssClass != null ? !cssClass.equals(feed.cssClass) : feed.cssClass != null) {
             return false;
         }
-        if (!invalidationPeriodUnit.equals(feed.invalidationPeriodUnit)) {
+        if (ttl != null ? !ttl.equals(feed.ttl) : feed.ttl != null) {
             return false;
         }
-        return lastRead.equals(feed.lastRead);
+        if (filter != null ? !filter.equals(feed.filter) : feed.filter != null) {
+            return false;
+        }
+        return !(lastRead != null ? !lastRead.equals(feed.lastRead) : feed.lastRead != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + webUrl.hashCode();
-        result = 31 * result + type.hashCode();
-        result = 31 * result + feedReaderParameters.hashCode();
-        result = 31 * result + feedUsers.hashCode();
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (webUrl != null ? webUrl.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (feedReaderParameters != null ? feedReaderParameters.hashCode() : 0);
+        result = 31 * result + (feedUsers != null ? feedUsers.hashCode() : 0);
         result = 31 * result + (cssClass != null ? cssClass.hashCode() : 0);
-        result = 31 * result + (int) (invalidationPeriod ^ invalidationPeriod >>> 32);
-        result = 31 * result + invalidationPeriodUnit.hashCode();
-        result = 31 * result + lastRead.hashCode();
+        result = 31 * result + (ttl != null ? ttl.hashCode() : 0);
+        result = 31 * result + (filter != null ? filter.hashCode() : 0);
+        result = 31 * result + (lastRead != null ? lastRead.hashCode() : 0);
         return result;
     }
 
@@ -147,7 +145,7 @@ public class FeedImpl implements Feed {
     }
     
     @Override
-    public Filter getFilter() {
+    public Predicate<Document> getFilter() {
         return filter;
     }
 }

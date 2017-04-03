@@ -1,6 +1,5 @@
 package se.johantiden.myfeed.persistence;
 
-import se.johantiden.myfeed.controller.NameAndUrlBean;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.persistence.user.User;
@@ -10,37 +9,21 @@ import java.util.Objects;
 
 public class UserDocument implements Persistable<UserDocument> {
 
+    private final Instant publishDate;
     private final Key<User> userKey;
     private final Key<Document> documentKey;
-
-    public final Instant publishedDate;
-    public final NameAndUrlBean feedBean;
-    public final NameAndUrlBean category;
-    public final String title;
-    public final String text;
-    public final NameAndUrlBean author;
-    public final String cssClass;
-    public final String pageUrl;
-    public final String imageUrl;
-    public final String fullSourceEntryForSearch;
-    public final String html;
     private boolean read;
+    private boolean isFlagged;
 
-    public UserDocument(Key<User> userKey, Document document) {
-
+    public UserDocument(Key<User> userKey, Key<Document> documentKey, Instant publishDate, boolean isFlagged) {
+        this.publishDate = publishDate;
+        this.isFlagged = isFlagged;
         this.userKey = Objects.requireNonNull(userKey);
-        this.documentKey = Objects.requireNonNull(document).getKey();
-        this.publishedDate = document.publishedDate;
-        this.title = document.title;
-        this.feedBean = new NameAndUrlBean(document.feedName, document.feedUrl);
-        this.category = new NameAndUrlBean(document.categoryName, document.categoryUrl);
-        this.author = new NameAndUrlBean(document.authorName, document.authorUrl);
-        this.text = document.text;
-        this.cssClass = document.cssClass;
-        this.pageUrl = document.pageUrl;
-        this.imageUrl = document.imageUrl;
-        this.fullSourceEntryForSearch = document.fullSourceEntryForSearch;
-        this.html = document.html;
+        this.documentKey = Objects.requireNonNull(documentKey);
+    }
+
+    public Instant getPublishDate() {
+        return publishDate;
     }
 
     public void setRead(boolean read) {
@@ -60,15 +43,15 @@ public class UserDocument implements Persistable<UserDocument> {
         return Keys.userDocument(userKey, documentKey);
     }
 
-    public Instant getPublishedDate() {
-        return publishedDate;
-    }
-
     public Key<User> getUserKey() {
         return userKey;
     }
 
     public Key<Document> getDocumentKey() {
         return documentKey;
+    }
+
+    public boolean isFlagged() {
+        return isFlagged;
     }
 }

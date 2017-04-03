@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
- import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
@@ -26,10 +26,16 @@ public class UserDocumentController {
     public void putDocument(@RequestBody UserDocumentPutBean userDocumentPutBean) {
 
 
+        if (userDocumentPutBean.getUsername() == null) {
+            log.warn("Not 'logged in'. Can't check documents as read.");
+            return;
+        }
+
         log.info("Received PUT document: {}", userDocumentPutBean);
 
         Key<User> userKey = Keys.user(userDocumentPutBean.getUsername());
-        userDocumentService.setRead(userKey, Keys.document(userDocumentPutBean.pageUrl), userDocumentPutBean.read);
+        userDocumentService.setRead(userKey, Key.create(userDocumentPutBean.userDocumentKey), userDocumentPutBean.read);
+
 
 
     }
