@@ -45,12 +45,16 @@ a:hover {
     margin-right: auto;
 }
 
+.right {
+    right: 0;
+}
+
 .item-box {
-    padding: 8px;
     background-color: white;
     /*margin-left: 30vw;*/
     /*margin-right: 30vw;*/
     width: 600px;
+    max-width: 100%;
 
     /*border-bottom: 1px solid #e1e8ed;*/
     margin-bottom: 4px;
@@ -63,8 +67,7 @@ a:hover {
 
 .image-box {
     max-height: 300px;
-    max-width: 300px;
-    margin-bottom: 2vh;
+    max-width: 100%;
 }
 
 .image-box {
@@ -93,16 +96,13 @@ a:hover {
     background-color: #DDDDDD;
 }
 
-.read-input {
-    width: 10vw;
-    height: 10vw;
-}
-
 .content-box {
     /*background-color: green;*/
     display: inline-block;
     vertical-align: top;
     margin: 0;
+    padding-left: 2px;
+    padding-right: 2px;
     width: 500px;
 }
 
@@ -130,27 +130,13 @@ div.text {
     font-size: small;
 }
 
-input[type=checkbox] {
-    width: 44px; height: 44px;
-    -webkit-border-radius: 22px;
-    -moz-border-radius: 22px;
-    border-radius: 22px;
-    border: 1px solid #bbb;
-}
-
-/*.time-since:before {*/
-    /*content: ' | ';*/
-/*}*/
-/*.time-since {*/
-    /*margin-left: 10px;*/
-/*}*/
-
-.comments-button {
-    width: 4vw;
-    height: 1.5vw;
-    /*cursor: pointer;*/
-    background-color: transparent;
-    border: none;
+.read-input {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #BBBBBB;
+    background-color: #DDDDDD;
+    border-radius: 20px;
+    margin: 0;
 }
 
 .title > a {
@@ -161,7 +147,6 @@ input[type=checkbox] {
 .navbar {
     padding: 5px;
 }
-
 
 /*HACKS - THESE SHOULD BE EITHER REMOVED OR MOVED TO PLUGIN FOLDERS*/
 .slashdot > div.content-box > span.htmlContent > div,
