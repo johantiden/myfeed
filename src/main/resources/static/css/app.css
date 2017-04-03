@@ -45,15 +45,11 @@ a:hover {
     margin-right: auto;
 }
 
-.right {
-    right: 0;
-}
 
 .item-box {
     background-color: white;
     /*margin-left: 30vw;*/
     /*margin-right: 30vw;*/
-    width: 600px;
     max-width: 100%;
 
     /*border-bottom: 1px solid #e1e8ed;*/
@@ -92,6 +88,11 @@ a:hover {
     width: 40px;
 }
 
+.input-box.right {
+    position: relative;
+    right: 0;
+}
+
 .read {
     background-color: #DDDDDD;
 }
@@ -103,7 +104,7 @@ a:hover {
     margin: 0;
     padding-left: 2px;
     padding-right: 2px;
-    width: 500px;
+    width: auto;
 }
 
 .top-row > *, .top-row > * > * {
