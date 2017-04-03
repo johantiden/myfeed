@@ -1,6 +1,11 @@
 
-.ng-hide-add { 
-  animation:0.5s lightSpeedOut ease; 
+
+.ng-hide-add {
+
+  -webkit-animation: lightSpeedOut 0.5s;
+  -webkit-animation-fill-mode: forwards;
+  animation: lightSpeedOut 0.5s;
+  animation-fill-mode: forwards;
 }
 
 /* Can not get this to change element height :( maybe only use transition instead? */
@@ -30,8 +35,8 @@
   }
 
   to {
-    -webkit-transform: translate3d(0, -100px, 0) skewX(10deg);
-    transform: translate3d(0, -100px, 0) skewX(10deg);
+    -webkit-transform: scale(0) translate3d(0, -100px, 0) skewX(0deg);
+    transform: scale(0) translate3d(0, -100px, 0) skewX(0deg);
     opacity: 0;
   }
 }
@@ -39,11 +44,13 @@
 @keyframes lightSpeedOut {
   from {
     opacity: 1;
+    height: 100px;
   }
 
   to {
-    -webkit-transform: translate3d(0, -100px, 0) skewX(10deg);
-    transform: translate3d(0, -100px, 0) skewX(10deg);
+    -webkit-transform: translate3d(200px, -1000px, 150px) skewX(0deg);
+    transform: translate3d(200px, -1000px, 150px) skewX(0deg);
     opacity: 0;
+    height: 0;
   }
 }
