@@ -26,7 +26,7 @@
         
 
         <div class="input-box">
-            <input class="read-input" type="checkbox" ng-model="item.read" ng-change="setDocumentRead(item)">
+            <input class="read-input" type="checkbox" ng-model="item.read" ng-change="setDocumentRead(item, item.read)">
         </div>
         <div class="content-box">
 
@@ -50,6 +50,9 @@
                 </a>
             </div>
 
+        </div>
+        <div class="input-box right">
+            <input class="read-input" type="checkbox" ng-model="item.read" ng-change="setDocumentRead(item, item.read)">
         </div>
     </div>
     </div>

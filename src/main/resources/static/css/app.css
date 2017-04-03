@@ -50,13 +50,15 @@ a:hover {
     background-color: white;
     /*margin-left: 30vw;*/
     /*margin-right: 30vw;*/
-    width: 100%;
+    width: 600px;
 
     /*border-bottom: 1px solid #e1e8ed;*/
     margin-bottom: 4px;
     word-wrap: break-word;
     box-shadow: 6px 6px 20px #EEEEEE;
     transform-origin: left top;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .image-box {
@@ -84,9 +86,7 @@ a:hover {
     /*background-color: red;*/
     display: inline-block;
     vertical-align: top;
-    margin: 0;
-    width: 10vw;
-    height: 10vw;
+    width: 40px;
 }
 
 .read {
@@ -103,7 +103,7 @@ a:hover {
     display: inline-block;
     vertical-align: top;
     margin: 0;
-    width: 88vw;
+    width: 500px;
 }
 
 .top-row > *, .top-row > * > * {
@@ -128,6 +128,14 @@ div.text {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     font-size: small;
+}
+
+input[type=checkbox] {
+    width: 44px; height: 44px;
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px;
+    border-radius: 22px;
+    border: 1px solid #bbb;
 }
 
 /*.time-since:before {*/
