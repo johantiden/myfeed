@@ -28,7 +28,6 @@
         <!--orderBy:'-publishedDate.epochSecond' | -->
 
         <div class="content-box">
-            {{key}}
             <div class="top-row">
                 <input class="read-input" type="checkbox" ng-model="item.read" ng-change="setDocumentRead(item, item.read)">
                 <div class="feedName" ng-if="item.feed.name"><a href="{{item.feed.url}}">{{item.feed.name}}</a></div>
