@@ -22,7 +22,7 @@ public class Document implements Persistable<Document> {
     public final String pageUrl;
     public final String imageUrl;
     public final Instant publishedDate;
-    public final String html;
+    public String html;
     private Key<Feed> feed;
     public String categoryName;
     public String categoryUrl;
