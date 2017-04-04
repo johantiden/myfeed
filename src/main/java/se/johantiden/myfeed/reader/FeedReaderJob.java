@@ -35,7 +35,7 @@ public class FeedReaderJob {
 
     private void consume(Feed feed) {
 
-        List<Document> documents = feedReaderService.readAll(feed);
+        List<Document> documents = FeedReaderService.readAll(feed);
 
         List<Document> filtered = documents.stream()
                 .filter(feed.getFilter())

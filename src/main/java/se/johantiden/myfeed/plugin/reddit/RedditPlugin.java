@@ -28,7 +28,7 @@ public class RedditPlugin implements Plugin {
 
     @Override
     public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(PluginType.REDDIT, feedName, webUrl, cssClass, readerParameters, ttl, filter);
+        return new FeedImpl(PluginType.REDDIT, feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
     }
 
     @Override

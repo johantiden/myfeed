@@ -20,7 +20,7 @@ public class TwitterPlugin implements Plugin{
 
     @Override
     public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(PluginType.TWITTER, feedName, webUrl, "twitter", readerParameters, ttl, filter);
+        return new FeedImpl(PluginType.TWITTER, feedName, webUrl, "twitter", readerParameters, ttl, filter, this);
     }
 
     @Override

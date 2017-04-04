@@ -28,7 +28,7 @@ public class SvenskaDagbladetPlugin implements Plugin {
 
     @Override
     public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(PluginType.SVENSKA_DAGBLADET, feedName, webUrl, cssClass, readerParameters, ttl, filter);
+        return new FeedImpl(PluginType.SVENSKA_DAGBLADET, feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
     }
 
     @Override

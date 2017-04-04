@@ -18,8 +18,9 @@ public class RssPlugin implements Plugin {
             String feedName,
             String cssClass, String webUrl,
             Map<String, String> readerParameters,
-            Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(PluginType.RSS, feedName, webUrl, cssClass, readerParameters, ttl, filter);
+            Duration ttl,
+            Predicate<Document> filter) {
+        return new FeedImpl(PluginType.RSS, feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
     }
 
     @Override

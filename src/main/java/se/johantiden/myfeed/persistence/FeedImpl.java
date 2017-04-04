@@ -2,18 +2,21 @@ package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
+import se.johantiden.myfeed.plugin.Plugin;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class FeedImpl implements Feed {
 
     public static final Feed EMPTY = new EmptyFeed();
     private final String name;
+    private final Plugin plugin;
     private final String webUrl;
     private final PluginType type;
     private final Map<String, String> feedReaderParameters;
@@ -29,21 +32,22 @@ public class FeedImpl implements Feed {
             String webUrl,
             String cssClass, Map<String, String> feedReaderParameters,
             Duration ttl,
-            Predicate<Document> filter) {
+            Predicate<Document> filter,
+            Plugin plugin) {
         this.name = name;
         this.webUrl = webUrl;
         this.type = type;
         this.feedReaderParameters = feedReaderParameters;
         this.cssClass = cssClass;
         this.ttl = ttl;
+        this.plugin = Objects.requireNonNull(plugin);
         this.filter = filter  == null ? d -> true : filter;
         this.feedUsers = new ArrayList<>();
     }
 
-
     @Override
-    public PluginType getType() {
-        return type;
+    public Plugin getPlugin() {
+        return plugin;
     }
 
     @Override
@@ -100,6 +104,9 @@ public class FeedImpl implements Feed {
         if (name != null ? !name.equals(feed.name) : feed.name != null) {
             return false;
         }
+        if (plugin != null ? !plugin.equals(feed.plugin) : feed.plugin != null) {
+            return false;
+        }
         if (webUrl != null ? !webUrl.equals(feed.webUrl) : feed.webUrl != null) {
             return false;
         }
@@ -128,6 +135,7 @@ public class FeedImpl implements Feed {
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (plugin != null ? plugin.hashCode() : 0);
         result = 31 * result + (webUrl != null ? webUrl.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (feedReaderParameters != null ? feedReaderParameters.hashCode() : 0);

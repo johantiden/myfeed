@@ -1,7 +1,5 @@
 package se.johantiden.myfeed.plugin.slashdot;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
@@ -20,11 +18,9 @@ import java.util.stream.Collectors;
 
 public class SlashdotPlugin implements Plugin {
 
-    private static final Logger log = LoggerFactory.getLogger(SlashdotPlugin.class);
-
     @Override
     public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(PluginType.SLASHDOT, feedName, webUrl, cssClass, readerParameters, ttl, filter);
+        return new FeedImpl(PluginType.SLASHDOT, feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
     }
 
     @Override

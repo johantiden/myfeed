@@ -1,6 +1,8 @@
 package se.johantiden.myfeed.persistence;
 
 
+import se.johantiden.myfeed.plugin.Plugin;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +10,7 @@ import java.util.function.Predicate;
 
 public interface Feed extends Persistable<Feed> {
 
-    PluginType getType();
+    Plugin getPlugin();
 
     Map<String, String> getFeedReaderParameters();
 
