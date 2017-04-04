@@ -7,6 +7,7 @@ import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
 import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
+import se.johantiden.myfeed.plugin.slashdot.SlashdotPlugin;
 import se.johantiden.myfeed.plugin.svd.SvenskaDagbladetPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
@@ -32,6 +33,8 @@ public class FeedReaderService {
                 return new RedditPlugin().createFeedReader(feed);
             case SVENSKA_DAGBLADET:
                 return new SvenskaDagbladetPlugin().createFeedReader(feed);
+            case SLASHDOT:
+                return new SlashdotPlugin().createFeedReader(feed);
             case NONE:
                 return new EmptyReader();
             default:

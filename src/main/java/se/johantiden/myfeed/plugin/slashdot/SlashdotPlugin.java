@@ -1,7 +1,5 @@
 package se.johantiden.myfeed.plugin.slashdot;
 
-import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
@@ -12,8 +10,6 @@ import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
-import java.io.IOException;
-import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +24,7 @@ public class SlashdotPlugin implements Plugin {
 
     @Override
     public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(PluginType.SVENSKA_DAGBLADET, feedName, webUrl, cssClass, readerParameters, ttl, filter);
+        return new FeedImpl(PluginType.SLASHDOT, feedName, webUrl, cssClass, readerParameters, ttl, filter);
     }
 
     @Override
@@ -42,28 +38,13 @@ public class SlashdotPlugin implements Plugin {
 
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
-            entry.isPaywalled = isPaywalled(entry);
+            entry.html = prune(entry.html);
             return entry;
         };
     }
 
-    private static boolean isPaywalled(Document document) {
-        try {
-            org.jsoup.nodes.Document parse = Jsoup.parse(new URL(document.pageUrl), 10_000);
-
-            Elements select = parse.select(".paywall-loader");
-            if (!select.isEmpty()) {
-                log.debug("SVD Paywall: {}", document.pageUrl);
-                return true;
-            }
-
-            return false;
-
-        } catch (IOException e) {
-            log.error("Could not determine paywall", e);
-            return false;
-        }
-
+    public static String prune(String html) {
+        int i = html.indexOf("<p>");
+        return html.substring(0, i);
     }
-
 }
