@@ -38,7 +38,6 @@ a:hover {
     /*background-color: red;*/
     background-color: white;
     border-bottom: 1px solid #EEEEFF;
-    alignment: center;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -64,19 +63,17 @@ a:hover {
 }
 
 .image-box {
+    display: block;
     max-height: 300px;
     max-width: 100%;
-}
-
-.image-box {
-    display: block;
-    /*border: 1px solid #DDDDDD;*/
     background-color: white;
     margin: 0;
 }
 
 .image-box-image {
-    width: 100%;
+    max-width: 100%;
+    max-height: 300px;
+    margin: 0;
 }
 
 .category a {
@@ -106,7 +103,7 @@ a:hover {
     margin: 0;
     padding-left: 2px;
     padding-right: 2px;
-    width: auto;
+    width: 100%;
 }
 
 .top-row > *, .top-row > * > * {
@@ -155,11 +152,3 @@ div.text {
 .navbar {
     padding: 5px;
 }
-
-/*HACKS - THESE SHOULD BE EITHER REMOVED OR MOVED TO PLUGIN FOLDERS*/
-.slashdot > div.content-box > span.htmlContent > div,
-.slashdot > div.content-box > span.htmlContent > p{
-    display: none;
-}
-
-
