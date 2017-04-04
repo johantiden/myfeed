@@ -28,7 +28,7 @@ public class FeedReaderJob {
     @Autowired
     private InboxService inboxService;
 
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 1000)
     public void myRunnable() {
         consume(feedService.popOldestInvalidatedFeed());
     }
