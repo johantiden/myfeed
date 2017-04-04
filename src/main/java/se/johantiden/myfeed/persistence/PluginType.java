@@ -6,5 +6,6 @@ public enum PluginType {
     DAGENS_NYHETER,
     REDDIT,
     SVENSKA_DAGBLADET,
+    SLASHDOT,
     RSS
 }
