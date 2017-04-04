@@ -39,6 +39,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         })
     };
 
+    $scope.myFilter = function(item) {
+        return !item.read || item.hide;
+    };
+
     $scope.increaseLimit = function() {
         limitStep += 1;
         $scope.itemLimit = limitStep;
