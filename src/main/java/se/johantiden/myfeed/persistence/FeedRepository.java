@@ -9,6 +9,7 @@ import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
 import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
+import se.johantiden.myfeed.plugin.slashdot.SlashdotPlugin;
 import se.johantiden.myfeed.plugin.svd.SvenskaDagbladetPlugin;
 import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
@@ -34,11 +35,12 @@ public class FeedRepository {
     private static List<Feed> allFeedsHack(UserRepository userRepository) {
         List<Feed> feeds = new ArrayList<>();
 
-        feeds.add(createRss(
+        feeds.add(new SlashdotPlugin().createFeed(
                 "Slashdot",
                 "slashdot",
                 "https://slashdot.org",
-                "http://rss.slashdot.org/Slashdot/slashdotMainatom"));
+                newHashMap("rssUrl", "http://rss.slashdot.org/Slashdot/slashdotMainatom"),
+                INVALIDATION_PERIOD, null));
 
         feeds.add(new SvenskaDagbladetPlugin().createFeed(
                 "Svenska Dagbladet",
@@ -130,7 +132,6 @@ public class FeedRepository {
     private static Feed createReddit(String subreddit, double minScore, Duration invalidationPeriod) {
         Predicate<Document> votesPredicate = d -> {
             boolean ok = d.getScore() != null && d.getScore() > minScore;
-//            log.info("{} : score>{} ? {}", d.pageUrl, minScore, ok);
             return ok;
         };
 
