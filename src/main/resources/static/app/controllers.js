@@ -43,6 +43,12 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return !item.read || item.hide;
     };
 
+    $scope.markAllAsRead = function() {
+        $scope.items.forEach(function(item) {
+            $scope.setDocumentRead(item, true);
+        });
+    };
+
     $scope.increaseLimit = function() {
         limitStep += 1;
         $scope.itemLimit = limitStep;
