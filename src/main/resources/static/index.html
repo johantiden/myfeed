@@ -15,6 +15,7 @@
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
+        <button id="mark-all-as-read-button" ng-click="markAllAsRead()">Mark all as read</button>
         <div style="float: right;" >
             Keys:{{keys.length}} | Items:{{items.length}} | unread:{{(items | filter:{read:false}).length}} | limit:{{itemLimit}}
         </div>
