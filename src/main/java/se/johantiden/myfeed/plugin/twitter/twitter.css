@@ -4,7 +4,7 @@ div.twitter > div.content-box > div.top-row  > div.author > a {
 }
 
 div.item-box.twitter > div > div > div.author {
-    display: block;
+    display: inline-block;
 }
 
 div.twitter > div.content-box > div.text {
