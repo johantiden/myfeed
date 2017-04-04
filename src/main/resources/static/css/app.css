@@ -44,6 +44,9 @@ a:hover {
     margin-right: auto;
 }
 
+.top-row > div.author {
+    display: none;
+}
 
 .item-box {
     background-color: white;
