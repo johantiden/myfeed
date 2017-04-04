@@ -22,8 +22,11 @@ import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Objects;
 
 @SpringBootApplication
@@ -118,6 +121,16 @@ public class Main {
 
     public static void main(String[] args) {
         log.info("JAVA_OPTS: {}", System.getenv("JAVA_OPTS"));
+        runtimeParameters();
         SpringApplication.run(Main.class, args);
+    }
+
+    public static void runtimeParameters() {
+        RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
+        List<String> aList = bean.getInputArguments();
+
+        for (int i = 0; i < aList.size(); i++) {
+            log.info(aList.get( i ) );
+        }
     }
 }
