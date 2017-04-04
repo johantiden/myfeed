@@ -24,9 +24,9 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 public class FeedRepository {
 
     private static final Logger log = LoggerFactory.getLogger(FeedRepository.class);
-    public static final int REDDIT_MIN_SCORE = 5000;
+    public static final int REDDIT_MIN_SCORE = 6000;
     private List<Feed> allFeeds;
-    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(1);
+    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(2);
 
     @Autowired
     private UserRepository userRepository;
