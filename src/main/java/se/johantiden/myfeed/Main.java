@@ -117,6 +117,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        log.info("JAVA_OPTS: {}", System.getenv("JAVA_OPTS"));
         SpringApplication.run(Main.class, args);
     }
 }
