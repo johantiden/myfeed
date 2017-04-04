@@ -4,7 +4,6 @@
 
 
 * {
-    vertical-align:top;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -110,6 +109,7 @@ a:hover {
 .top-row > *, .top-row > * > * {
     /*background-color: BLUE;*/
     /*width: 39vw;*/
+    vertical-align: baseline;
     margin: 0;
     font-size: small;
     color: #666666;
