@@ -57,4 +57,8 @@ public class UserDocumentRepository {
         String maxValue = "inf";
         return getProxy(user).removeByScore(min, maxValue);
     }
+
+    public void remove(UserDocument userDocument) {
+        getProxy(userDocument.getUserKey()).remove(userDocument.getKey());
+    }
 }

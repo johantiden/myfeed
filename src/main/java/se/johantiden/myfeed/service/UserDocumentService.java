@@ -10,7 +10,9 @@ import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UserDocumentService {
 
@@ -57,5 +59,18 @@ public class UserDocumentService {
 
     public Optional<UserDocument> get(Key<User> userKey, Key<UserDocument> userDocumentKey) {
         return userDocumentRepository.find(userKey, userDocumentKey);
+    }
+
+    public long purgeReadDocuments(Key<User> userKey) {
+        Collection<String> allUserDocumentKeys = getAllDocumentsFor(userKey);
+        List<UserDocument> userDocumentsToRemove = allUserDocumentKeys.stream()
+                .map(key -> get(userKey, Key.create(key)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(UserDocument::isRead)
+                .collect(Collectors.toList());
+
+        userDocumentsToRemove.forEach(userDocumentRepository::remove);
+        return userDocumentsToRemove.size();
     }
 }

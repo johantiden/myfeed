@@ -10,30 +10,11 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.$location = $location;
     var user = getParameterByName('user');
 
-    var search = getParameterByName('search');
-    if (search) {
-        $scope.searchText = search;
-    } else {
-        $scope.searchText = $cookies.get('searchText');
-    }
-
-    $scope.showRead = $cookies.get('showRead');
-    if ($scope.showRead === undefined) {
-        $scope.showRead = false;
-    }
-
-    $scope.$watch('searchText', function(newValue) {
-        $cookies.put('searchText', newValue);
-    });
-
-    $scope.$watch('showRead', function(newValue) {
-        $cookies.put('showRead', newValue);
-    });
-
     $scope.setDocumentRead = function(item, read, callback) {
         item.read = read;
         item.username = user;
         item.hide = true;
+        $scope.itemLimit += 1;
         documentService.putItem(item, callback);
     };
 
@@ -59,12 +40,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     $scope.increaseLimit = function() {
-        limitStep = limitStep + 1;
+        limitStep += 1;
         $scope.itemLimit = limitStep;
-    };
-
-    $scope.filterReadExceptIfSearchTextPresent = function(item) {
-        return !item.read || $scope.searchText.length > 0 || item.hide;
     };
 
     /**
