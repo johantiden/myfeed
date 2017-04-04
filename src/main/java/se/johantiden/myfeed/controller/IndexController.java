@@ -46,17 +46,6 @@ public class IndexController {
 
         Collection<String> allDocumentsFor = userDocumentService.getAllDocumentsFor(user);
         return allDocumentsFor;
-//        log.info("     index foo"); // 100 ms from ENTER
-
-//        List<DocumentBean> documentBeans =
-//                userDocuments.stream()
-//                        .map(ud -> )
-//                .filter(Optional::isPresent)
-//                .map(Optional::get)
-//                .collect(Collectors.toList());
-//        List<String> keys = userDocuments.stream().map(key -> key.toString()).collect(Collectors.toList());
-//        return keys;
-//        return documentBeans;
     }
 
     @RequestMapping("/rest/userdocument/{userDocumentKey}")
