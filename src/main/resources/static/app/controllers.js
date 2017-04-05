@@ -44,9 +44,11 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     $scope.markAllAsRead = function() {
-        $scope.items.forEach(function(item) {
-            $scope.setDocumentRead(item, true);
-        });
+        if (confirm("Are you sure?")) {
+            $scope.items.forEach(function (item) {
+                $scope.setDocumentRead(item, true);
+            });
+        }
     };
 
     $scope.increaseLimit = function() {
