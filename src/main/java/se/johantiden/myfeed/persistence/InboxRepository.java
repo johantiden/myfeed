@@ -1,42 +1,30 @@
 package se.johantiden.myfeed.persistence;
 
-import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
-import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.persistence.redis.RedisSet;
 
 import java.util.Optional;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class InboxRepository {
 
-    @Autowired
-    private JedisPool jedisPool;
-    @Autowired
-    private Gson gson;
+    private final LinkedBlockingQueue<Document> inbox = new LinkedBlockingQueue<>();
 
-    private RedisSet<Document> getProxy() {
-        return new RedisSet<>(Keys.inbox(), jedisPool, gson);
-    }
 
     public Optional<Document> pop() {
-        return getProxy().popAnyElement(Document.class);
+        Document poll = inbox.poll();
+        return Optional.ofNullable(poll);
     }
 
     public void put(Document document) {
-        getProxy().put(document, document.getKey(), Document.class);
-    }
-
-    public Optional<Document> find(Document document) {
-        return find(document.getKey());
+        inbox.offer(document);
     }
 
     public Optional<Document> find(Key<Document> documentKey) {
-        return getProxy().find(documentKey, Document.class);
+        return inbox.stream().filter(d -> d.getKey().equals(documentKey)).findAny();
     }
 
     public boolean hasDocument(Key<Document> key) {
-        return find(key).isPresent();
+        return inbox.stream()
+                .anyMatch(d -> d.getKey().equals(key));
     }
 }

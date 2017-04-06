@@ -18,7 +18,10 @@ import se.johantiden.myfeed.service.UserDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 @RestController
 @EnableAutoConfiguration
@@ -44,8 +47,16 @@ public class IndexController {
         Key<User> user = Keys.user(username);
         log.info("EXIT  index"); // 9 seconds from foo
 
-        Collection<String> allDocumentsFor = userDocumentService.getAllDocumentsFor(user);
-        return allDocumentsFor;
+        SortedSet<UserDocument> allUserDocuments = userDocumentService.getAllDocumentsFor(user);
+
+
+        List<String> keys = allUserDocuments.stream()
+                .filter(UserDocument::isUnread)
+                .map(UserDocument::getKey)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        return keys;
     }
 
     @RequestMapping("/rest/userdocument/{userDocumentKey}")

@@ -32,7 +32,7 @@ public class DocumentPurgeOldJob {
         Collection<User> users = userService.getAllUsers();
 
         for (User user : users) {
-            long removed = userDocumentService.purgeOlderThan(user.getKey(), GlobalSettings.DOCUMENT_MAX_AGE);
+            long removed = userDocumentService.purgeOlderThan(GlobalSettings.DOCUMENT_MAX_AGE);
             log.info("Removed {} UserDocuments for {}", removed, user.getUsername());
         }
 
