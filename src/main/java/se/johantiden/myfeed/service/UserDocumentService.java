@@ -9,10 +9,8 @@ import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.SortedSet;
 
 public class UserDocumentService {
 
@@ -20,7 +18,7 @@ public class UserDocumentService {
     @Autowired
     private UserDocumentRepository userDocumentRepository;
 
-    public Collection<String> getAllDocumentsFor(Key<User> user) {
+    public SortedSet<UserDocument> getAllDocumentsFor(Key<User> user) {
         return userDocumentRepository.getAllKeys(user);
     }
 
@@ -53,8 +51,8 @@ public class UserDocumentService {
         }
     }
 
-    public long purgeOlderThan(Key<User> user, Duration duration) {
-        return userDocumentRepository.purgeOlderThan(user, duration);
+    public long purgeOlderThan(Duration duration) {
+        return userDocumentRepository.purgeOlderThan(duration);
     }
 
     public Optional<UserDocument> get(Key<User> userKey, Key<UserDocument> userDocumentKey) {
@@ -62,15 +60,12 @@ public class UserDocumentService {
     }
 
     public long purgeReadDocuments(Key<User> userKey) {
-        Collection<String> allUserDocumentKeys = getAllDocumentsFor(userKey);
-        List<UserDocument> userDocumentsToRemove = allUserDocumentKeys.stream()
-                .map(key -> get(userKey, Key.create(key)))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(UserDocument::isRead)
-                .collect(Collectors.toList());
+        SortedSet<UserDocument> allUserDocuments = getAllDocumentsFor(userKey);
 
-        userDocumentsToRemove.forEach(userDocumentRepository::remove);
-        return userDocumentsToRemove.size();
+        int sizeBefore = allUserDocuments.size();
+        allUserDocuments.removeIf(UserDocument::isRead);
+        int sizeAfter = allUserDocuments.size();
+
+        return sizeBefore-sizeAfter;
     }
 }

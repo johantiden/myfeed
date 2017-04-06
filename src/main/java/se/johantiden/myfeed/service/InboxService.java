@@ -40,15 +40,6 @@ public class InboxService {
         }
     }
 
-    public Optional<Document> find(Key<Document> documentKey) {
-        return inboxRepository.find(documentKey);
-    }
-
-    public boolean hasDocument(Key<Document> documentKey) {
-        Optional<Document> document = inboxRepository.find(documentKey);
-        return document.isPresent();
-    }
-
     public Optional<Document> pop() {
         return inboxRepository.pop();
     }
