@@ -24,7 +24,7 @@ public class DocumentPurgeReadJob {
     @Autowired
     private UserService userService;
 
-    @Scheduled(fixedRate = 3600*1000, initialDelay = 60*1000)
+//    @Scheduled(fixedRate = 3600*1000)
     public void purgeRead() {
         log.info("Purging read documents!");
 

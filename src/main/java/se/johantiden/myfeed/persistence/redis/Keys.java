@@ -1,9 +1,12 @@
 package se.johantiden.myfeed.persistence.redis;
 
 import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.DocumentGroup;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.UserDocument;
+
+import java.security.acl.Group;
 
 public class Keys {
 
@@ -19,11 +22,11 @@ public class Keys {
         return Sha1Hex.makeSHA1Hash(hashMe);
     }
 
-    public static Key<RedisMap<UserDocument>> userDocuments(Key<User> user) {
+    public static Key<RedisIndexedMap<Key<UserDocument>, UserDocument>> userDocuments(Key<User> user) {
         return indexedMap("ud:" + user);
     }
 
-    public static Key<RedisMap<Document>> documents() {
+    public static Key<RedisIndexedMap<Key<Document>, Document>> documents() {
         return indexedMap("d");
     }
 
@@ -39,22 +42,19 @@ public class Keys {
 
     }
 
-    public static Key<RedisSet<Document>> inbox() {
-        return set("inbox");
+    public static Key<RedisMap<Key<Document>, Document>> inbox() {
+        return Key.create("sets:inbox");
     }
 
-
-
-
-
-
-
-
-    private static <T> Key<RedisMap<T>> indexedMap(String mapName) {
+    private static <T> Key<RedisIndexedMap<Key<T>, T>> indexedMap(String mapName) {
         return Key.create("maps:"+mapName);
     }
 
-    public static <T> Key<RedisSet<T>> set(String setName) {
-        return Key.create("sets:"+setName);
+    public static Key<RedisMap<Key<Document>, Key<Document>>> verySimilarGrouper() {
+        return Key.create("sets:grouper:very-similar");
+    }
+
+    public static Key<RedisMap<Key<Document>, Key<DocumentGroup>>> findGroupByDocument() {
+        return Key.create("sets:find-group-by-document");
     }
 }

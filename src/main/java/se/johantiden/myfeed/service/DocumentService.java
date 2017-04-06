@@ -8,7 +8,10 @@ import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Duration;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class DocumentService {
 
@@ -38,7 +41,19 @@ public class DocumentService {
         return documentRepository.find(documentKey);
     }
 
+    public Optional<Document> findAnySlow(Predicate<Document> predicate) {
+        return documentRepository.findAnySlow(predicate);
+    }
+
+    public List<Document> findAllSlow(Predicate<Document> predicate) {
+        return documentRepository.findAllSlow(predicate);
+    }
+
     public long purgeOlderThan(Duration duration) {
         return documentRepository.purgeOlderThan(duration);
+    }
+
+    public Collection<Document> getAll() {
+        return documentRepository.getAll();
     }
 }

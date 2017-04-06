@@ -140,4 +140,89 @@ public class Document implements Persistable<Document> {
     public void setScore(double score) {
         this.score = score;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Document document = (Document) o;
+
+        if (isPaywalled != document.isPaywalled) {
+            return false;
+        }
+        if (key != null ? !key.equals(document.key) : document.key != null) {
+            return false;
+        }
+        if (feedName != null ? !feedName.equals(document.feedName) : document.feedName != null) {
+            return false;
+        }
+        if (feedUrl != null ? !feedUrl.equals(document.feedUrl) : document.feedUrl != null) {
+            return false;
+        }
+        if (title != null ? !title.equals(document.title) : document.title != null) {
+            return false;
+        }
+        if (text != null ? !text.equals(document.text) : document.text != null) {
+            return false;
+        }
+        if (authorName != null ? !authorName.equals(document.authorName) : document.authorName != null) {
+            return false;
+        }
+        if (authorUrl != null ? !authorUrl.equals(document.authorUrl) : document.authorUrl != null) {
+            return false;
+        }
+        if (cssClass != null ? !cssClass.equals(document.cssClass) : document.cssClass != null) {
+            return false;
+        }
+        if (pageUrl != null ? !pageUrl.equals(document.pageUrl) : document.pageUrl != null) {
+            return false;
+        }
+        if (imageUrl != null ? !imageUrl.equals(document.imageUrl) : document.imageUrl != null) {
+            return false;
+        }
+        if (publishedDate != null ? !publishedDate.equals(document.publishedDate) : document.publishedDate != null) {
+            return false;
+        }
+        if (html != null ? !html.equals(document.html) : document.html != null) {
+            return false;
+        }
+        if (feed != null ? !feed.equals(document.feed) : document.feed != null) {
+            return false;
+        }
+        if (categoryName != null ? !categoryName.equals(document.categoryName) : document.categoryName != null) {
+            return false;
+        }
+        if (categoryUrl != null ? !categoryUrl.equals(document.categoryUrl) : document.categoryUrl != null) {
+            return false;
+        }
+        return !(score != null ? !score.equals(document.score) : document.score != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = key != null ? key.hashCode() : 0;
+        result = 31 * result + (feedName != null ? feedName.hashCode() : 0);
+        result = 31 * result + (feedUrl != null ? feedUrl.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (authorName != null ? authorName.hashCode() : 0);
+        result = 31 * result + (authorUrl != null ? authorUrl.hashCode() : 0);
+        result = 31 * result + (cssClass != null ? cssClass.hashCode() : 0);
+        result = 31 * result + (pageUrl != null ? pageUrl.hashCode() : 0);
+        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
+        result = 31 * result + (publishedDate != null ? publishedDate.hashCode() : 0);
+        result = 31 * result + (html != null ? html.hashCode() : 0);
+        result = 31 * result + (feed != null ? feed.hashCode() : 0);
+        result = 31 * result + (categoryName != null ? categoryName.hashCode() : 0);
+        result = 31 * result + (categoryUrl != null ? categoryUrl.hashCode() : 0);
+        result = 31 * result + (score != null ? score.hashCode() : 0);
+        result = 31 * result + (isPaywalled ? 1 : 0);
+        return result;
+    }
 }

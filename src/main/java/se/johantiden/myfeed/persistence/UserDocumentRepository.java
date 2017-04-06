@@ -2,10 +2,11 @@ package se.johantiden.myfeed.persistence;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.persistence.redis.RedisMap;
+import se.johantiden.myfeed.persistence.redis.RedisIndexedMap;
 import se.johantiden.myfeed.persistence.user.User;
 
 import java.time.Duration;
@@ -32,12 +33,13 @@ public class UserDocumentRepository {
     }
 
     public Optional<UserDocument> find(Key<User> userKey, Key<UserDocument> userDocumentKey) {
-        return getProxy(userKey).find(userDocumentKey, UserDocument.class);
+        return getProxy(userKey).find(userDocumentKey);
 
     }
 
-    private RedisMap<UserDocument> getProxy(Key<User> userKey) {
-        return new RedisMap<>(Keys.userDocuments(userKey), jedisPool, gson, UserDocument::getKey);
+    private RedisIndexedMap<Key<UserDocument>, UserDocument> getProxy(Key<User> userKey) {
+        Key<RedisIndexedMap<Key<UserDocument>, UserDocument>> redisIndexedMapKey = Keys.userDocuments(userKey);
+        return new RedisIndexedMap<>(redisIndexedMapKey, UserDocument.class, jedisPool, gson, UserDocument::getKey);
     }
 
     private static Function<UserDocument, Double> youngestFirst() {

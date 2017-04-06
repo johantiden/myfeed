@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import se.johantiden.myfeed.persistence.DocumentRepository;
@@ -14,7 +15,6 @@ import se.johantiden.myfeed.persistence.FeedRepository;
 import se.johantiden.myfeed.persistence.InboxRepository;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.UserService;
-import se.johantiden.myfeed.persistence.redis.JedisClient;
 import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.reader.FeedReaderService;
 import se.johantiden.myfeed.service.DocumentService;
@@ -80,13 +80,22 @@ public class Main {
         Objects.requireNonNull(redis_url, "Could not read REDIS_URL environment variable.");
         URI redisURI = new URI(redis_url);
         JedisPoolConfig poolConfig = new JedisPoolConfig();
-        poolConfig.setMaxTotal(10);
-        poolConfig.setMaxIdle(5);
+        poolConfig.setMaxTotal(100);
+        poolConfig.setMaxIdle(50);
         poolConfig.setMinIdle(1);
         poolConfig.setTestOnBorrow(true);
         poolConfig.setTestOnReturn(true);
         poolConfig.setTestWhileIdle(true);
-        return new JedisPool(poolConfig, redisURI);
+        JedisPool jedisPool = new JedisPool(poolConfig, redisURI) {
+            @Override
+            public Jedis getResource() {
+//                log.info("ENTER getResource");
+                Jedis resource = super.getResource();
+//                log.info("EXIT  getResource");
+                return resource;
+            }
+        };
+        return jedisPool;
     }
 
     @Bean
@@ -102,11 +111,6 @@ public class Main {
     @Bean
     public Gson gson() {
         return new Gson();
-    }
-
-    @Bean
-    public JedisClient jedisClient() {
-        return new JedisClient();
     }
 
     @Bean

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.persistence.redis.RedisSet;
+import se.johantiden.myfeed.persistence.redis.RedisMap;
 
 import java.util.Optional;
 
@@ -16,16 +16,16 @@ public class InboxRepository {
     @Autowired
     private Gson gson;
 
-    private RedisSet<Document> getProxy() {
-        return new RedisSet<>(Keys.inbox(), jedisPool, gson);
+    private RedisMap<Key<Document>, Document> getProxy() {
+        return new RedisMap<>(Keys.inbox(), jedisPool, gson, Document.class);
     }
 
     public Optional<Document> pop() {
-        return getProxy().popAnyElement(Document.class);
+        return getProxy().popAnyElement();
     }
 
     public void put(Document document) {
-        getProxy().put(document, document.getKey(), Document.class);
+        getProxy().put(document, document.getKey());
     }
 
     public Optional<Document> find(Document document) {
@@ -33,7 +33,7 @@ public class InboxRepository {
     }
 
     public Optional<Document> find(Key<Document> documentKey) {
-        return getProxy().find(documentKey, Document.class);
+        return getProxy().get(documentKey);
     }
 
     public boolean hasDocument(Key<Document> key) {

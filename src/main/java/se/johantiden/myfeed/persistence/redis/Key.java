@@ -10,6 +10,10 @@ public class Key<T> {
         this.key = Objects.requireNonNull(key);
     }
 
+    public Key() {
+        key = "Dummy";
+    }
+
     @Override
     public String toString() {
         return key;

@@ -25,7 +25,7 @@ public class DocumentPurgeOldJob {
     @Autowired
     private UserService userService;
 
-    @Scheduled(fixedRate = 3600*1000)
+//    @Scheduled(fixedRate = 3600*1000)
     public void purgeOldByPublishDate() {
         log.info("Purging oldest documents!");
 

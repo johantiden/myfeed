@@ -5,12 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisPool;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.persistence.redis.RedisMap;
+import se.johantiden.myfeed.persistence.redis.RedisIndexedMap;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class DocumentRepository {
 
@@ -26,15 +29,19 @@ public class DocumentRepository {
     }
 
     public Optional<Document> find(Key<Document> documentKey) {
-        return getProxy().find(documentKey, Document.class);
+        return getProxy().find(documentKey);
     }
 
+    public Optional<Document> findAnySlow(Predicate<Document> predicate) {
+        return getProxy().findAnySlow(predicate);
+    }
 
+    public List<Document> findAllSlow(Predicate<Document> predicate) {
+        return getProxy().findAllSlow(predicate);
+    }
 
-
-
-    private RedisMap<Document> getProxy() {
-        return new RedisMap<>(Keys.documents(), jedisPool, gson, Document::getKey);
+    private RedisIndexedMap<Key<Document>, Document> getProxy() {
+        return new RedisIndexedMap<>(Keys.documents(), Document.class, jedisPool, gson, Document::getKey);
     }
 
     private static Function<Document, Double> youngestFirst() {
@@ -53,5 +60,9 @@ public class DocumentRepository {
         String min = youngestFirstInstant().apply(minus).toString();
         String maxValue = "inf";
         return getProxy().removeByScore(min, maxValue);
+    }
+
+    public Collection<Document> getAll() {
+        return getProxy().values();
     }
 }
