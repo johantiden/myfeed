@@ -38,6 +38,7 @@ public class Johan extends User {
                 isNotPaywalled(),
                 categoryContains("sport").negate(),
                 categoryContains("kultur").negate(),
+                categoryContains("insidan").negate(),
                 categoryContains("mat").and(categoryContains("dryck")).negate(),
                 categoryContains("mat").and(categoryContains("vin")).negate(),
                 categoryContains("resor").negate(),
