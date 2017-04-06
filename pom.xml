@@ -5,7 +5,7 @@
 
     <groupId>se.johantiden.myfeed</groupId>
     <artifactId>myfeed</artifactId>
-    <version>0.0.6-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT-${timestamp}</version>
     <packaging>jar</packaging>
 
     <name>myfeed</name>
@@ -113,6 +113,19 @@
                                 </resource>
                             </resources>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create-timestamp</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
