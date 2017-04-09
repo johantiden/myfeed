@@ -34,7 +34,7 @@ public class IndexController {
     private DocumentService documentService;
 
     @RequestMapping("/rest/index/{username}")
-    public Collection<String> index(
+    public Collection<String> i1ndex(
             @PathVariable("username") String username,
             HttpServletRequest req  ) {
         log.info("ENTER index");

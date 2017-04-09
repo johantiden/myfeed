@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -19,7 +20,11 @@ public class UserDocumentRepository {
     public static final Comparator<UserDocument> YOUNGEST_FIRST =
             Comparator.comparing(UserDocument::getPublishDate).reversed();
 
-    private final Map<Key<User>, SortedSet<UserDocument>> map = new HashMap<>();
+    private final Map<Key<User>, SortedSet<UserDocument>> map;
+
+    public UserDocumentRepository(Map<Key<User>, SortedSet<UserDocument>> map) {
+        this.map = Objects.requireNonNull(map);
+    }
 
     public SortedSet<UserDocument> getAllKeys(Key<User> user) {
         return getOrCreateSetForUser(user);
@@ -64,5 +69,9 @@ public class UserDocumentRepository {
 
     public void remove(UserDocument userDocument) {
         getOrCreateSetForUser(userDocument.getUserKey()).remove(userDocument);
+    }
+
+    public Map<Key<User>, SortedSet<UserDocument>> unwrapMap() {
+        return map;
     }
 }

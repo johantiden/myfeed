@@ -4,21 +4,22 @@ import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DocumentRepository {
 
-    public static final Comparator<Document> YOUNGEST_FIRST =
-            Comparator.comparing(Document::getPublishDate);
+    private final Map<Key<Document>, Document> map;
 
-    Map<Key<Document>, Document> map = new HashMap<>();
-
+    public DocumentRepository(HashMap<Key<Document>, Document> map) {
+        this.map = Objects.requireNonNull(map);
+    }
 
     public void put(Document document) {
         map.put(document.getKey(), document);
@@ -30,8 +31,7 @@ public class DocumentRepository {
 
     public long purgeOlderThan(Duration duration) {
 
-        int removed = 0;
-        List<Map.Entry<Key<Document>, Document>> toBeRemoved = map.entrySet().stream()
+        List<Entry<Key<Document>, Document>> toBeRemoved = map.entrySet().stream()
                 .filter(isOlderThan(duration))
                 .collect(Collectors.toList());
 
@@ -40,7 +40,11 @@ public class DocumentRepository {
         return toBeRemoved.size();
     }
 
-    private Predicate<? super Map.Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
+    private static Predicate<? super Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
         return e -> e.getValue().getPublishDate().plus(duration).isAfter(Instant.now());
+    }
+
+    public Map<Key<Document>, Document> unwrapMap() {
+        return map;
     }
 }
