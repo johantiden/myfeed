@@ -54,6 +54,7 @@ public class Johan extends User {
                 notZlatan,
                 notSport,
                 freeSearch(s -> !s.contains("medan du sov")),
+                freeSearch(s -> !s.contains("stockholmstestet")),
                 freeSearch(s -> !s.contains("trump")));
 
         return JCollections.reduce(predicates, Predicate::and, d->true);
@@ -76,6 +77,9 @@ public class Johan extends User {
                 categoryContains("porn"),
                 categoryContains("shit"),
                 categoryContains("fuck"),
+                categoryContains("hockey"),
+                categoryContains("rocketleague"),
+                categoryContains("h3h3productions"),
                 categoryContains("boner"),
                 categoryContains("soccer"),
                 categoryContains("nba"),
@@ -114,6 +118,7 @@ public class Johan extends User {
                 freeSearch(s -> s.contains("tipsen")),
                 freeSearch(s -> s.contains("här är")),
                 freeSearch(s -> s.contains("up vote")),
+                freeSearch(s -> s.contains("quiz")),
                 freeSearch(s -> s.contains("-- number of people"))
         );
         return JCollections.reduce(clickBaityPhrases, Predicate::or, d->false);
