@@ -31,8 +31,6 @@ a:hover {
     text-decoration: underline;
 }
 
-
-
 .navbar {
     height: 30px;
     /*background-color: red;*/
@@ -42,6 +40,10 @@ a:hover {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    position: fixed;
+    top: 0px;
+    width:100%;
+    text-align:center;
 }
 
 
@@ -159,4 +161,45 @@ div.text {
     display: none;
 }
 
+.btn-group {
+    display:inline-block;
+    margin: auto;
+}
 
+.btn-group label {
+    background-color: #4CAF50;
+    border: 1px solid green;
+    color: white;
+    padding: 4px;
+    cursor: pointer;
+    float: left;
+    font-size: small;
+}
+
+.btn-group label:not(:last-child) {
+    border-right: none;
+}
+
+.btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.btn-group label:hover {
+    background-color: #3e8e41;
+}
+
+.btn-group input[type=radio] {
+   position:fixed;
+   left:-9999px;
+}
+
+.btn-group input[type="radio"]:checked+label {
+    font-weight: bold;
+    background-color:green;
+}
+
+#mark-all-as-read-button {
+    float:left;
+}

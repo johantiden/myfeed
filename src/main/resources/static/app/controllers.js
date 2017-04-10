@@ -43,6 +43,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return !item.read || item.hide;
     };
 
+    $scope.radioFilter = {};
+
     $scope.markAllAsRead = function() {
         $scope.items.forEach(function(item) {
             $scope.setDocumentRead(item, true);
