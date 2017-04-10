@@ -140,6 +140,15 @@ div.text {
     margin: 0;
 }
 
+.read-button {
+    height: 40px;
+    width: 40px;
+    background-color: #EEEEEE;
+    border: 1px solid #BBBBBB;
+    border-radius: 3px;
+    margin: 0;
+}
+
 .title > a {
     font-size: large;
     font-weight: bold;
