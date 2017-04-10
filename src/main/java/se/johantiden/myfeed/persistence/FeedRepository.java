@@ -75,7 +75,7 @@ public class FeedRepository {
         feeds.add(createReddit("top", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/announcements", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("r/random", REDDIT_MIN_SCORE, Duration.ofMillis(1)));
+//        feeds.add(createReddit("r/random", REDDIT_MIN_SCORE, Duration.ofMillis(1)));
 
         feeds.add(createRss(
                 "TheLocal",
