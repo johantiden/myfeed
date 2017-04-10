@@ -19,11 +19,11 @@
 
         <div class="btn-group">
             <form>
-                <input type="radio" name="category" id="news-radio" checked><label for="news-radio">News</label>
-                <input type="radio" name="category" id="fun-radio"><label for="fun-radio">Fun</label>
-                <input type="radio" name="category" id="read-radio"><label for="read-radio">Read</label>
-                <input type="radio" name="category" id="flagged-radio"><label for="flagged-radio">Flagged</label>
-                <input type="radio" name="category" id="saved-radio"><label for="saved-radio">Saved</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="news-radio" value="news"><label for="news-radio">News</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="fun-radio" value="fun"><label for="fun-radio">Fun</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="read-radio" value="read"><label for="read-radio">Read</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="flagged-radio" value="flagged"><label for="flagged-radio">Flagged</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="saved-radio" value="saved"><label for="saved-radio">Saved</label>
             </form>
         </div>
 
@@ -33,7 +33,7 @@
     </div>
     <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}}"
-        ng-repeat="item in items | filter:myFilter | limitTo:itemLimit | limitTo:1000"
+        ng-repeat="item in items | filter:radioFilter | filter:myFilter | limitTo:itemLimit | limitTo:1000"
         ng-hide="item.hide">
 
         <!--orderBy:'-publishedDate.epochSecond' | -->
