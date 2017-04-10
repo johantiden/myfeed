@@ -43,6 +43,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return !item.read || item.hide;
     };
 
+    $scope.radioFilter = {};
+
     $scope.markAllAsRead = function() {
         if (confirm("Are you sure?")) {
             $scope.items.forEach(function (item) {

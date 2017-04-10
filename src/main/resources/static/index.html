@@ -15,6 +15,16 @@
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
+        <div class="btn-group">
+            <form>
+                <input type="radio" ng-model="radioFilter" name="category" id="news-radio" value="news"><label for="news-radio">News</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="fun-radio" value="fun"><label for="fun-radio">Fun</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="read-radio" value="read"><label for="read-radio">Read</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="flagged-radio" value="flagged"><label for="flagged-radio">Flagged</label>
+                <input type="radio" ng-model="radioFilter" name="category" id="saved-radio" value="saved"><label for="saved-radio">Saved</label>
+            </form>
+        </div>
+
         <div style="vertical-align:baseline; float: right;" >
             Keys:{{keys.length}} | Items:{{items.length}} | unread:{{(items | filter:{read:false}).length}} | limit:{{itemLimit}}
         </div>
@@ -24,7 +34,8 @@
     </div>
     <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}}"
-        ng-repeat="item in items | filter:myFilter | orderBy:'-publishedDate.epochSecond' | limitTo:itemLimit | limitTo:1000"
+        ng-repeat="item in items | filter:radioFilter | filter:myFilter | orderBy:'-publishedDate.epochSecond' 
+ limitTo:itemLimit | limitTo:1000"
         ng-hide="item.hide">
 
         <div class="content-box">
