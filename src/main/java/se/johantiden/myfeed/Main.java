@@ -18,15 +18,9 @@ import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
-import java.util.List;
-
 @SpringBootApplication
 @EnableScheduling
 public class Main {
-
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     @Bean
     public DocumentRepository documentRepository() {
