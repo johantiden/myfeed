@@ -203,6 +203,6 @@ div.text {
     background-color:green;
 }
 
-#mark-all-as-read-button {
-    float:left;
+.inf-scroll {
+    margin-top:41px;
 }
