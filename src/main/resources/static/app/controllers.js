@@ -10,6 +10,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.$location = $location;
     var user = getParameterByName('user');
 
+
+
+
     $scope.setDocumentRead = function(item, read, callback) {
         item.read = read;
         item.username = user;
@@ -38,10 +41,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         })
     };
 
-    $scope.myFilter = function(item) {
-        return !item.read;
-    };
-
     $scope.radioFilter = {};
 
     $scope.markAllAsRead = function() {
@@ -56,6 +55,50 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         limitStep += 1;
         $scope.itemLimit = limitStep;
     };
+
+
+
+    $scope.unwrapRadioFilter = function(item) {
+        return $scope.radioFilter.predicate(item);
+    };
+
+
+    var unreadFilter = function(item) {
+        return !item.read;
+    };
+
+    var newsFilter = function(item) {
+        var includes = item.category.name.includes('ews');
+        return !item.read && includes;
+    };
+
+    var arsFilter = function(item) {
+        var includes = item.feed.name === 'Ars Technica';
+        return !item.read && includes;
+    };
+
+    var readFilter = function(item) {
+        return item.read;
+    };
+
+    $scope.radioFilter = function(item) {
+        return $scope.radioFilters[$scope.radioFilterName](item);
+    };
+
+
+    $scope.radioFilters = {
+        "All" : unreadFilter,
+        "News" : newsFilter,
+        "Ars" : arsFilter,
+        "Read" : readFilter,
+    };
+
+
+    $scope.radioFilterName = $cookies.get('radioFilterName');
+
+    $scope.$watch('radioFilterName', function(newValue) {
+        $cookies.put('radioFilterName', newValue);
+    });
 
     /**
      * Gets a query parameter.

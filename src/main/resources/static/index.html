@@ -16,17 +16,15 @@
     <div class="navbar">
         <div class="btn-group">
             <form>
-                <input type="radio" ng-model="radioFilter" name="category" id="all-radio" value="" checked><label for="all-radio">All</label>
-                <input type="radio" ng-model="radioFilter" name="category" id="news-radio" value="news"><label for="news-radio">News</label>
-                <input type="radio" ng-model="radioFilter" name="category" id="fun-radio" value="fun"><label for="fun-radio">Fun</label>
-                <input type="radio" ng-model="radioFilter" name="category" id="read-radio" value='"read":true'><label for="read-radio">Read</label>
-                <input type="radio" ng-model="radioFilter" name="category" id="flagged-radio" value='"flagged":true'><label for="flagged-radio">Flagged</label>
-                <input type="radio" ng-model="radioFilter" name="category" id="saved-radio" value="saved"><label for="saved-radio">Saved</label>
+                <input type="radio" ng-model="radioFilterName" name="category" id="all-radio" value="All"><label for="all-radio">All</label>
+                <input type="radio" ng-model="radioFilterName" name="category" id="news-radio" value="News"><label for="news-radio">News</label>
+                <input type="radio" ng-model="radioFilterName" name="category" id="ars-radio" value="Ars"><label for="ars-radio">Ars</label>
+                <input type="radio" ng-model="radioFilterName" name="category" id="read-radio" value="Read"><label for="read-radio">Read</label>
             </form>
         </div>
 
         <div style="vertical-align:baseline; float: right;" >
-            Keys:{{keys.length}} | Items:{{items.length}} | unread:{{(items | filter:{read:false}).length}} | limit:{{itemLimit}}
+            Items:{{items.length}} | filtered:{{(items | filter:radioFilter).length}}
         </div>
         <div style="vertical-align:baseline; float: right; margin-right: 5px;">
             <button id="mark-all-as-read-button" ng-click="markAllAsRead()">Mark all as read</button>
@@ -34,7 +32,7 @@
     </div>
     <div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
     <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}}"
-        ng-repeat="item in items | filter:radioFilter | filter:myFilter | orderBy:'-publishedDate.epochSecond' | limitTo:itemLimit | limitTo:1000">
+        ng-repeat="item in items | filter:radioFilter | orderBy:'-publishedDate.epochSecond' | limitTo:itemLimit | limitTo:1000">
 
         <div class="content-box">
             <div class="top-row">

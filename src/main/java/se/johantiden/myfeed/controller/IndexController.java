@@ -51,7 +51,6 @@ public class IndexController {
 
 
         List<String> keys = allUserDocuments.stream()
-                .filter(UserDocument::isUnread)
                 .map(UserDocument::getKey)
                 .map(Object::toString)
                 .collect(Collectors.toList());

@@ -32,7 +32,6 @@ a:hover {
 }
 
 .navbar {
-    height: 30px;
     /*background-color: red;*/
     background-color: white;
     border-bottom: 1px solid #EEEEFF;
@@ -42,7 +41,6 @@ a:hover {
     position: fixed;
     top: 0px;
     width:100%;
-    text-align:center;
 }
 
 .top-row > div.author {
@@ -58,7 +56,6 @@ a:hover {
     /*border-bottom: 1px solid #e1e8ed;*/
     margin-bottom: 4px;
     word-wrap: break-word;
-    box-shadow: 6px 6px 20px #EEEEEE;
     transform-origin: left top;
     margin-left: auto;
     margin-right: auto;
@@ -161,22 +158,28 @@ div.text {
 }
 
 .navbar {
-    padding: 5px;
+    background-color: #DDDDDD;
+    vertical-align: bottom;
 }
 
 .btn-group {
     display:inline-block;
-    margin: auto;
+    left: 0;
+    /*margin: auto;*/
 }
 
 .btn-group label {
-    background-color: #4CAF50;
-    border: 1px solid green;
-    color: white;
-    padding: 4px;
+    background-color: #CCCCCC;
+    border: 1px solid #AAAAAA;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 5px;
+    color: black;
+    padding: 4px 20px 4px 4px;
     cursor: pointer;
     float: left;
     font-size: small;
+    min-width: 30px;
+    text-align: center;
 }
 
 .btn-group label:not(:last-child) {
@@ -190,19 +193,19 @@ div.text {
 }
 
 .btn-group label:hover {
-    background-color: #3e8e41;
+    background-color: #DDDDDD;
 }
 
 .btn-group input[type=radio] {
-   position:fixed;
-   left:-9999px;
+    position:fixed;
+    left:-9999px;
 }
 
 .btn-group input[type="radio"]:checked+label {
-    font-weight: bold;
-    background-color:green;
+    background-color: WHITE;
+    border-bottom: none;
 }
 
 .inf-scroll {
-    margin-top:41px;
+    margin-top: 25px;
 }
