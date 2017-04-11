@@ -68,31 +68,61 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     var newsFilter = function(item) {
-        var includes = item.category.name.includes('ews');
+        var includes =
+            item.category.name.includes('News') ||
+            item.category.name.includes('Dagens Nyheter') ||
+            item.category.name.includes('Svenska Dagbladet') ||
+            item.author.name === '@annieloof' || // questionable :)
+            item.author.name === '@kinbergbatra'; // questionable :)
         return !item.read && includes;
     };
 
-    var arsFilter = function(item) {
-        var includes = item.feed.name === 'Ars Technica';
-        return !item.read && includes;
+    var techFilter = function(item) {
+        var tech =
+            item.feed.name === 'Ars Technica' ||
+            item.feed.name === 'Slashdot' ||
+            item.author.name === '@github' ||
+            item.author.name === '@tastapod';
+
+        return !item.read && tech;
+    };
+
+    var funFilter = function(item) {
+        var fun =
+            item.author.name === '@deepdarkfears';
+
+        return !item.read && fun;
     };
 
     var readFilter = function(item) {
         return item.read;
     };
 
-    $scope.radioFilter = function(item) {
-        return $scope.radioFilters[$scope.radioFilterName](item);
+    var unmatchedFilter = function(item) {
+        for (var filterName in $scope.radioFilters) {
+            if (filterName !== 'All' &&
+                    filterName !== 'Unmatched' &&
+                    $scope.radioFilters[filterName](item)) {
+                return false;
+            }
+        }
+        return true;
     };
 
 
     $scope.radioFilters = {
-        "All" : unreadFilter,
-        "News" : newsFilter,
-        "Ars" : arsFilter,
-        "Read" : readFilter,
+        'All' : unreadFilter,
+        'News' : newsFilter,
+        'Tech' : techFilter,
+        'Fun' : funFilter,
+        'Read' : readFilter,
+        'Unmatched' : unmatchedFilter,
     };
 
+
+    $scope.radioFilter = function(item) {
+        return $scope.radioFilters[$scope.radioFilterName](item);
+    };
 
     $scope.radioFilterName = $cookies.get('radioFilterName');
 

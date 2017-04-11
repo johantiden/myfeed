@@ -70,6 +70,7 @@ public class Johan extends User {
                 categoryContains("art"),
                 categoryContains("aww"),
                 categoryContains("gaming"),
+                categoryContains("adviceanimals"),
                 categoryContains("natureisfuckinglit"),
                 categoryContains("instant_regret"),
                 categoryContains("gifrecipes"),
