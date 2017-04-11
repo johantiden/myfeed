@@ -71,7 +71,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         var includes =
             item.category.name.includes('News') ||
             item.category.name === 'news' ||
-            item.category.name === 'WorldNews' ||
+            item.category.name === 'worldnews' ||
             item.category.name === 'politics' ||
             item.feed.name === 'TheLocal' ||
             item.feed.name === 'Dagens Nyheter' ||
