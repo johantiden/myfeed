@@ -10,16 +10,10 @@ Content should work like they do at the original site without an extra click to 
 
 This repo will mostly be a base for prototyping. In the future, plugins should be put in separate repos.
 
-
 ---
 Get started:
 
-
-Install a local redis
-https://redis.io/topics/quickstart
-run with *redis-server* (i.e. not in sentinel mode)
-
-./start.sh
+mvn clean compile exec:java
 
 This will start a web app running locally at port 8080.
 http://localhost:8080

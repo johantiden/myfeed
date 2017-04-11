@@ -13,7 +13,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.setDocumentRead = function(item, read, callback) {
         item.read = read;
         item.username = user;
-        item.hide = true;
         $scope.itemLimit += 1;
         documentService.putItem(item, callback);
     };
@@ -40,7 +39,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     $scope.myFilter = function(item) {
-        return !item.read || item.hide;
+        return !item.read;
     };
 
     $scope.radioFilter = {};
