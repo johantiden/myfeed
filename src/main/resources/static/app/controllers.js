@@ -85,6 +85,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         var tech =
             item.feed.name === 'Ars Technica' ||
             item.feed.name === 'Slashdot' ||
+            item.feed.name === 'xkcd' ||
             item.category.name === 'science' ||
             item.author.name === '@github' ||
             item.author.name === '@tastapod';
@@ -95,6 +96,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     var funFilter = function(item) {
         var fun =
             item.author.name === '@deepdarkfears' ||
+            item.feed.name === 'xkcd' ||
             item.category.name === 'AskReddit' ||
             item.category.name === 'todayilearned' ||
             item.category.name === 'mildlyinteresting' ||
