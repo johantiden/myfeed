@@ -70,8 +70,12 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     var newsFilter = function(item) {
         var includes =
             item.category.name.includes('News') ||
-            item.category.name.includes('Dagens Nyheter') ||
-            item.category.name.includes('Svenska Dagbladet') ||
+            item.category.name === 'news' ||
+            item.category.name === 'WorldNews' ||
+            item.category.name === 'politics' ||
+            item.feed.name === 'TheLocal' ||
+            item.feed.name === 'Dagens Nyheter' ||
+            item.feed.name === 'Svenska Dagbladet' ||
             item.author.name === '@annieloof' || // questionable :)
             item.author.name === '@kinbergbatra'; // questionable :)
         return !item.read && includes;
@@ -81,6 +85,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         var tech =
             item.feed.name === 'Ars Technica' ||
             item.feed.name === 'Slashdot' ||
+            item.category.name === 'science' ||
             item.author.name === '@github' ||
             item.author.name === '@tastapod';
 
@@ -89,7 +94,13 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     var funFilter = function(item) {
         var fun =
-            item.author.name === '@deepdarkfears';
+            item.author.name === '@deepdarkfears' ||
+            item.category.name === 'AskReddit' ||
+            item.category.name === 'todayilearned' ||
+            item.category.name === 'mildlyinteresting' ||
+            item.category.name === 'funny' ||
+            item.category.name === 'gifs' ||
+            item.category.name === 'pics';
 
         return !item.read && fun;
     };
