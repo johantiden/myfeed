@@ -123,6 +123,11 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return true;
     };
 
+    $scope.withFilter = function(filterName) {
+        return function(item) {
+            return $scope.radioFilters[filterName](item);
+        }
+    };
 
     $scope.radioFilters = {
         'All' : unreadFilter,

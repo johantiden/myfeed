@@ -164,65 +164,16 @@ div.text {
 
 .filter-button {
     display: inline-block;
-    min-width: 30px;
-    /*background-color: #CCCCCC;*/
+    margin-left: 25px;
     color: black;
-    padding: 4px 20px 4px 4px;
+    /*padding: 4px 4px 4px 4px;*/
     cursor: pointer;
-    float: left;
     font-size: small;
     text-align: center;
 }
 
-.filter-button:hover {
-    /*background-color: #DDDDDD;*/
-}
 .filter-button.selected {
     text-decoration: underline;
-}
-
-.btn-group {
-    display:inline-block;
-    left: 0;
-    /*margin: auto;*/
-}
-
-.btn-group label {
-    /*background-color: #CCCCCC;*/
-    border: 1px solid #AAAAAA;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 5px;
-    color: black;
-    padding: 4px 20px 4px 4px;
-    cursor: pointer;
-    float: left;
-    font-size: small;
-    min-width: 30px;
-    text-align: center;
-}
-
-.btn-group label:not(:last-child) {
-    border-right: none;
-}
-
-.btn-group:after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
-.btn-group label:hover {
-    /*background-color: #DDDDDD;*/
-}
-
-.btn-group input[type=radio] {
-    position:fixed;
-    left:-9999px;
-}
-
-.btn-group input[type="radio"]:checked+label {
-    background-color: WHITE;
-    border-bottom: none;
 }
 
 .inf-scroll {

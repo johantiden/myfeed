@@ -14,17 +14,9 @@
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
-        <div ng-repeat="(filterName, _) in radioFilters" class="filter-button {{radioFilterName == filterName ? 'selected' : ''}}" ng-click="selectFilter(filterName)">{{filterName}}</div>
-        <!--<div class="btn-group">-->
-            <!--<form>-->
-                <!--<input type="radio" ng-model="radioFilterName" name="category" id="all-radio" value="All"><label for="all-radio">All</label>-->
-                <!--<input type="radio" ng-model="radioFilterName" name="category" id="news-radio" value="News"><label for="news-radio">News</label>-->
-                <!--<input type="radio" ng-model="radioFilterName" name="category" id="tech-radio" value="Tech"><label for="tech-radio">Tech</label>-->
-                <!--<input type="radio" ng-model="radioFilterName" name="category" id="fun-radio" value="Fun"><label for="fun-radio">Fun</label>-->
-                <!--<input type="radio" ng-model="radioFilterName" name="category" id="read-radio" value="Read"><label for="read-radio">Read</label>-->
-                <!--<input type="radio" ng-model="radioFilterName" name="category" id="unmatched-radio" value="Unmatched"><label for="unmatched-radio">Unmatched</label>-->
-            <!--</form>-->
-        <!--</div>-->
+        <div ng-repeat="(filterName, _) in radioFilters" class="filter-button {{radioFilterName == filterName ? 'selected' : ''}}" ng-click="selectFilter(filterName)" data-badge="{{(items | filter:withFilter(filterName)).length}}">
+            {{filterName}} <span style="font-size: 10px;">{{((items | filter:withFilter(filterName)).length) > 0 ? '('+(items | filter:withFilter(filterName)).length+')' : ''}}</span>
+        </div>
 
         <div style="vertical-align:baseline; float: right;" >
             Items:{{items.length}} | filtered:{{(items | filter:radioFilter).length}}
