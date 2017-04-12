@@ -69,6 +69,12 @@ public class FeedRepository {
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index"));
 
+        feeds.add(createRss(
+                "HackerNews",
+                "hackernews",
+                "https://news.ycombinator.com/news",
+                "https://news.ycombinator.com/rss"));
+
         feeds.add(createReddit("r/worldnews", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/AskReddit", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/science", REDDIT_MIN_SCORE));

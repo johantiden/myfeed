@@ -47,6 +47,7 @@ public class Johan extends User {
                 categoryContains("dnbok").negate(),
                 categoryContains("familj").negate(),
                 redditCategories(),
+                isFrom("hackernews").and(freeSearch(s -> s.contains("hiring"))).negate(),
                 isFrom("reddit").and(freeSearch(s -> s.contains("upvote"))).negate(),
                 isFrom("ars").and(categoryContains("dealmaster")).negate(),
                 isFrom("ars").and(categoryContains("opposable thumbs")).negate(),

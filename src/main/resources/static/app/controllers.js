@@ -86,6 +86,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             item.feed.name === 'Ars Technica' ||
             item.feed.name === 'Slashdot' ||
             item.feed.name === 'xkcd' ||
+            item.feed.name === 'HackerNews' ||
             item.category.name === 'science' ||
             item.author.name === '@github' ||
             item.author.name === '@tastapod';
@@ -138,6 +139,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     $scope.radioFilterName = $cookies.get('radioFilterName');
+    if ($scope.radioFilterName === undefined) {
+        $scope.radioFilterName = 'All';
+    }
 
     $scope.$watch('radioFilterName', function(newValue) {
         $cookies.put('radioFilterName', newValue);
