@@ -20,7 +20,6 @@ public class DocumentBean {
     public final String imageUrl;
     public final Instant publishedDate;
     public final String html;
-    public final boolean flagged;
     public final boolean read;
 
     public DocumentBean(UserDocument userDocument, Document document) {
@@ -38,7 +37,6 @@ public class DocumentBean {
         this.html = document.html;
         this.read = userDocument.isRead();
         this.score = document.score;
-        flagged = userDocument.isFlagged();
         userDocumentKey = userDocument.getKey().toString();
     }
 
@@ -95,10 +93,6 @@ public class DocumentBean {
 
     public String getUserDocumentKey() {
         return userDocumentKey;
-    }
-
-    public boolean isFlagged() {
-        return flagged;
     }
 
     public static String dateToShortString(Instant instant) {

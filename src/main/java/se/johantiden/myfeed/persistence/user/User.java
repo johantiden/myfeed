@@ -17,13 +17,11 @@ public class User implements Persistable<User> {
     private final Key<User> key;
     private final String username;
     private final Predicate<Document> userGlobalFilter;
-    private final Predicate<Document> userFlagFilter;
 
-    public User(Key<User> key, String username, Predicate<Document> userGlobalFilter, Predicate<Document> userFlagFilter) {
+    public User(Key<User> key, String username, Predicate<Document> userGlobalFilter) {
         this.key = key;
         this.username = username;
         this.userGlobalFilter = userGlobalFilter;
-        this.userFlagFilter = userFlagFilter;
         this.documents = new ArrayList<>();
         this.feedsForUser = new ArrayList<>();
     }
@@ -38,10 +36,6 @@ public class User implements Persistable<User> {
 
     public List<FeedUser> getFeedsForUser() {
         return feedsForUser;
-    }
-
-    public Predicate<Document> getFlagFilter() {
-        return userFlagFilter;
     }
 
     @Override

@@ -48,12 +48,7 @@ public class DocumentFanoutJob {
                 .filter(u -> u.getUserGlobalFilter().test(document))
                 .forEach(user -> {
                     log.info("  -> {}", user.getUsername());
-                    boolean flagged = user.getFlagFilter().test(document);
-                    if (flagged) {
-                        log.warn("Flagged: {}", document.pageUrl);
-                    }
-
-                    userDocumentService.putIfNew(new UserDocument(user.getKey(), document.getKey(), document.publishedDate, flagged));
+                    userDocumentService.putIfNew(new UserDocument(user.getKey(), document.getKey(), document.publishedDate));
                 });
     }
 }
