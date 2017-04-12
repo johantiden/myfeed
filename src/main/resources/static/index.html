@@ -15,7 +15,7 @@
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
         <div ng-repeat="(filterName, _) in radioFilters" class="filter-button {{radioFilterName == filterName ? 'selected' : ''}}" ng-click="selectFilter(filterName)" data-badge="{{(items | filter:withFilter(filterName)).length}}">
-            {{filterName}} <span style="font-size: 10px;">{{((items | filter:withFilter(filterName)).length) > 0 ? '('+(items | filter:withFilter(filterName)).length+')' : ''}}</span>
+            {{filterName}} <span class="number-badge" ng-if="((items | filter:withFilter(filterName)).length) > 0">({{(items | filter:withFilter(filterName)).length}})</span>
         </div>
 
         <div style="vertical-align:baseline; float: right;" >

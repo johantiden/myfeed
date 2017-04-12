@@ -164,9 +164,8 @@ div.text {
 
 .filter-button {
     display: inline-block;
-    margin-left: 25px;
     color: black;
-    /*padding: 4px 4px 4px 4px;*/
+    padding: 4px 4px 4px 4px;
     cursor: pointer;
     font-size: small;
     text-align: center;
@@ -174,6 +173,11 @@ div.text {
 
 .filter-button.selected {
     text-decoration: underline;
+}
+
+.number-badge {
+    margin-left: -4px;
+    color: #888888;
 }
 
 .inf-scroll {
