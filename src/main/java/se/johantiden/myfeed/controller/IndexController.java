@@ -35,17 +35,13 @@ public class IndexController {
 
     @RequestMapping("/rest/index/{username}")
     public Collection<String> index(
-            @PathVariable("username") String username,
-            HttpServletRequest req  ) {
-        log.info("ENTER index");
+            @PathVariable("username") String username) {
 
         if (username == null || "null".equals(username)) {
             username = "johan";
         }
 
-        log.info("User: " + username);
         Key<User> user = Keys.user(username);
-        log.info("EXIT  index"); // 9 seconds from foo
 
         SortedSet<UserDocument> allUserDocuments = userDocumentService.getAllDocumentsFor(user);
 
@@ -54,6 +50,9 @@ public class IndexController {
                 .map(UserDocument::getKey)
                 .map(Object::toString)
                 .collect(Collectors.toList());
+
+
+        log.info("index User:{}, keys:{}", username, keys.size());
 
         return keys;
     }
