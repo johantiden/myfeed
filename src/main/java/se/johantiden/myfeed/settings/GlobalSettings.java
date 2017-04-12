@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 
 public class GlobalSettings {
 
-    public static final Duration DOCUMENT_MAX_AGE = Duration.ofDays(4);
+    public static final Duration DOCUMENT_MAX_AGE = Duration.ofDays(7);
 
     public static final Predicate<? super Document> DOCUMENT_MAX_AGE_PREDICATE = d -> {
         Instant publishDate = d.getPublishDate();
