@@ -157,6 +157,10 @@ div.text {
     background-color: #FFFFDD;
 }
 
+.bad {
+    background-color: #ffe0e0;
+}
+
 .navbar {
     /*background-color: #DDDDDD;*/
     vertical-align: bottom;

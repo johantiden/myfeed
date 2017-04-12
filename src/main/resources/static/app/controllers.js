@@ -29,6 +29,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         keys.forEach(function(key) {
             documentService.getItem(key, function(item) {
                 item.flagged = item.flagged || flagPredicate(item);
+                item.bad = item.bad || badPredicate(item);
                 $scope.items.push(item);
             });
         });
@@ -75,32 +76,48 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return flagPredicate(item) && !item.read && !badFilter(item);
     };
 
-    var badFilter = function(i) {
+    var badPredicate = function(i) {
         var bad =
-            categoryContains(i, 'sport') ||
-            categoryContains(i, 'kultur') ||
-            categoryContains(i, 'insidan') ||
-            categoryContains(i, 'idagsidan') ||
-            (categoryContains(i, 'mat') && categoryContains(i, 'dryck')) ||
-            (categoryContains(i, 'mat') && categoryContains(i, 'vin')) ||
-            categoryContains(i, 'resor') ||
-            categoryContains(i, 'webb-tv') ||
-            categoryContains(i, 'dnbok') ||
-            categoryContains(i, 'familj') ||
-            (isFrom(i, 'hackernews') && contains(i, 'hiring')) ||
-            contains(i, 'upvote') ||
-            (isFrom(i, "ars") && categoryContains("dealmaster")) ||
-            (isFrom(i, "svenska dagbladet") && categoryContains("perfect guide")) ||
-            contains(i, "trump")
+                categoryContains(i, 'sport') ||
+                categoryContains(i, 'kultur') ||
+                categoryContains(i, 'insidan') ||
+                categoryContains(i, 'idagsidan') ||
+                (categoryContains(i, 'mat') && categoryContains(i, 'dryck')) ||
+                (categoryContains(i, 'mat') && categoryContains(i, 'vin')) ||
+                categoryContains(i, 'resor') ||
+                categoryContains(i, 'webb-tv') ||
+                categoryContains(i, 'dnbok') ||
+                categoryContains(i, 'familj') ||
+                (isFrom(i, 'hackernews') && contains(i, 'hiring')) ||
+                contains(i, 'upvote') ||
+                (isFrom(i, "ars") && categoryContains(i, "dealmaster")) ||
+                (isFrom(i, "svenska dagbladet") && categoryContains(i, "perfect guide")) ||
+                contains(i, "trump") ||
+                (isFrom(i, "reddit") && categoryContains(i, "iama")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "wtf")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "blackpeopletwitter")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "porn")) || // earthporn, etc
+                (isFrom(i, "reddit") && categoryContains(i, "twoxchromosomes")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "art")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "ps4")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "quityourbullshit")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "hearthstone")) ||
 
 
-                ;
 
-        return !i.read && bad;
+
+                false
+
+            ;
+        return bad;
     };
 
-    var unreadFilter = function(item) {
-        return !item.read;
+    var badFilter = function(item) {
+        return !item.read && item.bad;
+    };
+
+    var allFilter = function(item) {
+        return !item.read && !item.bad;
     };
 
     var newsFilter = function(item) {
@@ -109,41 +126,54 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             item.category.name === 'news' ||
             item.category.name === 'worldnews' ||
             item.category.name === 'politics' ||
-            item.feed.name === 'TheLocal' ||
-            item.feed.name === 'Dagens Nyheter' ||
-            item.feed.name === 'Svenska Dagbladet' ||
+            isFrom(item, 'thelocal') ||
+            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'nyheter')) ||
+            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'ekonomi')) ||
+            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'sthlm')) ||
+            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'debatt')) ||
+            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'ledare')) ||
+            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'världen')) ||
+            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'näringsliv')) ||
+            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'debatt')) ||
+            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'sverige')) ||
+            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'ledare')) ||
             item.author.name === '@annieloof' || // questionable :)
             item.author.name === '@kinbergbatra'; // questionable :)
 
-        return !item.read && news && !badFilter(item);
+        return !item.read && news && !item.bad;
     };
 
     var techFilter = function(item) {
         var tech =
-            isFrom(item, 'Ars Technica') ||
-            isFrom(item, 'Slashdot') ||
+            isFrom(item, 'ars technica') ||
+            isFrom(item, 'slashdot') ||
             isFrom(item, 'xkcd') ||
-            isFrom(item, 'HackerNews') ||
+            isFrom(item, 'hackernews') ||
             item.category.name === 'science' ||
             item.author.name === '@github' ||
             item.author.name === '@elonmusk' ||
             item.author.name === '@tastapod';
 
-        return !item.read && tech && !badFilter(item);
+        return !item.read && tech && !item.bad;
     };
 
     var funFilter = function(item) {
         var fun =
             item.author.name === '@deepdarkfears' ||
             isFrom(item, 'xkcd') ||
-            item.category.name === 'AskReddit' ||
-            item.category.name === 'todayilearned' ||
-            item.category.name === 'mildlyinteresting' ||
-            item.category.name === 'funny' ||
-            item.category.name === 'gifs' ||
-            item.category.name === 'pics';
+            categoryContains(item, 'askreddit') ||
+            categoryContains(item, 'todayilearned') ||
+            categoryContains(item, 'mildlyinteresting') ||
+            categoryContains(item, 'funny') ||
+            categoryContains(item, 'gifs') ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'television')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'movies')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'aww')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'gaming')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'videos')) ||
+            categoryContains(item, 'pics');
 
-        return !item.read && fun && !badFilter(item);
+        return !item.read && fun && !item.bad;
     };
 
     var readFilter = function(item) {
@@ -168,7 +198,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     $scope.radioFilters = {
-        'All' : unreadFilter,
+        'All' : allFilter,
         'News' : newsFilter,
         'Tech' : techFilter,
         'Fun' : funFilter,
@@ -212,14 +242,11 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     }
 
     function isFrom(item, feedName) {
-        if (item.feed === undefined) {
-            throw "Illegal item, there is no feed";
-        }
-        return item.feed.name === feedName;
+        return item.feed.name.toLowerCase().includes(feedName);
     }
 
     function categoryContains(item, str) {
-        return item.category.name.includes(str);
+        return item.category.name.toLowerCase().includes(str);
     }
 
     function contains(item, str) {
