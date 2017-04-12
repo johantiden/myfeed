@@ -22,7 +22,7 @@
             Items:{{items.length}} | filtered:{{(items | filter:radioFilter).length}}
         </div>
         <div style="vertical-align:baseline; float: right; margin-right: 5px;">
-            <button id="mark-all-as-read-button" ng-click="markAllAsRead()">Mark all as read</button>
+            <button id="mark-all-as-read-button" ng-if="(items | filter:radioFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(items | filter:radioFilter | filter:{read:false}).length}} as read</button>
         </div>
     </div>
     <div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
@@ -31,7 +31,7 @@
 
         <div class="content-box">
             <div class="top-row">
-                <button class="read-button" ng-model="item.read" ng-click="setDocumentRead(item, true)" ></button>
+                <button class="read-button" ng-model="item.read" ng-click="setDocumentRead(item, true)" ng-if="!item.read" ></button>
                 <div class="feedName" ng-if="item.feed.name"><a href="{{item.feed.url}}">{{item.feed.name}}</a></div>
                 <div class="score" ng-if="item.score"> | {{item.score}}</div>
                 <div class="category" ng-if="item.category.name"> | <a href="{{item.category.url}}">{{item.category.name}}</a></div>

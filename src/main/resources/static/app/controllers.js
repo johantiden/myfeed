@@ -43,10 +43,12 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     $scope.radioFilter = {};
 
-    $scope.markAllAsRead = function() {
+    $scope.markFilteredAsRead = function() {
         if (confirm("Are you sure?")) {
             $scope.items.forEach(function (item) {
-                $scope.setDocumentRead(item, true);
+                if ($scope.radioFilter(item)) {
+                    $scope.setDocumentRead(item, true);
+                }
             });
         }
     };
