@@ -133,6 +133,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         'Unmatched' : unmatchedFilter,
     };
 
+    $scope.selectFilter = function(filterName) {
+        $scope.radioFilterName = filterName;
+    };
 
     $scope.radioFilter = function(item) {
         return $scope.radioFilters[$scope.radioFilterName](item);
