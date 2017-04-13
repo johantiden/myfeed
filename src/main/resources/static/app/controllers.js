@@ -14,6 +14,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.setDocumentRead = function(item, read, callback) {
         item.read = read;
         item.username = user;
+
+        clearCache(item);
+
         $scope.itemLimit += 1;
         documentService.putItem(item, callback);
     };
@@ -85,10 +88,11 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 categoryContains(i, 'dnbok') ||
                 categoryContains(i, 'familj') ||
                 (isFrom(i, 'hackernews') && contains(i, 'hiring')) ||
-                contains(i, 'upvote') ||
                 (isFrom(i, "ars") && categoryContains(i, "dealmaster")) ||
+                (isFrom(i, "ars") && categoryContains(i, "opposable thumbs")) ||
+                (isFrom(i, "ars") && categoryContains(i, "air force")) ||
+                (isFrom(i, "ars") && categoryContains(i, "laptop")) ||
                 (isFrom(i, "svenska dagbladet") && categoryContains(i, "perfect guide")) ||
-                contains(i, "trump") ||
                 (isFrom(i, "reddit") && categoryContains(i, "iama")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "wtf")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "blackpeopletwitter")) ||
@@ -107,11 +111,17 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "adviceanimals")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "interestingasfuck")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "facepalm")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "perfecttiming")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "bidenbro")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "woahdude")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "photoshopbattles")) ||
 
-                false
+                contains(i, 'join us') ||
+                contains(i, 'upvote') ||
+                contains(i, "trump")
 
             ;
-        return bad;
+        return bad && !i.read;
     };
 
     var newsPredicate = function(item) {
@@ -131,7 +141,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'debatt')) ||
             (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'sverige')) ||
             (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'ledare')) ||
-            item.author.name === '@annieloof' || // questionable :)
             item.author.name === '@kinbergbatra'; // questionable :)
 
         return !item.read && news && !badFilter(item);
@@ -167,6 +176,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryContains(item, 'gaming')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'videos')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'showerthoughts')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'unexpected')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
@@ -182,8 +192,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         }
         return true;
     };
-
-
 
     var badFilter = function(item) {
         if (item.isBad === undefined) {
@@ -203,7 +211,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     var allFilter = function(item) {
         return !item.read && !badFilter(item);
     };
-
 
     var techFilter = function(item) {
         if (item.isTech === undefined) {
@@ -246,6 +253,15 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         'Bad' : badFilter,
         'Unmatched' : unmatchedFilter,
         'Flagged' : flagFilter,
+    };
+
+    var clearCache = function(item) {
+        item.isUnmatched = undefined;
+        item.isNews = undefined;
+        item.isFun = undefined;
+        item.isTech = undefined;
+        item.isFlagged = undefined;
+        item.isBad = undefined;
     };
 
     $scope.selectFilter = function(filterName) {

@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
-    <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}} {{item.bad ? 'bad' : ''}}"
+    <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.isFlagged ? 'flagged' : ''}} {{item.isBad ? 'bad' : ''}}"
         ng-repeat="item in items | filter:radioFilter | orderBy:'-publishedDate.epochSecond' | limitTo:itemLimit | limitTo:1000">
 
         <div class="content-box">
