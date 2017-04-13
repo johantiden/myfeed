@@ -3,11 +3,11 @@ package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.util.JString;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Document implements Persistable<Document> {
 
@@ -20,7 +20,7 @@ public class Document implements Persistable<Document> {
     public String authorUrl;
     public final String cssClass;
     public final String pageUrl;
-    public final String imageUrl;
+    public String imageUrl;
     public final Instant publishedDate;
     public String html;
     private Key<Feed> feed;
@@ -28,6 +28,7 @@ public class Document implements Persistable<Document> {
     public String categoryUrl;
     public Double score;
     public boolean isPaywalled;
+    public List<Video> videos = new ArrayList<>();
 
     public Document(
             Key<Feed> feed,
@@ -131,5 +132,9 @@ public class Document implements Persistable<Document> {
 
     public void setScore(double score) {
         this.score = score;
+    }
+
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
     }
 }

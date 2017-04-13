@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.plugin.reddit;
 
+import com.google.common.collect.Lists;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -9,6 +10,7 @@ import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.persistence.PluginType;
+import se.johantiden.myfeed.persistence.Video;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
@@ -16,6 +18,7 @@ import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -39,32 +42,84 @@ public class RedditPlugin implements Plugin {
         };
     }
 
-
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
-            document.score = findVotes(document);
+            org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(document.pageUrl);
+            document.score = findVotes(jsoupDocument);
+            parseStuffz(document, jsoupDocument);
             document.authorName = null;
             document.authorUrl = null;
             return document;
         };
     }
 
-    private static Double findVotes(Document entry) {
-        try {
-            org.jsoup.nodes.Document parse = Jsoup.parse(new URL(entry.pageUrl), 10_000);
-            if (parse.location().contains("over18")) {
-//                log.info("Skipping NSFW");
-                return 0D;
+    private static void parseStuffz(Document document, org.jsoup.nodes.Document jsoupDocument) {
+        org.jsoup.nodes.Document rssDocument = Jsoup.parse(document.html);
+        document.html = null;
+        Elements imgs = rssDocument.select("img");
+        if (!imgs.isEmpty()) {
+            Element img = imgs.get(0);
+            String imgSrc = img.attr("src");
+            document.imageUrl = imgSrc;
+        }
+
+        Elements linkLinks = rssDocument.select("td > span > a");
+
+        if (linkLinks.size() == 2) {
+            Element link = linkLinks.get(0);
+            String linkHref = link.attr("href");
+            if (linkHref.contains("https://gfycat.com")) {
+                parseGfycat(document, linkHref);
             }
-            Double votes = findVotes(parse);
-            return votes;
-        } catch (IOException e) {
-            log.error("Could not find score of " + entry.pageUrl, e);
-            return null;
+
+            if (linkHref.contains("http://i.imgur.com") && !linkHref.contains("jpg")) {
+                String webmSrc = linkHref.substring(0, linkHref.length()-4) + "webm";
+                String mp4Src = linkHref.substring(0, linkHref.length()-4) + "mp4";
+                ArrayList<Video> videos = Lists.newArrayList(
+                        new Video(webmSrc, "video/webm"),
+                        new Video(mp4Src, "video/mp4"));
+                document.setVideos(videos);
+            }
+            if (linkHref.contains("https://media.giphy.com/media/")) {
+                String id = linkHref.split("/")[4];
+                document.imageUrl = "https://i.giphy.com/"+ id + ".gif";
+            }
+            if (linkHref.contains("https://youtu.be/")) {
+                String id = linkHref.split("/")[3]; //yECd_Sz_zJ8
+                document.imageUrl = null;
+                document.html = "<iframe class=\"image-box\" src=\"https://www.youtube.com/embed/"+id+"?ecver=1?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>";
+            }
+        }
+    }
+
+    private static void parseGfycat(Document document, String linkHref) {
+        org.jsoup.nodes.Document gfyCat = getJsoupDocument(linkHref);
+        Elements sources = gfyCat.select("video.share-video > source");
+        if (sources.size() > 0) {
+            List<Video> videoSources = sources.stream().map(s -> new Video(s.attr("src"), s.attr("type"))).collect(Collectors.toList());
+            document.setVideos(videoSources);
+            document.imageUrl = null;
         }
     }
 
     private static Double findVotes(org.jsoup.nodes.Document parse) {
+        if (parse.location().contains("over18")) {
+//                log.info("Skipping NSFW");
+            return 0D;
+        }
+        return findVotes2(parse);
+    }
+
+    private static org.jsoup.nodes.Document getJsoupDocument(String pageUrl) {
+        try {
+            return Jsoup.parse(new URL(pageUrl), 10_000);
+        } catch (IOException e) {
+            log.error("Could not jsoup-parse " + pageUrl, e);
+            return null;
+        }
+    }
+
+    private static Double findVotes2(org.jsoup.nodes.Document parse) {
 
         Elements select = parse.select(".score > span.number");
         if (select.size() == 1) {

@@ -39,17 +39,22 @@
                 <div class="time-since" ng-if="item.publishedDateShort"> | {{item.publishedDateShort}}</div>
             </div>
 
-
             <div class="title" ng-if="item.title"><a class="link" href="{{item.pageUrl}}" >{{item.title}}</a></div>
             <div class="text" ng-if="item.text && !item.html">{{item.text}}</div>
 
 
-            <span class="htmlContent" ng-bind-html="$sce.trustAsHtml(item.html)"></span>
-            <div ng-if="item.imageUrl" class="image-box">
+            <span class="htmlContent" ng-if="!item.imageUrl && item.videos.length == 0" ng-bind-html="$sce.trustAsHtml(item.html)"></span>
+            <div class="image-box" ng-if="item.imageUrl && item.videos.length == 0">
                 <a href="{{item.pageUrl}}">
                     <img class="image-box-image" src="{{item.imageUrl}}" />
                 </a>
             </div>
+
+            <a  ng-if="item.videos.length > 0" href="{{item.pageUrl}}">
+                <video class="image-box" preload="auto" autoplay="autoplay" loop="loop" muted="muted" webkit-playsinline>
+                    <source ng-repeat="v in item.videos" src="{{v.src}}" type="{{v.type}}">
+                </video>
+            </a>
 
         </div>
     </div>
