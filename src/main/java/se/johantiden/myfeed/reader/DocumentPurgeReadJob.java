@@ -26,13 +26,13 @@ public class DocumentPurgeReadJob {
 
     @Scheduled(fixedRate = 10*1000)
     public void purgeRead() {
-        log.info("Purging read documents!");
+        log.debug("Purging read documents!");
 
         Collection<User> users = userService.getAllUsers();
 
         for (User user : users) {
             long removed = userDocumentService.purgeReadDocuments(user.getKey());
-            log.info("Removed {} UserDocuments for {}", removed, user.getUsername());
+            log.debug("Removed {} UserDocuments for {}", removed, user.getUsername());
         }
     }
 }
