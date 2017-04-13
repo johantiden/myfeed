@@ -1,7 +1,5 @@
 package se.johantiden.myfeed.persistence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.User;
@@ -24,7 +22,6 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
-    private static final Logger log = LoggerFactory.getLogger(FeedRepository.class);
     public static final int REDDIT_MIN_SCORE = 10000;
     private List<Feed> allFeeds;
     public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(2);
@@ -81,7 +78,6 @@ public class FeedRepository {
         feeds.add(createReddit("top", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/announcements", REDDIT_MIN_SCORE));
-//        feeds.add(createReddit("r/random", REDDIT_MIN_SCORE, Duration.ofMillis(1)));
 
         feeds.add(createRss(
                 "TheLocal",
@@ -92,10 +88,10 @@ public class FeedRepository {
 //        feeds.add(createTwitter("pwolodarski"));
         feeds.add(createTwitter("kinbergbatra"));
 //        feeds.add(createTwitter("annieloof"));
-        feeds.add(createTwitter("deepdarkfears"));
+//        feeds.add(createTwitter("deepdarkfears"));
         feeds.add(createTwitter("tastapod"));
         feeds.add(createTwitter("elonmusk"));
-        feeds.add(createTwitter("github"));
+//        feeds.add(createTwitter("github"));
 
         Collection<User> allUsers = userRepository.getAllUsers();
         allUsersHasAllFeedsHack(allUsers, feeds);
@@ -112,16 +108,6 @@ public class FeedRepository {
         }
     }
 
-    private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl, Predicate<Document> filter) {
-        RssPlugin rss = new RssPlugin();
-        return rss.createFeed(
-                feedName,
-                cssClass,
-                webUrl,
-                newHashMap("rssUrl", rssUrl),
-                INVALIDATION_PERIOD,
-                filter);
-    }
     private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl) {
         RssPlugin rss = new RssPlugin();
         return rss.createFeed(
@@ -175,8 +161,7 @@ public class FeedRepository {
                 .filter(
                         f -> {
                             Key<Feed> key = f.getKey();
-                            boolean equals = feedKey.equals(key);
-                            return equals;
+                            return feedKey.equals(key);
                         }
                 )
                 .findAny()
