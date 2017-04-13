@@ -98,9 +98,15 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "ps4")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "quityourbullshit")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "hearthstone")) ||
-
-
-
+                (isFrom(i, "reddit") && categoryContains(i, "oldschoolcool")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "getmotivated")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "me_irl")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "instant_regret")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "wholesomememes")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "reallifedoodles")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "adviceanimals")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "interestingasfuck")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "facepalm")) ||
 
                 false
 
@@ -137,6 +143,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             isFrom(item, 'slashdot') ||
             isFrom(item, 'xkcd') ||
             isFrom(item, 'hackernews') ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'space')) ||
             item.category.name === 'science' ||
             item.author.name === '@github' ||
             item.author.name === '@elonmusk' ||
@@ -159,6 +166,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryContains(item, 'aww')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'gaming')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'videos')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'showerthoughts')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
