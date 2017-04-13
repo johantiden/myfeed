@@ -28,8 +28,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         }
         keys.forEach(function(key) {
             documentService.getItem(key, function(item) {
-                item.flagged = item.flagged || flagPredicate(item);
-                item.bad = item.bad || badPredicate(item);
                 $scope.items.push(item);
             });
         });
@@ -65,15 +63,13 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     var flagPredicate = function(item) {
-        return contains(item, 'quiz') ||
+        var flagged = contains(item, 'quiz') ||
             contains(item, 'up vote') ||
             contains(item, 'här är') ||
             contains(item, 'tipsen') ||
             contains(item, '-- number of people');
-    };
 
-    var flagFilter = function(item) {
-        return flagPredicate(item) && !item.read && !badFilter(item);
+        return !item.read && !badFilter(item) && flagged;
     };
 
     var badPredicate = function(i) {
@@ -112,15 +108,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return bad;
     };
 
-    var badFilter = function(item) {
-        return !item.read && item.bad;
-    };
-
-    var allFilter = function(item) {
-        return !item.read && !item.bad;
-    };
-
-    var newsFilter = function(item) {
+    var newsPredicate = function(item) {
         var news =
             item.category.name.includes('News') ||
             item.category.name === 'news' ||
@@ -140,10 +128,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             item.author.name === '@annieloof' || // questionable :)
             item.author.name === '@kinbergbatra'; // questionable :)
 
-        return !item.read && news && !item.bad;
+        return !item.read && news && !badFilter(item);
     };
 
-    var techFilter = function(item) {
+    var techPredicate = function(item) {
         var tech =
             isFrom(item, 'ars technica') ||
             isFrom(item, 'slashdot') ||
@@ -154,10 +142,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             item.author.name === '@elonmusk' ||
             item.author.name === '@tastapod';
 
-        return !item.read && tech && !item.bad;
+        return !item.read && tech && !badFilter(item);
     };
 
-    var funFilter = function(item) {
+    var funPredicate = function(item) {
         var fun =
             item.author.name === '@deepdarkfears' ||
             isFrom(item, 'xkcd') ||
@@ -173,14 +161,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryContains(item, 'videos')) ||
             categoryContains(item, 'pics');
 
-        return !item.read && fun && !item.bad;
+        return !item.read && fun && !badFilter(item);
     };
 
-    var readFilter = function(item) {
-        return item.read;
-    };
-
-    var unmatchedFilter = function(item) {
+    var unmatchedPredicate = function(item) {
         for (var filterName in $scope.radioFilters) {
             if (filterName !== 'All' &&
                     filterName !== 'Unmatched' &&
@@ -191,10 +175,58 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return true;
     };
 
-    $scope.withFilter = function(filterName) {
-        return function(item) {
-            return $scope.radioFilters[filterName](item);
+
+
+    var badFilter = function(item) {
+        if (item.isBad === undefined) {
+            item.isBad = badPredicate(item);
         }
+        return item.isBad;
+    };
+
+
+    var flagFilter = function(item) {
+        if (item.isFlagged === undefined) {
+            item.isFlagged = flagPredicate(item);
+        }
+        return item.isFlagged;
+    };
+
+    var allFilter = function(item) {
+        return !item.read && !badFilter(item);
+    };
+
+
+    var techFilter = function(item) {
+        if (item.isTech === undefined) {
+            item.isTech = techPredicate(item);
+        }
+        return item.isTech;
+    };
+
+    var funFilter = function(item) {
+        if (item.isFun === undefined) {
+            item.isFun = funPredicate(item);
+        }
+        return item.isFun;
+    };
+
+    var readFilter = function(item) {
+        return item.read;
+    };
+
+    var unmatchedFilter = function(item) {
+        if (item.isUnmatched === undefined) {
+            item.isUnmatched = unmatchedPredicate(item);
+        }
+        return item.isUnmatched;
+    };
+
+    var newsFilter = function(item) {
+        if (item.isNews === undefined) {
+            item.isNews = newsPredicate(item);
+        }
+        return item.isNews;
     };
 
     $scope.radioFilters = {
@@ -224,6 +256,15 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.$watch('radioFilterName', function(newValue) {
         $cookies.put('radioFilterName', newValue);
     });
+
+    $scope.withFilter = function(filterName) {
+        return function(item) {
+            return $scope.radioFilters[filterName](item);
+        }
+    };
+
+
+
 
     /**
      * Gets a query parameter.
