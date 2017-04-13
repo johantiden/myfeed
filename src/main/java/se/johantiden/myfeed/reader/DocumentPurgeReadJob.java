@@ -12,7 +12,7 @@ import se.johantiden.myfeed.service.UserDocumentService;
 
 import java.util.Collection;
 
-//@Component
+@Component
 public class DocumentPurgeReadJob {
 
     private static final Logger log = LoggerFactory.getLogger(DocumentPurgeReadJob.class);
@@ -24,7 +24,7 @@ public class DocumentPurgeReadJob {
     @Autowired
     private UserService userService;
 
-//    @Scheduled(fixedRate = 3600*1000)
+    @Scheduled(fixedRate = 10*1000)
     public void purgeRead() {
         log.info("Purging read documents!");
 
