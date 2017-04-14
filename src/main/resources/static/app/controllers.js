@@ -119,6 +119,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "animalcrossing")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "empiredidnothingwrong")) ||
 
+                contains(i, 'nutidstestet') ||
                 contains(i, 'join us') ||
                 contains(i, 'upvote') ||
                 contains(i, "trump")
