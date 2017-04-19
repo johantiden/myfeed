@@ -18,11 +18,11 @@
             {{filterName}} <span class="number-badge" ng-if="((items | filter:withFilter(filterName)).length) > 0">({{(items | filter:withFilter(filterName)).length}})</span>
         </div>
 
-        <div style="vertical-align:baseline; float: right;" >
-            Items:{{items.length}} | filtered:{{(items | filter:radioFilter).length}}
-        </div>
-        <div style="vertical-align:baseline; float: right; margin-right: 5px;">
+        <div class="mark-all-div" >
             <button id="mark-all-as-read-button" ng-if="(items | filter:radioFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(items | filter:radioFilter | filter:{read:false}).length}} as read</button>
+        </div>
+        <div class="debug-info" >
+            Items:{{items.length}} | filtered:{{(items | filter:radioFilter).length}}
         </div>
     </div>
     <div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
