@@ -160,6 +160,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             isFrom(item, 'xkcd') ||
             isFrom(item, 'hackernews') ||
             (isFrom(item, 'reddit') && categoryContains(item, 'space')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'futurology')) ||
             item.category.name === 'science' ||
             item.author.name === '@github' ||
             item.author.name === '@elonmusk' ||
@@ -186,6 +187,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryContains(item, 'unexpected')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'oddlysatisfying')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'nottheonion')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'latestagecapitalism')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
