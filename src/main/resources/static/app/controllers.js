@@ -182,6 +182,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryContains(item, 'videos')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'showerthoughts')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'unexpected')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'oddlysatisfying')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
