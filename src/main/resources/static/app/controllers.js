@@ -118,6 +118,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "overwatch")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "animalcrossing")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "empiredidnothingwrong")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "politicalhumor")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "polandball")) ||
 
                 contains(i, 'medan du sov') ||
                 contains(i, 'nutidstestet') ||
@@ -183,6 +185,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryContains(item, 'showerthoughts')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'unexpected')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'oddlysatisfying')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'nottheonion')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
