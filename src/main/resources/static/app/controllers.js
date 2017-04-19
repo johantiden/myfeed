@@ -70,7 +70,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             contains(item, 'up vote') ||
             contains(item, 'här är') ||
             contains(item, 'tipsen') ||
-            contains(item, '-- number of people');
+            contains(item, '-- number of people') ||
+            contains(item, "trump");
 
         return !item.read && !badFilter(item) && flagged;
     };
@@ -124,8 +125,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 contains(i, 'medan du sov') ||
                 contains(i, 'nutidstestet') ||
                 contains(i, 'join us') ||
-                contains(i, 'upvote') ||
-                contains(i, "trump")
+                contains(i, 'upvote')
 
             ;
         return bad && !i.read;
