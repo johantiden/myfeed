@@ -30,15 +30,14 @@ public class InboxService {
     }
 
     public void putIfNew(Document document) {
+        boolean isAlreadyInDocuments = documentService.hasDocument(document.getKey());
         boolean isAlreadyInInbox = inboxRepository.hasDocument(document.getKey());
-        if (!isAlreadyInInbox) {
+        if (!isAlreadyInInbox && !isAlreadyInDocuments) {
             log.info("Adding new document to inbox: {}", document.pageUrl);
             put(document);
-        } else {
-            if (documentService.hasDocument(document.getKey())) {
-                documentService.purge(document.getKey());
-                documentService.put(document);
-            }
+        } else if (isAlreadyInDocuments) {
+            documentService.purge(document.getKey());
+            documentService.put(document);
         }
     }
 
