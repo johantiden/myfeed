@@ -42,4 +42,8 @@ public class DocumentRepository {
             return Chrono.isOlderThan(duration, publishDate);
         };
     }
+
+    public void purge(Key<Document> documentKey) {
+        map.remove(documentKey);
+    }
 }
