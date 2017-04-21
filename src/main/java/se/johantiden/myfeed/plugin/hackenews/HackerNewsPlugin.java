@@ -42,7 +42,6 @@ public class HackerNewsPlugin implements Plugin {
         return document -> {
             Double votes = findVotes(document);
             document.score = votes;
-            document.score = 4711d;
             return document;
         };
     }
