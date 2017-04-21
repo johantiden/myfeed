@@ -310,6 +310,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         item.isTech = undefined;
         item.isFlagged = undefined;
         item.isBad = undefined;
+        item.isBiz = undefined;
     };
 
     $scope.selectFilter = function(filterName) {
