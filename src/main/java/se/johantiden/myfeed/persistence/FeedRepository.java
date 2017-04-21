@@ -76,7 +76,7 @@ public class FeedRepository {
                 "Al Jazeera",
                 "aljazeera",
                 "http://www.aljazeera.com",
-                "https://www.aljazeera.com/xml/rss/all.xml"));
+                "http://www.aljazeera.com/xml/rss/all.xml"));
 
         feeds.add(createRss(
                 "New York Times :: World",
