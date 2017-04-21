@@ -81,7 +81,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 categoryContains(i, 'sport') ||
                 categoryContains(i, 'kultur') ||
                 categoryContains(i, 'insidan') ||
-                categoryContains(i, 'idagsidan') ||badPre
+                categoryContains(i, 'idagsidan') ||
                 (categoryContains(i, 'mat') && categoryContains(i, 'dryck')) ||
                 (categoryContains(i, 'mat') && categoryContains(i, 'vin')) ||
                 categoryContains(i, 'resor') ||
