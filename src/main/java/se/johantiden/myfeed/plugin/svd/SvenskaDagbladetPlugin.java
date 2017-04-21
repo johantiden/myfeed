@@ -43,6 +43,9 @@ public class SvenskaDagbladetPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
             entry.isPaywalled = isPaywalled(entry);
+            if (entry.categoryUrl == null) {
+                entry.categoryUrl = entry.feedUrl+"/"+entry.categoryName; // Det funkar :D
+            }
             return entry;
         };
     }
