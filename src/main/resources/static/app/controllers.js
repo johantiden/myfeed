@@ -164,7 +164,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && categoryContains(item, 'venezuela')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'korea')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'war crimes')) ||
-            (isFrom(item, 'new york times') && categoryIs('ice')) ||
+            (isFrom(item, 'new york times') && categoryIs('Ice')) ||
             item.author.name === '@kinbergbatra'; // questionable :)
 
         return !item.read && news && !badFilter(item);
