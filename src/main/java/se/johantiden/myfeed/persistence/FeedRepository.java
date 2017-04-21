@@ -22,9 +22,9 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
-    public static final int REDDIT_MIN_SCORE = 10000;
+    public static final int REDDIT_MIN_SCORE = 20000;
     private List<Feed> allFeeds;
-    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(2);
+    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(5);
 
     @Autowired
     private UserRepository userRepository;

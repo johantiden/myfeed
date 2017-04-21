@@ -94,6 +94,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "ars") && categoryContains(i, "air force")) ||
                 (isFrom(i, "ars") && categoryContains(i, "laptop")) ||
                 (isFrom(i, "svenska dagbladet") && categoryContains(i, "perfect guide")) ||
+                (isFrom(i, "svenska dagbladet") && categoryContains(i, "junior")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "iama")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "wtf")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "blackpeopletwitter")) ||
@@ -123,6 +124,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "polandball")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "eyebleach")) ||
                 (isFrom(i, "new york times") && contains(i, "your") && contains(i, "briefing")) ||
+                (isFrom(i, "new york times") && categoryContains(i, "real estate")) ||
 
                 contains(i, 'medan du sov') ||
                 contains(i, 'nutidstestet') ||
@@ -158,7 +160,11 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && categoryContains(item, 'human rights')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'iran')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'india')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'italy')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'venezuela')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'korea')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'war crimes')) ||
+            (isFrom(item, 'new york times') && categoryIs('ice')) ||
             item.author.name === '@kinbergbatra'; // questionable :)
 
         return !item.read && news && !badFilter(item);
@@ -208,6 +214,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryContains(item, 'nottheonion')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'latestagecapitalism')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'crappydesign')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'natureisfuckinglit')) ||
+            (isFrom(item, 'reddit') && categoryIs(item, 'creepy')) ||
+            (isFrom(item, 'reddit') && categoryIs(item, 'cringe')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
@@ -350,7 +359,17 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     }
 
     function categoryContains(item, str) {
+        if (item.category === undefined) {
+            return false;
+        }
         return item.category.name.toLowerCase().includes(str);
+    }
+
+    function categoryIs(item, str) {
+        if (item.category === undefined) {
+            return false;
+        }
+        return item.category.name === str;
     }
 
     function contains(item, str) {
