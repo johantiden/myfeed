@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.persistence.Video;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
@@ -31,7 +30,7 @@ public class RedditPlugin implements Plugin {
 
     @Override
     public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(PluginType.REDDIT, feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
+        return new FeedImpl(feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
     }
 
     @Override

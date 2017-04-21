@@ -3,7 +3,6 @@ package se.johantiden.myfeed.plugin.dn;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.persistence.PluginType;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
@@ -21,7 +20,7 @@ public class DagensNyheterPlugin implements Plugin {
 
     @Override
     public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(PluginType.DAGENS_NYHETER, feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
+        return new FeedImpl(feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
     }
 
     @Override

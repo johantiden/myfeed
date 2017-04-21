@@ -1,6 +1,7 @@
-package se.johantiden.myfeed.plugin.svd;
+package se.johantiden.myfeed.plugin.hackenews;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+public class HackerNewsPlugin implements Plugin {
 
-public class SvenskaDagbladetPlugin implements Plugin {
-
-    private static final Logger log = LoggerFactory.getLogger(SvenskaDagbladetPlugin.class);
+    private static final Logger log = LoggerFactory.getLogger(HackerNewsPlugin.class);
 
     @Override
     public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
@@ -38,34 +38,40 @@ public class SvenskaDagbladetPlugin implements Plugin {
         };
     }
 
-
     private static Function<Document, Document> createEntryMapper() {
-        return entry -> {
-            entry.isPaywalled = isPaywalled(entry);
-            if (entry.categoryUrl == null) {
-                entry.categoryUrl = entry.feedUrl+"/"+entry.categoryName; // Det funkar :D
-            }
-            return entry;
+        return document -> {
+            Double votes = findVotes(document);
+            document.score = votes;
+            document.score = 4711d;
+            return document;
         };
     }
 
-    private static boolean isPaywalled(Document document) {
-        try {
-            org.jsoup.nodes.Document parse = Jsoup.parse(new URL(document.pageUrl), 10_000);
+    private static Double findVotes(Document document) {
+        org.jsoup.nodes.Document rssDocument = Jsoup.parse(document.html);
+        String commentsUrl = rssDocument.select("a").get(0).attr("href");
 
-            Elements select = parse.select(".paywall-loader");
-            if (!select.isEmpty()) {
-                log.debug("SVD Paywall: {}", document.pageUrl);
-                return true;
-            }
+        org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(commentsUrl);
 
-            return false;
+        Elements select = jsoupDocument.select(".score");
+        if (select.size() == 1) {
+            Element element = select.get(0);
+            String html = element.html();
+            html = html.replace(" points", "");
 
-        } catch (IOException e) {
-            log.error("Could not determine paywall", e);
-            return false;
+            int i = Integer.parseInt(html);
+            return (double) i;
         }
+        return null;
+    }
 
+    private static org.jsoup.nodes.Document getJsoupDocument(String pageUrl) {
+        try {
+            return Jsoup.parse(new URL(pageUrl), 10_000);
+        } catch (IOException e) {
+            log.error("Could not jsoup-parse " + pageUrl, e);
+            return null;
+        }
     }
 
 }

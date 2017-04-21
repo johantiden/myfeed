@@ -5,6 +5,7 @@ import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
+import se.johantiden.myfeed.plugin.hackenews.HackerNewsPlugin;
 import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.slashdot.SlashdotPlugin;
@@ -31,6 +32,14 @@ public class FeedRepository {
 
     private static List<Feed> allFeedsHack(UserRepository userRepository) {
         List<Feed> feeds = new ArrayList<>();
+
+        feeds.add(new HackerNewsPlugin().createFeed(
+                "HackerNews",
+                "hackernews",
+                "https://news.ycombinator.com/news",
+                newHashMap("rssUrl", "https://news.ycombinator.com/rss"),
+                INVALIDATION_PERIOD,
+                scoreMoreThan(100)));
 
         feeds.add(new SlashdotPlugin().createFeed(
                 "Slashdot",
@@ -65,12 +74,6 @@ public class FeedRepository {
                 "arstechnica",
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index"));
-
-        feeds.add(createRss(
-                "HackerNews",
-                "hackernews",
-                "https://news.ycombinator.com/news",
-                "https://news.ycombinator.com/rss"));
 
         feeds.add(createRss(
                 "Al Jazeera",
@@ -134,17 +137,20 @@ public class FeedRepository {
     }
 
     private static Feed createReddit(String subreddit, double minScore, Duration invalidationPeriod) {
-        Predicate<Document> votesPredicate = d -> {
-            boolean ok = d.getScore() != null && d.getScore() > minScore;
-            return ok;
-        };
-
         return new RedditPlugin().createFeed(
                 "Reddit::"+subreddit,
                 "reddit", "https://www.reddit.com/" + subreddit,
                 newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), invalidationPeriod,
-                votesPredicate);
+                scoreMoreThan(minScore));
     }
+
+    private static Predicate<Document> scoreMoreThan(double score) {
+        return d -> {
+            boolean ok = d.getScore() != null && d.getScore() > score;
+            return ok;
+        };
+    }
+
 
     private static Feed createTwitter(String username) {
         TwitterPlugin twitter = new TwitterPlugin();
