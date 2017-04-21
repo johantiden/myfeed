@@ -72,6 +72,18 @@ public class FeedRepository {
                 "https://news.ycombinator.com/news",
                 "https://news.ycombinator.com/rss"));
 
+        feeds.add(createRss(
+                "Al Jazeera",
+                "aljazeera",
+                "http://www.aljazeera.com",
+                "https://www.aljazeera.com/xml/rss/all.xml"));
+
+        feeds.add(createRss(
+                "New York Times :: World",
+                "nyt",
+                "https://www.nytimes.com/section/world",
+                "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"));
+
         feeds.add(createReddit("r/worldnews", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/AskReddit", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/science", REDDIT_MIN_SCORE));

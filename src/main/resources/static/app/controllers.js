@@ -122,6 +122,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "politicalhumor")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "polandball")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "eyebleach")) ||
+                (isFrom(i, "new york times") && categoryContains(i, "your") && categoryContains(i, "briefing")) ||
 
                 contains(i, 'medan du sov') ||
                 contains(i, 'nutidstestet') ||
@@ -140,18 +141,30 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             item.category.name === 'politics' ||
             isFrom(item, 'thelocal') ||
             (isFrom(item, 'dagens nyheter') && categoryContains(item, 'nyheter')) ||
-            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'ekonomi')) ||
             (isFrom(item, 'dagens nyheter') && categoryContains(item, 'sthlm')) ||
             (isFrom(item, 'dagens nyheter') && categoryContains(item, 'debatt')) ||
             (isFrom(item, 'dagens nyheter') && categoryContains(item, 'ledare')) ||
             (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'världen')) ||
-            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'näringsliv')) ||
             (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'debatt')) ||
             (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'sverige')) ||
             (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'ledare')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'politics')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'military')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'earthquake')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'tsunami')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'terrorism')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'police')) ||
             item.author.name === '@kinbergbatra'; // questionable :)
 
         return !item.read && news && !badFilter(item);
+    };
+
+    var bizPredicate = function(item) {
+        var biz =
+            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'ekonomi')) ||
+            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'näringsliv'));
+
+        return !item.read && biz && !badFilter(item);
     };
 
     var techPredicate = function(item) {
@@ -257,9 +270,17 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return item.isNews;
     };
 
+    var bizFilter = function(item) {
+        if (item.isBiz === undefined) {
+            item.isBiz = bizPredicate(item);
+        }
+        return item.isBiz;
+    };
+
     $scope.radioFilters = {
         'All' : allFilter,
         'News' : newsFilter,
+        'Biz' : bizFilter,
         'Tech' : techFilter,
         'Fun' : funFilter,
         'Read' : readFilter,
