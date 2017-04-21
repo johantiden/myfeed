@@ -81,7 +81,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 categoryContains(i, 'sport') ||
                 categoryContains(i, 'kultur') ||
                 categoryContains(i, 'insidan') ||
-                categoryContains(i, 'idagsidan') ||
+                categoryContains(i, 'idagsidan') ||badPre
                 (categoryContains(i, 'mat') && categoryContains(i, 'dryck')) ||
                 (categoryContains(i, 'mat') && categoryContains(i, 'vin')) ||
                 categoryContains(i, 'resor') ||
@@ -125,7 +125,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "eyebleach")) ||
                 (isFrom(i, "new york times") && contains(i, "your") && contains(i, "briefing")) ||
                 (isFrom(i, "new york times") && categoryContains(i, "real estate")) ||
+                (isFrom(i, "thelocal") && contains(i, "recipe:")) ||
 
+                contains(i, 'zlatan') ||
+                contains(i, 'ibrahimovic') ||
                 contains(i, 'medan du sov') ||
                 contains(i, 'nutidstestet') ||
                 contains(i, 'join us') ||
