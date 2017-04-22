@@ -221,6 +221,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryContains(item, 'natureisfuckinglit')) ||
             (isFrom(item, 'reddit') && categoryIs(item, 'creepy')) ||
             (isFrom(item, 'reddit') && categoryIs(item, 'cringe')) ||
+            (isFrom(item, 'reddit') && categoryIs(item, 'dataisbeautiful')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
