@@ -71,6 +71,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             contains(item, 'här är') ||
             contains(item, 'tipsen') ||
             contains(item, '-- number of people') ||
+            (isFrom(item, 'new york times') && categoryIs('')) ||
             contains(item, "trump");
 
         return !item.read && !badFilter(item) && flagged;
@@ -125,6 +126,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "eyebleach")) ||
                 (isFrom(i, "new york times") && contains(i, "your") && contains(i, "briefing")) ||
                 (isFrom(i, "new york times") && categoryContains(i, "real estate")) ||
+                (isFrom(i, "new york times") && categoryContains(i, "unidentified flying objects")) ||
                 (isFrom(i, "thelocal") && contains(i, "recipe:")) ||
 
                 contains(i, 'zlatan') ||
@@ -161,14 +163,21 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && categoryContains(item, 'terrorism')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'police')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'human rights')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'war crimes')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'assad')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'australia')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'france')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'great britain')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'iran')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'india')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'italy')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'venezuela')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'korea')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'war crimes')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'great britain')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'russia')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'syria')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'venezuela')) ||
+            (isFrom(item, 'new york times') && categoryContains(item, 'ukraine')) ||
             (isFrom(item, 'new york times') && categoryIs('Ice')) ||
+            (isFrom(item, 'new york times') && categoryIs('')) ||
             item.author.name === '@kinbergbatra'; // questionable :)
 
         return !item.read && news && !badFilter(item);
@@ -222,6 +231,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryIs(item, 'creepy')) ||
             (isFrom(item, 'reddit') && categoryIs(item, 'cringe')) ||
             (isFrom(item, 'reddit') && categoryIs(item, 'dataisbeautiful')) ||
+            (isFrom(item, 'reddit') && categoryIs(item, 'lifeprotips')) ||
+            (isFrom(item, 'reddit') && categoryIs(item, 'fuckthealtright')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
