@@ -5,10 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.InboxRepository;
-import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public class InboxService {
 
@@ -34,9 +32,12 @@ public class InboxService {
     public void putIfNew(Document document) {
         boolean isAlreadyInDocuments = documentService.hasDocument(document.getKey());
         boolean isAlreadyInInbox = inboxRepository.hasDocument(document.getKey());
-        if (!isAlreadyInDocuments && !isAlreadyInInbox) {
+        if (!isAlreadyInInbox && !isAlreadyInDocuments) {
             log.info("Adding new document to inbox: {}", document.pageUrl);
             put(document);
+        } else if (isAlreadyInDocuments) {
+            documentService.purge(document.getKey());
+            documentService.put(document);
         }
     }
 

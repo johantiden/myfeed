@@ -1,7 +1,8 @@
 <html lang="en">
 <head>
+    <link rel="icon" type="image/png" href="fidn1.png"><!-- Major Browsers -->
+    <!--[if IE]><link rel="SHORTCUT ICON" href="fidn1.ico"/><![endif]--><!-- Internet Explorer-->
     <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/animations.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <script type="text/javascript" src="./bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.js"></script>
@@ -11,25 +12,29 @@
     <script type="text/javascript" src="./app/app.js"></script>
     <script type="text/javascript" src="./app/controllers.js"></script>
     <script type="text/javascript" src="./app/services.js"></script>
+    <title>fidn</title>
 </head>
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
-        <div style="vertical-align:baseline; float: right;" >
-            Keys:{{keys.length}} | Items:{{items.length}} | unread:{{(items | filter:{read:false}).length}} | limit:{{itemLimit}}
+        <div ng-repeat="(filterName, _) in radioFilters" class="filter-button {{radioFilterName == filterName ? 'selected' : ''}}" ng-click="selectFilter(filterName)" data-badge="{{(items | filter:withFilter(filterName)).length}}">
+            {{filterName}} <span class="number-badge" ng-if="((items | filter:withFilter(filterName)).length) > 0">({{(items | filter:withFilter(filterName)).length}})</span>
         </div>
-        <div style="vertical-align:baseline; float: right; margin-right: 5px;">
-            <button id="mark-all-as-read-button" ng-click="markAllAsRead()">Mark all as read</button>
+
+        <div class="mark-all-div" >
+            <button id="mark-all-as-read-button" ng-if="(items | filter:radioFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(items | filter:radioFilter | filter:{read:false}).length}} as read</button>
+        </div>
+        <div class="debug-info" >
+            Items:{{items.length}} | filtered:{{(items | filter:radioFilter).length}}
         </div>
     </div>
-    <div infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
-    <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.flagged ? 'flagged' : ''}}"
-        ng-repeat="item in items | filter:myFilter | orderBy:'-publishedDate.epochSecond' | limitTo:itemLimit | limitTo:1000"
-        ng-hide="item.hide">
+    <div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">
+    <div class="item-box {{item.cssClass}} {{item.read ? 'read' : ''}} {{item.isFlagged ? 'flagged' : ''}} {{item.isBad ? 'bad' : ''}}"
+        ng-repeat="item in items | filter:radioFilter | orderBy:'-publishedDate.epochSecond' | limitTo:itemLimit | limitTo:1000">
 
         <div class="content-box">
             <div class="top-row">
-                <input class="read-input" type="checkbox" ng-model="item.read" ng-change="setDocumentRead(item, item.read)">
+                <button class="read-button" ng-model="item.read" ng-click="setDocumentRead(item, true)" ng-if="!item.read" ></button>
                 <div class="feedName" ng-if="item.feed.name"><a href="{{item.feed.url}}">{{item.feed.name}}</a></div>
                 <div class="score" ng-if="item.score"> | {{item.score}}</div>
                 <div class="category" ng-if="item.category.name"> | <a href="{{item.category.url}}">{{item.category.name}}</a></div>
@@ -37,17 +42,22 @@
                 <div class="time-since" ng-if="item.publishedDateShort"> | {{item.publishedDateShort}}</div>
             </div>
 
-
             <div class="title" ng-if="item.title"><a class="link" href="{{item.pageUrl}}" >{{item.title}}</a></div>
             <div class="text" ng-if="item.text && !item.html">{{item.text}}</div>
 
 
-            <span class="htmlContent" ng-bind-html="$sce.trustAsHtml(item.html)"></span>
-            <div ng-if="item.imageUrl" class="image-box">
+            <span class="htmlContent" ng-if="!item.imageUrl && item.videos.length == 0" ng-bind-html="$sce.trustAsHtml(item.html)"></span>
+            <div class="image-box" ng-if="item.imageUrl && item.videos.length == 0">
                 <a href="{{item.pageUrl}}">
                     <img class="image-box-image" src="{{item.imageUrl}}" />
                 </a>
             </div>
+
+            <a  ng-if="item.videos.length > 0" href="{{item.pageUrl}}">
+                <video class="image-box" preload="auto" autoplay="autoplay" loop="loop" muted="muted" webkit-playsinline>
+                    <source ng-repeat="v in item.videos" src="{{v.src}}" type="{{v.type}}">
+                </video>
+            </a>
 
         </div>
     </div>

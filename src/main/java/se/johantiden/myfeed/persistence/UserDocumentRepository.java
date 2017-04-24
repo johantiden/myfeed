@@ -2,76 +2,86 @@ package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.User;
+import se.johantiden.myfeed.util.Chrono;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class UserDocumentRepository {
+public class UserDocumentRepository implements Serializable {
 
-    public static final Comparator<UserDocument> YOUNGEST_FIRST =
-            Comparator.comparing(UserDocument::getPublishDate).reversed();
+    private static final long serialVersionUID = -5559800426834360178L;
 
-    private final Map<Key<User>, SortedSet<UserDocument>> map;
+    public static final transient Comparator<UserDocument> YOUNGEST_FIRST =
+            Comparator.comparing((Function<UserDocument, Instant> & Serializable)UserDocument::getPublishDate).reversed();
 
-    public UserDocumentRepository(Map<Key<User>, SortedSet<UserDocument>> map) {
-        this.map = Objects.requireNonNull(map);
+    private final HashMap<Key<User>, SortedSet<UserDocument>> map;
+
+    public UserDocumentRepository() {
+        map = new HashMap<>();
     }
 
-    public SortedSet<UserDocument> getAllKeys(Key<User> user) {
+    public final SortedSet<UserDocument> getAllKeys(Key<User> user) {
         return getOrCreateSetForUser(user);
     }
 
     private SortedSet<UserDocument> getOrCreateSetForUser(Key<User> userKey) {
         if (!map.containsKey(userKey)) {
-            map.put(userKey, new TreeSet<>(YOUNGEST_FIRST));
+            map.put(userKey, createNewUserSet());
         }
         return map.get(userKey);
     }
 
-    public void put(UserDocument userDocument) {
+    public static TreeSet<UserDocument> createNewUserSet() {
+        return new TreeSet<>(YOUNGEST_FIRST);
+    }
+
+    public final void put(UserDocument userDocument) {
         getOrCreateSetForUser(userDocument.getUserKey()).add(userDocument);
     }
 
-    public Optional<UserDocument> find(Key<User> userKey, Key<UserDocument> userDocumentKey) {
+    public final Optional<UserDocument> find(Key<User> userKey, Key<UserDocument> userDocumentKey) {
         return getOrCreateSetForUser(userKey).stream()
-                .filter(ud -> ud.getKey().equals(userDocumentKey))
+                .filter((Predicate<UserDocument> & Serializable) ud -> ud.getKey().equals(userDocumentKey))
                 .findAny();
     }
 
-    private static Function<Instant, Double> youngestFirstInstant() {
-        return i -> (double) -i.toEpochMilli();
-    }
-
-    public long purgeOlderThan(Duration duration) {
+    public final long purgeOlderThan(Duration duration) {
 
         int removed = 0;
         for (SortedSet<UserDocument> set : map.values()) {
             int sizeBefore = set.size();
-            set.removeIf(isOlderThan(duration));
+            set.removeIf(olderThan(duration));
             int sizeAfter = set.size();
             removed += sizeBefore-sizeAfter;
         }
         return removed;
     }
 
-    private Predicate<? super UserDocument> isOlderThan(Duration duration) {
-        return userDocument -> userDocument.getPublishDate().plus(duration).isAfter(Instant.now());
+    public static Predicate<? super UserDocument> olderThan(Duration duration) {
+        return (Predicate<? super UserDocument> & Serializable)userDocument -> {
+            boolean isOlder = Chrono.isOlderThan(duration, userDocument.getPublishDate());
+            return isOlder;
+        };
     }
 
-    public void remove(UserDocument userDocument) {
+    public final void remove(UserDocument userDocument) {
         getOrCreateSetForUser(userDocument.getUserKey()).remove(userDocument);
     }
 
-    public Map<Key<User>, SortedSet<UserDocument>> unwrapMap() {
-        return map;
+    @Override
+    public final String toString() {
+        int size = map.isEmpty() ? 0 : map.values().iterator().next().size();
+        return "UserDocumentRepository{" +
+                " users: " + map.size()+
+                ", size:" + size +
+                '}';
     }
 }

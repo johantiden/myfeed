@@ -25,7 +25,7 @@ public class DocumentService {
         if (optional.isPresent()) {
 //            log.warn("put but was not new. You must remove the old document first! Not putting.");
         } else {
-            log.info("Adding new document: {}", document.pageUrl);
+            log.info("Adding document: {}", document.pageUrl);
             documentRepository.put(document);
         }
     }
@@ -40,5 +40,9 @@ public class DocumentService {
 
     public long purgeOlderThan(Duration duration) {
         return documentRepository.purgeOlderThan(duration);
+    }
+
+    public void purge(Key<Document> documentKey) {
+        documentRepository.purge(documentKey);
     }
 }
