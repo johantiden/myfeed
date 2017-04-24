@@ -6,11 +6,13 @@ import se.johantiden.myfeed.util.Chrono;
 
 import java.io.Serializable;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class UserDocumentRepository implements Serializable {
