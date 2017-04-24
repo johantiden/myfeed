@@ -71,7 +71,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             contains(item, 'här är') ||
             contains(item, 'tipsen') ||
             contains(item, '-- number of people') ||
-            (isFrom(item, 'new york times') && categoryIs('')) ||
+            (isFrom(item, 'new york times') && categoryIs(undefined)) ||
             contains(item, "trump");
 
         return !item.read && !badFilter(item) && flagged;
@@ -177,7 +177,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && categoryContains(item, 'venezuela')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'ukraine')) ||
             (isFrom(item, 'new york times') && categoryIs('Ice')) ||
-            (isFrom(item, 'new york times') && categoryIs('')) ||
+            (isFrom(item, 'new york times') && categoryIs(undefined)) ||
             item.author.name === '@kinbergbatra'; // questionable :)
 
         return !item.read && news && !badFilter(item);
@@ -231,8 +231,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && categoryIs(item, 'creepy')) ||
             (isFrom(item, 'reddit') && categoryIs(item, 'cringe')) ||
             (isFrom(item, 'reddit') && categoryIs(item, 'dataisbeautiful')) ||
-            (isFrom(item, 'reddit') && categoryIs(item, 'lifeprotips')) ||
-            (isFrom(item, 'reddit') && categoryIs(item, 'fuckthealtright')) ||
+            (isFrom(item, 'reddit') && categoryIs(item, 'LifeProTips')) ||
+            (isFrom(item, 'reddit') && categoryIs(item, 'Fuckthealtright')) ||
+            (isFrom(item, 'reddit') && categoryIs(item, 'pussypassdenied')) ||
             categoryContains(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
@@ -384,6 +385,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     function categoryIs(item, str) {
         if (item.category === undefined) {
+            if (str === undefined) {
+                return true;
+            }
             return false;
         }
         return item.category.name === str;
