@@ -41,12 +41,15 @@ public class IndexController {
             username = "johan";
         }
 
+        log.info("User: " + username);
         Key<User> user = Keys.user(username);
+        log.info("EXIT  index"); // 9 seconds from foo
 
         SortedSet<UserDocument> allUserDocuments = userDocumentService.getAllDocumentsFor(user);
 
 
         List<String> keys = allUserDocuments.stream()
+                .filter(UserDocument::isUnread)
                 .map(UserDocument::getKey)
                 .map(Object::toString)
                 .collect(Collectors.toList());

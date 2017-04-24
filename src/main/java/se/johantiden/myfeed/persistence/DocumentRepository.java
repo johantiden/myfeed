@@ -3,6 +3,7 @@ package se.johantiden.myfeed.persistence;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.util.Chrono;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -12,21 +13,26 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class DocumentRepository {
+public class DocumentRepository implements Serializable {
 
-    Map<Key<Document>, Document> map = new HashMap<>();
+    private static final long serialVersionUID = -4911338149956359732L;
 
-    public void put(Document document) {
+    private final Map<Key<Document>, Document> map;
+
+    public DocumentRepository() {
+        this.map = new HashMap<>();
+    }
+
+    public final void put(Document document) {
         map.put(document.getKey(), document);
     }
 
-    public Optional<Document> find(Key<Document> documentKey) {
+    public final Optional<Document> find(Key<Document> documentKey) {
         return Optional.ofNullable(map.get(documentKey));
     }
 
-    public long purgeOlderThan(Duration duration) {
+    public final long purgeOlderThan(Duration duration) {
 
-        int removed = 0;
         List<Map.Entry<Key<Document>, Document>> toBeRemoved = map.entrySet().stream()
                 .filter(isOlderThan(duration))
                 .collect(Collectors.toList());
@@ -36,14 +42,18 @@ public class DocumentRepository {
         return toBeRemoved.size();
     }
 
-    private Predicate<? super Map.Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
+    private static Predicate<? super Map.Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
         return e -> {
             Instant publishDate = e.getValue().getPublishDate();
             return Chrono.isOlderThan(duration, publishDate);
         };
     }
 
-    public void purge(Key<Document> documentKey) {
+    public final void purge(Key<Document> documentKey) {
         map.remove(documentKey);
+    }
+
+    public final int size() {
+        return map.size();
     }
 }

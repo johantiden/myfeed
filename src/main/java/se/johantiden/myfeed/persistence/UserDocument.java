@@ -4,10 +4,13 @@ import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.persistence.user.User;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
-public class UserDocument implements Persistable<UserDocument> {
+public class UserDocument implements Persistable<UserDocument>, Serializable {
+
+    private static final long serialVersionUID = 3545729809583935357L;
 
     private final Instant publishDate;
     private final Key<User> userKey;
@@ -20,32 +23,32 @@ public class UserDocument implements Persistable<UserDocument> {
         this.documentKey = Objects.requireNonNull(documentKey);
     }
 
-    public Instant getPublishDate() {
+    public final Instant getPublishDate() {
         return publishDate;
     }
 
-    public void setRead(boolean read) {
+    public final void setRead(boolean read) {
         this.read = read;
     }
 
-    public boolean isRead() {
+    public final boolean isRead() {
         return read;
     }
 
-    public boolean isUnread() {
+    public final boolean isUnread() {
         return !read;
     }
 
     @Override
-    public Key<UserDocument> getKey() {
+    public final Key<UserDocument> getKey() {
         return Keys.userDocument(userKey, documentKey);
     }
 
-    public Key<User> getUserKey() {
+    public final Key<User> getUserKey() {
         return userKey;
     }
 
-    public Key<Document> getDocumentKey() {
+    public final Key<Document> getDocumentKey() {
         return documentKey;
     }
 }

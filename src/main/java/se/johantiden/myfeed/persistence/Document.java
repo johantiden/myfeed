@@ -4,12 +4,13 @@ package se.johantiden.myfeed.persistence;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Document implements Persistable<Document> {
+public class Document implements Persistable<Document>, Serializable {
 
     public final Key<Document> key;
     public final String feedName;
