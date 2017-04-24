@@ -2,9 +2,12 @@ package se.johantiden.myfeed.controller;
 
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.UserDocument;
+import se.johantiden.myfeed.persistence.Video;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DocumentBean {
 
@@ -20,8 +23,8 @@ public class DocumentBean {
     public final String imageUrl;
     public final Instant publishedDate;
     public final String html;
-    public final boolean flagged;
     public final boolean read;
+    public final List<Video> videos;
 
     public DocumentBean(UserDocument userDocument, Document document) {
         this.feed = new NameAndUrlBean(document.feedName, document.feedUrl);
@@ -38,8 +41,8 @@ public class DocumentBean {
         this.html = document.html;
         this.read = userDocument.isRead();
         this.score = document.score;
-        flagged = userDocument.isFlagged();
-        userDocumentKey = userDocument.getKey().toString();
+        this.userDocumentKey = userDocument.getKey().toString();
+        this.videos = new ArrayList<>(document.videos);
     }
 
     public String getCssClass() {
@@ -97,8 +100,8 @@ public class DocumentBean {
         return userDocumentKey;
     }
 
-    public boolean isFlagged() {
-        return flagged;
+    public List<Video> getVideos() {
+        return videos;
     }
 
     public static String dateToShortString(Instant instant) {

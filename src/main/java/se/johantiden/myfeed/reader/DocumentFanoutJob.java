@@ -41,19 +41,14 @@ public class DocumentFanoutJob {
     }
 
     private void consume(Document document) {
-        log.info("DocumentFanJob consuming '{}'", document.pageUrl);
+        log.debug("DocumentFanJob consuming '{}'", document.pageUrl);
         Feed feed = feedService.getFeed(document.getFeed());
         feed.getFeedUsers().stream()
                 .map(FeedUser::getUser)
                 .filter(u -> u.getUserGlobalFilter().test(document))
                 .forEach(user -> {
-                    log.info("  -> {}", user.getUsername());
-                    boolean flagged = user.getFlagFilter().test(document);
-                    if (flagged) {
-                        log.warn("Flagged: {}", document.pageUrl);
-                    }
-
-                    userDocumentService.putIfNew(new UserDocument(user.getKey(), document.getKey(), document.publishedDate, flagged));
+                    log.debug("  -> {}", user.getUsername());
+                    userDocumentService.putIfNew(new UserDocument(user.getKey(), document.getKey(), document.publishedDate));
                 });
     }
 }

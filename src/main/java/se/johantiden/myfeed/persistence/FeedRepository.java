@@ -1,12 +1,11 @@
 package se.johantiden.myfeed.persistence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
+import se.johantiden.myfeed.plugin.hackenews.HackerNewsPlugin;
 import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.slashdot.SlashdotPlugin;
@@ -24,16 +23,23 @@ import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
-    private static final Logger log = LoggerFactory.getLogger(FeedRepository.class);
-    public static final int REDDIT_MIN_SCORE = 6000;
+    public static final int REDDIT_MIN_SCORE = 20000;
     private List<Feed> allFeeds;
-    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(2);
+    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(5);
 
     @Autowired
     private UserRepository userRepository;
 
     private static List<Feed> allFeedsHack(UserRepository userRepository) {
         List<Feed> feeds = new ArrayList<>();
+
+        feeds.add(new HackerNewsPlugin().createFeed(
+                "HackerNews",
+                "hackernews",
+                "https://news.ycombinator.com/news",
+                newHashMap("rssUrl", "https://news.ycombinator.com/rss"),
+                INVALIDATION_PERIOD,
+                scoreMoreThan(100)));
 
         feeds.add(new SlashdotPlugin().createFeed(
                 "Slashdot",
@@ -69,13 +75,24 @@ public class FeedRepository {
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index"));
 
+        feeds.add(createRss(
+                "Al Jazeera",
+                "aljazeera",
+                "http://www.aljazeera.com",
+                "http://www.aljazeera.com/xml/rss/all.xml"));
+
+        feeds.add(createRss(
+                "New York Times :: World",
+                "nyt",
+                "https://www.nytimes.com/section/world",
+                "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"));
+
         feeds.add(createReddit("r/worldnews", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/AskReddit", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/science", REDDIT_MIN_SCORE));
         feeds.add(createReddit("top", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/announcements", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("r/random", REDDIT_MIN_SCORE, Duration.ofMillis(1)));
 
         feeds.add(createRss(
                 "TheLocal",
@@ -85,11 +102,11 @@ public class FeedRepository {
 
 //        feeds.add(createTwitter("pwolodarski"));
         feeds.add(createTwitter("kinbergbatra"));
-        feeds.add(createTwitter("annieloof"));
-        feeds.add(createTwitter("deepdarkfears"));
+//        feeds.add(createTwitter("annieloof"));
+//        feeds.add(createTwitter("deepdarkfears"));
         feeds.add(createTwitter("tastapod"));
         feeds.add(createTwitter("elonmusk"));
-        feeds.add(createTwitter("github"));
+//        feeds.add(createTwitter("github"));
 
         Collection<User> allUsers = userRepository.getAllUsers();
         allUsersHasAllFeedsHack(allUsers, feeds);
@@ -106,16 +123,6 @@ public class FeedRepository {
         }
     }
 
-    private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl, Predicate<Document> filter) {
-        RssPlugin rss = new RssPlugin();
-        return rss.createFeed(
-                feedName,
-                cssClass,
-                webUrl,
-                newHashMap("rssUrl", rssUrl),
-                INVALIDATION_PERIOD,
-                filter);
-    }
     private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl) {
         RssPlugin rss = new RssPlugin();
         return rss.createFeed(
@@ -130,17 +137,20 @@ public class FeedRepository {
     }
 
     private static Feed createReddit(String subreddit, double minScore, Duration invalidationPeriod) {
-        Predicate<Document> votesPredicate = d -> {
-            boolean ok = d.getScore() != null && d.getScore() > minScore;
-            return ok;
-        };
-
         return new RedditPlugin().createFeed(
                 "Reddit::"+subreddit,
                 "reddit", "https://www.reddit.com/" + subreddit,
                 newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), invalidationPeriod,
-                votesPredicate);
+                scoreMoreThan(minScore));
     }
+
+    private static Predicate<Document> scoreMoreThan(double score) {
+        return d -> {
+            boolean ok = d.getScore() != null && d.getScore() > score;
+            return ok;
+        };
+    }
+
 
     private static Feed createTwitter(String username) {
         TwitterPlugin twitter = new TwitterPlugin();
@@ -169,8 +179,7 @@ public class FeedRepository {
                 .filter(
                         f -> {
                             Key<Feed> key = f.getKey();
-                            boolean equals = feedKey.equals(key);
-                            return equals;
+                            return feedKey.equals(key);
                         }
                 )
                 .findAny()

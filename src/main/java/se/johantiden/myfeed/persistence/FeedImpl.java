@@ -18,7 +18,6 @@ public class FeedImpl implements Feed {
     private final String name;
     private final Plugin plugin;
     private final String webUrl;
-    private final PluginType type;
     private final Map<String, String> feedReaderParameters;
     private final List<FeedUser> feedUsers;
     private final String cssClass;
@@ -27,7 +26,6 @@ public class FeedImpl implements Feed {
     private Instant lastRead = Instant.EPOCH;
 
     public FeedImpl(
-            PluginType type,
             String name,
             String webUrl,
             String cssClass, Map<String, String> feedReaderParameters,
@@ -36,7 +34,6 @@ public class FeedImpl implements Feed {
             Plugin plugin) {
         this.name = name;
         this.webUrl = webUrl;
-        this.type = type;
         this.feedReaderParameters = feedReaderParameters;
         this.cssClass = cssClass;
         this.ttl = ttl;
@@ -110,9 +107,6 @@ public class FeedImpl implements Feed {
         if (webUrl != null ? !webUrl.equals(feed.webUrl) : feed.webUrl != null) {
             return false;
         }
-        if (type != feed.type) {
-            return false;
-        }
         if (feedReaderParameters != null ? !feedReaderParameters.equals(feed.feedReaderParameters) : feed.feedReaderParameters != null) {
             return false;
         }
@@ -137,7 +131,6 @@ public class FeedImpl implements Feed {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (plugin != null ? plugin.hashCode() : 0);
         result = 31 * result + (webUrl != null ? webUrl.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (feedReaderParameters != null ? feedReaderParameters.hashCode() : 0);
         result = 31 * result + (feedUsers != null ? feedUsers.hashCode() : 0);
         result = 31 * result + (cssClass != null ? cssClass.hashCode() : 0);

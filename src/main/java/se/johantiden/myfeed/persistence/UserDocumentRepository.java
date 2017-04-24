@@ -2,9 +2,9 @@ package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.User;
+import se.johantiden.myfeed.util.Chrono;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class UserDocumentRepository {
@@ -47,24 +46,23 @@ public class UserDocumentRepository {
                 .findAny();
     }
 
-    private static Function<Instant, Double> youngestFirstInstant() {
-        return i -> (double) -i.toEpochMilli();
-    }
-
     public long purgeOlderThan(Duration duration) {
 
         int removed = 0;
         for (SortedSet<UserDocument> set : map.values()) {
             int sizeBefore = set.size();
-            set.removeIf(isOlderThan(duration));
+            set.removeIf(olderThan(duration));
             int sizeAfter = set.size();
             removed += sizeBefore-sizeAfter;
         }
         return removed;
     }
 
-    private Predicate<? super UserDocument> isOlderThan(Duration duration) {
-        return userDocument -> userDocument.getPublishDate().plus(duration).isAfter(Instant.now());
+    public static Predicate<? super UserDocument> olderThan(Duration duration) {
+        return userDocument -> {
+            boolean isOlder = Chrono.isOlderThan(duration, userDocument.getPublishDate());
+            return isOlder;
+        };
     }
 
     public void remove(UserDocument userDocument) {

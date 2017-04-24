@@ -41,4 +41,8 @@ public class DocumentService {
     public long purgeOlderThan(Duration duration) {
         return documentRepository.purgeOlderThan(duration);
     }
+
+    public void purge(Key<Document> documentKey) {
+        documentRepository.purge(documentKey);
+    }
 }

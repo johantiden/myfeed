@@ -1,13 +1,12 @@
 package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.persistence.redis.Key;
+import se.johantiden.myfeed.util.Chrono;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -17,7 +16,7 @@ public class DocumentRepository {
 
     private final Map<Key<Document>, Document> map;
 
-    public DocumentRepository(HashMap<Key<Document>, Document> map) {
+    public DocumentRepository(Map<Key<Document>, Document> map) {
         this.map = Objects.requireNonNull(map);
     }
 
@@ -31,7 +30,7 @@ public class DocumentRepository {
 
     public long purgeOlderThan(Duration duration) {
 
-        List<Entry<Key<Document>, Document>> toBeRemoved = map.entrySet().stream()
+        List<Map.Entry<Key<Document>, Document>> toBeRemoved = map.entrySet().stream()
                 .filter(isOlderThan(duration))
                 .collect(Collectors.toList());
 
@@ -40,8 +39,15 @@ public class DocumentRepository {
         return toBeRemoved.size();
     }
 
-    private static Predicate<? super Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
-        return e -> e.getValue().getPublishDate().plus(duration).isAfter(Instant.now());
+    private Predicate<? super Map.Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
+        return e -> {
+            Instant publishDate = e.getValue().getPublishDate();
+            return Chrono.isOlderThan(duration, publishDate);
+        };
+    }
+
+    public void purge(Key<Document> documentKey) {
+        map.remove(documentKey);
     }
 
     public Map<Key<Document>, Document> unwrapMap() {
