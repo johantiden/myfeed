@@ -40,8 +40,8 @@ public class HackerNewsPlugin implements Plugin {
 
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
-//            Double votes = findVotes(document);
-//            document.score = votes;
+            Double votes = findVotes(document);
+            document.score = votes;
             return document;
         };
     }

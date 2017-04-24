@@ -6,13 +6,11 @@ import se.johantiden.myfeed.util.Chrono;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class UserDocumentRepository implements Serializable {
@@ -53,7 +51,7 @@ public class UserDocumentRepository implements Serializable {
                 .findAny();
     }
 
-    public final long purgeOlderThan(Duration duration) {
+    public long purgeOlderThan(Duration duration) {
 
         int removed = 0;
         for (SortedSet<UserDocument> set : map.values()) {
@@ -66,7 +64,7 @@ public class UserDocumentRepository implements Serializable {
     }
 
     public static Predicate<? super UserDocument> olderThan(Duration duration) {
-        return (Predicate<? super UserDocument> & Serializable)userDocument -> {
+        return userDocument -> {
             boolean isOlder = Chrono.isOlderThan(duration, userDocument.getPublishDate());
             return isOlder;
         };

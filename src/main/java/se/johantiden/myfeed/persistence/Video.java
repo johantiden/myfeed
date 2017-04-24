@@ -1,9 +1,6 @@
 package se.johantiden.myfeed.persistence;
 
-import java.io.Serializable;
-
-public class Video implements Serializable {
-    private static final long serialVersionUID = 8521007591680989558L;
+public class Video {
     private final String src;
     private final String type;
 
@@ -17,11 +14,11 @@ public class Video implements Serializable {
         this.type = type;
     }
 
-    public final String getSrc() {
+    public String getSrc() {
         return src;
     }
 
-    public final String getType() {
+    public String getType() {
         return type;
     }
 }

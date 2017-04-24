@@ -8,9 +8,9 @@ import se.johantiden.myfeed.util.Chrono;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -22,8 +22,8 @@ public class DocumentRepository implements Serializable {
 
     private final Map<Key<Document>, Document> map;
 
-    public DocumentRepository() {
-        map = new HashMap<>();
+    public DocumentRepository(Map<Key<Document>, Document> map) {
+        this.map = Objects.requireNonNull(map);
     }
 
     public final void put(Document document) {
@@ -45,14 +45,14 @@ public class DocumentRepository implements Serializable {
         return toBeRemoved.size();
     }
 
-    private static Predicate<? super Map.Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
+    private Predicate<? super Map.Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
         return e -> {
             Instant publishDate = e.getValue().getPublishDate();
             return Chrono.isOlderThan(duration, publishDate);
         };
     }
 
-    public final void purge(Key<Document> documentKey) {
+    public void purge(Key<Document> documentKey) {
         map.remove(documentKey);
     }
 
