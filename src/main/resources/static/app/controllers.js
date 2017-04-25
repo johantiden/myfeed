@@ -71,7 +71,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             contains(item, 'här är') ||
             contains(item, 'tipsen') ||
             contains(item, '-- number of people') ||
-            (isFrom(item, 'new york times') && categoryIs(undefined)) ||
+            (isFrom(item, 'new york times') && categoryIs(item, undefined)) ||
             contains(item, "trump");
 
         return !item.read && !badFilter(item) && flagged;
@@ -177,7 +177,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && categoryContains(item, 'venezuela')) ||
             (isFrom(item, 'new york times') && categoryContains(item, 'ukraine')) ||
             (isFrom(item, 'new york times') && categoryIs('Ice')) ||
-            (isFrom(item, 'new york times') && categoryIs(undefined)) ||
+            (isFrom(item, 'new york times') && categoryIs(item, undefined)) ||
             item.author.name === '@kinbergbatra'; // questionable :)
 
         return !item.read && news && !badFilter(item);
