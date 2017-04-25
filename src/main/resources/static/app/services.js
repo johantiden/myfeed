@@ -10,8 +10,7 @@ app.service('documentService', function($http, $cacheFactory) {
             method: 'GET',
             url: '/rest/index/'+username,
             headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
+                'Cache-Control': 'no-cache, no-store'
             }
         }).then(function(response) {
             callback(response.data);
@@ -22,8 +21,7 @@ app.service('documentService', function($http, $cacheFactory) {
             method: 'GET',
             url: '/rest/userdocument/'+key,
             headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
+                'Cache-Control': 'no-cache, no-store'
             }
         }).then(function(response) {
             callback(response.data);
