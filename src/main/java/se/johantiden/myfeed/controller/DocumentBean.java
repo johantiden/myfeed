@@ -13,7 +13,7 @@ public class DocumentBean {
 
     public final String userDocumentKey;
     public final NameAndUrl feed;
-    public final NameAndUrl category;
+    public final List<NameAndUrl> categories;
     public final String title;
     public final String text;
     public final Double score;
@@ -28,7 +28,7 @@ public class DocumentBean {
 
     public DocumentBean(UserDocument userDocument, Document document) {
         this.feed = document.feed;
-        this.category = document.category;
+        this.categories = document.categories;
 
         this.title = document.title;
         this.text = document.text;
@@ -45,62 +45,63 @@ public class DocumentBean {
         this.videos = new ArrayList<>(document.videos);
     }
 
-    public String getCssClass() {
+    public final String getCssClass() {
         return cssClass;
     }
 
-    public String getTitle() {
+    public final String getTitle() {
         return title;
     }
 
-    public String getText() {
+    public final String getText() {
         return text;
     }
 
-    public String getHtml() {
+    public final String getHtml() {
         return html;
     }
-    public String getPageUrl() {
+
+    public final String getPageUrl() {
         return pageUrl;
     }
 
-    public String getImageUrl() {
+    public final String getImageUrl() {
         return imageUrl;
     }
 
-    public Instant getPublishedDate() {
+    public final Instant getPublishedDate() {
         return publishedDate;
     }
 
-    public String getPublishedDateShort() {
+    public final String getPublishedDateShort() {
         return dateToShortString(publishedDate);
     }
 
-    public NameAndUrl getFeed() {
+    public final NameAndUrl getFeed() {
         return feed;
     }
 
-    public NameAndUrl getCategory() {
-        return category;
+    public final List<NameAndUrl> getCategories() {
+        return categories;
     }
 
-    public NameAndUrl getAuthor() {
+    public final NameAndUrl getAuthor() {
         return author;
     }
 
-    public boolean isRead() {
+    public final boolean isRead() {
         return read;
     }
 
-    public Double getScore() {
+    public final Double getScore() {
         return score;
     }
 
-    public String getUserDocumentKey() {
+    public final String getUserDocumentKey() {
         return userDocumentKey;
     }
 
-    public List<Video> getVideos() {
+    public final List<Video> getVideos() {
         return videos;
     }
 
@@ -132,12 +133,14 @@ public class DocumentBean {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "DocumentBean{" +
-                "feed=" + feed +
-                ", category=" + category +
+                "userDocumentKey='" + userDocumentKey + '\'' +
+                ", feed=" + feed +
+                ", categories=" + categories +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
+                ", score=" + score +
                 ", author=" + author +
                 ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
@@ -145,6 +148,7 @@ public class DocumentBean {
                 ", publishedDate=" + publishedDate +
                 ", html='" + html + '\'' +
                 ", read=" + read +
+                ", videos=" + videos +
                 '}';
     }
 }

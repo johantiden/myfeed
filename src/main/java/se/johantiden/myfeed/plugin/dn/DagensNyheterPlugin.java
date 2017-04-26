@@ -9,6 +9,7 @@ import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -36,7 +37,7 @@ public class DagensNyheterPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
             String category = parseFirstFolder(entry.pageUrl);
-            entry.category = new NameAndUrl(category, "https://www.dn.se/"+category);
+            entry.categories = Collections.singletonList(new NameAndUrl(category, "https://www.dn.se/"+category));
             return entry;
         };
     }

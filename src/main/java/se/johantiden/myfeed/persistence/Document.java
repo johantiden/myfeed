@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Document implements Persistable<Document>, Serializable {
 
@@ -26,7 +27,7 @@ public class Document implements Persistable<Document>, Serializable {
     public String imageUrl;
     public final Instant publishedDate;
     public String html;
-    public NameAndUrl category;
+    public List<NameAndUrl> categories;
     public Double score;
     public boolean isPaywalled;
     public List<Video> videos = new ArrayList<>();
@@ -42,7 +43,7 @@ public class Document implements Persistable<Document>, Serializable {
             String imageUrl,
             Instant publishedDate,
             String html,
-            NameAndUrl category) {
+            List<NameAndUrl> categories) {
 
         this.feed = feed;
         this.feedKey = feedKey;
@@ -53,8 +54,8 @@ public class Document implements Persistable<Document>, Serializable {
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
-        this.category = category;
         this.html = html;
+        this.categories = Objects.requireNonNull(categories);
         this.key = Keys.document(this.pageUrl);
     }
 
@@ -103,35 +104,27 @@ public class Document implements Persistable<Document>, Serializable {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
                 ", html='" + html + '\'' +
-                ", category=" + category +
+                ", categories=" + categories +
                 ", score=" + score +
                 ", isPaywalled=" + isPaywalled +
                 ", videos=" + videos +
                 '}';
     }
 
-    public Key<Feed> getFeedKey() {
+    public final Key<Feed> getFeedKey() {
         return feedKey;
     }
 
     @Override
-    public Key<Document> getKey() {
+    public final Key<Document> getKey() {
         return key;
     }
 
-    public Instant getPublishDate() {
+    public final Instant getPublishDate() {
         return publishedDate;
     }
 
-    public Double getScore() {
+    public final Double getScore() {
         return score;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
-    }
-
-    public void setVideos(List<Video> videos) {
-        this.videos = videos;
     }
 }

@@ -76,7 +76,7 @@ public class RedditPlugin implements Plugin {
                 ArrayList<Video> videos = Lists.newArrayList(
                         new Video(webmSrc, "video/webm"),
                         new Video(mp4Src, "video/mp4"));
-                document.setVideos(videos);
+                document.videos = videos;
             }
             if (linkHref.contains("https://media.giphy.com/media/")) {
                 String id = linkHref.split("/")[4];
@@ -95,7 +95,7 @@ public class RedditPlugin implements Plugin {
         Elements sources = gfyCat.select("video.share-video > source");
         if (sources.size() > 0) {
             List<Video> videoSources = sources.stream().map(s -> new Video(s.attr("src"), s.attr("type"))).collect(Collectors.toList());
-            document.setVideos(videoSources);
+            document.videos = videoSources;
             document.imageUrl = null;
         }
     }

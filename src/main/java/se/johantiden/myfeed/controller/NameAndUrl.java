@@ -1,6 +1,10 @@
 package se.johantiden.myfeed.controller;
 
-public class NameAndUrl {
+import java.io.Serializable;
+
+public class NameAndUrl implements Serializable {
+    private static final long serialVersionUID = -1797226876013074980L;
+
     public final String name;
     public final String url;
 
@@ -9,11 +13,11 @@ public class NameAndUrl {
         this.url = url;
     }
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    public String getUrl() {
+    public final String getUrl() {
         return url;
     }
 }

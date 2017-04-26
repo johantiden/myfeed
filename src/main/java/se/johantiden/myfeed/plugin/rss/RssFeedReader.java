@@ -1,7 +1,6 @@
 package se.johantiden.myfeed.plugin.rss;
 
 import com.google.common.collect.Lists;
-import com.rometools.rome.feed.synd.SyndCategory;
 import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEnclosure;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -69,8 +68,7 @@ public class RssFeedReader implements FeedReader {
             String authorName = e.getAuthor();
             String authorUrl = getAuthorUrl(e);
             Instant publishedDate = getDate(e);
-            String categoryNames = getCategoryNamesString(e);
-            String categoryUrl = getCategoryUrl(e);
+            List<NameAndUrl> categories = getCategories(e);
             String descriptionHtml = getDescription(e);
             String contentHtml = getContentHtml(e);
             String text = descriptionHtml == null ? null : html2text(descriptionHtml);
@@ -80,10 +78,15 @@ public class RssFeedReader implements FeedReader {
             }
             NameAndUrl feed = new NameAndUrl(feedName, feedWebUrl);
             NameAndUrl author = new NameAndUrl(authorName, authorUrl);
-            NameAndUrl category = new NameAndUrl(categoryNames, categoryUrl);
-            return new Document(this.feed.getKey(), feed, title, text, author, cssClass, link, imageUrl, publishedDate, html, category);
+            return new Document(this.feed.getKey(), feed, title, text, author, cssClass, link, imageUrl, publishedDate, html, categories);
         
         });
+    }
+
+    private List<NameAndUrl> getCategories(SyndEntry e) {
+        return e.getCategories().stream()
+                .map(c -> new NameAndUrl(c.getName(), c.getTaxonomyUri()))
+                .collect(Collectors.toList());
     }
 
     private static String getDescription(SyndEntry e) {
@@ -106,20 +109,6 @@ public class RssFeedReader implements FeedReader {
         SyndContent syndContent = contents.get(0);
         return syndContent.getValue();
 
-    }
-
-    private static String getCategoryUrl(SyndEntry e) {
-        List<SyndCategory> categories = e.getCategories();
-        if (categories.isEmpty()) {
-            return null;
-        }
-        return categories.get(0).getTaxonomyUri();
-    }
-
-           
-    private static String getCategoryNamesString(SyndEntry e) {
-        List<String> categoryNames = e.getCategories().stream().map(SyndCategory::getName).collect(Collectors.toList());
-        return String.join(", ", categoryNames);
     }
 
     private static Instant getDate(SyndEntry e) {

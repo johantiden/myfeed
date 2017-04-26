@@ -1,6 +1,6 @@
 
-app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, documentService) {
-
+app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, documentService) { // jshint ignore:line
+    "use strict";
     $scope.items = [];
 
     var limitStep = 10;
@@ -39,13 +39,13 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.getItem = function(key) {
         documentService.getItem(key, function(item) {
             $scope.items.push(item);
-        })
+        });
     };
 
     $scope.radioFilter = {};
 
     $scope.markFilteredAsRead = function() {
-        if (confirm("Are you sure?")) {
+        if (confirm("Are you sure?")) { // jshint ignore:line
             $scope.items.forEach(function (item) {
                 if ($scope.radioFilter(item)) {
                     $scope.setDocumentRead(item, true);
@@ -142,12 +142,22 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return bad && !i.read;
     };
 
+    function hasAuthor(item, name) {
+        if (item.author === undefined) {
+            if (name === undefined) {
+                return true;
+            }
+            return false;
+        }
+        return item.author.name === name;
+    }
+
     var newsPredicate = function(item) {
         var news =
-            item.category.name.includes('News') ||
-            item.category.name === 'news' ||
-            item.category.name === 'worldnews' ||
-            item.category.name === 'politics' ||
+            //item.category.name.includes('News') ||
+            //item.category.name === 'news' ||
+            //item.category.name === 'worldnews' ||
+            //item.category.name === 'politics' ||
             isFrom(item, 'thelocal') ||
             isFrom(item, 'al jazeera') ||
             (isFrom(item, 'dagens nyheter') && categoryContains(item, 'nyheter')) ||
@@ -180,7 +190,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && categoryContains(item, 'ukraine')) ||
             (isFrom(item, 'new york times') && categoryIs('Ice')) ||
             (isFrom(item, 'new york times') && categoryIs(item, undefined)) ||
-            item.author.name === '@kinbergbatra'; // questionable :)
+            hasAuthor(item, '@kinbergbatra'); // questionable :)
 
         return !item.read && news && !badFilter(item);
     };
@@ -207,17 +217,16 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'ars technica') && categoryContains(item, 'ministry of innovation')) ||
             (isFrom(item, 'ars technica') && categoryContains(item, 'scientific method')) ||
             (isFrom(item, 'ars technica') && categoryContains(item, 'net neutrality')) ||
-            item.category.name === 'science' ||
-            item.author.name === '@github' ||
-            item.author.name === '@elonmusk' ||
-            item.author.name === '@tastapod';
+            hasAuthor(item, '@github') ||
+            hasAuthor(item, '@elonmusk') ||
+            hasAuthor(item, '@tastapod');
 
         return !item.read && tech && !badFilter(item);
     };
 
     var funPredicate = function(item) {
         var fun =
-            item.author.name === '@deepdarkfears' ||
+            hasAuthor(item, '@deepdarkfears') ||
             isFrom(item, 'xkcd') ||
             categoryContains(item, 'askreddit') ||
             categoryContains(item, 'todayilearned') ||
@@ -325,7 +334,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         'Read' : readFilter,
         'Bad' : badFilter,
         'Unmatched' : unmatchedFilter,
-        'Flagged' : flagFilter,
+        'Flagged' : flagFilter
     };
 
     var clearCache = function(item) {
@@ -358,7 +367,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.withFilter = function(filterName) {
         return function(item) {
             return $scope.radioFilters[filterName](item);
-        }
+        };
     };
 
 
@@ -371,12 +380,16 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
      * - Can't get ngRoute to work...
      */
     function getParameterByName(name) {
-        var url = window.location.href;
+        var url = window.location.href; // jshint ignore:line
         name = name.replace(/[\[\]]/g, "\\$&");
         var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
             results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
+        if (!results) {
+            return null;
+        }
+        if (!results[2]) {
+            return '';
+        }
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
@@ -385,28 +398,15 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     }
 
     function categoryContains(item, str) {
-        if (item.category === undefined) {
-            return false;
-        }
-        return item.category.name.toLowerCase().includes(str);
+        return item.categories.some(c => c.name.toLowerCase().includes(str));
     }
 
     function categoryIs(item, str) {
-        if (item.category === undefined) {
-            if (str === undefined) {
-                return true;
-            }
-            return false;
-        }
-        return item.category.name === str;
+        return item.categories.some(c => c.name === str);
     }
 
     function contains(item, str) {
         var mergedString = '';
-        mergedString += item.author.name;
-        mergedString += item.category.name;
-        mergedString += item.cssClass;
-        mergedString += item.feed.name;
         mergedString += item.html;
         mergedString += item.text;
         mergedString += item.title;

@@ -27,12 +27,12 @@ public class SvenskaDagbladetPlugin implements Plugin {
     private static final Logger log = LoggerFactory.getLogger(SvenskaDagbladetPlugin.class);
 
     @Override
-    public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
+    public final Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
         return new FeedImpl(feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
     }
 
     @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public final FeedReader createFeedReader(Feed feed) {
         return () -> {
             List<Document> documents = new RssPlugin().createFeedReader(feed).readAllAvailable();
             return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
@@ -43,10 +43,11 @@ public class SvenskaDagbladetPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
             entry.isPaywalled = isPaywalled(entry);
-            if (entry.category.url == null) {
-                String name = entry.category.name;
-                entry.category = new NameAndUrl(name, entry.feed.url+"/"+ name); // Det funkar :D
-            }
+
+            entry.categories = entry.categories.stream()
+                    .filter(c -> c.url == null)
+                    .map(c -> new NameAndUrl(c.name, entry.feed.url + "/" + c.name))
+                    .collect(Collectors.toList());
             return entry;
         };
     }

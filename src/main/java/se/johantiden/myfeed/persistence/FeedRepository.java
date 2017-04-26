@@ -39,7 +39,7 @@ public class FeedRepository {
                 "https://news.ycombinator.com/news",
                 newHashMap("rssUrl", "https://news.ycombinator.com/rss"),
                 INVALIDATION_PERIOD,
-                scoreMoreThan(100)));
+                null));
 
         feeds.add(new SlashdotPlugin().createFeed(
                 "Slashdot",
