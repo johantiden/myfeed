@@ -71,7 +71,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             contains(item, 'här är') ||
             contains(item, 'tipsen') ||
             contains(item, '-- number of people') ||
-            (isFrom(item, 'new york times') && categoryIs(item, undefined)) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, undefined)) ||
             contains(item, "trump");
 
         return !item.read && !badFilter(item) && flagged;
@@ -79,56 +79,56 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     var badPredicate = function(i) {
         var bad =
-                categoryContains(i, 'sport') ||
-                categoryContains(i, 'kultur') ||
-                categoryContains(i, 'insidan') ||
-                categoryContains(i, 'idagsidan') ||
-                (categoryContains(i, 'mat') && categoryContains(i, 'dryck')) ||
-                (categoryContains(i, 'mat') && categoryContains(i, 'vin')) ||
-                categoryContains(i, 'resor') ||
-                categoryContains(i, 'webb-tv') ||
-                categoryContains(i, 'dnbok') ||
-                categoryContains(i, 'familj') ||
+                anyCategoryIs(i, 'sport') ||
+                anyCategoryIs(i, 'kultur') ||
+                anyCategoryIs(i, 'insidan') ||
+                anyCategoryIs(i, 'idagsidan') ||
+                (anyCategoryIs(i, 'mat') && anyCategoryIs(i, 'dryck')) ||
+                (anyCategoryIs(i, 'mat') && anyCategoryIs(i, 'vin')) ||
+                anyCategoryIs(i, 'resor') ||
+                anyCategoryIs(i, 'webb-tv') ||
+                anyCategoryIs(i, 'dnbok') ||
+                anyCategoryIs(i, 'familj') ||
                 (isFrom(i, 'hackernews') && contains(i, 'hiring')) ||
-                (isFrom(i, "ars") && categoryContains(i, "dealmaster")) ||
-                (isFrom(i, "ars") && categoryContains(i, "opposable thumbs")) ||
-                (isFrom(i, "ars") && categoryContains(i, "air force")) ||
-                (isFrom(i, "ars") && categoryContains(i, "laptop")) ||
-                (isFrom(i, "svenska dagbladet") && categoryContains(i, "perfect guide")) ||
-                (isFrom(i, "svenska dagbladet") && categoryContains(i, "junior")) ||
-                (isFrom(i, "reddit") && categoryIs(i, "food")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "iama")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "wtf")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "blackpeopletwitter")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "porn")) || // earthporn, etc
-                (isFrom(i, "reddit") && categoryContains(i, "twoxchromosomes")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "art")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "ps4")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "quityourbullshit")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "hearthstone")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "oldschoolcool")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "getmotivated")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "me_irl")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "instant_regret")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "wholesomememes")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "reallifedoodles")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "adviceanimals")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "interestingasfuck")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "facepalm")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "perfecttiming")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "bidenbro")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "woahdude")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "photoshopbattles")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "overwatch")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "animalcrossing")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "empiredidnothingwrong")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "politicalhumor")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "polandball")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "eyebleach")) ||
-                (isFrom(i, "reddit") && categoryContains(i, "esist")) ||
+                (isFrom(i, "ars") && anyCategoryIs(i, "dealmaster")) ||
+                (isFrom(i, "ars") && anyCategoryIs(i, "opposable thumbs")) ||
+                (isFrom(i, "ars") && anyCategoryIs(i, "air force")) ||
+                (isFrom(i, "ars") && anyCategoryIs(i, "laptop")) ||
+                (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "perfect guide")) ||
+                (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "junior")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "food")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "iama")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "wtf")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "blackpeopletwitter")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "porn")) || // earthporn, etc
+                (isFrom(i, "reddit") && anyCategoryIs(i, "twoxchromosomes")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "art")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "ps4")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "quityourbullshit")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "hearthstone")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "oldschoolcool")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "getmotivated")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "me_irl")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "instant_regret")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "wholesomememes")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "reallifedoodles")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "adviceanimals")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "interestingasfuck")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "facepalm")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "perfecttiming")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "bidenbro")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "woahdude")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "photoshopbattles")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "overwatch")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "animalcrossing")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "empiredidnothingwrong")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "politicalhumor")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "polandball")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "eyebleach")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "esist")) ||
                 (isFrom(i, "new york times") && contains(i, "your") && contains(i, "briefing")) ||
-                (isFrom(i, "new york times") && categoryContains(i, "real estate")) ||
-                (isFrom(i, "new york times") && categoryContains(i, "unidentified flying objects")) ||
+                (isFrom(i, "new york times") && anyCategoryIs(i, "real estate")) ||
+                (isFrom(i, "new york times") && anyCategoryIs(i, "unidentified flying objects")) ||
                 (isFrom(i, "thelocal") && contains(i, "recipe:")) ||
 
                 contains(i, 'zlatan') ||
@@ -143,7 +143,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     function hasAuthor(item, name) {
-        if (item.author == undefined) {
+        if (item.author == undefined) { // jshint ignore:line
             if (name === undefined) {
                 return true;
             }
@@ -154,42 +154,41 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     var newsPredicate = function(item) {
         var news =
-            //item.category.name.includes('News') ||
-            //item.category.name === 'news' ||
-            //item.category.name === 'worldnews' ||
-            //item.category.name === 'politics' ||
+            (isFrom(item, 'reddit') && anyCategoryIs('news')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs('politics')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs('worldnews')) ||
             isFrom(item, 'thelocal') ||
             isFrom(item, 'al jazeera') ||
-            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'nyheter')) ||
-            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'sthlm')) ||
-            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'debatt')) ||
-            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'ledare')) ||
-            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'världen')) ||
-            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'debatt')) ||
-            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'sverige')) ||
-            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'ledare')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'politics')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'military')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'earthquake')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'tsunami')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'terrorism')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'police')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'human rights')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'war crimes')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'assad')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'australia')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'france')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'great britain')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'iran')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'india')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'italy')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'korea')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'russia')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'syria')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'venezuela')) ||
-            (isFrom(item, 'new york times') && categoryContains(item, 'ukraine')) ||
-            (isFrom(item, 'new york times') && categoryIs('Ice')) ||
-            (isFrom(item, 'new york times') && categoryIs(item, undefined)) ||
+            (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'nyheter')) ||
+            (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'sthlm')) ||
+            (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'debatt')) ||
+            (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'ledare')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'världen')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'debatt')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'sverige')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'ledare')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'politics')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'military')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'earthquake')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'tsunami')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'terrorism')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'police')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'human rights')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'war crimes')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'assad')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'australia')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'france')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'great britain')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'iran')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'india')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'italy')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'korea')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'russia')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'syria')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'venezuela')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'ukraine')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs('Ice')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, undefined)) ||
             hasAuthor(item, '@kinbergbatra'); // questionable :)
 
         return !item.read && news && !badFilter(item);
@@ -197,8 +196,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     var bizPredicate = function(item) {
         var biz =
-            (isFrom(item, 'dagens nyheter') && categoryContains(item, 'ekonomi')) ||
-            (isFrom(item, 'svenska dagbladet') && categoryContains(item, 'näringsliv'));
+            (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'ekonomi')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'näringsliv'));
 
         return !item.read && biz && !badFilter(item);
     };
@@ -208,15 +207,16 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             isFrom(item, 'slashdot') ||
             isFrom(item, 'xkcd') ||
             isFrom(item, 'hackernews') ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'space')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'futurology')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'technology')) ||
-            (isFrom(item, 'ars technica') && categoryContains(item, 'gear & gadgets')) ||
-            (isFrom(item, 'ars technica') && categoryContains(item, 'law & disorder')) ||
-            (isFrom(item, 'ars technica') && categoryContains(item, 'technology lab')) ||
-            (isFrom(item, 'ars technica') && categoryContains(item, 'ministry of innovation')) ||
-            (isFrom(item, 'ars technica') && categoryContains(item, 'scientific method')) ||
-            (isFrom(item, 'ars technica') && categoryContains(item, 'net neutrality')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs('science')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'space')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'futurology')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'technology')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'gear & gadgets')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'law & disorder')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'technology lab')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'ministry of innovation')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'scientific method')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'net neutrality')) ||
             hasAuthor(item, '@github') ||
             hasAuthor(item, '@elonmusk') ||
             hasAuthor(item, '@tastapod');
@@ -228,30 +228,30 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         var fun =
             hasAuthor(item, '@deepdarkfears') ||
             isFrom(item, 'xkcd') ||
-            categoryContains(item, 'askreddit') ||
-            categoryContains(item, 'todayilearned') ||
-            categoryContains(item, 'mildlyinteresting') ||
-            categoryContains(item, 'funny') ||
-            categoryContains(item, 'gifs') ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'television')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'movies')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'aww')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'gaming')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'videos')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'showerthoughts')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'unexpected')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'oddlysatisfying')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'nottheonion')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'latestagecapitalism')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'crappydesign')) ||
-            (isFrom(item, 'reddit') && categoryContains(item, 'natureisfuckinglit')) ||
-            (isFrom(item, 'reddit') && categoryIs(item, 'creepy')) ||
-            (isFrom(item, 'reddit') && categoryIs(item, 'cringe')) ||
-            (isFrom(item, 'reddit') && categoryIs(item, 'dataisbeautiful')) ||
-            (isFrom(item, 'reddit') && categoryIs(item, 'LifeProTips')) ||
-            (isFrom(item, 'reddit') && categoryIs(item, 'Fuckthealtright')) ||
-            (isFrom(item, 'reddit') && categoryIs(item, 'pussypassdenied')) ||
-            categoryContains(item, 'pics');
+            anyCategoryIs(item, 'askreddit') ||
+            anyCategoryIs(item, 'todayilearned') ||
+            anyCategoryIs(item, 'mildlyinteresting') ||
+            anyCategoryIs(item, 'funny') ||
+            anyCategoryIs(item, 'gifs') ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'television')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'movies')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'aww')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'gaming')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'videos')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'showerthoughts')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'unexpected')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'oddlysatisfying')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'nottheonion')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'latestagecapitalism')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'crappydesign')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'natureisfuckinglit')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'creepy')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'cringe')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'dataisbeautiful')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'LifeProTips')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'Fuckthealtright')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'pussypassdenied')) ||
+            anyCategoryIs(item, 'pics');
 
         return !item.read && fun && !badFilter(item);
     };
@@ -397,15 +397,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return item.feed.name.toLowerCase().includes(feedName);
     }
 
-    function categoryContains(item, str) {
-        if (item.categories == undefined) {
-            return false;
-        }
-        return item.categories.some(c => c.name.toLowerCase().includes(str));
-    }
-
-    function categoryIs(item, str) {
-        if (item.categories == undefined) {
+    function anyCategoryIs(item, str) {
+        if (item.categories == undefined) { // jshint ignore:line
             return false;
         }
         return item.categories.some(c => c.name === str);
