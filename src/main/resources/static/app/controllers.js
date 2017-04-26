@@ -137,7 +137,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     function hasAuthor(item, name) {
-        if (item.author == unefined) { // jshint ignore:line
+        if (item.author == undefined) { // jshint ignore:line
             if (name === undefined) {
                 return true;
             }
