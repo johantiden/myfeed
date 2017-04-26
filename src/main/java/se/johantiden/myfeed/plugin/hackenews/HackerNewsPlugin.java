@@ -41,49 +41,49 @@ public class HackerNewsPlugin implements Plugin {
 
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
-            Double votes = findVotes(document);
-            document.score = votes;
+//            Double votes = findVotes(document);
+//            document.score = votes;
             return document;
         };
     }
+//
+//    private static Double findVotes(Document document) {
+//        try {
+//            org.jsoup.nodes.Document rssDocument = Jsoup.parse(document.html);
+//            String commentsUrl = rssDocument.select("a").get(0).attr("href");
+//
+//            org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(commentsUrl);
+//
+//            Elements select = jsoupDocument.select(".score");
+//            if (select.size() == 1) {
+//                Element element = select.get(0);
+//                String html = element.html();
+//                html = html.replace(" points", "");
+//
+//                int i = Integer.parseInt(html);
+//                return (double) i;
+//            }
+//            return null;
+//        } catch (RuntimeException e) {
+//            log.error("Couldn't parse HackerNews votes:", e);
+//            return 9999.0;
+//        }
+//    }
 
-    private static Double findVotes(Document document) {
-        try {
-            org.jsoup.nodes.Document rssDocument = Jsoup.parse(document.html);
-            String commentsUrl = rssDocument.select("a").get(0).attr("href");
+//    private static org.jsoup.nodes.Document getJsoupDocument(String pageUrl) {
+//        return getDocumentInner(pageUrl, 3);
+//    }
 
-            org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(commentsUrl);
-
-            Elements select = jsoupDocument.select(".score");
-            if (select.size() == 1) {
-                Element element = select.get(0);
-                String html = element.html();
-                html = html.replace(" points", "");
-
-                int i = Integer.parseInt(html);
-                return (double) i;
-            }
-            return null;
-        } catch (RuntimeException e) {
-            log.error("Couldn't parse HackerNews votes:", e);
-            return 9999.0;
-        }
-    }
-
-    private static org.jsoup.nodes.Document getJsoupDocument(String pageUrl) {
-        return getDocumentInner(pageUrl, 3);
-    }
-
-    private static org.jsoup.nodes.Document getDocumentInner(String pageUrl, int retriesLeft) {
-        try {
-            return Jsoup.parse(new URL(pageUrl), 10_000);
-        } catch (IOException e) {
-            if (retriesLeft > 0) {
-                return getDocumentInner(pageUrl, retriesLeft - 1);
-            } else {
-                throw new UncheckedIOException("Could not jsoup-parse " + pageUrl, e);
-            }
-        }
-    }
+//    private static org.jsoup.nodes.Document getDocumentInner(String pageUrl, int retriesLeft) {
+//        try {
+//            return Jsoup.parse(new URL(pageUrl), 10_000);
+//        } catch (IOException e) {
+//            if (retriesLeft > 0) {
+//                return getDocumentInner(pageUrl, retriesLeft - 1);
+//            } else {
+//                throw new UncheckedIOException("Could not jsoup-parse " + pageUrl, e);
+//            }
+//        }
+//    }
 
 }
