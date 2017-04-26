@@ -71,6 +71,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             contains(item, 'här är') ||
             contains(item, 'tipsen') ||
             contains(item, '-- number of people') ||
+            contains(item, '-- amount of people') ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, undefined)) ||
             contains(item, "trump");
 
@@ -90,6 +91,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "dnbok")) ||
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "sport")) ||
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "kultur-noje")) ||
+                (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "serier")) || // cuz it's broken
                 (isFrom(i, "reddit") && anyCategoryIs(i, "food")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "iama")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "wtf")) ||
@@ -123,6 +125,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "new york times") && contains(i, "your") && contains(i, "briefing")) ||
                 (isFrom(i, "new york times") && anyCategoryIs(i, "real estate")) ||
                 (isFrom(i, "new york times") && anyCategoryIs(i, "unidentified flying objects")) ||
+                (isFrom(i, "new york times") && anyCategoryIs(i, "Holocaust and the Nazi Era")) ||
                 (isFrom(i, "thelocal") && contains(i, "recipe:")) ||
 
                 contains(i, 'zlatan') ||
@@ -148,9 +151,9 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     var newsPredicate = function(item) {
         var news =
-            (isFrom(item, 'reddit') && anyCategoryIs('news')) ||
-            (isFrom(item, 'reddit') && anyCategoryIs('politics')) ||
-            (isFrom(item, 'reddit') && anyCategoryIs('worldnews')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'news')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'politics')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'worldnews')) ||
             isFrom(item, 'thelocal') ||
             isFrom(item, 'al jazeera') ||
             (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'nyheter')) ||
@@ -162,9 +165,13 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Sverige')) ||
             (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Ledare')) ||
             (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Kultur')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'TED Conference')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Airlines and Airplanes')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Politics')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Politics and Government')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'United States Defense and Military Forces')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Defense and Military Forces')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Censorship')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, "Coups D'Etat and Attempted Coups D'Etat")) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, "Demonstrations, Protests and Riots")) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Military')) ||
@@ -188,7 +195,11 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Venezuela')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Ukraine')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Afghanistan')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs('Ice')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Brazil')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Brazil')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Organized Crime')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Robberies and Thefts')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Ice')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, undefined)) ||
             hasAuthor(item, '@kinbergbatra'); // questionable :)
 
@@ -208,7 +219,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             isFrom(item, 'slashdot') ||
             isFrom(item, 'xkcd') ||
             isFrom(item, 'hackernews') ||
-            (isFrom(item, 'reddit') && anyCategoryIs('science')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'science')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'space')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'futurology')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'technology')) ||
