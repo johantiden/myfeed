@@ -96,6 +96,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "ars") && categoryContains(i, "laptop")) ||
                 (isFrom(i, "svenska dagbladet") && categoryContains(i, "perfect guide")) ||
                 (isFrom(i, "svenska dagbladet") && categoryContains(i, "junior")) ||
+                (isFrom(i, "reddit") && categoryIs(i, "food")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "iama")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "wtf")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "blackpeopletwitter")) ||
@@ -124,6 +125,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "reddit") && categoryContains(i, "politicalhumor")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "polandball")) ||
                 (isFrom(i, "reddit") && categoryContains(i, "eyebleach")) ||
+                (isFrom(i, "reddit") && categoryContains(i, "esist")) ||
                 (isFrom(i, "new york times") && contains(i, "your") && contains(i, "briefing")) ||
                 (isFrom(i, "new york times") && categoryContains(i, "real estate")) ||
                 (isFrom(i, "new york times") && categoryContains(i, "unidentified flying objects")) ||
@@ -193,12 +195,18 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     var techPredicate = function(item) {
         var tech =
-            isFrom(item, 'ars technica') ||
             isFrom(item, 'slashdot') ||
             isFrom(item, 'xkcd') ||
             isFrom(item, 'hackernews') ||
             (isFrom(item, 'reddit') && categoryContains(item, 'space')) ||
             (isFrom(item, 'reddit') && categoryContains(item, 'futurology')) ||
+            (isFrom(item, 'reddit') && categoryContains(item, 'technology')) ||
+            (isFrom(item, 'ars technica') && categoryContains(item, 'gear & gadgets')) ||
+            (isFrom(item, 'ars technica') && categoryContains(item, 'law & disorder')) ||
+            (isFrom(item, 'ars technica') && categoryContains(item, 'technology lab')) ||
+            (isFrom(item, 'ars technica') && categoryContains(item, 'ministry of innovation')) ||
+            (isFrom(item, 'ars technica') && categoryContains(item, 'scientific method')) ||
+            (isFrom(item, 'ars technica') && categoryContains(item, 'net neutrality')) ||
             item.category.name === 'science' ||
             item.author.name === '@github' ||
             item.author.name === '@elonmusk' ||
