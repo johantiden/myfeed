@@ -143,7 +143,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     function hasAuthor(item, name) {
-        if (item.author === undefined) {
+        if (item.author == undefined) {
             if (name === undefined) {
                 return true;
             }
@@ -398,10 +398,16 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     }
 
     function categoryContains(item, str) {
+        if (item.categories == undefined) {
+            return false;
+        }
         return item.categories.some(c => c.name.toLowerCase().includes(str));
     }
 
     function categoryIs(item, str) {
+        if (item.categories == undefined) {
+            return false;
+        }
         return item.categories.some(c => c.name === str);
     }
 
