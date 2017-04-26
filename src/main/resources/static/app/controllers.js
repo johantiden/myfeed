@@ -79,34 +79,28 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     var badPredicate = function(i) {
         var bad =
-                anyCategoryIs(i, 'sport') ||
-                anyCategoryIs(i, 'kultur') ||
-                anyCategoryIs(i, 'insidan') ||
-                anyCategoryIs(i, 'idagsidan') ||
-                (anyCategoryIs(i, 'mat') && anyCategoryIs(i, 'dryck')) ||
-                (anyCategoryIs(i, 'mat') && anyCategoryIs(i, 'vin')) ||
-                anyCategoryIs(i, 'resor') ||
-                anyCategoryIs(i, 'webb-tv') ||
-                anyCategoryIs(i, 'dnbok') ||
-                anyCategoryIs(i, 'familj') ||
                 (isFrom(i, 'hackernews') && contains(i, 'hiring')) ||
                 (isFrom(i, "ars") && anyCategoryIs(i, "dealmaster")) ||
-                (isFrom(i, "ars") && anyCategoryIs(i, "opposable thumbs")) ||
+                (isFrom(i, "ars") && anyCategoryIs(i, "Opposable Thumbs")) ||
                 (isFrom(i, "ars") && anyCategoryIs(i, "air force")) ||
                 (isFrom(i, "ars") && anyCategoryIs(i, "laptop")) ||
                 (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "perfect guide")) ||
                 (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "junior")) ||
+                (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "Sport")) ||
+                (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "dnbok")) ||
+                (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "sport")) ||
+                (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "kultur-noje")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "food")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "iama")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "wtf")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "blackpeopletwitter")) ||
-                (isFrom(i, "reddit") && anyCategoryIs(i, "porn")) || // earthporn, etc
+                (isFrom(i, "reddit") && anyCategoryIs(i, "EarthPorn")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "twoxchromosomes")) ||
-                (isFrom(i, "reddit") && anyCategoryIs(i, "art")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "Art")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "ps4")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "quityourbullshit")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "hearthstone")) ||
-                (isFrom(i, "reddit") && anyCategoryIs(i, "oldschoolcool")) ||
+                (isFrom(i, "reddit") && anyCategoryIs(i, "OldSchoolCool")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "getmotivated")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "me_irl")) ||
                 (isFrom(i, "reddit") && anyCategoryIs(i, "instant_regret")) ||
@@ -143,7 +137,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     function hasAuthor(item, name) {
-        if (item.author == undefined) { // jshint ignore:line
+        if (item.author == unefined) { // jshint ignore:line
             if (name === undefined) {
                 return true;
             }
@@ -163,30 +157,37 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'sthlm')) ||
             (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'debatt')) ||
             (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'ledare')) ||
-            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'världen')) ||
-            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'debatt')) ||
-            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'sverige')) ||
-            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'ledare')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'politics')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'military')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'earthquake')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'tsunami')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'terrorism')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'police')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'human rights')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'war crimes')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'assad')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'australia')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'france')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'great britain')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'iran')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'india')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'italy')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'korea')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'russia')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'syria')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'venezuela')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'ukraine')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Världen')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Debatt')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Sverige')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Ledare')) ||
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Kultur')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Airlines and Airplanes')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Politics')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Politics and Government')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, "Coups D'Etat and Attempted Coups D'Etat")) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, "Demonstrations, Protests and Riots")) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Military')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Earthquake')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Tsunami')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Terrorism')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Police')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Human Rights')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'War Crimes')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Assad')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Australia')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'France')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Great britain')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Iran')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'India')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Italy')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Korea')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'North Korea')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Russia')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Syria')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Venezuela')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Ukraine')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Afghanistan')) ||
             (isFrom(item, 'new york times') && anyCategoryIs('Ice')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, undefined)) ||
             hasAuthor(item, '@kinbergbatra'); // questionable :)
@@ -197,7 +198,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     var bizPredicate = function(item) {
         var biz =
             (isFrom(item, 'dagens nyheter') && anyCategoryIs(item, 'ekonomi')) ||
-            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'näringsliv'));
+            (isFrom(item, 'svenska dagbladet') && anyCategoryIs(item, 'Näringsliv'));
 
         return !item.read && biz && !badFilter(item);
     };
@@ -211,12 +212,12 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'space')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'futurology')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'technology')) ||
-            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'gear & gadgets')) ||
-            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'law & disorder')) ||
-            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'technology lab')) ||
-            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'ministry of innovation')) ||
-            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'scientific method')) ||
-            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'net neutrality')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'Gear & Gadgets')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'Law & Disorder')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'Technology Lab')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'Ministry of Innovation')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'Scientific Method')) ||
+            (isFrom(item, 'ars technica') && anyCategoryIs(item, 'Net Neutrality')) ||
             hasAuthor(item, '@github') ||
             hasAuthor(item, '@elonmusk') ||
             hasAuthor(item, '@tastapod');
@@ -232,13 +233,14 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             anyCategoryIs(item, 'todayilearned') ||
             anyCategoryIs(item, 'mildlyinteresting') ||
             anyCategoryIs(item, 'funny') ||
-            anyCategoryIs(item, 'gifs') ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'television')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'movies')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'aww')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'gaming')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'videos')) ||
-            (isFrom(item, 'reddit') && anyCategoryIs(item, 'showerthoughts')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'gifs')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'HighQualityGifs')) ||
+            (isFrom(item, 'reddit') && anyCategoryIs(item, 'Showerthoughts')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'unexpected')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'oddlysatisfying')) ||
             (isFrom(item, 'reddit') && anyCategoryIs(item, 'nottheonion')) ||
