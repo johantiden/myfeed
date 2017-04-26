@@ -12,12 +12,12 @@ import java.util.List;
 public class DocumentBean {
 
     public final String userDocumentKey;
-    public final NameAndUrlBean feed;
-    public final NameAndUrlBean category;
+    public final NameAndUrl feed;
+    public final NameAndUrl category;
     public final String title;
     public final String text;
     public final Double score;
-    public final NameAndUrlBean author;
+    public final NameAndUrl author;
     public final String cssClass;
     public final String pageUrl;
     public final String imageUrl;
@@ -27,12 +27,12 @@ public class DocumentBean {
     public final List<Video> videos;
 
     public DocumentBean(UserDocument userDocument, Document document) {
-        this.feed = new NameAndUrlBean(document.feedName, document.feedUrl);
-        this.category = new NameAndUrlBean(document.categoryName, document.categoryUrl);
+        this.feed = new NameAndUrl(document.feedName, document.feedUrl);
+        this.category = new NameAndUrl(document.categoryName, document.categoryUrl);
 
         this.title = document.title;
         this.text = document.text;
-        this.author = new NameAndUrlBean(document.authorName, document.authorUrl);
+        this.author = new NameAndUrl(document.authorName, document.authorUrl);
 
         this.cssClass = document.cssClass;
         this.pageUrl = document.pageUrl;
@@ -76,15 +76,15 @@ public class DocumentBean {
         return dateToShortString(publishedDate);
     }
 
-    public NameAndUrlBean getFeed() {
+    public NameAndUrl getFeed() {
         return feed;
     }
 
-    public NameAndUrlBean getCategory() {
+    public NameAndUrl getCategory() {
         return category;
     }
 
-    public NameAndUrlBean getAuthor() {
+    public NameAndUrl getAuthor() {
         return author;
     }
 

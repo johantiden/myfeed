@@ -1,10 +1,10 @@
 package se.johantiden.myfeed.controller;
 
-public class NameAndUrlBean {
+public class NameAndUrl {
     public final String name;
     public final String url;
 
-    public NameAndUrlBean(String name, String url) {
+    public NameAndUrl(String name, String url) {
         this.name = name;
         this.url = url;
     }
