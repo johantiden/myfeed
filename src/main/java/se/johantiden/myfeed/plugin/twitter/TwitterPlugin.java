@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.plugin.twitter;
 
+import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
@@ -45,9 +46,8 @@ public class TwitterPlugin implements Plugin{
         private static Function<Document, Document> createEntryMapper(String username) {
             return entry ->  {
                 entry.title = null;
-                entry.authorName = "@" + username;
-                entry.authorUrl = entry.feedUrl;
-                entry.feedUrl = "https://www.twitter.com";
+                entry.author = new NameAndUrl("@" + username, entry.feed.url);
+                entry.feed = new NameAndUrl("Twitter", "https://www.twitter.com");
                 return entry;
             };
         }

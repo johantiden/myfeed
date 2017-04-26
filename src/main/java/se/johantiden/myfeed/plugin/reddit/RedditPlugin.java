@@ -45,14 +45,13 @@ public class RedditPlugin implements Plugin {
         return document -> {
             org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(document.pageUrl);
             document.score = findVotes(jsoupDocument);
-            parseStuffz(document, jsoupDocument);
-            document.authorName = null;
-            document.authorUrl = null;
+            parseStuffz(document);
+            document.author = null;
             return document;
         };
     }
 
-    private static void parseStuffz(Document document, org.jsoup.nodes.Document jsoupDocument) {
+    private static void parseStuffz(Document document) {
         org.jsoup.nodes.Document rssDocument = Jsoup.parse(document.html);
         document.html = null;
         Elements imgs = rssDocument.select("img");

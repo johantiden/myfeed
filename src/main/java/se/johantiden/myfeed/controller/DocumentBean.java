@@ -27,12 +27,12 @@ public class DocumentBean {
     public final List<Video> videos;
 
     public DocumentBean(UserDocument userDocument, Document document) {
-        this.feed = new NameAndUrl(document.feedName, document.feedUrl);
-        this.category = new NameAndUrl(document.categoryName, document.categoryUrl);
+        this.feed = document.feed;
+        this.category = document.category;
 
         this.title = document.title;
         this.text = document.text;
-        this.author = new NameAndUrl(document.authorName, document.authorUrl);
+        this.author = document.author;
 
         this.cssClass = document.cssClass;
         this.pageUrl = document.pageUrl;

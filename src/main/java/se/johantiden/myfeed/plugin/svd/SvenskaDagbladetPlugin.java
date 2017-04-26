@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
@@ -42,8 +43,9 @@ public class SvenskaDagbladetPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
             entry.isPaywalled = isPaywalled(entry);
-            if (entry.categoryUrl == null) {
-                entry.categoryUrl = entry.feedUrl+"/"+entry.categoryName; // Det funkar :D
+            if (entry.category.url == null) {
+                String name = entry.category.name;
+                entry.category = new NameAndUrl(name, entry.feed.url+"/"+ name); // Det funkar :D
             }
             return entry;
         };

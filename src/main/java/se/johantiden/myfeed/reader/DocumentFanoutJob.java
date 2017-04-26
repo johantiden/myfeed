@@ -42,7 +42,7 @@ public class DocumentFanoutJob {
 
     private void consume(Document document) {
         log.debug("DocumentFanJob consuming '{}'", document.pageUrl);
-        Feed feed = feedService.getFeed(document.getFeed());
+        Feed feed = feedService.getFeed(document.getFeedKey());
         feed.getFeedUsers().stream()
                 .map(FeedUser::getUser)
                 .filter(u -> u.getUserGlobalFilter().test(document))

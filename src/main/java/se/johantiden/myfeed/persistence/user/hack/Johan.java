@@ -24,7 +24,4 @@ public class Johan extends User {
         return document -> !document.isPaywalled;
     }
 
-    private static Predicate<Document> isFrom(String feedName) {
-        return document -> document.feedName.toLowerCase().contains(feedName);
-    }
 }

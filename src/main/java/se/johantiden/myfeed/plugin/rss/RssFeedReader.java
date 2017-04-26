@@ -13,6 +13,7 @@ import com.rometools.rome.io.XmlReader;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.plugin.FeedReader;
@@ -65,7 +66,7 @@ public class RssFeedReader implements FeedReader {
             String title = e.getTitle();
             String link = e.getLink();
             String imageUrl = getImageUrl(e);
-            String author = e.getAuthor();
+            String authorName = e.getAuthor();
             String authorUrl = getAuthorUrl(e);
             Instant publishedDate = getDate(e);
             String categoryNames = getCategoryNamesString(e);
@@ -77,7 +78,10 @@ public class RssFeedReader implements FeedReader {
             if (html == null) {
                 html = contentHtml;
             }
-            return new Document(feed.getKey(), feedName, feedWebUrl, title, text, author, authorUrl, cssClass, link, imageUrl, publishedDate, html, categoryNames, categoryUrl);
+            NameAndUrl feed = new NameAndUrl(feedName, feedWebUrl);
+            NameAndUrl author = new NameAndUrl(authorName, authorUrl);
+            NameAndUrl category = new NameAndUrl(categoryNames, categoryUrl);
+            return new Document(this.feed.getKey(), feed, title, text, author, cssClass, link, imageUrl, publishedDate, html, category);
         
         });
     }

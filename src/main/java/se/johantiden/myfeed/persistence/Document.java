@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.persistence;
 
 
+import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
@@ -12,54 +13,48 @@ import java.util.List;
 
 public class Document implements Persistable<Document>, Serializable {
 
+    private static final long serialVersionUID = 7281769259354137360L;
+
     public final Key<Document> key;
-    public final String feedName;
-    public String feedUrl;
+    public Key<Feed> feedKey;
+    public NameAndUrl feed;
     public String title;
     public final String text;
-    public String authorName;
-    public String authorUrl;
+    public NameAndUrl author;
     public final String cssClass;
     public final String pageUrl;
     public String imageUrl;
     public final Instant publishedDate;
     public String html;
-    private Key<Feed> feed;
-    public String categoryName;
-    public String categoryUrl;
+    public NameAndUrl category;
     public Double score;
     public boolean isPaywalled;
     public List<Video> videos = new ArrayList<>();
 
     public Document(
-            Key<Feed> feed,
-            String feedName,
-            String feedUrl,
+            Key<Feed> feedKey,
+            NameAndUrl feed,
             String title,
             String text,
-            String authorName,
-            String authorUrl,
+            NameAndUrl author,
             String cssClass,
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
-            String html, String categoryName,
-            String categoryUrl) {
+            String html,
+            NameAndUrl category) {
 
-        this.feedName = feedName;
         this.feed = feed;
-        this.feedUrl = feedUrl;
+        this.feedKey = feedKey;
         this.title = title;
         this.text = text;
-        this.authorName = authorName;
-        this.authorUrl = authorUrl;
+        this.author = author;
         this.cssClass = cssClass;
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
-        this.categoryName = categoryName;
+        this.category = category;
         this.html = html;
-        this.categoryUrl = categoryUrl;
         this.key = Keys.document(this.pageUrl);
     }
 
@@ -97,25 +92,26 @@ public class Document implements Persistable<Document>, Serializable {
     @Override
     public String toString() {
         return "Document{" +
-                "feedName='" + feedName + '\'' +
-                ", feedUrl='" + feedUrl + '\'' +
+                "key=" + key +
+                ", feedKey=" + feedKey +
+                ", feed=" + feed +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
-                ", authorName='" + authorName + '\'' +
-                ", authorUrl='" + authorUrl + '\'' +
+                ", author=" + author +
                 ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
                 ", html='" + html + '\'' +
-                ", feed=" + feed +
-                ", categoryName='" + categoryName + '\'' +
-                ", categoryUrl='" + categoryUrl + '\'' +
+                ", category=" + category +
+                ", score=" + score +
+                ", isPaywalled=" + isPaywalled +
+                ", videos=" + videos +
                 '}';
     }
 
-    public Key<Feed> getFeed() {
-        return feed;
+    public Key<Feed> getFeedKey() {
+        return feedKey;
     }
 
     @Override
