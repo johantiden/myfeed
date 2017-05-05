@@ -86,7 +86,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "ars") && anyCategoryIs(i, "air force")) ||
                 (isFrom(i, "ars") && anyCategoryIs(i, "laptop")) ||
                 (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "perfect guide")) ||
-                (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "junior")) ||
+                (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "Junior")) ||
                 (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "Sport")) ||
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "dnbok")) ||
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "sport")) ||
