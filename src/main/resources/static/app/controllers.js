@@ -199,6 +199,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Brazil')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Organized Crime')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Robberies and Thefts')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Freedom of the Press')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Ice')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, undefined)) ||
             hasAuthor(item, '@kinbergbatra'); // questionable :)
