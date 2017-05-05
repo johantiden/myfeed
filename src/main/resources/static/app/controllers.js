@@ -90,6 +90,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
                 (isFrom(i, "svenska dagbladet") && anyCategoryIs(i, "Sport")) ||
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "dnbok")) ||
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "sport")) ||
+                (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "webb-tv")) ||
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "kultur-noje")) ||
                 (isFrom(i, "dagens nyheter") && anyCategoryIs(i, "serier")) || // cuz it's broken
                 (isFrom(i, "reddit") && anyCategoryIs(i, "food")) ||
@@ -188,14 +189,13 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Iran')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'India')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Italy')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Korea')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'North Korea')) ||
+            (isFrom(item, 'new york times') && anyCategoryIs(item, 'South Korea')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Russia')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Syria')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Venezuela')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Ukraine')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Afghanistan')) ||
-            (isFrom(item, 'new york times') && anyCategoryIs(item, 'Brazil')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Brazil')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Organized Crime')) ||
             (isFrom(item, 'new york times') && anyCategoryIs(item, 'Robberies and Thefts')) ||
