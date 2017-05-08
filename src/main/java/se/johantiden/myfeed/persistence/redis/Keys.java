@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.persistence.redis;
 
+import se.johantiden.myfeed.controller.Subject;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.user.User;
@@ -28,5 +29,9 @@ public class Keys {
         String uniqueness = feed.getName() + feed.getFeedReaderParameters();
         return new Key<>(uniqueness);
 
+    }
+
+    public static Key<Subject> subject(Subject subject) {
+        return Key.create("s:"+hash(subject.getTitle()));
     }
 }

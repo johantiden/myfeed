@@ -2,6 +2,7 @@ package se.johantiden.myfeed.persistence;
 
 
 import se.johantiden.myfeed.controller.NameAndUrl;
+import se.johantiden.myfeed.controller.Subject;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
@@ -31,6 +32,8 @@ public class Document implements Persistable<Document>, Serializable {
     public Double score;
     public boolean isPaywalled;
     public List<Video> videos = new ArrayList<>();
+    public final List<Key<Subject>> subjects = new ArrayList<>();
+    public final List<Key<Subject>> nonMatchedSubjects = new ArrayList<>();
 
     public Document(
             Key<Feed> feedKey,
@@ -90,27 +93,6 @@ public class Document implements Persistable<Document>, Serializable {
         return dateToShortString(publishedDate);
     }
 
-    @Override
-    public String toString() {
-        return "Document{" +
-                "key=" + key +
-                ", feedKey=" + feedKey +
-                ", feed=" + feed +
-                ", title='" + title + '\'' +
-                ", text='" + text + '\'' +
-                ", author=" + author +
-                ", cssClass='" + cssClass + '\'' +
-                ", pageUrl='" + pageUrl + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", publishedDate=" + publishedDate +
-                ", html='" + html + '\'' +
-                ", categories=" + categories +
-                ", score=" + score +
-                ", isPaywalled=" + isPaywalled +
-                ", videos=" + videos +
-                '}';
-    }
-
     public final Key<Feed> getFeedKey() {
         return feedKey;
     }
@@ -126,5 +108,13 @@ public class Document implements Persistable<Document>, Serializable {
 
     public final Double getScore() {
         return score;
+    }
+
+    public List<Key<Subject>> getSubjects() {
+        return subjects;
+    }
+
+    public List<Key<Subject>> getNonMatchedSubjects() {
+        return nonMatchedSubjects;
     }
 }

@@ -31,6 +31,10 @@ public class DocumentRepository implements Serializable {
         return Optional.ofNullable(map.get(documentKey));
     }
 
+    public List<Document> find(Predicate<Document> predicate) {
+        return map.values().stream().filter(predicate).collect(Collectors.toList());
+    }
+
     public final long purgeOlderThan(Duration duration) {
 
         List<Map.Entry<Key<Document>, Document>> toBeRemoved = map.entrySet().stream()

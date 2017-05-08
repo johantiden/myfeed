@@ -32,14 +32,9 @@ a:hover {
 }
 
 .navbar {
-    /*background-color: red;*/
-    /*background-color: white;*/
     border-bottom: 1px solid #EEEEFF;
-    display: block;
     margin-left: auto;
     margin-right: auto;
-    position: fixed;
-    top: 0;
     min-width: 800px;
     width:100%;
 }
@@ -48,10 +43,8 @@ a:hover {
     display: none;
 }
 
-.item-box {
-    /*background-color: white;*/
-    /*margin-left: 30vw;*/
-    /*margin-right: 30vw;*/
+.document-box {
+    background-color: white;
     max-width: 100%;
 
     border-bottom: 4px solid #EEEEEE;
@@ -80,18 +73,6 @@ a:hover {
     text-transform: capitalize;
 }
 
-.input-box {
-    /*background-color: red;*/
-    display: inline-block;
-    vertical-align: top;
-    width: 40px;
-}
-
-.input-box.right {
-    position: relative;
-    right: 0;
-}
-
 .read {
     /*background-color: #DDDDDD;*/
 }
@@ -111,7 +92,7 @@ a:hover {
     /*width: 39vw;*/
     vertical-align: baseline;
     margin: 0;
-    font-size: small;
+    font-size: x-large;
     color: #666666;
 }
 
@@ -128,7 +109,7 @@ div.text {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    font-size: small;
+    font-size: large;
 }
 
 .read-input {
@@ -162,21 +143,16 @@ div.text {
     background-color: #ffe0e0;
 }
 
-.navbar {
-    /*background-color: #DDDDDD;*/
-    vertical-align: bottom;
-}
-
-.filter-button {
+.tab-button {
     display: inline-block;
     color: black;
     padding: 4px 4px 4px 4px;
     cursor: pointer;
-    font-size: small;
+    font-size: x-large;
     text-align: center;
 }
 
-.filter-button.selected {
+.tab-button.selected {
     text-decoration: underline;
 }
 
@@ -195,4 +171,10 @@ div.text {
 
 .debug-info {
     display: inline-block;
+}
+
+.subject-box {
+    background-color: #DDDDDD;
+    font-size: x-large;
+    padding: 10px;
 }

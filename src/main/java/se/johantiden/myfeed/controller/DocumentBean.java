@@ -29,11 +29,9 @@ public class DocumentBean {
     public DocumentBean(UserDocument userDocument, Document document) {
         this.feed = document.feed;
         this.categories = document.categories;
-
         this.title = document.title;
         this.text = document.text;
         this.author = document.author;
-
         this.cssClass = document.cssClass;
         this.pageUrl = document.pageUrl;
         this.imageUrl = document.imageUrl;
