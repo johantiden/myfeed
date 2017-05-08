@@ -34,12 +34,15 @@ public class SubjectRepository {
         add(s, "TheLocal (Unmatched)", NEWS, isFromFeed("TheLocal"));
         add(s, "Crises", NEWS, textContains("kris"));
         add(s, "Disasters", "disasters_v2", NEWS, textContainsIgnoreCase("floods").or(textContainsIgnoreCase("översvämning")));
-        add(s, "Violence", NEWS, textContainsIgnoreCase("våldtäkt")
+        add(s, "Crime", "crime_v2", NEWS, textContainsIgnoreCase("våldtäkt")
                                          .or(textContainsIgnoreCase("man död")
                                          .or(textContainsIgnoreCase("kvinna död")
-                                                     .or(anyCategoryEquals("Accidents and Safety")))));
+                                         .or(anyCategoryEquals("Accidents and Safety"))
+                                         .or(textContainsIgnoreCase("sexköp"))
+                                         .or(textContainsIgnoreCase("stöld")))));
 
         add(s, "Stockholm", "sthml", NEWS, textContains("Stockholm").or(anyCategoryEquals("sthlm")));
+        add(s, "Arbogamorder", NEWS, textContains("Arboga").and(textContainsIgnoreCase("mord")));
         add(s, "Sex", "sex", NEWS, textContainsIgnoreCase("sexliv"));
         add(s, "Högskoleprovet", NEWS, textContainsIgnoreCase("högskoleprov"));
         add(s, "Fake News", NEWS, textContainsIgnoreCase("fake news").or(textContainsIgnoreCase("alternative facts")));
@@ -48,17 +51,23 @@ public class SubjectRepository {
         add(s, "Lottning i skolan", NEWS, textContainsIgnoreCase("skol").and(textContainsIgnoreCase("lott")));
         add(s, "Deaths", NEWS, anyCategoryEquals("Deaths (Obituaries)").or(anyCategoryEquals("Funerals and Memorials")));
         add(s, "North Korea", NEWS, textContains("Nordkorea").or(textContains("North Korea")));
-        add(s, "Terrorism", NEWS, textContains("Boko Haram").or(textContainsIgnoreCase("car bomb")));
-        add(s, "USA", "usa_v2", NEWS, textContains("Indiana").or(textContainsIgnoreCase("inreseförbud")));
+        add(s, "Terrorism", NEWS, textContains("Boko Haram").or(textContainsIgnoreCase("car bomb")).or(anyCategoryEquals("Terrorism")));
+        add(s, "USA", "usa_v2", NEWS, textContains("Indiana")
+                .or(textContainsIgnoreCase("inreseförbud"))
+                .or(textContainsIgnoreCase("republican")));
+
         add(s, "Russia", NEWS, textContains("Russia"));
-        add(s, "China", NEWS, textContains("China"));
+        add(s, "China", NEWS, textContains("China").or(textContainsIgnoreCase("communist party")));
         add(s, "Venezuela", NEWS, textContains("Venezuela").or(textContains("Maduro")));
         add(s, "Marine Le Pen", NEWS, textContains("Marine Le Pen"));
-        add(s, "Kevin", NEWS, textContains("Kevin").and(textContains("Arvika")));
+        add(s, "Kevin", NEWS, textContains("Kevin").and(textContains("Arvika").or(textContainsIgnoreCase("mord"))));
         add(s, "Ledare & Sammanfattningar", NEWS, anyCategoryEqualsIgnoreCase("ledare"));
         add(s, "Baby", NEWS, textContainsIgnoreCase("spädbarn"));
         add(s, "Refugees", NEWS, textContainsIgnoreCase("refugees").or(textContainsIgnoreCase("flykting")));
         add(s, "Misc News", NEWS, textContainsIgnoreCase("politiker").or(textContainsIgnoreCase("polis")).or(textContainsIgnoreCase("police")));
+        add(s, "Political Movements", NEWS, anyCategoryEquals("esist"));
+        add(s, "Norway", NEWS, textContains("Norway"));
+        add(s, "Philippines", NEWS, textContains("Philippines").or(textContains("Duterte")));
 
         add(s, "Apple", TECH, textContains("Apple"));
         add(s, "Google", TECH, textContains("Google").or(anyCategoryEquals("Google")));
@@ -67,9 +76,9 @@ public class SubjectRepository {
         add(s, "Samsung", TECH, textContainsIgnoreCase("samsung group"));
         add(s, "Microsoft", TECH, textContainsIgnoreCase("microsoft"));
         add(s, "IBM", TECH, anyCategoryEquals("ibm"));
+        add(s, "Gadgets", TECH, anyCategoryEquals("Gear & Gadgets"));
         add(s, "Artificial Intelligence", TECH, textContainsIgnoreCase("artificial intelligence"));
         add(s, "Internet", TECH, textContainsIgnoreCase("internet"));
-        add(s, "Scientific Method", TECH, anyCategoryEquals("Scientific Method"));
         add(s, "Ask Slashdot", TECH, textContains("Ask Slashdot"));
         add(s, "Security", "Security_v3", TECH, anyCategoryEquals("malware").or(anyCategoryEquals("passwords")).or(textContainsIgnoreCase("denial-of-service")));
         add(s, "Misc Tech", TECH, isFromFeed("HackerNews").and(textContainsIgnoreCase("hiring").negate()).and(textContainsIgnoreCase("Show HN").negate())
@@ -77,6 +86,7 @@ public class SubjectRepository {
                                                       .or(anyCategoryEquals("internet"))));
         add(s, "Show HN", TECH, textContains("Show HN"));
         add(s, "Privacy", TECH, anyCategoryEquals("privacy"));
+        add(s, "Science", TECH, anyCategoryEquals("science").or(anyCategoryEquals("Scientific Method")));
 
         add(s, "Music", CULTURE, anyCategoryEquals("Pop and Rock Music"));
         add(s, "Movies", CULTURE, anyCategoryEquals("movies"));
@@ -100,12 +110,20 @@ public class SubjectRepository {
         add(s, "Reddit::Gifs", FUN, anyCategoryEquals("gifs"));
         add(s, "Reddit::Oddly Satisfying", FUN, anyCategoryEquals("oddlysatisfying"));
         add(s, "Reddit::Educational Gifs", FUN, anyCategoryEquals("educationalgifs"));
+        add(s, "Reddit::Not The Onion", FUN, anyCategoryEquals("nottheonion"));
+        add(s, "Reddit::Photoshop Battles", FUN, anyCategoryEquals("photoshopbattles"));
+        add(s, "Reddit::Interesting As Fuck", FUN, anyCategoryEquals("interestingasfuck"));
+        add(s, "Reddit::Europe", FUN, feedContains("Reddit").and(anyCategoryEquals("europe")));
+        add(s, "Reddit::Videos", FUN, anyCategoryEquals("videos"));
+        add(s, "John Oliver", FUN, textContains("John Oliver"));
+        add(s, "Comics", FUN, anyCategoryEquals("serier").or(isFromFeed("xkcd")));
 
         add(s, "Sport", "Sport_v2", BAD, anyCategoryEquals("sport").or(anyCategoryEquals("Sport")));
         add(s, "Reddit::Jokes", BAD, anyCategoryEquals("Jokes"));
         add(s, "Reddit Clickbaity", BAD, textContainsIgnoreCase("-- number"));
         add(s, "Reddit::MURICA", BAD, anyCategoryEquals("MURICA"));
         add(s, "Reddit::meirl", BAD, anyCategoryEquals("meirl"));
+        add(s, "Reddit::wholesomememes", BAD, anyCategoryEquals("wholesomememes"));
         add(s, "Food", BAD, anyCategoryEquals("mat-dryck").or(anyCategoryEqualsIgnoreCase("food")));
         add(s, "Cars", BAD, anyCategoryEquals("Cars Technica"));
         add(s, "Al Jazeera::News Grid", BAD, textContains("NewsGrid"));
@@ -113,6 +131,10 @@ public class SubjectRepository {
         add(s, "Ars Technica::The Multiverse", BAD, isFromFeed("Ars Technica").and(anyCategoryEquals("The Multiverse")));
         add(s, "HackerNews::hiring", BAD, isFromFeed("HackerNews").and(textContainsIgnoreCase("hiring")));
         return s;
+    }
+
+    private static Predicate<Document> feedContains(String string) {
+        return d -> d.feed.name.contains(string);
     }
 
 
@@ -146,7 +168,7 @@ public class SubjectRepository {
     private static Predicate<Document> textContains(String string) {
         return d -> d.text != null && d.text.contains(string) ||
                 d.title != null && d.title.contains(string) ||
-                d.categories.stream().anyMatch(c -> c.name.contains(string));
+                            d.categories.stream().anyMatch(c -> c.name.contains(string));
 
     }
 
