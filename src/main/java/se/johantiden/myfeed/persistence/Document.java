@@ -31,8 +31,9 @@ public class Document implements Persistable<Document>, Serializable {
     public List<NameAndUrl> categories;
     public Double score;
     public boolean isPaywalled;
-    public final List<Video> videos = new ArrayList<>();
-    public final List<Subject> subjects = new ArrayList<>();
+    public List<Video> videos = new ArrayList<>();
+    public final List<Key<Subject>> subjects = new ArrayList<>();
+    public final List<Key<Subject>> nonMatchedSubjects = new ArrayList<>();
 
     public Document(
             Key<Feed> feedKey,
@@ -109,7 +110,11 @@ public class Document implements Persistable<Document>, Serializable {
         return score;
     }
 
-    public List<Subject> getSubjects() {
+    public List<Key<Subject>> getSubjects() {
         return subjects;
+    }
+
+    public List<Key<Subject>> getNonMatchedSubjects() {
+        return nonMatchedSubjects;
     }
 }

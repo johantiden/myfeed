@@ -8,7 +8,9 @@ import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class DocumentService {
 
@@ -44,5 +46,9 @@ public class DocumentService {
 
     public void purge(Key<Document> documentKey) {
         documentRepository.purge(documentKey);
+    }
+
+    public List<Document> find(Predicate<Document> predicate) {
+        return documentRepository.find(predicate);
     }
 }
