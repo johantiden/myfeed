@@ -45,6 +45,7 @@ public class SubjectTesterJob {
         List<Document> document = documentService.find(hasNotTestedSubject(key));
         document.forEach(d -> {
             if (subject.test(d)) {
+                log.info("Adding subject: " + subject.getTitle());
                 d.subjects.add(key);
             } else {
                 d.nonMatchedSubjects.add(key);

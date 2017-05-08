@@ -29,8 +29,8 @@
         </div>
     </div>
     <!--<div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">-->
-    <div class="subject-box" ng-repeat="subject in subjects | filter:tabFilter | orderBy:-length">
-        {{subject.title}}
+    <div class="subject-box" ng-repeat="subject in subjects | filter:tabFilter | orderBy:-userDocuments.length">
+        {{subject.title}} ({{subject.userDocuments.length}})
     <div class="document-box {{document.cssClass}} {{document.read ? 'read' : ''}}"
         ng-repeat="document in subject.userDocuments | orderBy:'-publishedDate.epochSecond'">
 

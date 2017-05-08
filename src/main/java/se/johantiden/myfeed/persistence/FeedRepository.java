@@ -54,7 +54,7 @@ public class FeedRepository {
                 "https://www.svd.se",
                 newHashMap("rssUrl", "https://www.svd.se/?service=rss"),
                 INVALIDATION_PERIOD,
-                d -> !d.isPaywalled));
+                d -> !d.isPaywalled && (d.title == null || !d.title.equals("serier"))));
 
         DagensNyheterPlugin dn = new DagensNyheterPlugin();
         feeds.add(dn.createFeed(
@@ -101,11 +101,11 @@ public class FeedRepository {
                 "https://www.thelocal.se/feeds/rss.php"));
 
 //        feeds.add(createTwitter("pwolodarski"));
-        feeds.add(createTwitter("kinbergbatra"));
+//        feeds.add(createTwitter("kinbergbatra"));
 //        feeds.add(createTwitter("annieloof"));
 //        feeds.add(createTwitter("deepdarkfears"));
-        feeds.add(createTwitter("tastapod"));
-        feeds.add(createTwitter("elonmusk"));
+//        feeds.add(createTwitter("tastapod"));
+//        feeds.add(createTwitter("elonmusk"));
 //        feeds.add(createTwitter("github"));
 
         Collection<User> allUsers = userRepository.getAllUsers();

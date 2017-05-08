@@ -109,7 +109,7 @@ public class UserDocumentService {
         Set<UserDocument> unmatched = allUserDocuments.stream().filter(p -> p.getRight().getSubjects().isEmpty())
                                              .map(Pair::getLeft)
                                              .collect(Collectors.toSet());
-        return new UserSubject(new Subject("Unmatched", "Unmatched",
+        return new UserSubject(new Subject("Unmatched", "Unmatched", "Unmatched",
                                                   d -> false), unmatched);
 
 

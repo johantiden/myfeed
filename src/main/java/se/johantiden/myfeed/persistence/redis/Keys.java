@@ -31,7 +31,7 @@ public class Keys {
 
     }
 
-    public static Key<Subject> subject(Subject subject) {
-        return Key.create("s:"+hash(subject.getTitle()));
+    public static Key<Subject> subject(String keySeed) {
+        return Key.create("s:"+hash(keySeed));
     }
 }
