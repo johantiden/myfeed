@@ -14,6 +14,7 @@ public class DocumentBean {
     public final String userDocumentKey;
     public final NameAndUrl feed;
     public final List<NameAndUrl> categories;
+    public final List<Subject> subjects;
     public final String title;
     public final String text;
     public final Double score;
@@ -29,11 +30,9 @@ public class DocumentBean {
     public DocumentBean(UserDocument userDocument, Document document) {
         this.feed = document.feed;
         this.categories = document.categories;
-
         this.title = document.title;
         this.text = document.text;
         this.author = document.author;
-
         this.cssClass = document.cssClass;
         this.pageUrl = document.pageUrl;
         this.imageUrl = document.imageUrl;
@@ -43,6 +42,7 @@ public class DocumentBean {
         this.score = document.score;
         this.userDocumentKey = userDocument.getKey().toString();
         this.videos = new ArrayList<>(document.videos);
+        this.subjects = new ArrayList<>(document.getSubjects());
     }
 
     public final String getCssClass() {
@@ -103,6 +103,10 @@ public class DocumentBean {
 
     public final List<Video> getVideos() {
         return videos;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
     }
 
     public static String dateToShortString(Instant instant) {
