@@ -33,7 +33,7 @@ public class SubjectRepository {
                                                     .or(textContains("Hamas")));
         add(s, "Egypt vs Libya", NEWS, textContains("Egypt").or(textContains("Libya")));
         add(s, "TheLocal (Unmatched)", NEWS, isFromFeed("TheLocal"));
-        add(s, "Crises", NEWS, textContains("kris"));
+        add(s, "Crises", NEWS, textContains("kris").and(anyCategoryEquals("Näringsliv").negate()));
         add(s, "Disasters", "disasters_v2", NEWS, textContainsIgnoreCase("floods").or(textContainsIgnoreCase("översvämning")));
         add(s, "Crime", "crime_v2", NEWS, textContainsIgnoreCase("våldtäkt")
                                          .or(textContainsIgnoreCase("man död")
