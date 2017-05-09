@@ -19,6 +19,7 @@ public final class UserRepository {
         put(new Johan());
         put(new Karin());
         put(new Bjon());
+        put(new Danne());
     }
 
     public void put(User user) {
