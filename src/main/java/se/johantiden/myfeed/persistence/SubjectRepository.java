@@ -14,6 +14,7 @@ public class SubjectRepository {
     private static final String BAD = "Bad";
     private static final String FUN = "Fun";
     private static final String CULTURE = "Culture";
+    private static final String ENTERTAINMENT = "Entertainment";
 
     private final List<Subject> subjects;
 
@@ -41,9 +42,9 @@ public class SubjectRepository {
                                          .or(textContainsIgnoreCase("sexköp"))
                                          .or(textContainsIgnoreCase("stöld")))));
 
-        add(s, "Stockholm", "sthml", NEWS, textContains("Stockholm").or(anyCategoryEquals("sthlm")));
-        add(s, "Arbogamorder", NEWS, textContains("Arboga").and(textContainsIgnoreCase("mord")));
-        add(s, "Sex", "sex", NEWS, textContainsIgnoreCase("sexliv"));
+        add(s, "Stockholm", "sthml", NEWS, textContains("Stockholm").or(anyCategoryEquals("sthlm")).and(textContainsIgnoreCase("börs").negate()));
+        add(s, "Arbogamordet", NEWS, textContains("Arboga").and(textContainsIgnoreCase("mord")));
+        add(s, "Sex", "sex", ENTERTAINMENT, textContainsIgnoreCase("sexliv"));
         add(s, "Högskoleprovet", NEWS, textContainsIgnoreCase("högskoleprov"));
         add(s, "Fake News", NEWS, textContainsIgnoreCase("fake news").or(textContainsIgnoreCase("alternative facts")));
         add(s, "Elections", NEWS, textContainsIgnoreCase("väljer").and(textContainsIgnoreCase("president")));
