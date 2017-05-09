@@ -22,17 +22,17 @@
         </div>
 
         <div class="mark-all-div" >
-            <button id="mark-all-as-read-button" ng-if="(subjects | filter:tabFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(subjects | filter:radioFilter | filter:{read:false}).length}} subjects as read</button>
+            <button id="mark-all-as-read-button" ng-if="(subjects | filter:tabFilter).length > 0" ng-click="markFilteredAsRead()">Mark {{(subjects | filter:tabFilter).length}} subjects as read</button>
         </div>
         <div class="debug-info" >
-            Subjects:{{subjects.length}} | filtered:{{(subjects | filter:radioFilter).length}}
+            Subjects:{{subjects.length}} | filtered:{{(subjects | filter:tabFilter).length}}
         </div>
     </div>
     <!--<div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">-->
-    <div class="subject-box" ng-repeat="subject in subjects | filter:tabFilter | orderBy:-userDocuments.length">
+    <div class="subject-box" ng-repeat="subject in subjects | filter:tabFilter | filter:hasUnread | orderBy:-userDocuments.length">
         {{subject.title}} ({{subject.userDocuments.length}})
     <div class="document-box {{document.cssClass}} {{document.read ? 'read' : ''}}"
-        ng-repeat="document in subject.userDocuments | orderBy:'-publishedDate.epochSecond'">
+        ng-repeat="document in subject.userDocuments | filter:{read:false} | orderBy:'-publishedDate.epochSecond'">
 
         <div class="content-box">
             <div class="top-row">

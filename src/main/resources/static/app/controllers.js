@@ -69,6 +69,11 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         return $scope.tabs[$scope.selectedTabName](subject);
     };
 
+    $scope.hasUnread = function(subject) {
+        return subject.userDocuments.some(d => d.read === false);
+    };
+
+
     $scope.selectedTabName = $cookies.get('selectedTabName');
     if ($scope.selectedTabName === undefined) {
         $scope.selectedTabName = 'All';
@@ -83,9 +88,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             return $scope.tabs[tabName](item);
         };
     };
-
-
-
 
     /**
      * Gets a query parameter.
