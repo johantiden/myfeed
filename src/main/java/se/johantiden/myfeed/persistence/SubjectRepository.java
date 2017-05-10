@@ -30,25 +30,27 @@ public class SubjectRepository {
         add(s, "Trump", NEWS, has("trump").or(has("the_donald")));
         add(s, "Macron", NEWS, has("macron"));
         add(s, "Syria", NEWS, has("syria"));
-        add(s, "Palestine vs Israel", "PvI", NEWS, has("palestinian")
+        add(s, "Palestine vs Israel", NEWS, has("palestinian")
                                                     .or(has("israeli"))
                                                     .or(has("hamas")));
         add(s, "Egypt vs Libya", NEWS, has("egypt").or(has("libya")));
         add(s, "USA vs Syria", NEWS, has("usa").or(has("trump")).and(has("syria")));
+        add(s, "USA vs Russia", NEWS, has("usa").or(has("trump")).and(has("russia").or(has("ryssland"))));
         add(s, "TheLocal (Unmatched)", NEWS, isFromFeed("TheLocal"));
         add(s, "Crises", NEWS, has("kris").and(anyCategoryEquals("Näringsliv").negate()));
-        add(s, "Disasters", "disasters_v2", NEWS, has("floods").or(has("översvämning")));
-        add(s, "Crime", "crime_v2", NEWS, has("våldtäkt")
-                                         .or(has("man död")
-                                                     .or(has("kvinna död")
-                                                                 .or(anyCategoryEquals("Accidents and Safety"))
-                                                                 .or(has("sexköp"))
-                                                                 .or(has("stöld"))
-                                                                 .or(has("mörda")))));
+        add(s, "Disasters", NEWS, has("floods").or(has("översvämning")));
+        add(s, "Crime", NEWS,
+                has("våldtäkt")
+                    .or(has("man död").or(has("kvinna död")
+                                                  .or(anyCategoryEquals("Accidents and Safety"))
+                                                  .or(has("sexköp"))
+                                                  .or(has("stöld"))
+                                                  .or(has("murder"))
+                                                  .or(has("mordmisstänkt"))
+                                                  .or(has("mörda")))));
 
-        add(s, "Stockholm", "sthml", NEWS, has("stockholm").or(anyCategoryEquals("sthlm")).and(has("börs").negate()));
+        add(s, "Stockholm", NEWS, has("stockholm").or(anyCategoryEquals("sthlm")).and(has("börs").negate()));
         add(s, "Arbogamordet", NEWS, has("arboga").and(has("mord")));
-        add(s, "Sex", "sex", ENTERTAINMENT, has("sexliv"));
         add(s, "Högskoleprovet", NEWS, has("högskoleprov"));
         add(s, "Fake News", NEWS, has("fake news").or(has("alternative facts")));
         add(s, "Elections", NEWS, has("väljer").and(has("president")));
@@ -56,8 +58,8 @@ public class SubjectRepository {
         add(s, "Lottning i skolan", NEWS, has("skol").and(has("lott")));
         add(s, "Deaths", NEWS, anyCategoryEquals("Deaths (Obituaries)").or(anyCategoryEquals("Funerals and Memorials")));
         add(s, "North Korea", NEWS, has("nordkorea").or(has("north korea")));
-        add(s, "Terrorism", NEWS, has("boko haram").or(has("car bomb")).or(anyCategoryEquals("Terrorism")));
-        add(s, "USA", "usa_v2", NEWS, has("indiana")
+        add(s, "Terrorism", NEWS, has("boko haram").or(has("car bomb")).or(has("terrorism")));
+        add(s, "USA", NEWS, has("indiana")
                 .or(has("inreseförbud"))
                 .or(has("republican")));
         add(s, "Russia", NEWS, has("russia"));
@@ -71,13 +73,22 @@ public class SubjectRepository {
         add(s, "Misc News", NEWS, has("politiker").or(has("polis")).or(has("police")));
         add(s, "Political Movements", NEWS, anyCategoryEquals("esist"));
         add(s, "Norway", NEWS, has("norway"));
+        add(s, "Kambodja", NEWS, has("kambodja").or(has("hun sen")));
         add(s, "Philippines", NEWS, has("philippines").or(has("duterte")));
         add(s, "Daesh", NEWS, has("isil").or(has("duterte")));
         add(s, "Discrimination", NEWS, has("racism").or(has("discrimination")));
         add(s, "South Korea", NEWS, has("south korea").and(has("vote").negate().and(has("election").negate())));
         add(s, "South Korean Election", NEWS, has("south korea").and(has("vote").or(has("election"))));
         add(s, "France", NEWS, has("france").or(has("fransk").or(has("french")).or(has("frankr"))));
-
+        add(s, "Debate", NEWS, anyCategoryEquals("Debatt"));
+        add(s, "Drottninggatan", NEWS, has("drottninggatan").and(has("terror")));
+        add(s, "Toxic", NEWS, has("gift").and(has("utsläpp")));
+        add(s, "Fox Hunt", NEWS, has("rävjakt"));
+        add(s, "Holocaust", NEWS, has("holocaust"));
+        add(s, "Bosnia", NEWS, has("bosnia"));
+        add(s, "Weather", NEWS, has("monsoon").or(has("snö")));
+        add(s, "FIFA Corruption", NEWS, has("fifa").and(has("corruption")));
+        add(s, "Public Sector", NEWS, has("vårdcentral"));
 
         add(s, "Apple", TECH, has("apple"));
         add(s, "Google", TECH, has("google").or(anyCategoryEquals("Google")));
@@ -90,7 +101,7 @@ public class SubjectRepository {
         add(s, "Artificial Intelligence", TECH, has("artificial intelligence"));
         add(s, "Internet", TECH, has("internet"));
         add(s, "Ask Slashdot", TECH, has("ask slashdot"));
-        add(s, "Security", "Security_v3", TECH, anyCategoryEquals("malware").or(anyCategoryEquals("passwords")).or(has("denial-of-service")));
+        add(s, "Security", TECH, anyCategoryEquals("malware").or(anyCategoryEquals("passwords")).or(has("denial-of-service")));
         add(s, "Misc Tech", TECH, isFromFeed("HackerNews").and(has("hiring").negate()).and(has("show hn").negate())
                                           .or(anyCategoryEquals("Law & Disorder")
                                                       .or(anyCategoryEquals("internet"))));
@@ -103,11 +114,14 @@ public class SubjectRepository {
         add(s, "Art", CULTURE, anyCategoryEquals("Art"));
         add(s, "DN::Kultur & Nöje", CULTURE, anyCategoryEquals("kultur-noje"));
         add(s, "SVD::Kultur", CULTURE, anyCategoryEquals("Kultur"));
+        add(s, "Books", CULTURE, anyCategoryEquals("familj").and(has("bok")));
+
+        add(s, "Sex", ENTERTAINMENT, has("sexliv"));
 
         add(s, "Misc Business", BIZ, anyCategoryEquals("Business"));
         add(s, "Affärsbragd", BIZ, has("affärsbragd"));
         add(s, "Loans", BIZ, anyCategoryEquals("Näringsliv").and(has("lån")));
-        add(s, "Union", BIZ, anyCategoryEquals("Näringsliv").and(has("fack")));
+        add(s, "Union", BIZ, anyCategoryEquals("Näringsliv").and(has("fack").or(has("strejk"))));
         add(s, "Pension", BIZ, anyCategoryEquals("Näringsliv").and(has("pension")));
         add(s, "Your boss (test)", BIZ, anyCategoryEquals("business").and(has("boss")));
         add(s, "Basic Income", BIZ, has("basic income"));
@@ -115,7 +129,11 @@ public class SubjectRepository {
         add(s, "Medicine", BIZ, anyCategoryEquals("Näringsliv").and(has("läkemedel")));
         add(s, "Press Releases", BIZ, anyCategoryEquals("Näringsliv").and(has("pressmeddelande")));
         add(s, "Stockholm", BIZ, anyCategoryEquals("Näringsliv").and(has("stockholm")));
-
+        add(s, "Riksbanken", BIZ, anyCategoryEquals("ekonomi").and(has("riksbanken")));
+        add(s, "Fraud", BIZ, anyCategoryEquals("Näringsliv").and(has("bedrägeri")));
+        add(s, "Scandals", BIZ, anyCategoryEquals("Näringsliv").and(has("skandal")));
+        add(s, "Nordea till Danmark", BIZ, has("nordea").and(has("danmark")));
+        add(s, "Food Services", BIZ, anyCategoryEquals("ekonomi").and(has("foodora").or(has("ubereats")).or(has("uber eats"))));
 
         add(s, "Reddit::Aww", FUN, anyCategoryEquals("aww"));
         add(s, "Reddit::Pics", FUN, anyCategoryEquals("pics"));
@@ -134,7 +152,7 @@ public class SubjectRepository {
         add(s, "John Oliver", FUN, has("john oliver"));
         add(s, "Comics", FUN, anyCategoryEquals("serier").or(isFromFeed("xkcd")));
 
-        add(s, "Sport", "Sport_v2", BAD, anyCategoryEquals("sport").or(anyCategoryEquals("Sport")));
+        add(s, "Sport", BAD, anyCategoryEquals("sport").or(anyCategoryEquals("Sport")));
         add(s, "Reddit::Jokes", BAD, anyCategoryEquals("Jokes"));
         add(s, "Reddit Clickbaity", BAD, has("-- number"));
         add(s, "Reddit::MURICA", BAD, anyCategoryEquals("MURICA"));
@@ -146,6 +164,8 @@ public class SubjectRepository {
         add(s, "DN::Webb-TV", BAD, anyCategoryEquals("webb-tv"));
         add(s, "Ars Technica::The Multiverse", BAD, isFromFeed("Ars Technica").and(anyCategoryEquals("The Multiverse")));
         add(s, "HackerNews::hiring", BAD, isFromFeed("HackerNews").and(has("hiring")));
+        add(s, "Economy - Warning (clickbaity)", BAD, anyCategoryEquals("Näringsliv").and(has("varning")));
+
         return s;
     }
 
@@ -167,11 +187,7 @@ public class SubjectRepository {
     }
 
     private static boolean add(ArrayList<Subject> s, String title, String tab, Predicate<Document> predicate) {
-        return s.add(new Subject(title, title, tab, predicate));
-    }
-
-    private static boolean add(ArrayList<Subject> s, String title, String key, String tab, Predicate<Document> predicate) {
-        return s.add(new Subject(title, key, tab, predicate));
+        return s.add(new Subject(title, title+tab, tab, predicate));
     }
 
     private static Predicate<Document> has(String string) {
