@@ -3,13 +3,13 @@ package se.johantiden.myfeed.persistence.redis;
 import se.johantiden.myfeed.controller.Subject;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.UserDocument;
+import se.johantiden.myfeed.persistence.Username;
 
 public class Keys {
 
-    public static Key<User> user(String userName) {
-        return Key.create(userName);
+    public static Username user(String userName) {
+        return new Username(userName);
     }
 
     public static Key<Document> document(String pageUrl) {
@@ -20,7 +20,7 @@ public class Keys {
         return Sha1Hex.makeSHA1Hash(hashMe);
     }
 
-    public static Key<UserDocument> userDocument(Key<User> user, Key<Document> document) {
+    public static Key<UserDocument> userDocument(Username user, Key<Document> document) {
         return Key.create(user + ":" + document);
     }
 

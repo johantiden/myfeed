@@ -1,37 +1,30 @@
 package se.johantiden.myfeed.persistence.user;
 
+import se.johantiden.myfeed.persistence.Username;
 import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.user.hack.Bjon;
-import se.johantiden.myfeed.persistence.user.hack.Danne;
-import se.johantiden.myfeed.persistence.user.hack.Jocke;
-import se.johantiden.myfeed.persistence.user.hack.Johan;
-import se.johantiden.myfeed.persistence.user.hack.Karin;
+import se.johantiden.myfeed.persistence.redis.Keys;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public final class UserRepository {
 
-    private final Map<Key<User>, User> users = new HashMap<>();
+    private final List<Username> users = new ArrayList<>();
 
     public UserRepository() {
-        put(new Jocke());
-        put(new Johan());
-        put(new Karin());
-        put(new Bjon());
-        put(new Danne());
+        put(Keys.user("jocke"));
+        put(Keys.user("johan"));
+        put(Keys.user("karin"));
+        put(Keys.user("bjon"));
+        put(Keys.user("danne"));
     }
 
-    public void put(User user) {
-        users.put(user.getKey(), user);
+    public void put(Username user) {
+        users.add(user);
     }
 
-    public Collection<User> getAllUsers() {
-        return users.values();
-    }
-
-    public User getUser(Key<User> userKey) {
-        return users.get(userKey);
+    public Collection<Username> getAllUsers() {
+        return users;
     }
 }

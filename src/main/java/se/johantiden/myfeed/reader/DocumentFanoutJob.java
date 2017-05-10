@@ -45,10 +45,9 @@ public class DocumentFanoutJob {
         Feed feed = feedService.getFeed(document.getFeedKey());
         feed.getFeedUsers().stream()
                 .map(FeedUser::getUser)
-                .filter(u -> u.getUserGlobalFilter().test(document))
                 .forEach(user -> {
-                    log.debug("  -> {}", user.getUsername());
-                    userDocumentService.putIfNew(new UserDocument(user.getKey(), document.getKey(), document.publishedDate));
+                    log.debug("  -> {}", user);
+                    userDocumentService.putIfNew(new UserDocument(user, document.getKey(), document.publishedDate));
                 });
     }
 }

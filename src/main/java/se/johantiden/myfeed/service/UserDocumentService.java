@@ -8,9 +8,9 @@ import se.johantiden.myfeed.controller.Subject;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.SubjectRepository;
 import se.johantiden.myfeed.persistence.UserSubject;
-import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
+import se.johantiden.myfeed.persistence.Username;
 import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Duration;
@@ -36,7 +36,7 @@ public class UserDocumentService {
     @Autowired
     private DocumentService documentService;
 
-    public SortedSet<UserDocument> getAllDocumentsFor(Key<User> user) {
+    public SortedSet<UserDocument> getAllDocumentsFor(Username user) {
         return userDocumentRepository.getAllKeys(user);
     }
 
@@ -44,7 +44,7 @@ public class UserDocumentService {
         userDocumentRepository.put(userDocument);
     }
 
-    public void setRead(Key<User> user, Key<UserDocument> userDocumentKey, boolean read) {
+    public void setRead(Username user, Key<UserDocument> userDocumentKey, boolean read) {
 
         if (user == null) {
             log.info("No user: No check");
@@ -73,11 +73,11 @@ public class UserDocumentService {
         return userDocumentRepository.purgeOlderThan(duration);
     }
 
-    public Optional<UserDocument> get(Key<User> userKey, Key<UserDocument> userDocumentKey) {
+    public Optional<UserDocument> get(Username userKey, Key<UserDocument> userDocumentKey) {
         return userDocumentRepository.find(userKey, userDocumentKey);
     }
 
-    public long purgeReadDocuments(Key<User> userKey) {
+    public long purgeReadDocuments(Username userKey) {
         SortedSet<UserDocument> allUserDocuments = getAllDocumentsFor(userKey);
 
         int sizeBefore = allUserDocuments.size();
@@ -87,7 +87,7 @@ public class UserDocumentService {
         return sizeBefore-sizeAfter;
     }
 
-    public TreeSet<UserSubject> getUnreadUserSubjects(Key<User> user) {
+    public TreeSet<UserSubject> getUnreadUserSubjects(Username user) {
         List<Subject> allSubjects = subjectRepository.getAllSubjects();
 
         SortedSet<UserDocument> allUserDocuments = getAllDocumentsFor(user);

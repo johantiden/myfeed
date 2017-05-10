@@ -1,7 +1,6 @@
 package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.util.Chrono;
 
 import java.io.Serializable;
@@ -22,17 +21,17 @@ public class UserDocumentRepository implements Serializable {
     public static final transient Comparator<UserDocument> YOUNGEST_FIRST =
             Comparator.comparing((Function<UserDocument, Instant> & Serializable)UserDocument::getPublishDate).reversed();
 
-    private final HashMap<Key<User>, SortedSet<UserDocument>> map;
+    private final HashMap<Username, SortedSet<UserDocument>> map;
 
     public UserDocumentRepository() {
         map = new HashMap<>();
     }
 
-    public final SortedSet<UserDocument> getAllKeys(Key<User> user) {
+    public final SortedSet<UserDocument> getAllKeys(Username user) {
         return getOrCreateSetForUser(user);
     }
 
-    private SortedSet<UserDocument> getOrCreateSetForUser(Key<User> userKey) {
+    private SortedSet<UserDocument> getOrCreateSetForUser(Username userKey) {
         if (!map.containsKey(userKey)) {
             map.put(userKey, createNewUserSet());
         }
@@ -47,7 +46,7 @@ public class UserDocumentRepository implements Serializable {
         getOrCreateSetForUser(userDocument.getUserKey()).add(userDocument);
     }
 
-    public final Optional<UserDocument> find(Key<User> userKey, Key<UserDocument> userDocumentKey) {
+    public final Optional<UserDocument> find(Username userKey, Key<UserDocument> userDocumentKey) {
         return getOrCreateSetForUser(userKey).stream()
                 .filter((Predicate<UserDocument> & Serializable) ud -> ud.getKey().equals(userDocumentKey))
                 .findAny();

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.UserService;
-import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.UserDocumentService;
 import se.johantiden.myfeed.settings.GlobalSettings;
@@ -29,14 +28,10 @@ public class DocumentPurgeOldJob {
     public void purgeOldByPublishDate() {
         log.info("Purging oldest documents!");
 
-        Collection<User> users = userService.getAllUsers();
+        long removedUserDocuments = userDocumentService.purgeOlderThan(GlobalSettings.DOCUMENT_MAX_AGE);
+        log.info("Removed {} UserDocuments", removedUserDocuments);
 
-        for (User user : users) {
-            long removed = userDocumentService.purgeOlderThan(GlobalSettings.DOCUMENT_MAX_AGE);
-            log.info("Removed {} UserDocuments for {}", removed, user.getUsername());
-        }
-
-        long removed = documentService.purgeOlderThan(GlobalSettings.DOCUMENT_MAX_AGE);
-        log.info("Removed {} Documents.", removed);
+        long removedDocuments = documentService.purgeOlderThan(GlobalSettings.DOCUMENT_MAX_AGE);
+        log.info("Removed {} Documents.", removedDocuments);
     }
 }

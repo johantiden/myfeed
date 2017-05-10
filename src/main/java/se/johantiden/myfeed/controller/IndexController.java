@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserSubject;
-import se.johantiden.myfeed.persistence.user.User;
+import se.johantiden.myfeed.persistence.Username;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 import se.johantiden.myfeed.service.DocumentService;
@@ -38,7 +38,7 @@ public class IndexController {
             @PathVariable("username") String username) {
 
         log.info("User: " + username);
-        Key<User> user = Keys.user(username);
+        Username user = Keys.user(username);
 
         SortedSet<UserSubject> allUserSubjects = userDocumentService.getUnreadUserSubjects(user);
 
@@ -59,7 +59,7 @@ public class IndexController {
     public DocumentBean userDocument(@PathVariable("userDocumentKey") String userDocumentKey) {
 
         String user = userDocumentKey.split(":")[0];
-        Key<User> userKey = Key.create(user);
+        Username userKey = Keys.user(user);
         Optional<UserDocument> documentOptional = userDocumentService.get(userKey, Key.<UserDocument>create(userDocumentKey));
 
         Optional<DocumentBean> documentBean = documentOptional.flatMap(ud -> documentService.find(ud.getDocumentKey()))
@@ -78,7 +78,7 @@ public class IndexController {
                 @PathVariable("username") String username) {
 
         Key<Subject> subjectKey = Key.create(subjectKeyStr);
-        Key<User> user = Keys.user(username);
+        Username user = Keys.user(username);
 
         SortedSet<UserSubject> allUserSubjects = userDocumentService.getUnreadUserSubjects(user);
 

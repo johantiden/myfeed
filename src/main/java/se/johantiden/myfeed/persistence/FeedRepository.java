@@ -2,7 +2,6 @@ package se.johantiden.myfeed.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
 import se.johantiden.myfeed.plugin.hackenews.HackerNewsPlugin;
@@ -108,15 +107,15 @@ public class FeedRepository {
 //        feeds.add(createTwitter("elonmusk"));
 //        feeds.add(createTwitter("github"));
 
-        Collection<User> allUsers = userRepository.getAllUsers();
+        Collection<Username> allUsers = userRepository.getAllUsers();
         allUsersHasAllFeedsHack(allUsers, feeds);
 
         return feeds;
     }
 
-    private static void allUsersHasAllFeedsHack(Collection<User> allUsers, List<Feed> feeds) {
+    private static void allUsersHasAllFeedsHack(Collection<Username> allUsers, List<Feed> feeds) {
         for (Feed feed : feeds) {
-            for (User user : allUsers) {
+            for (Username user : allUsers) {
                 feed.getFeedUsers().add(new FeedUser(feed, user));
             }
 
