@@ -59,7 +59,7 @@ public class IndexController {
     }
 
     private Predicate<UserSubject> badFilter() {
-        if (SubjectService.REMOVE_BAD) {
+        if (!SubjectService.REMOVE_BAD) {
             return s -> true;
         }
 
