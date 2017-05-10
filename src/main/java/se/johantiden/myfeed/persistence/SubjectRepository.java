@@ -32,6 +32,7 @@ public class SubjectRepository {
                                                     .or(textContains("Israeli"))
                                                     .or(textContains("Hamas")));
         add(s, "Egypt vs Libya", NEWS, textContains("Egypt").or(textContains("Libya")));
+        add(s, "USA vs Syria", NEWS, textContains("USA").or(textContains("Trump")).and(textContains("Syria")));
         add(s, "TheLocal (Unmatched)", NEWS, isFromFeed("TheLocal"));
         add(s, "Crises", NEWS, textContains("kris").and(anyCategoryEquals("Näringsliv").negate()));
         add(s, "Disasters", "disasters_v2", NEWS, textContainsIgnoreCase("floods").or(textContainsIgnoreCase("översvämning")));
@@ -40,7 +41,8 @@ public class SubjectRepository {
                                          .or(textContainsIgnoreCase("kvinna död")
                                          .or(anyCategoryEquals("Accidents and Safety"))
                                          .or(textContainsIgnoreCase("sexköp"))
-                                         .or(textContainsIgnoreCase("stöld")))));
+                                         .or(textContainsIgnoreCase("stöld"))
+                                         .or(textContainsIgnoreCase("mörda")))));
 
         add(s, "Stockholm", "sthml", NEWS, textContains("Stockholm").or(anyCategoryEquals("sthlm")).and(textContainsIgnoreCase("börs").negate()));
         add(s, "Arbogamordet", NEWS, textContains("Arboga").and(textContainsIgnoreCase("mord")));
@@ -56,7 +58,6 @@ public class SubjectRepository {
         add(s, "USA", "usa_v2", NEWS, textContains("Indiana")
                 .or(textContainsIgnoreCase("inreseförbud"))
                 .or(textContainsIgnoreCase("republican")));
-
         add(s, "Russia", NEWS, textContains("Russia"));
         add(s, "China", NEWS, textContains("China").or(textContainsIgnoreCase("communist party")));
         add(s, "Venezuela", NEWS, textContains("Venezuela").or(textContains("Maduro")));
@@ -69,6 +70,11 @@ public class SubjectRepository {
         add(s, "Political Movements", NEWS, anyCategoryEquals("esist"));
         add(s, "Norway", NEWS, textContains("Norway"));
         add(s, "Philippines", NEWS, textContains("Philippines").or(textContains("Duterte")));
+        add(s, "Daesh", NEWS, textContains("ISIL").or(textContains("Duterte")));
+        add(s, "Racism", NEWS, textContainsIgnoreCase("racism"));
+        add(s, "South Korea", NEWS, textContains("South Korea").and(textContainsIgnoreCase("vote").negate().and(textContainsIgnoreCase("election").negate())));
+        add(s, "South Korean Election", NEWS, textContains("South Korea").and(textContainsIgnoreCase("vote").or(textContainsIgnoreCase("election"))));
+
 
         add(s, "Apple", TECH, textContains("Apple"));
         add(s, "Google", TECH, textContains("Google").or(anyCategoryEquals("Google")));
@@ -93,6 +99,7 @@ public class SubjectRepository {
         add(s, "Movies", CULTURE, anyCategoryEquals("movies"));
         add(s, "Art", CULTURE, anyCategoryEquals("Art"));
         add(s, "DN::Kultur & Nöje", CULTURE, anyCategoryEquals("kultur-noje"));
+        add(s, "SVD::Kultur", CULTURE, anyCategoryEquals("Kultur"));
 
         add(s, "Misc Business", BIZ, anyCategoryEquals("Business"));
         add(s, "Affärsbragd", BIZ, textContains("Affärsbragd"));
@@ -101,6 +108,10 @@ public class SubjectRepository {
         add(s, "Pension", BIZ, anyCategoryEquals("Näringsliv").and(textContainsIgnoreCase("pension")));
         add(s, "Your boss (test)", BIZ, anyCategoryEquals("business").and(textContainsIgnoreCase("boss")));
         add(s, "Basic Income", BIZ, textContainsIgnoreCase("basic income"));
+        add(s, "Asia", BIZ, anyCategoryEquals("ekonomi").and(textContainsIgnoreCase("asia").or(textContainsIgnoreCase("asien"))));
+        add(s, "Medicine", BIZ, anyCategoryEquals("Näringsliv").and(textContainsIgnoreCase("läkemedel")));
+        add(s, "Press Releases", BIZ, anyCategoryEquals("Näringsliv").and(textContainsIgnoreCase("pressmeddelande")));
+
 
         add(s, "Reddit::Aww", FUN, anyCategoryEquals("aww"));
         add(s, "Reddit::Pics", FUN, anyCategoryEquals("pics"));
