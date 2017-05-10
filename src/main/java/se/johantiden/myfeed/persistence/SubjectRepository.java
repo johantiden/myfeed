@@ -16,6 +16,8 @@ public class SubjectRepository {
     private static final String CULTURE = "Culture";
     private static final String ENTERTAINMENT = "Entertainment";
 
+    private static final boolean DEBUG = true;
+
     private final List<Subject> subjects;
 
     public SubjectRepository() {
@@ -25,73 +27,74 @@ public class SubjectRepository {
     private static List<Subject> createSubjects() {
         ArrayList<Subject> s = new ArrayList<>();
 
-        add(s, "Trump", NEWS, textContainsIgnoreCase("trump").or(textContainsIgnoreCase("the_donald")));
-        add(s, "Macron", NEWS, textContainsIgnoreCase("macron"));
-        add(s, "Syria", NEWS, textContains("Syria"));
-        add(s, "Palestine vs Israel", "PvI", NEWS, textContains("Palestinian")
-                                                    .or(textContains("Israeli"))
-                                                    .or(textContains("Hamas")));
-        add(s, "Egypt vs Libya", NEWS, textContains("Egypt").or(textContains("Libya")));
-        add(s, "USA vs Syria", NEWS, textContains("USA").or(textContains("Trump")).and(textContains("Syria")));
+        add(s, "Trump", NEWS, has("trump").or(has("the_donald")));
+        add(s, "Macron", NEWS, has("macron"));
+        add(s, "Syria", NEWS, has("syria"));
+        add(s, "Palestine vs Israel", "PvI", NEWS, has("palestinian")
+                                                    .or(has("israeli"))
+                                                    .or(has("hamas")));
+        add(s, "Egypt vs Libya", NEWS, has("egypt").or(has("libya")));
+        add(s, "USA vs Syria", NEWS, has("usa").or(has("trump")).and(has("syria")));
         add(s, "TheLocal (Unmatched)", NEWS, isFromFeed("TheLocal"));
-        add(s, "Crises", NEWS, textContains("kris").and(anyCategoryEquals("Näringsliv").negate()));
-        add(s, "Disasters", "disasters_v2", NEWS, textContainsIgnoreCase("floods").or(textContainsIgnoreCase("översvämning")));
-        add(s, "Crime", "crime_v2", NEWS, textContainsIgnoreCase("våldtäkt")
-                                         .or(textContainsIgnoreCase("man död")
-                                         .or(textContainsIgnoreCase("kvinna död")
-                                         .or(anyCategoryEquals("Accidents and Safety"))
-                                         .or(textContainsIgnoreCase("sexköp"))
-                                         .or(textContainsIgnoreCase("stöld"))
-                                         .or(textContainsIgnoreCase("mörda")))));
+        add(s, "Crises", NEWS, has("kris").and(anyCategoryEquals("Näringsliv").negate()));
+        add(s, "Disasters", "disasters_v2", NEWS, has("floods").or(has("översvämning")));
+        add(s, "Crime", "crime_v2", NEWS, has("våldtäkt")
+                                         .or(has("man död")
+                                                     .or(has("kvinna död")
+                                                                 .or(anyCategoryEquals("Accidents and Safety"))
+                                                                 .or(has("sexköp"))
+                                                                 .or(has("stöld"))
+                                                                 .or(has("mörda")))));
 
-        add(s, "Stockholm", "sthml", NEWS, textContains("Stockholm").or(anyCategoryEquals("sthlm")).and(textContainsIgnoreCase("börs").negate()));
-        add(s, "Arbogamordet", NEWS, textContains("Arboga").and(textContainsIgnoreCase("mord")));
-        add(s, "Sex", "sex", ENTERTAINMENT, textContainsIgnoreCase("sexliv"));
-        add(s, "Högskoleprovet", NEWS, textContainsIgnoreCase("högskoleprov"));
-        add(s, "Fake News", NEWS, textContainsIgnoreCase("fake news").or(textContainsIgnoreCase("alternative facts")));
-        add(s, "Elections", NEWS, textContainsIgnoreCase("väljer").and(textContainsIgnoreCase("president")));
-        add(s, "Vinster i välfärden", NEWS, textContainsIgnoreCase("vinst").and(textContainsIgnoreCase("välfärd")));
-        add(s, "Lottning i skolan", NEWS, textContainsIgnoreCase("skol").and(textContainsIgnoreCase("lott")));
+        add(s, "Stockholm", "sthml", NEWS, has("stockholm").or(anyCategoryEquals("sthlm")).and(has("börs").negate()));
+        add(s, "Arbogamordet", NEWS, has("arboga").and(has("mord")));
+        add(s, "Sex", "sex", ENTERTAINMENT, has("sexliv"));
+        add(s, "Högskoleprovet", NEWS, has("högskoleprov"));
+        add(s, "Fake News", NEWS, has("fake news").or(has("alternative facts")));
+        add(s, "Elections", NEWS, has("väljer").and(has("president")));
+        add(s, "Vinster i välfärden", NEWS, has("vinst").and(has("välfärd")));
+        add(s, "Lottning i skolan", NEWS, has("skol").and(has("lott")));
         add(s, "Deaths", NEWS, anyCategoryEquals("Deaths (Obituaries)").or(anyCategoryEquals("Funerals and Memorials")));
-        add(s, "North Korea", NEWS, textContains("Nordkorea").or(textContains("North Korea")));
-        add(s, "Terrorism", NEWS, textContains("Boko Haram").or(textContainsIgnoreCase("car bomb")).or(anyCategoryEquals("Terrorism")));
-        add(s, "USA", "usa_v2", NEWS, textContains("Indiana")
-                .or(textContainsIgnoreCase("inreseförbud"))
-                .or(textContainsIgnoreCase("republican")));
-        add(s, "Russia", NEWS, textContains("Russia"));
-        add(s, "China", NEWS, textContains("China").or(textContainsIgnoreCase("communist party")));
-        add(s, "Venezuela", NEWS, textContains("Venezuela").or(textContains("Maduro")));
-        add(s, "Marine Le Pen", NEWS, textContains("Marine Le Pen"));
-        add(s, "Kevin", NEWS, textContains("Kevin").and(textContains("Arvika").or(textContainsIgnoreCase("mord"))));
+        add(s, "North Korea", NEWS, has("nordkorea").or(has("north korea")));
+        add(s, "Terrorism", NEWS, has("boko haram").or(has("car bomb")).or(anyCategoryEquals("Terrorism")));
+        add(s, "USA", "usa_v2", NEWS, has("indiana")
+                .or(has("inreseförbud"))
+                .or(has("republican")));
+        add(s, "Russia", NEWS, has("russia"));
+        add(s, "China", NEWS, has("china").or(has("communist party")));
+        add(s, "Venezuela", NEWS, has("venezuela").or(has("maduro")));
+        add(s, "Marine Le Pen", NEWS, has("marine le pen"));
+        add(s, "Kevin", NEWS, has("kevin").and(has("arvika").or(has("mord")).or(has("åklagare"))));
         add(s, "Ledare & Sammanfattningar", NEWS, anyCategoryEqualsIgnoreCase("ledare"));
-        add(s, "Baby", NEWS, textContainsIgnoreCase("spädbarn"));
-        add(s, "Refugees", NEWS, textContainsIgnoreCase("refugees").or(textContainsIgnoreCase("flykting")));
-        add(s, "Misc News", NEWS, textContainsIgnoreCase("politiker").or(textContainsIgnoreCase("polis")).or(textContainsIgnoreCase("police")));
+        add(s, "Baby", NEWS, has("spädbarn"));
+        add(s, "Refugees", NEWS, has("refugees").or(has("flykting")));
+        add(s, "Misc News", NEWS, has("politiker").or(has("polis")).or(has("police")));
         add(s, "Political Movements", NEWS, anyCategoryEquals("esist"));
-        add(s, "Norway", NEWS, textContains("Norway"));
-        add(s, "Philippines", NEWS, textContains("Philippines").or(textContains("Duterte")));
-        add(s, "Daesh", NEWS, textContains("ISIL").or(textContains("Duterte")));
-        add(s, "Racism", NEWS, textContainsIgnoreCase("racism"));
-        add(s, "South Korea", NEWS, textContains("South Korea").and(textContainsIgnoreCase("vote").negate().and(textContainsIgnoreCase("election").negate())));
-        add(s, "South Korean Election", NEWS, textContains("South Korea").and(textContainsIgnoreCase("vote").or(textContainsIgnoreCase("election"))));
+        add(s, "Norway", NEWS, has("norway"));
+        add(s, "Philippines", NEWS, has("philippines").or(has("duterte")));
+        add(s, "Daesh", NEWS, has("isil").or(has("duterte")));
+        add(s, "Discrimination", NEWS, has("racism").or(has("discrimination")));
+        add(s, "South Korea", NEWS, has("south korea").and(has("vote").negate().and(has("election").negate())));
+        add(s, "South Korean Election", NEWS, has("south korea").and(has("vote").or(has("election"))));
+        add(s, "France", NEWS, has("france").or(has("fransk").or(has("french")).or(has("frankr"))));
 
 
-        add(s, "Apple", TECH, textContains("Apple"));
-        add(s, "Google", TECH, textContains("Google").or(anyCategoryEquals("Google")));
-        add(s, "Comcast", TECH, textContains("Comcast"));
-        add(s, "Facebook", TECH, textContains("Facebook"));
-        add(s, "Samsung", TECH, textContainsIgnoreCase("samsung group"));
-        add(s, "Microsoft", TECH, textContainsIgnoreCase("microsoft"));
+        add(s, "Apple", TECH, has("apple"));
+        add(s, "Google", TECH, has("google").or(anyCategoryEquals("Google")));
+        add(s, "Comcast", TECH, has("comcast"));
+        add(s, "Facebook", TECH, has("facebook"));
+        add(s, "Samsung", TECH, has("samsung group"));
+        add(s, "Microsoft", TECH, has("microsoft"));
         add(s, "IBM", TECH, anyCategoryEquals("ibm"));
         add(s, "Gadgets", TECH, anyCategoryEquals("Gear & Gadgets"));
-        add(s, "Artificial Intelligence", TECH, textContainsIgnoreCase("artificial intelligence"));
-        add(s, "Internet", TECH, textContainsIgnoreCase("internet"));
-        add(s, "Ask Slashdot", TECH, textContains("Ask Slashdot"));
-        add(s, "Security", "Security_v3", TECH, anyCategoryEquals("malware").or(anyCategoryEquals("passwords")).or(textContainsIgnoreCase("denial-of-service")));
-        add(s, "Misc Tech", TECH, isFromFeed("HackerNews").and(textContainsIgnoreCase("hiring").negate()).and(textContainsIgnoreCase("Show HN").negate())
+        add(s, "Artificial Intelligence", TECH, has("artificial intelligence"));
+        add(s, "Internet", TECH, has("internet"));
+        add(s, "Ask Slashdot", TECH, has("ask slashdot"));
+        add(s, "Security", "Security_v3", TECH, anyCategoryEquals("malware").or(anyCategoryEquals("passwords")).or(has("denial-of-service")));
+        add(s, "Misc Tech", TECH, isFromFeed("HackerNews").and(has("hiring").negate()).and(has("show hn").negate())
                                           .or(anyCategoryEquals("Law & Disorder")
                                                       .or(anyCategoryEquals("internet"))));
-        add(s, "Show HN", TECH, textContains("Show HN"));
+        add(s, "Show HN", TECH, has("show hn"));
         add(s, "Privacy", TECH, anyCategoryEquals("privacy"));
         add(s, "Science", TECH, anyCategoryEquals("science").or(anyCategoryEquals("Scientific Method")));
 
@@ -102,15 +105,16 @@ public class SubjectRepository {
         add(s, "SVD::Kultur", CULTURE, anyCategoryEquals("Kultur"));
 
         add(s, "Misc Business", BIZ, anyCategoryEquals("Business"));
-        add(s, "Affärsbragd", BIZ, textContains("Affärsbragd"));
-        add(s, "Loans", BIZ, anyCategoryEquals("Näringsliv").and(textContainsIgnoreCase("lån")));
-        add(s, "Union", BIZ, anyCategoryEquals("Näringsliv").and(textContainsIgnoreCase("fack")));
-        add(s, "Pension", BIZ, anyCategoryEquals("Näringsliv").and(textContainsIgnoreCase("pension")));
-        add(s, "Your boss (test)", BIZ, anyCategoryEquals("business").and(textContainsIgnoreCase("boss")));
-        add(s, "Basic Income", BIZ, textContainsIgnoreCase("basic income"));
-        add(s, "Asia", BIZ, anyCategoryEquals("ekonomi").and(textContainsIgnoreCase("asia").or(textContainsIgnoreCase("asien"))));
-        add(s, "Medicine", BIZ, anyCategoryEquals("Näringsliv").and(textContainsIgnoreCase("läkemedel")));
-        add(s, "Press Releases", BIZ, anyCategoryEquals("Näringsliv").and(textContainsIgnoreCase("pressmeddelande")));
+        add(s, "Affärsbragd", BIZ, has("affärsbragd"));
+        add(s, "Loans", BIZ, anyCategoryEquals("Näringsliv").and(has("lån")));
+        add(s, "Union", BIZ, anyCategoryEquals("Näringsliv").and(has("fack")));
+        add(s, "Pension", BIZ, anyCategoryEquals("Näringsliv").and(has("pension")));
+        add(s, "Your boss (test)", BIZ, anyCategoryEquals("business").and(has("boss")));
+        add(s, "Basic Income", BIZ, has("basic income"));
+        add(s, "Asia", BIZ, anyCategoryEquals("ekonomi").and(has("asia").or(has("asien"))));
+        add(s, "Medicine", BIZ, anyCategoryEquals("Näringsliv").and(has("läkemedel")));
+        add(s, "Press Releases", BIZ, anyCategoryEquals("Näringsliv").and(has("pressmeddelande")));
+        add(s, "Stockholm", BIZ, anyCategoryEquals("Näringsliv").and(has("stockholm")));
 
 
         add(s, "Reddit::Aww", FUN, anyCategoryEquals("aww"));
@@ -127,21 +131,21 @@ public class SubjectRepository {
         add(s, "Reddit::Interesting As Fuck", FUN, anyCategoryEquals("interestingasfuck"));
         add(s, "Reddit::Europe", FUN, feedContains("Reddit").and(anyCategoryEquals("europe")));
         add(s, "Reddit::Videos", FUN, anyCategoryEquals("videos"));
-        add(s, "John Oliver", FUN, textContains("John Oliver"));
+        add(s, "John Oliver", FUN, has("john oliver"));
         add(s, "Comics", FUN, anyCategoryEquals("serier").or(isFromFeed("xkcd")));
 
         add(s, "Sport", "Sport_v2", BAD, anyCategoryEquals("sport").or(anyCategoryEquals("Sport")));
         add(s, "Reddit::Jokes", BAD, anyCategoryEquals("Jokes"));
-        add(s, "Reddit Clickbaity", BAD, textContainsIgnoreCase("-- number"));
+        add(s, "Reddit Clickbaity", BAD, has("-- number"));
         add(s, "Reddit::MURICA", BAD, anyCategoryEquals("MURICA"));
         add(s, "Reddit::meirl", BAD, anyCategoryEquals("meirl"));
         add(s, "Reddit::wholesomememes", BAD, anyCategoryEquals("wholesomememes"));
         add(s, "Food", BAD, anyCategoryEquals("mat-dryck").or(anyCategoryEqualsIgnoreCase("food")));
         add(s, "Cars", BAD, anyCategoryEquals("Cars Technica"));
-        add(s, "Al Jazeera::News Grid", BAD, textContains("NewsGrid"));
+        add(s, "Al Jazeera::News Grid", BAD, has("newsgrid"));
         add(s, "DN::Webb-TV", BAD, anyCategoryEquals("webb-tv"));
         add(s, "Ars Technica::The Multiverse", BAD, isFromFeed("Ars Technica").and(anyCategoryEquals("The Multiverse")));
-        add(s, "HackerNews::hiring", BAD, isFromFeed("HackerNews").and(textContainsIgnoreCase("hiring")));
+        add(s, "HackerNews::hiring", BAD, isFromFeed("HackerNews").and(has("hiring")));
         return s;
     }
 
@@ -170,18 +174,15 @@ public class SubjectRepository {
         return s.add(new Subject(title, key, tab, predicate));
     }
 
-
-    private static Predicate<Document> textContainsIgnoreCase(String string) {
+    private static Predicate<Document> has(String string) {
+        if (DEBUG) {
+            if (!string.toLowerCase().equals(string)) {
+                throw new IllegalArgumentException("Input must be lower case only!");
+            }
+        }
         return d -> d.text != null && d.text.toLowerCase().contains(string) ||
                 d.title != null && d.title.toLowerCase().contains(string) ||
                 d.categories.stream().anyMatch(c -> c.name.toLowerCase().contains(string));
-    }
-
-    private static Predicate<Document> textContains(String string) {
-        return d -> d.text != null && d.text.contains(string) ||
-                d.title != null && d.title.contains(string) ||
-                            d.categories.stream().anyMatch(c -> c.name.contains(string));
-
     }
 
     public List<Subject> getAllSubjects() {
