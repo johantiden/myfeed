@@ -58,7 +58,7 @@ public class IndexController {
         return keys;
     }
 
-    private Predicate<UserSubject> badFilter() {
+    private static Predicate<UserSubject> badFilter() {
         if (!SubjectService.REMOVE_BAD) {
             return s -> true;
         }
