@@ -23,6 +23,8 @@ public class DocumentRepositorySaver implements Saver<DocumentRepository> {
 
     @Override
     public Optional<DocumentRepository> load() {
-        return baseSaver.load(BaseSaver.DOCUMENTS);
+        Optional<DocumentRepository> load = baseSaver.load(BaseSaver.DOCUMENTS);
+        load.ifPresent(DocumentRepository::resetSubjects);
+        return load;
     }
 }

@@ -60,4 +60,10 @@ public class DocumentRepository implements Serializable {
     public final int size() {
         return map.size();
     }
+
+    public void resetSubjects() {
+        map.values().stream()
+//                .filter(d -> d.getSubject().equals(SubjectService.UNMATCHED.getKey()))
+                .forEach(d -> d.subject = null);
+    }
 }

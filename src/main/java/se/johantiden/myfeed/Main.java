@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.FeedRepository;
 import se.johantiden.myfeed.persistence.InboxRepository;
-import se.johantiden.myfeed.persistence.SubjectRepository;
+import se.johantiden.myfeed.persistence.SubjectService;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.persistence.file.BaseSaver;
@@ -112,8 +112,8 @@ public class Main {
     }
 
     @Bean
-    public SubjectRepository subjectRepository() {
-        return new SubjectRepository();
+    public SubjectService subjectRepository() {
+        return new SubjectService();
     }
 
     public static void main(String[] args) {

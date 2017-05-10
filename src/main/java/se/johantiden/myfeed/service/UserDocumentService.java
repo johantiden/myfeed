@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.controller.Subject;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.SubjectRepository;
+import se.johantiden.myfeed.persistence.SubjectService;
 import se.johantiden.myfeed.persistence.UserSubject;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
@@ -16,6 +16,7 @@ import se.johantiden.myfeed.persistence.redis.Key;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
@@ -31,7 +32,7 @@ public class UserDocumentService {
     private UserDocumentRepository userDocumentRepository;
 
     @Autowired
-    private SubjectRepository subjectRepository;
+    private SubjectService subjectService;
 
     @Autowired
     private DocumentService documentService;
@@ -88,31 +89,19 @@ public class UserDocumentService {
     }
 
     public TreeSet<UserSubject> getUnreadUserSubjects(Username user) {
-        List<Subject> allSubjects = subjectRepository.getAllSubjects();
+        List<Subject> allSubjects = subjectService.getAllSubjects();
 
         SortedSet<UserDocument> allUserDocuments = getAllDocumentsFor(user);
         List<Pair<UserDocument, Document>> allDocuments = map(allUserDocuments);
+
         TreeSet<UserSubject> subjects = allSubjects.stream()
                 .map(s -> new UserSubject(s, allDocuments.stream()
-                                                     .filter(p -> s.test(p.getValue()))
+                                                     .filter(p -> p.getValue().hasSubject(s.getKey()))
                                                      .map(Pair::getKey)
                                                      .collect(Collectors.toSet())))
                 .collect(Collectors.toCollection(getTreeSetSupplier()));
 
-        subjects.add(createUnmatchedSubject(allDocuments));
-
         return subjects;
-    }
-
-    private static UserSubject createUnmatchedSubject(List<Pair<UserDocument, Document>> allUserDocuments) {
-
-        Set<UserDocument> unmatched = allUserDocuments.stream().filter(p -> p.getRight().getSubjects().isEmpty())
-                                             .map(Pair::getLeft)
-                                             .collect(Collectors.toSet());
-        return new UserSubject(new Subject("Unmatched", "Unmatched", "Unmatched",
-                                                  d -> false), unmatched);
-
-
     }
 
     private static Supplier<TreeSet<UserSubject>> getTreeSetSupplier() {
