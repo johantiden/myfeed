@@ -64,9 +64,8 @@ public class IndexController {
         }
 
         return s -> {
-            return !s.getSubject().getTitle().equals(SubjectService.ERROR) &&
-                    !s.getSubject().getTitle().equals(SubjectService.BAD);
-
+            return !s.getSubject().getTab().equals(SubjectService.ERROR) &&
+                    !s.getSubject().getTab().equals(SubjectService.BAD);
         };
     }
 
