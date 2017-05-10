@@ -18,7 +18,7 @@
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
         <div ng-repeat="(tabName, _) in tabs" class="tab-button {{selectedTabName == tabName ? 'selected' : ''}}" ng-click="selectTab(tabName)">
-            {{tabName}} <span class="number-badge" ng-if="((subjects | filter:withFilter(tabName)).length) > 0">({{(subjects | filter:withFilter(tabName)).length}})</span>
+            {{tabName}} <span class="number-badge" ng-if="((subjects | filter:withFilter(tabName)).length) > 0">({{(subjects | filter:withFilter(tabName) | filter:hasUnread).length}})</span>
         </div>
 
         <div class="mark-all-div" >
@@ -30,7 +30,7 @@
     </div>
     <!--<div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">-->
     <div class="subject-box" ng-repeat="subject in subjects | filter:tabFilter | filter:hasUnread | orderBy:-userDocuments.length">
-        {{subject.title}} ({{subject.userDocuments.length}})
+        {{subject.title}} ({{(subject.userDocuments | filter:{read:false}).length}})
     <div class="document-box {{document.cssClass}} {{document.read ? 'read' : ''}}"
         ng-repeat="document in subject.userDocuments | filter:{read:false} | orderBy:'-publishedDate.epochSecond'">
 

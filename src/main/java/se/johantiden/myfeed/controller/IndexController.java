@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import se.johantiden.myfeed.persistence.SubjectService;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserSubject;
 import se.johantiden.myfeed.persistence.Username;
@@ -21,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,6 +46,7 @@ public class IndexController {
 
         List<String> keys = allUserSubjects.stream()
                 .filter(UserSubject::hasUnread)
+                .filter(badFilter())
                 .map(UserSubject::getSubject)
                 .map(Subject::getKey)
                 .map(Object::toString)
@@ -53,6 +56,18 @@ public class IndexController {
         log.info("index User:{}, keys:{}", username, keys.size());
 
         return keys;
+    }
+
+    private Predicate<UserSubject> badFilter() {
+        if (SubjectService.REMOVE_BAD) {
+            return s -> true;
+        }
+
+        return s -> {
+            return !s.getSubject().getTitle().equals(SubjectService.ERROR) &&
+                    !s.getSubject().getTitle().equals(SubjectService.BAD);
+
+        };
     }
 
     @RequestMapping("/rest/userdocument/{userDocumentKey}")
