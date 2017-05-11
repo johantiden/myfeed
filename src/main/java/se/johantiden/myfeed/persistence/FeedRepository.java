@@ -55,14 +55,6 @@ public class FeedRepository {
                 INVALIDATION_PERIOD,
                 d -> !d.isPaywalled));
 
-        feeds.add(new SvenskaDagbladetPlugin().createFeed(
-                "SVT Nyheter",
-                "svt",
-                "https://www.svt.se/nyheter",
-                newHashMap("rssUrl", "https://www.svt.se/nyheter/rss.xml"),
-                INVALIDATION_PERIOD,
-                d -> !d.isPaywalled));
-
         DagensNyheterPlugin dn = new DagensNyheterPlugin();
         feeds.add(dn.createFeed(
                 "Dagens Nyheter",
@@ -75,6 +67,12 @@ public class FeedRepository {
                 "xkcd",
                 "https://xkcd.com",
                 "https://xkcd.com/atom.xml", Duration.ofDays(30)));
+
+        feeds.add(createRss(
+                "SVT Nyheter",
+                "svt",
+                "https://www.svt.se/nyheter",
+                "https://www.svt.se/nyheter/rss.xml", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "Ars Technica",
@@ -106,6 +104,12 @@ public class FeedRepository {
                 "thelocal",
                 "https://www.thelocal.se/",
                 "https://www.thelocal.se/feeds/rss.php", INVALIDATION_PERIOD));
+
+        feeds.add(createRss(
+                "9gag",
+                "9gag",
+                "https://9gag.com/",
+                "http://9gagrss.com/feed/", INVALIDATION_PERIOD));
 
 //        feeds.add(createTwitter("pwolodarski"));
 //        feeds.add(createTwitter("kinbergbatra"));

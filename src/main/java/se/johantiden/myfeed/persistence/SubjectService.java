@@ -95,6 +95,7 @@ public class SubjectService {
         add("Videos", FUN, anyCategoryEquals("gifs").or(anyCategoryEquals("videos")));
         add("Gaming", FUN, anyCategoryEquals("opposable thumbs").or(anyCategoryEquals("gaming")));
         add("Funny", FUN, anyCategoryEquals("funny"));
+        add("9gag", FUN, isFromFeed("9gag"));
         add("Today I Learned", FUN, anyCategoryEquals("todayilearned"));
         add("Nottheonion", FUN, anyCategoryEquals("nottheonion"));
         add("Aww", FUN, anyCategoryEquals("aww"));
@@ -164,7 +165,7 @@ public class SubjectService {
         // Only sweden should be left at this point. Create some very general topics.
 
         add("Finans", BIZ, BIZ_CATEGORIES.and(has("aktie")));
-        add("Ekonomi", BIZ, BIZ_CATEGORIES.and(has("inflation").or(has("räntepolitik")).or(has("utlåning")).or(has("valuta")).or(has("pris")).or(has("kritiserade bolag")).or(has("pension"))));
+        add("Ekonomi", BIZ, BIZ_CATEGORIES.and(has("inflation").or(has("räntepolitik")).or(has("utlåning")).or(has("valuta")).or(has("pris")).or(has("kritiserade bolag")).or(has("pension")).or(hasCaseSensitive("NIX"))));
         add("Politik", NEWS, has("minister").or(has("regering")).or(has("ungdomsförbund")).or(has("kommunalråd")).or(has("partistämma")).or(SWEDEN.and(has("democrats").or(has("centre")))));
         add("Brott", NEWS,
                 has("prison").or(has("mördare")).or(has("mord")).or(has("bråk")).or(has("våldtäkt"))
