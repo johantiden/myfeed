@@ -72,8 +72,13 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     }
 
     $scope.selectedTabName = $cookies.get('selectedTabName');
-    if ($scope.selectedTabName === undefined) {
+    $scope.search = $cookies.get('search');
+
+    if ($scope.selectedTabName === undefined && $scope.search === undefined) {
         $scope.selectedTabName = 'All';
+    }
+    if ($scope.search === undefined) {
+        $scope.search = '';
     }
 
     $scope.$watch('selectedTabName', function(newValue) {
@@ -82,11 +87,6 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         }
         $cookies.put('selectedTabName', newValue);
     });
-
-    $scope.search = $cookies.get('search');
-    if ($scope.search === undefined) {
-        $scope.search = '';
-    }
 
     $scope.$watch('search', function(newValue) {
         if (newValue) {
