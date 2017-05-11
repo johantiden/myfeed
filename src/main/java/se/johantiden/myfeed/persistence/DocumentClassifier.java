@@ -187,6 +187,7 @@ public class DocumentClassifier {
         m.anyCategoryEquals("familj") ||
         d.isPaywalled ||
         m.isFromFeed("eztv") && !m.has("720p") ||
-        m.anyCategoryEquals("vin & mat");
+        m.anyCategoryEquals("vin & mat") ||
+        m.has("nutidstest");
     }
 }
