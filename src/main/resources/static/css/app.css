@@ -130,6 +130,7 @@ div.text {
 .title > a {
     /*font-size: large;*/
     /*font-weight: bold;*/
+    text-decoration: underline;
 }
 
 .flagged {
