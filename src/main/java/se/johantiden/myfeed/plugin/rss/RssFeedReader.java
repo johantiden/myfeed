@@ -97,6 +97,7 @@ public class RssFeedReader implements FeedReader {
 
     private static String unescape(String string) {
         String unescaped = string.replaceAll("&#38;", "&");
+        unescaped = unescaped.replaceAll("&#34;", "\"");
 
         if (!unescaped.equals(string)) {
             log.info("Unescaped! {} -> {}", string, unescaped);
