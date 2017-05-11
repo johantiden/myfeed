@@ -4,6 +4,8 @@ import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserSubject;
 import se.johantiden.myfeed.service.DocumentService;
 
+import java.time.Instant;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,5 +34,11 @@ public class UserSubjectBean {
 
     public String getTab() {
         return tab;
+    }
+
+    public Instant getLatestPublishedDate() {
+        return userDocuments.stream()
+               .map(DocumentBean::getPublishedDate)
+               .max(Comparator.<Instant>naturalOrder()).get();
     }
 }

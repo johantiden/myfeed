@@ -28,9 +28,9 @@
             Subjects:{{subjects.length}} | filtered:{{(subjects | filter:tabFilter).length}}
         </div>
     </div>
-    <!--<div class="inf-scroll" infinite-scroll="increaseLimit()" infinite-scroll-distance="15">-->
-    <div class="subject-box" ng-repeat="subject in subjects | filter:tabFilter | filter:hasUnread | orderBy:-userDocuments.length">
-        {{subject.title}} ({{(subject.userDocuments | filter:{read:false}).length}})
+    <div class="subject-box {{subject.userDocuments.length > 1 ? 'active' : ''}}"
+         ng-repeat="subject in subjects | filter:tabFilter | filter:hasUnread | orderBy:['-latestPublishedDate.epochSecond']">
+    <span ng-if="subject.userDocuments.length > 1">{{subject.title}} ({{(subject.userDocuments | filter:{read:false}).length}})</span>
     <div class="document-box {{document.cssClass}} {{document.read ? 'read' : ''}}"
         ng-repeat="document in subject.userDocuments | filter:{read:false} | orderBy:'-publishedDate.epochSecond'">
 
@@ -63,7 +63,6 @@
         </div>
     </div>
     </div>
-    <!--</div>-->
 </div>
 </body>
 </html>
