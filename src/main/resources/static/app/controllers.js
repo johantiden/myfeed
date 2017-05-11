@@ -38,7 +38,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     $scope.markFilteredAsRead = function() {
         if (confirm("Are you sure?")) { // jshint ignore:line
             $scope.documents.forEach(document => {
-                if ($scope.tabFilter(document)) {
+                if ($scope.tabOrSearchFilter(document)) {
                     $scope.setDocumentRead(document, true);
                 }
             });
@@ -53,9 +53,23 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         $scope.selectedTabName = tabName;
     };
 
-    $scope.tabFilter = function(document) {
+    $scope.tabOrSearchFilter = function(document) {
+        if ($scope.search) {
+            return match($scope.search, document);
+        }
+
         return $scope.tabs[$scope.selectedTabName](document);
     };
+
+    function match(query, document) {
+        var mergedString = '';
+        mergedString += document.html;
+        mergedString += document.text;
+        mergedString += document.title;
+        mergedString += document.feed.name;
+        mergedString = mergedString.toLowerCase();
+        return mergedString.includes(query);
+    }
 
     $scope.selectedTabName = $cookies.get('selectedTabName');
     if ($scope.selectedTabName === undefined) {
@@ -63,7 +77,22 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     }
 
     $scope.$watch('selectedTabName', function(newValue) {
+        if (newValue) {
+            $scope.search = undefined;
+        }
         $cookies.put('selectedTabName', newValue);
+    });
+
+    $scope.search = $cookies.get('search');
+    if ($scope.search === undefined) {
+        $scope.search = '';
+    }
+
+    $scope.$watch('search', function(newValue) {
+        if (newValue) {
+            $scope.selectedTabName = undefined;
+        }
+        $cookies.put('search', newValue);
     });
 
     $scope.withTab = function(tabName) {

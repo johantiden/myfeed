@@ -134,9 +134,7 @@ public class DocumentClassifier {
         m.isFromFeed("Reddit::top") ||
         m.isFromFeed("Reddit::r/all") ||
         m.isFromFeed("Reddit::r/AskReddit") ||
-        m.isFromFeed("xkcd") ||
-        m.isFromFeed("9gag")
-        ;
+        m.isFromFeed("xkcd");
     }
 
     private static boolean isBiz(Document d) {

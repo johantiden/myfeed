@@ -17,16 +17,17 @@
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
+        <input type="text" ng-model="search" >
         <div ng-repeat="(tabName, _) in tabs" class="tab-button {{selectedTabName == tabName ? 'selected' : ''}} {{((documents | filter:withTab(tabName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="selectTab(tabName)">
             {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName) | filter:{read:false}).length) > 0">({{(documents | filter:withTab(tabName) | filter:{read:false}).length}})</span>
         </div>
 
         <div class="mark-all-div" >
-            <button id="mark-all-as-read-button" ng-if="(documents | filter:tabFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(documents | filter:tabFilter | filter:{read:false}).length}} as read</button>
+            <button id="mark-all-as-read-button" ng-if="(documents | filter:tabOrSearchFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(documents | filter:tabOrSearchFilter | filter:{read:false}).length}} as read</button>
         </div>
     </div>
     <div class="document-box {{item.cssClass}} {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
-        ng-repeat="document in documents | filter:tabFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
+        ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
 
         <div class="content-box">
             <div class="top-row">

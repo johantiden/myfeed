@@ -106,24 +106,10 @@ public class FeedRepository {
                 "https://www.thelocal.se/feeds/rss.php", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
-                "9gag",
-                "9gag",
-                "https://9gag.com/",
-                "http://9gagrss.com/feed/", INVALIDATION_PERIOD));
-
-        feeds.add(createRss(
                 "eztv",
                 "eztv",
                 "https://eztv.ag/",
                 "https://eztv.ag/ezrss.xml", INVALIDATION_PERIOD));
-
-//        feeds.add(createTwitter("pwolodarski"));
-//        feeds.add(createTwitter("kinbergbatra"));
-//        feeds.add(createTwitter("annieloof"));
-//        feeds.add(createTwitter("deepdarkfears"));
-//        feeds.add(createTwitter("tastapod"));
-//        feeds.add(createTwitter("elonmusk"));
-//        feeds.add(createTwitter("github"));
 
         Collection<Username> allUsers = userRepository.getAllUsers();
         allUsersHasAllFeedsHack(allUsers, feeds);
