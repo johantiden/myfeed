@@ -64,7 +64,7 @@ public class UserDocumentService {
     public void putIfNew(UserDocument userDocument) {
         Optional<UserDocument> optional = userDocumentRepository.find(userDocument.getUserKey(), userDocument.getKey());
         if (optional.isPresent()) {
-            log.warn("putIfNew but was not new. (This can probably be optimized)");
+            log.debug("putIfNew but was not new. (This can probably be optimized)");
         } else {
             put(userDocument);
         }

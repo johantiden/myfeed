@@ -53,7 +53,15 @@ public class FeedRepository {
                 "https://www.svd.se",
                 newHashMap("rssUrl", "https://www.svd.se/?service=rss"),
                 INVALIDATION_PERIOD,
-                d -> !d.isPaywalled && (d.title == null || !d.title.equals("serier"))));
+                d -> !d.isPaywalled));
+
+        feeds.add(new SvenskaDagbladetPlugin().createFeed(
+                "SVT Nyheter",
+                "svt",
+                "https://www.svt.se/nyheter",
+                newHashMap("rssUrl", "https://www.svt.se/nyheter/rss.xml"),
+                INVALIDATION_PERIOD,
+                d -> !d.isPaywalled));
 
         DagensNyheterPlugin dn = new DagensNyheterPlugin();
         feeds.add(dn.createFeed(
@@ -66,25 +74,25 @@ public class FeedRepository {
                 "xkcd",
                 "xkcd",
                 "https://xkcd.com",
-                "https://xkcd.com/atom.xml"));
+                "https://xkcd.com/atom.xml", Duration.ofDays(30)));
 
         feeds.add(createRss(
                 "Ars Technica",
                 "arstechnica",
                 "https://arstechnica.com/",
-                "http://feeds.arstechnica.com/arstechnica/index"));
+                "http://feeds.arstechnica.com/arstechnica/index", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "Al Jazeera",
                 "aljazeera",
                 "http://www.aljazeera.com",
-                "http://www.aljazeera.com/xml/rss/all.xml"));
+                "http://www.aljazeera.com/xml/rss/all.xml", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "New York Times :: World",
                 "nyt",
                 "https://www.nytimes.com/section/world",
-                "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"));
+                "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", INVALIDATION_PERIOD));
 
         feeds.add(createReddit("r/worldnews", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/AskReddit", REDDIT_MIN_SCORE));
@@ -97,7 +105,7 @@ public class FeedRepository {
                 "TheLocal",
                 "thelocal",
                 "https://www.thelocal.se/",
-                "https://www.thelocal.se/feeds/rss.php"));
+                "https://www.thelocal.se/feeds/rss.php", INVALIDATION_PERIOD));
 
 //        feeds.add(createTwitter("pwolodarski"));
 //        feeds.add(createTwitter("kinbergbatra"));
@@ -122,13 +130,13 @@ public class FeedRepository {
         }
     }
 
-    private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl) {
+    private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl, Duration invalidationPeriod) {
         RssPlugin rss = new RssPlugin();
         return rss.createFeed(
                 feedName,
                 cssClass,
                 webUrl,
-                newHashMap("rssUrl", rssUrl), INVALIDATION_PERIOD, null);
+                newHashMap("rssUrl", rssUrl), invalidationPeriod, null);
     }
 
     private static Feed createReddit(String subreddit, double minScore) {

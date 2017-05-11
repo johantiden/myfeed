@@ -16,6 +16,7 @@ import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.plugin.FeedReader;
+import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -62,7 +63,7 @@ public class RssFeedReader implements FeedReader {
         List<SyndEntry> entries = syndFeed.getEntries();
 
         return Lists.transform(entries, e -> {
-            String title = e.getTitle();
+            String title = unescape(e.getTitle());
             String link = e.getLink();
             String imageUrl = getImageUrl(e);
             String authorName = e.getAuthor();
@@ -78,15 +79,30 @@ public class RssFeedReader implements FeedReader {
             }
             NameAndUrl feed = new NameAndUrl(feedName, feedWebUrl);
             NameAndUrl author = new NameAndUrl(authorName, authorUrl);
-            return new Document(this.feed.getKey(), feed, title, text, author, cssClass, link, imageUrl, publishedDate, html, categories);
-        
+
+            Document document = new Document(this.feed.getKey(), feed, title, text, author, cssClass, link, imageUrl, publishedDate, html, categories);
+
+            if (DocumentPredicates.hasEscapeCharacters().test(document)) {
+                throw new RuntimeException("Escape characters!");
+            }
+            return document;
         });
     }
 
     private List<NameAndUrl> getCategories(SyndEntry e) {
         return e.getCategories().stream()
-                .map(c -> new NameAndUrl(c.getName(), c.getTaxonomyUri()))
+                .map(c -> new NameAndUrl(unescape(c.getName()), c.getTaxonomyUri()))
                 .collect(Collectors.toList());
+    }
+
+    private static String unescape(String string) {
+        String unescaped = string.replaceAll("&#38;", "&");
+
+        if (!unescaped.equals(string)) {
+            log.info("Unescaped! {} -> {}", string, unescaped);
+        }
+
+        return unescaped;
     }
 
     private static String getDescription(SyndEntry e) {
@@ -134,7 +150,7 @@ public class RssFeedReader implements FeedReader {
     }
 
     public static String html2text(String html) {
-        return Jsoup.parse(html).text();
+        return unescape(Jsoup.parse(html).text());
     }
 
     private static String getImageUrl(SyndEntry e) {

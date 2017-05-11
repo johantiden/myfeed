@@ -25,7 +25,7 @@ public class DocumentService {
     public void put(Document document) {
         Optional<Document> optional = documentRepository.find(document.getKey());
         if (optional.isPresent()) {
-//            log.warn("put but was not new. You must remove the old document first! Not putting.");
+            log.debug("put but was not new. You must remove the old document first! Not putting.");
         } else {
             log.info("Adding document: {}", document.pageUrl);
             documentRepository.put(document);

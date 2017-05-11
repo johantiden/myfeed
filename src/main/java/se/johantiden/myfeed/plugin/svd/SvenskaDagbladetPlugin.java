@@ -11,6 +11,7 @@ import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
+import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +21,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static se.johantiden.myfeed.util.DocumentPredicates.*;
 
 
 public class SvenskaDagbladetPlugin implements Plugin {
@@ -41,14 +44,18 @@ public class SvenskaDagbladetPlugin implements Plugin {
 
 
     private static Function<Document, Document> createEntryMapper() {
-        return entry -> {
-            entry.isPaywalled = isPaywalled(entry);
+        return document -> {
+            document.isPaywalled = isPaywalled(document);
 
-            entry.categories = entry.categories.stream()
+            document.categories = document.categories.stream()
                     .filter(c -> c.url == null)
-                    .map(c -> new NameAndUrl(c.name, entry.feed.url + "/" + c.name))
+                    .map(c -> new NameAndUrl(c.name, document.feed.url + "/" + c.name))
                     .collect(Collectors.toList());
-            return entry;
+
+            if (hasEscapeCharacters().test(document)) {
+                boolean a = true;
+            }
+            return document;
         };
     }
 
