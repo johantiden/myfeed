@@ -26,8 +26,8 @@ public class SubjectService {
 
     public static final String UNMATCHED_TAB = "Unmatched";
     public static final Subject UNMATCHED = new Subject("Unmatched", UNMATCHED_TAB, "Unmatched", d -> true);
-    public static final boolean REMOVE_BAD = false;
-    private static final boolean CATCH_UNMATCHED_PER_FEED = false;
+    public static final boolean REMOVE_BAD = true;
+    private static final boolean CATCH_UNMATCHED_PER_FEED = true;
 
     public static final Predicate<Document> USA = has("usa").or(hasCaseSensitive("US")).or(has("trump")).or(has("senate")).or(has("congress")).or(hasCaseSensitive("FBI"));
     public static final Predicate<Document> RUSSIA = has("russia").or(has("ryssland")).or(has("rysk")).or(has("putin"));
