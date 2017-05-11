@@ -77,6 +77,9 @@ public class RssFeedReader implements FeedReader {
             if (html == null) {
                 html = contentHtml;
             }
+            if (html.toLowerCase().contains("google-analytics")) {
+                throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
+            }
             NameAndUrl feed = new NameAndUrl(feedName, feedWebUrl);
             NameAndUrl author = new NameAndUrl(authorName, authorUrl);
 

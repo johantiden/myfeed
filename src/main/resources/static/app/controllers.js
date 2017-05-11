@@ -66,9 +66,14 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         mergedString += document.html;
         mergedString += document.text;
         mergedString += document.title;
+        mergedString += document.tab;
         mergedString += document.feed.name;
         mergedString = mergedString.toLowerCase();
-        return mergedString.includes(query);
+        var match = mergedString.includes(query);
+        if (match) {
+            return true;
+        }
+        return document.categories.some(c => c.name.toLowerCase().includes(query));
     }
 
     $scope.selectedTabName = $cookies.get('selectedTabName');
