@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DocumentBean {
 
@@ -15,6 +16,7 @@ public class DocumentBean {
     public final NameAndUrl feed;
     public final List<NameAndUrl> categories;
     public final String title;
+    public final String tab;
     public final String text;
     public final Double score;
     public final NameAndUrl author;
@@ -25,6 +27,7 @@ public class DocumentBean {
     public final String html;
     public final boolean read;
     public final List<Video> videos;
+    public final String subject;
 
     public DocumentBean(UserDocument userDocument, Document document) {
         this.feed = document.feed;
@@ -41,6 +44,8 @@ public class DocumentBean {
         this.score = document.score;
         this.userDocumentKey = userDocument.getKey().toString();
         this.videos = new ArrayList<>(document.videos);
+        this.tab = Objects.requireNonNull(document.tab);
+        this.subject = document.getSubject().getTitle();
     }
 
     public final String getCssClass() {

@@ -1,13 +1,11 @@
 package se.johantiden.myfeed.reader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.controller.Subject;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.SubjectService;
+import se.johantiden.myfeed.persistence.DocumentClassifier;
 import se.johantiden.myfeed.service.DocumentService;
 
 import java.util.List;
@@ -17,17 +15,17 @@ public class SubjectTesterJob {
 
     @Autowired
     private DocumentService documentService;
-    @Autowired
-    private SubjectService subjectService;
 
     @Scheduled(fixedRate = 1000)
     public void testSubjects() {
 
-        List<Document> documents = documentService.find(d -> d.subject == null);
+        List<Document> documents = documentService.find(d -> d.subject == null || d.tab == null);
 
         documents.forEach(d -> {
-            Subject subject = subjectService.getSubjectFor(d);
-            d.subject = subject.getKey();
+            Subject subject = DocumentClassifier.getSubjectFor(d);
+            d.subject = subject;
+            String tab = DocumentClassifier.getTabFor(d);
+            d.tab = tab;
         });
     }
 }

@@ -111,6 +111,12 @@ public class FeedRepository {
                 "https://9gag.com/",
                 "http://9gagrss.com/feed/", INVALIDATION_PERIOD));
 
+        feeds.add(createRss(
+                "eztv",
+                "eztv",
+                "https://eztv.ag/",
+                "https://eztv.ag/ezrss.xml", INVALIDATION_PERIOD));
+
 //        feeds.add(createTwitter("pwolodarski"));
 //        feeds.add(createTwitter("kinbergbatra"));
 //        feeds.add(createTwitter("annieloof"));

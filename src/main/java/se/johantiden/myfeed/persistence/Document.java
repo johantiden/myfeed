@@ -5,6 +5,7 @@ import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.controller.Subject;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
+import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -20,6 +21,7 @@ public class Document implements Persistable<Document>, Serializable {
     public final Key<Document> key;
     public Key<Feed> feedKey;
     public NameAndUrl feed;
+    public String tab;
     public String title;
     public final String text;
     public NameAndUrl author;
@@ -32,8 +34,7 @@ public class Document implements Persistable<Document>, Serializable {
     public Double score;
     public boolean isPaywalled;
     public List<Video> videos = new ArrayList<>();
-    public final List<Key<Subject>> nonMatchedSubjects = new ArrayList<>();
-    public Key<Subject> subject;
+    public Subject subject;
 
     public Document(
             Key<Feed> feedKey,
@@ -110,15 +111,11 @@ public class Document implements Persistable<Document>, Serializable {
         return score;
     }
 
-    public Key<Subject> getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
-    public List<Key<Subject>> getNonMatchedSubjects() {
-        return nonMatchedSubjects;
-    }
-
-    public boolean hasSubject(Key<Subject> key) {
-        return subject != null && subject.equals(key);
+    public boolean has(String string) {
+        return DocumentPredicates.has(string).test(this);
     }
 }

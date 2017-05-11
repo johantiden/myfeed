@@ -1,6 +1,6 @@
 app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, documentService) { // jshint ignore:line
     "use strict";
-    $scope.subjects = [];
+    $scope.documents = [];
     $scope.tabs = {
         'All': s => true
     };
@@ -14,23 +14,21 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         document.read = read;
         document.username = user;
 
-        clearCache(document);
-
         documentService.putDocument(document, callback);
     };
 
-    documentService.getAllSubjectKeys(user, function(json) {
-        $scope.subjectKeys = json;
+    documentService.getAllKeys(user, function(json) {
+        $scope.keys = json;
     });
 
-    $scope.$watch('subjectKeys', function(subjectKeys) {
-        if (subjectKeys === undefined) {
+    $scope.$watch('keys', function(keys) {
+        if (keys === undefined) {
             return;
         }
-        subjectKeys.forEach(function(key) {
-            documentService.getSubject(key, user, subject => {
-                $scope.tabs[subject.tab] = subjectTabPredicate(subject.tab);
-                $scope.subjects.push(subject);
+        keys.forEach(function(key) {
+            documentService.getDocument(key, document => {
+                $scope.tabs[document.tab] = documentTabPredicate(document.tab);
+                $scope.documents.push(document);
             });
         });
     });
@@ -39,40 +37,25 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     $scope.markFilteredAsRead = function() {
         if (confirm("Are you sure?")) { // jshint ignore:line
-            $scope.subjects.forEach(subject => {
-                if ($scope.tab(subject)) {
-                    subject.userDocuments.forEach(document => {
-                        $scope.setDocumentRead(document, true);
-                    });
+            $scope.documents.forEach(document => {
+                if ($scope.tabFilter(document)) {
+                    $scope.setDocumentRead(document, true);
                 }
             });
         }
     };
 
-    $scope.unwrapRadioFilter = function(subject) {
-        return $scope.tab.predicate(subject);
-    };
-
-    var clearCache = function(item) {
-        item.isUnmatched = undefined;
-    };
-
-    var subjectTabPredicate = function (tab) {
-        return subject => subject.tab === tab;
+    var documentTabPredicate = function (tab) {
+        return dock => dock.tab === tab;
     };
 
     $scope.selectTab = function(tabName) {
         $scope.selectedTabName = tabName;
     };
 
-    $scope.tabFilter = function(subject) {
-        return $scope.tabs[$scope.selectedTabName](subject);
+    $scope.tabFilter = function(document) {
+        return $scope.tabs[$scope.selectedTabName](document);
     };
-
-    $scope.hasUnread = function(subject) {
-        return subject.userDocuments.some(d => d.read === false);
-    };
-
 
     $scope.selectedTabName = $cookies.get('selectedTabName');
     if ($scope.selectedTabName === undefined) {
@@ -83,7 +66,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         $cookies.put('selectedTabName', newValue);
     });
 
-    $scope.withFilter = function(tabName) {
+    $scope.withTab = function(tabName) {
         return function(item) {
             return $scope.tabs[tabName](item);
         };

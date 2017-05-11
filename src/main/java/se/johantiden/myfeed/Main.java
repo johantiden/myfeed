@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.FeedRepository;
 import se.johantiden.myfeed.persistence.InboxRepository;
-import se.johantiden.myfeed.persistence.SubjectService;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.persistence.file.BaseSaver;
@@ -66,11 +65,6 @@ public class Main {
     }
 
     @Bean
-    public FeedReaderService feedReaderService() {
-        return new FeedReaderService();
-    }
-
-    @Bean
     public UserDocumentService userDocumentService() {
         return new UserDocumentService();
     }
@@ -109,11 +103,6 @@ public class Main {
     @Bean
     public UserService userService() {
         return new UserService();
-    }
-
-    @Bean
-    public SubjectService subjectRepository() {
-        return new SubjectService();
     }
 
     public static void main(String[] args) {

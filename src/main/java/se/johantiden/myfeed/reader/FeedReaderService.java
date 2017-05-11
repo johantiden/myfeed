@@ -7,7 +7,10 @@ import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.util.List;
 
-public class FeedReaderService {
+public final class FeedReaderService {
+
+    private FeedReaderService() {
+    }
 
     public static List<Document> readAll(Feed feed) {
         FeedReader reader = findFeedReader(feed);

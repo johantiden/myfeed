@@ -4,29 +4,18 @@ import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class Subject implements Predicate<Document> {
+public class Subject implements Serializable {
 
-    public static final Comparator<Subject> COMPARATOR = Comparator.comparing(Subject::getTitle);
-
+    private static final long serialVersionUID = -3724512594914225106L;
     private final String title;
-    private final Predicate<Document> hasDocument;
-    private final String tab;
-    private final String keySeed;
 
-    public Subject(String title, String keySeed, String tab, Predicate<Document> hasDocument) {
+    public Subject(String title) {
         this.title = Objects.requireNonNull(title);
-        this.keySeed = Objects.requireNonNull(keySeed);
-        this.tab = Objects.requireNonNull(tab);
-        this.hasDocument = Objects.requireNonNull(hasDocument);
-    }
-
-    @Override
-    public boolean test(Document document) {
-        return hasDocument.test(document);
     }
 
     public String getTitle() {
@@ -34,10 +23,22 @@ public class Subject implements Predicate<Document> {
     }
 
     public Key<Subject> getKey() {
-        return Keys.subject(keySeed);
+        return Keys.subject(title);
     }
 
-    public String getTab() {
-        return tab;
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) { return true; }
+        if(o == null || getClass() != o.getClass()) { return false; }
+
+        Subject subject = (Subject) o;
+
+        return !(title != null ? !title.equals(subject.title) : subject.title != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return title != null ? title.hashCode() : 0;
     }
 }

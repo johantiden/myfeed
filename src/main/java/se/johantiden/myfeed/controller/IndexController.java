@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.controller;
 
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import se.johantiden.myfeed.persistence.SubjectService;
+import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.UserDocument;
-import se.johantiden.myfeed.persistence.UserSubject;
 import se.johantiden.myfeed.persistence.Username;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
@@ -21,8 +21,8 @@ import se.johantiden.myfeed.service.UserDocumentService;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedSet;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,31 +42,19 @@ public class IndexController {
         log.info("User: " + username);
         Username user = Keys.user(username);
 
-        SortedSet<UserSubject> allUserSubjects = userDocumentService.getUnreadUserSubjects(user);
+        SortedSet<UserDocument> allUserDocuments = userDocumentService.getAllDocumentsFor(user);
 
-        List<String> keys = allUserSubjects.stream()
-                .filter(UserSubject::hasUnread)
-                .filter(badFilter())
-                .map(UserSubject::getSubject)
-                .map(Subject::getKey)
-                .map(Object::toString)
-                .collect(Collectors.toList());
 
+        List<String> keys = allUserDocuments.stream()
+                            .filter(UserDocument::isUnread)
+                            .filter(ud -> documentService.find(ud.getDocumentKey()).flatMap(d -> Optional.ofNullable(d.tab)).isPresent())
+                            .map(UserDocument::getKey)
+                            .map(Object::toString)
+                            .collect(Collectors.toList());
 
         log.info("index User:{}, keys:{}", username, keys.size());
 
         return keys;
-    }
-
-    private static Predicate<UserSubject> badFilter() {
-        if (!SubjectService.REMOVE_BAD) {
-            return s -> true;
-        }
-
-        return s -> {
-            return !s.getSubject().getTab().equals(SubjectService.ERROR) &&
-                    !s.getSubject().getTab().equals(SubjectService.BAD);
-        };
     }
 
     @RequestMapping("/rest/userdocument/{userDocumentKey}")
@@ -76,31 +64,17 @@ public class IndexController {
         Username userKey = Keys.user(user);
         Optional<UserDocument> documentOptional = userDocumentService.get(userKey, Key.<UserDocument>create(userDocumentKey));
 
-        Optional<DocumentBean> documentBean = documentOptional.flatMap(ud -> documentService.find(ud.getDocumentKey()))
-                .map(d -> new DocumentBean(documentOptional.get(), d));
+        Optional<Document> document = documentOptional.flatMap(ud -> documentService.find(ud.getDocumentKey()));
+
+        Optional<DocumentBean> documentBean = document
+                                              .filter(d -> d.subject != null && d.tab != null)
+                                              .map(d -> new DocumentBean(documentOptional.get(), d));
 
         if (!documentBean.isPresent()) {
             throw new NotFound404("Not found");
         }
 
         return documentBean.get();
-    }
-
-    @RequestMapping("/rest/subjects/{subjectKey}/users/{username}")
-    public UserSubjectBean subject(
-                @PathVariable("subjectKey") String subjectKeyStr,
-                @PathVariable("username") String username) {
-
-        Key<Subject> subjectKey = Key.create(subjectKeyStr);
-        Username user = Keys.user(username);
-
-        SortedSet<UserSubject> allUserSubjects = userDocumentService.getUnreadUserSubjects(user);
-
-        UserSubject userSubject = allUserSubjects.stream()
-                .filter(us -> us.getSubject().getKey().equals(subjectKey))
-                .findAny().orElseThrow(() -> new NotFound404("Not found"));
-
-        return new UserSubjectBean(userSubject, documentService);
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

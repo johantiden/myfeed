@@ -27,7 +27,7 @@ public class DocumentService {
         if (optional.isPresent()) {
             log.debug("put but was not new. You must remove the old document first! Not putting.");
         } else {
-            log.info("Adding document: {}", document.pageUrl);
+            log.debug("Adding document: {}", document.pageUrl);
             documentRepository.put(document);
         }
     }
