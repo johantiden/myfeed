@@ -186,6 +186,7 @@ public class DocumentClassifier {
         d.isPaywalled ||
         m.isFromFeed("eztv") && !m.has("720p") ||
         m.anyCategoryEquals("vin & mat") ||
+        m.isFromFeed("Dagens Nyheter") && m.anyCategoryEquals("serier") ||
         m.has("nutidstest");
     }
 }
