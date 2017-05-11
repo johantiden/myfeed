@@ -17,23 +17,21 @@
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
     <div class="navbar">
-        <div ng-repeat="(tabName, _) in tabs" class="tab-button {{selectedTabName == tabName ? 'selected' : ''}}" ng-click="selectTab(tabName)">
-            {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName)).length) > 0">({{(documents | filter:withTab(tabName)).length}})</span>
+        <div ng-repeat="(tabName, _) in tabs" class="tab-button {{selectedTabName == tabName ? 'selected' : ''}} {{((documents | filter:withTab(tabName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="selectTab(tabName)">
+            {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName) | filter:{read:false}).length) > 0">({{(documents | filter:withTab(tabName) | filter:{read:false}).length}})</span>
         </div>
 
         <div class="mark-all-div" >
             <button id="mark-all-as-read-button" ng-if="(documents | filter:tabFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(documents | filter:tabFilter | filter:{read:false}).length}} as read</button>
         </div>
-        <div class="debug-info" >
-            Documents:{{documents.length}} | filtered:{{(documents | filter:tabFilter).length}}
-        </div>
     </div>
     <div class="document-box {{item.cssClass}} {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
-        ng-repeat="document in documents | filter:tabFilter | orderBy:'-publishedDate.epochSecond' | limitTo:100">
+        ng-repeat="document in documents | filter:tabFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
 
         <div class="content-box">
             <div class="top-row">
                 <button class="read-button" ng-model="document.read" ng-click="setDocumentRead(document, true)" ng-if="!document.read" ></button>
+                <div class="subject" ng-if="document.subject">{{document.subject}}</div>
                 <div class="feedName" ng-if="document.feed.name"><a href="{{document.feed.url}}">{{document.feed.name}}</a></div>
                 <div class="score" ng-if="document.score"> | {{document.score}}</div>
                 <div class="category" ng-repeat="category in document.categories" > | <a href="{{category.url}}">{{category.name}}</a> </div>

@@ -25,8 +25,9 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         if(m.has("trump")) { return new Subject("Trump"); }
+        if(m.has("macron")) { return new Subject("Macron"); }
 
-        return new Subject("Jepp");
+        return new Subject("");
     }
 
     public static String getTabFor(Document document) {
@@ -108,6 +109,7 @@ public class DocumentClassifier {
         m.anyCategoryEquals("sthlm") ||
         m.anyCategoryEquals("debatt") ||
         m.anyCategoryEquals("världen") ||
+        m.anyCategoryEquals("ledare") ||
         m.anyCategoryEquals("sverige")
 
         ;
@@ -119,6 +121,7 @@ public class DocumentClassifier {
         return
         m.isFromFeed("Ars Technica") ||
         m.isFromFeed("Slashdot") ||
+        m.anyCategoryEquals("science") ||
         m.isFromFeed("HackerNews")
 
         ;
@@ -129,7 +132,10 @@ public class DocumentClassifier {
 
         return
         m.isFromFeed("Reddit::top") ||
-        m.isFromFeed("Reddit::r/all")
+        m.isFromFeed("Reddit::r/all") ||
+        m.isFromFeed("Reddit::r/AskReddit") ||
+        m.isFromFeed("xkcd") ||
+        m.isFromFeed("9gag")
         ;
     }
 

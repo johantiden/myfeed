@@ -40,10 +40,6 @@ a:hover {
     width:100%;
 }
 
-.top-row > div.author {
-    display: none;
-}
-
 .document-box {
     background-color: white;
     max-width: 100%;
@@ -156,6 +152,9 @@ div.text {
 .tab-button.selected {
     text-decoration: underline;
 }
+.tab-button.empty {
+    display: none;
+}
 
 .number-badge {
     margin-left: -4px;
@@ -174,12 +173,9 @@ div.text {
     display: inline-block;
 }
 
-.subject-box {
-    background-color: #FFFFFF;
-    /*font-size: x-large;*/
-    padding: 0;
-}
-.subject-box.active {
-    padding-left: 20px;
-    padding-top: 10px;
+.subject {
+    background-color: #ffe0e0;
+    border-radius: 50%;
+    padding: 5px;
+    font-weight: bold;
 }
