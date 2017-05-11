@@ -1,5 +1,4 @@
 /*TODO: import ALL css files dynamically (maybe maven filter a property) */
-@import "plugin/se/johantiden/myfeed/plugin/twitter/twitter.css";
 @import "plugin/se/johantiden/myfeed/plugin/reddit/reddit.css";
 
 

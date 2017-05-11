@@ -7,7 +7,12 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     $scope.$sce = $sce;
     $scope.$location = $location;
+
     var user = getParameterByName('user');
+    if (user) {
+        $cookies.put('user', user);
+    }
+    user = $cookies.get('user');
 
 
     $scope.setDocumentRead = function(document, read, callback) {
@@ -62,18 +67,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     function match(query, document) {
-        var mergedString = '';
-        mergedString += document.html;
-        mergedString += document.text;
-        mergedString += document.title;
-        mergedString += document.tab;
-        mergedString += document.feed.name;
-        mergedString = mergedString.toLowerCase();
-        var match = mergedString.includes(query);
-        if (match) {
-            return true;
-        }
-        return document.categories.some(c => c.name.toLowerCase().includes(query));
+        return JSON.stringify(document).toLowerCase().includes(query);
     }
 
     $scope.selectedTabName = $cookies.get('selectedTabName');
@@ -84,6 +78,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     }
     if ($scope.search === undefined) {
         $scope.search = '';
+    }
+    var q = getParameterByName('q');
+    if (q) {
+        $scope.search = q;
     }
 
     $scope.$watch('selectedTabName', function(newValue) {

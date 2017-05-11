@@ -15,6 +15,10 @@ public class NameAndUrl implements Serializable {
     }
 
     private void verifyUrl(String url) {
+        if (url == null) {
+            return;
+        }
+
         if (url.contains("google")) {
             throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
         }

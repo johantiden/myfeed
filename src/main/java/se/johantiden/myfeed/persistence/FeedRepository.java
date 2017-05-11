@@ -9,7 +9,6 @@ import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.slashdot.SlashdotPlugin;
 import se.johantiden.myfeed.plugin.svd.SvenskaDagbladetPlugin;
-import se.johantiden.myfeed.plugin.twitter.TwitterPlugin;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -152,15 +151,6 @@ public class FeedRepository {
             boolean ok = d.getScore() != null && d.getScore() > score;
             return ok;
         };
-    }
-
-
-    private static Feed createTwitter(String username) {
-        TwitterPlugin twitter = new TwitterPlugin();
-        return twitter.createFeed(
-                "Twitter",
-                "twitter", "https://twitter.com/" + username,
-                newHashMap("username", username), INVALIDATION_PERIOD, null);
     }
 
     public List<Feed> allFeeds() {
