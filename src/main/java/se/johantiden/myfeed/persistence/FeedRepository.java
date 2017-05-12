@@ -108,7 +108,7 @@ public class FeedRepository {
                 "eztv",
                 "eztv",
                 "https://eztv.ag/",
-                "https://eztv.ag/ezrss.xml", INVALIDATION_PERIOD));
+                "http://eztv.ag/ezrss.xml", INVALIDATION_PERIOD));
 
         Collection<Username> allUsers = userRepository.getAllUsers();
         allUsersHasAllFeedsHack(allUsers, feeds);

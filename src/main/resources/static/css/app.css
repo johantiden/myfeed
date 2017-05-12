@@ -7,7 +7,6 @@
 }
 
 body {
-    /*background-color: #EEEEEE;*/
     margin: 0;
     font-size: large;
 }
@@ -20,15 +19,6 @@ p {
 }
 a {
     color: black;
-    text-decoration: none;
-}
-
-a:visited {
-    /*color: black;*/
-}
-
-a:hover {
-    text-decoration: underline;
 }
 
 .navbar {
@@ -55,7 +45,6 @@ a:hover {
     display: block;
     max-height: 300px;
     max-width: 100%;
-    /*background-color: white;*/
     margin: 0;
 }
 
@@ -65,16 +54,7 @@ a:hover {
     margin: 0;
 }
 
-.category a {
-    text-transform: capitalize;
-}
-
-.read {
-    /*background-color: #DDDDDD;*/
-}
-
 .content-box {
-    /*background-color: green;*/
     display: inline-block;
     vertical-align: top;
     margin: 0;
@@ -84,12 +64,13 @@ a:hover {
 }
 
 .top-row > *, .top-row > * > * {
-    /*background-color: BLUE;*/
-    /*width: 39vw;*/
     vertical-align: baseline;
     margin: 0;
-    /*font-size: smaller;*/
-    color: #666666;
+    color: #999999;
+}
+
+.time-since {
+    color: #BBBBBB;
 }
 
 .top-row > div {
@@ -105,7 +86,6 @@ div.text {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    /*font-size: large;*/
 }
 
 .read-input {
@@ -174,8 +154,9 @@ div.text {
 }
 
 .subject {
-    background-color: #ffe0e0;
-    border-radius: 50%;
+    /*background-color: #ffe0e0;*/
+    /*border-radius: 50%;*/
     padding: 5px;
     font-weight: bold;
+    display: inline-block;
 }

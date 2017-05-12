@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" xmlns:javascript="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="icon" type="image/png" href="fidn1.png"><!-- Major Browsers -->
     <!--[if IE]><link rel="SHORTCUT ICON" href="fidn1.ico"/><![endif]--><!-- Internet Explorer-->
@@ -32,12 +32,17 @@
         <div class="content-box">
             <div class="top-row">
                 <button class="read-button" ng-model="document.read" ng-click="setDocumentRead(document, true)" ng-if="!document.read" ></button>
-                <div class="subject" ng-repeat="subject in document.subjects">{{subject}}</div>
+                <!--<div class="tab" ng-if="document.tab" ng-click="selectTab(document.tab)"><a href="javascript:void(0);" >{{document.tab}}</a></div>-->
                 <div class="feedName" ng-if="document.feed.name"><a href="{{document.feed.url}}">{{document.feed.name}}</a></div>
-                <div class="score" ng-if="document.score"> | {{document.score}}</div>
-                <div class="category" ng-repeat="category in document.categories" > | <a href="{{category.url}}">{{category.name}}</a> </div>
-                <div class="author" ng-if="document.author.name"> | <a href="{{document.author.url}}">{{document.author.name}}</a></div>
+                <!--<div class="score" ng-if="document.score"> | {{document.score}}</div>-->
+                <!--<div class="category" ng-repeat="category in document.categories"> | <a href="{{category.url}}">{{category.name}}</a></div>-->
+                <!--<div class="author" ng-if="document.author.name"> | <a href="{{document.author.url}}">{{document.author.name}}</a></div>-->
                 <div class="time-since" ng-if="document.publishedDateShort"> | {{document.publishedDateShort}}</div>
+            </div>
+
+            <div class="subject" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
+                <a href="javascript:void(0);" >{{subject}}</a>
+                <a style="font-size: small; color: #BBBBBB; font-weight: normal;" href="http://omni.se/sok?q={{subject}}" >Omni:{{subject}}</a>
             </div>
 
             <div class="title" ng-if="document.title"><a class="link" href="{{document.pageUrl}}" >{{document.title}}</a></div>

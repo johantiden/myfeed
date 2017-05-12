@@ -58,6 +58,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         $scope.selectedTabName = tabName;
     };
 
+    $scope.setSearch = function(query) {
+        $scope.search = query;
+    };
+
     $scope.tabOrSearchFilter = function(document) {
         if ($scope.search) {
             return match($scope.search, document);
@@ -67,21 +71,24 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     function match(query, document) {
-        return JSON.stringify(document).toLowerCase().includes(query);
+        return JSON.stringify(document).toLowerCase().includes(query.toLowerCase());
     }
 
-    $scope.selectedTabName = $cookies.get('selectedTabName');
     $scope.search = $cookies.get('search');
 
-    if ($scope.selectedTabName === undefined && $scope.search === undefined) {
-        $scope.selectedTabName = 'All';
-    }
+
     if ($scope.search === undefined) {
         $scope.search = '';
     }
     var q = getParameterByName('q');
-    if (q) {
+    if (q !== undefined && q !== null && q.length > 0) {
         $scope.search = q;
+    } else {
+        let cookieTabName = $cookies.get('selectedTabName');
+        $scope.selectedTabName = cookieTabName;
+        if ($scope.selectedTabName === undefined && $scope.search === undefined) {
+            $scope.selectedTabName = 'All';
+        }
     }
 
     $scope.$watch('selectedTabName', function(newValue) {
@@ -93,7 +100,13 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
 
     $scope.$watch('search', function(newValue) {
         if (newValue) {
-            $scope.selectedTabName = undefined;
+            if (newValue.length > 0) {
+                $scope.selectedTabName = undefined;
+            } else {
+                $scope.selectedTabName = 'All';
+            }
+        } else {
+            $scope.selectedTabName = 'All';
         }
         $cookies.put('search', newValue);
     });

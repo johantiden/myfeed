@@ -20,11 +20,6 @@ public class DocumentMatcher {
         return DocumentPredicates.hasCaseSensitive(string).test(document);
     }
 
-    public boolean hasEscapeCharacters() {
-        return DocumentPredicates.hasEscapeCharacters().test(document);
-    }
-
-
     public boolean isFromFeed(String feedName) {
         return DocumentPredicates.isFromFeed(feedName).test(document);
     }
@@ -40,4 +35,10 @@ public class DocumentMatcher {
     public boolean anyCategoryEquals(String category) {
         return DocumentPredicates.anyCategoryEquals(category).test(document);
     }
+
+    public boolean anySubjectEquals(String subject) {
+        return DocumentPredicates.anySubjectEquals(subject).test(document);
+    }
+
+
 }
