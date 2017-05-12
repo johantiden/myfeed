@@ -30,6 +30,9 @@ public class DocumentClassifier {
 
         if(m.has("trump")) { subjects.add(s("Trump")); }
         if(m.has("macron")) { subjects.add(s("Macron")); }
+        if(m.has("turist")) { subjects.add(s("turist")); }
+        if(m.has("hockey")) { subjects.add(s("Hockey")); }
+        if(m.has("fotboll")) { subjects.add(s("Fotboll")); }
 
         return subjects;
     }
@@ -87,7 +90,14 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-        m.anyCategoryEquals("sport");
+                m.anyCategoryEquals("sport") ||
+                m.has("bordtennis") ||
+                m.has("fotboll") ||
+                m.has("handboll") ||
+                m.has("hockey") ||
+                m.has("soccer") ||
+                m.has("champions league") ||
+                m.has("bordtennis");
     }
 
     private static boolean isCulture(Document d) {
@@ -125,12 +135,14 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-        m.isFromFeed("Ars Technica") ||
-        m.isFromFeed("Slashdot") ||
-        m.anyCategoryEquals("science") ||
-        m.isFromFeed("HackerNews")
-
-        ;
+            m.isFromFeed("Ars Technica") ||
+            m.isFromFeed("Slashdot") ||
+            m.anyCategoryEquals("science") ||
+            m.isFromFeed("HackerNews") ||
+            m.has("ransomware") ||
+            m.has("virus") && m.has("säkerhet") ||
+            m.has("cyber attack") || 
+            m.has("cyberattack");
     }
 
     private static boolean isFun(Document d) {
