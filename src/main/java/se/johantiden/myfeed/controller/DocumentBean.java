@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class DocumentBean {
 
@@ -27,7 +28,7 @@ public class DocumentBean {
     public final String html;
     public final boolean read;
     public final List<Video> videos;
-    public final String subject;
+    public final List<String> subjects;
 
     public DocumentBean(UserDocument userDocument, Document document) {
         this.feed = document.feed;
@@ -45,7 +46,7 @@ public class DocumentBean {
         this.userDocumentKey = userDocument.getKey().toString();
         this.videos = new ArrayList<>(document.videos);
         this.tab = Objects.requireNonNull(document.tab);
-        this.subject = document.getSubject().getTitle();
+        this.subjects = document.getSubjects().stream().map(Subject::getTitle).collect(Collectors.toList());
     }
 
     public final String getCssClass() {
@@ -106,6 +107,14 @@ public class DocumentBean {
 
     public final List<Video> getVideos() {
         return videos;
+    }
+
+    public String getTab() {
+        return tab;
+    }
+
+    public List<String> getSubjects() {
+        return subjects;
     }
 
     public static String dateToShortString(Instant instant) {

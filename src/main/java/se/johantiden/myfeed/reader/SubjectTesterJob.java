@@ -19,11 +19,12 @@ public class SubjectTesterJob {
     @Scheduled(fixedRate = 1000)
     public void testSubjects() {
 
-        List<Document> documents = documentService.find(d -> d.subject == null || d.tab == null);
+        List<Document> documents = documentService.find(d -> d.subjects.isEmpty() || d.tab == null);
 
         documents.forEach(d -> {
-            Subject subject = DocumentClassifier.getSubjectFor(d);
-            d.subject = subject;
+            List<Subject> subjects = DocumentClassifier.getSubjectFor(d);
+            d.subjects.clear();
+            d.subjects.addAll(subjects);
             String tab = DocumentClassifier.getTabFor(d);
             d.tab = tab;
         });

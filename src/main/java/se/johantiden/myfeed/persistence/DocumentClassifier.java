@@ -3,6 +3,9 @@ package se.johantiden.myfeed.persistence;
 import se.johantiden.myfeed.classification.DocumentMatcher;
 import se.johantiden.myfeed.controller.Subject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("SpellCheckingInspection")
 public class DocumentClassifier {
 
@@ -21,14 +24,17 @@ public class DocumentClassifier {
     private DocumentClassifier() {
     }
 
-    public static Subject getSubjectFor(Document d) {
+    public static List<Subject> getSubjectFor(Document d) {
+        List<Subject> subjects = new ArrayList<>();
         DocumentMatcher m = new DocumentMatcher(d);
 
-        if(m.has("trump")) { return new Subject("Trump"); }
-        if(m.has("macron")) { return new Subject("Macron"); }
+        if(m.has("trump")) { subjects.add(s("Trump")); }
+        if(m.has("macron")) { subjects.add(s("Macron")); }
 
-        return new Subject("");
+        return subjects;
     }
+
+    private static Subject s(final String title) {return new Subject(title);}
 
     public static String getTabFor(Document document) {
         if(isError(document)) {
