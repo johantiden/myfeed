@@ -63,9 +63,8 @@ public class DocumentRepository implements Serializable {
 
     public void resetSubjects() {
         map.values().stream()
-//                .filter(d -> d.getSubject().equals(SubjectService.UNMATCHED.getKey()))
                 .forEach(d -> {
-                    d.subject = null;
+                    d.subjects.clear();
                     d.tab = null;
                 });
     }

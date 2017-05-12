@@ -1,23 +1,16 @@
 package se.johantiden.myfeed.service;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import se.johantiden.myfeed.controller.Subject;
-import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.Username;
 import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 public class UserDocumentService {
 
@@ -25,9 +18,6 @@ public class UserDocumentService {
 
     @Autowired
     private UserDocumentRepository userDocumentRepository;
-
-    @Autowired
-    private DocumentService documentService;
 
     public SortedSet<UserDocument> getAllDocumentsFor(Username user) {
         return userDocumentRepository.getAllKeys(user);
@@ -80,44 +70,4 @@ public class UserDocumentService {
         return sizeBefore-sizeAfter;
     }
 
-    public Set<Subject> getUnreadUserSubjects(Username user) {
-//        List<Subject> allSubjects = subjectService.getAllSubjects();
-
-        SortedSet<UserDocument> allUserDocuments = getAllDocumentsFor(user);
-        List<Pair<UserDocument, Document>> allDocuments = map(allUserDocuments);
-
-        Set<Subject> subjects = allDocuments.stream()
-                                .filter(d -> d.getValue().getSubject() != null)
-                                .map(p -> p.getValue().getSubject())
-                                .collect(Collectors.toSet());
-
-
-        return subjects;
-//        Map<Key<Subject>, List<Pair<UserDocument, Document>>> collect = allDocuments.stream().collect(Collectors.groupingBy(p -> p.getValue().getSubject()));
-//
-//
-//        TreeSet<UserSubject> subjects = allSubjects.stream()
-//                .map(s -> new UserSubject(s, allDocuments.stream()
-//                                                     .filter(p -> p.getValue().hasSubject(s.getKey()))
-//                                                     .map(Pair::getKey)
-//                                                     .collect(Collectors.toSet())))
-//                .collect(Collectors.toCollection(getTreeSetSupplier()));
-//
-//        return subjects;
-    }
-
-//    private static Supplier<TreeSet<UserSubject>> getTreeSetSupplier() {
-//        return () -> new TreeSet<>(UserSubject.COMPARATOR);
-//    }
-
-    private List<Pair<UserDocument, Document>> map(Collection<UserDocument> allUserDocuments) {
-        return allUserDocuments.stream()
-                       .map(ud -> {
-                           Optional<Document> documentOptional = documentService.find(ud.getDocumentKey());
-                           Document document = documentOptional.orElse(null);
-                           return Pair.of(ud, document);
-                       })
-                       .filter(p -> p.getRight() != null)
-                       .collect(Collectors.toList());
-    }
 }
