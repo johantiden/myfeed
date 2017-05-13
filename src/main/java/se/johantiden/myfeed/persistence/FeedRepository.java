@@ -97,12 +97,12 @@ public class FeedRepository {
                 "http://www.latimes.com/world/rss2.0.xml",
                 "http://www.latimes.com/world/rss2.0.xml", INVALIDATION_PERIOD));
 
-        feeds.add(createReddit("r/worldnews", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("r/AskReddit", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("r/science", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("top", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/worldnews", 1000));
+        feeds.add(createReddit("r/AskReddit", 1000));
+        feeds.add(createReddit("r/science", 1000));
+        feeds.add(createReddit("top", 1000));
         feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("r/announcements", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/announcements", 10000));
 
         feeds.add(createRss(
                 "TheLocal",

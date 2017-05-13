@@ -67,7 +67,6 @@ public class DocumentClassifier {
         if(m.has("Brazil")) { s.add(s("Brasilien")); }
         if(m.has("Egypt")) { s.add(s("Egypten")); }
         if(m.has("Yemen")) { s.add(s("Yemen")); }
-        if(m.has("Ukrain")) { s.add(s("Ukraina")); }
         if(m.has("Bangladesh")) { s.add(s("Bangladesh")); }
         if(m.has("Malaysia")) { s.add(s("Malaysia")); }
         if(m.has("France ")) { s.add(s("France")); }
