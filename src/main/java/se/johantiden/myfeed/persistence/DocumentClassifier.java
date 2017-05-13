@@ -69,7 +69,7 @@ public class DocumentClassifier {
         if(m.has("Yemen")) { s.add(s("Yemen")); }
         if(m.has("Bangladesh")) { s.add(s("Bangladesh")); }
         if(m.has("Malaysia")) { s.add(s("Malaysia")); }
-        if(m.has("France ")) { s.add(s("France")); }
+        if(m.has("France ") || m.has("Frankrike") || m.has("Fransk") || m.has("French") || m.has("Paris")) { s.add(s("Frankrike")); }
         if(m.has("Australia")) { s.add(s("Australia")); }
         if(m.has("Göteborg") || m.has("Gothemburg")) { s.add(s("Göteborg")); }
         if(m.has("Malmö")) { s.add(s("Malmö")); }
@@ -77,7 +77,7 @@ public class DocumentClassifier {
         if(m.has("Europe") || m.has("Europa")) { s.add(s("Europa")); }
         if(m.has("Elfenbenskusten") || m.has("Ivory Coast")) { s.add(s("Elfenbenskusten")); }
         if(m.has("Storbritannien") || m.has("London") || m.has("England") || m.has("Britain")) { s.add(s("Storbritannien")); }
-        if(m.hasCaseSensitive("USA") || m.has("U.S.") || m.has("america") && !m.has("south america") || m.hasCaseSensitive("FBI")) { s.add(s("USA")); }
+        if(m.hasCaseSensitive("US") || m.has("U.S.") || m.has("america") && !m.has("south america") || m.hasCaseSensitive("FBI")) { s.add(s("USA")); }
         if(m.hasCaseSensitive("FBI")) { s.add(s("FBI")); }
         if(m.has("Mexiko") || m.has("Mexico") || m.has("Mexican")) { s.add(s("Mexico")); }
         if(m.has("Turkey") || m.has("Turkish") || m.has("Turkiet")) { s.add(s("Turkiet")); }
@@ -108,7 +108,7 @@ public class DocumentClassifier {
         if(m.has("Ebola")) { s.add(s("Ebola")); }
         if(m.has("Kiev") || m.has("Ukrain")) { s.add(s("Ukraina")); }
         if(m.isFromFeed("TheLocal") && m.has("book")) { s.add(s("Books")); }
-        if(m.has("IT-attacken") || m.has("Ransomware") || m.has("Cyberattack") || m.has("cyber") && m.has("attack") || m.has("Malware") || m.has("WanaCry") || m.has("WannaCry")) { s.add(s("Security")); }
+        if(m.has("IT-attacken") || m.has("Ransomware") || m.has("Cyberattack") || m.has("cyber") && m.has("attack") || m.has("Malware") || m.has("WanaCry") || m.has("WannaCry") || m.has("Hacker") || m.has("security") && m.has("computer")) { s.add(s("Security")); }
         if(m.has("Brexit")) { s.add(s("Brexit")); }
         if(m.has("Stockholm")) { s.add(s("Stockholm")); }
         if(m.has("Norge") || m.has("Norway")) { s.add(s("Norge")); }
@@ -130,6 +130,7 @@ public class DocumentClassifier {
         if(m.hasCaseSensitive("NewsGrid")) { s.add(s("NewsGrid")); }
         if(m.has("cars technica")) { s.add(s("Cars")); }
         if(m.has("webb-tv")) { s.add(s("webb-tv")); }
+        if(m.has("leagueoflegends")) { s.add(s("leagueoflegends")); }
         if(m.anyCategoryEquals("dealmaster")) { s.add(s("dealmaster")); }
         if(m.has("dödsfäll")) { s.add(s("Dödsfälla")); }
         if(m.has("mat-dryck")) { s.add(s("mat-dryck")); }
@@ -280,6 +281,7 @@ public class DocumentClassifier {
             m.anySubjectEquals("webb-tv") ||
             m.anySubjectEquals("serier") ||
             m.anySubjectEquals("cars") ||
-            m.anySubjectEquals("dealmaster");
+            m.anySubjectEquals("dealmaster") ||
+            m.anySubjectEquals("leagueoflegends");
     }
 }
