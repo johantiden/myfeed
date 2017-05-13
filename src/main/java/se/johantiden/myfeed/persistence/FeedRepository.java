@@ -110,12 +110,6 @@ public class FeedRepository {
                 "https://www.thelocal.se/",
                 "https://www.thelocal.se/feeds/rss.php", INVALIDATION_PERIOD));
 
-        feeds.add(createRss(
-                "eztv",
-                "eztv",
-                "https://eztv.ag/",
-                "http://eztv.ag/ezrss.xml", INVALIDATION_PERIOD));
-
         Collection<Username> allUsers = userRepository.getAllUsers();
         allUsersHasAllFeedsHack(allUsers, feeds);
 

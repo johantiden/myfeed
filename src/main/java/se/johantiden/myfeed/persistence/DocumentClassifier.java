@@ -17,7 +17,6 @@ public class DocumentClassifier {
     public static final String ERROR = "Errors";
     public static final String FUN = "Fun";
     public static final String CULTURE = "Kultur";
-    public static final String TORRENTS = "Torrents";
 
     public static final String UNMATCHED_TAB = "Unmatched";
 
@@ -181,18 +180,7 @@ public class DocumentClassifier {
             return NEWS;
         }
 
-        if(isTorrents(document)) {
-            return TORRENTS;
-        }
-
         return UNMATCHED_TAB;
-    }
-
-    private static boolean isTorrents(Document d) {
-        DocumentMatcher m = new DocumentMatcher(d);
-
-        return m.isFromFeed("eztv");
-
     }
 
     private static boolean isSport(Document d) {
