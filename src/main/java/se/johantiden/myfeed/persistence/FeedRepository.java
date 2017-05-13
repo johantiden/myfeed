@@ -86,10 +86,16 @@ public class FeedRepository {
                 "http://www.aljazeera.com/xml/rss/all.xml", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
-                "New York Times :: World",
+                "New York Times - World",
                 "nyt",
                 "https://www.nytimes.com/section/world",
                 "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", INVALIDATION_PERIOD));
+
+        feeds.add(createRss(
+                "Los Angeles Times - World",
+                "lat",
+                "http://www.latimes.com/world/rss2.0.xml",
+                "http://www.latimes.com/world/rss2.0.xml", INVALIDATION_PERIOD));
 
         feeds.add(createReddit("r/worldnews", REDDIT_MIN_SCORE));
         feeds.add(createReddit("r/AskReddit", REDDIT_MIN_SCORE));
@@ -140,7 +146,7 @@ public class FeedRepository {
 
     private static Feed createReddit(String subreddit, double minScore, Duration invalidationPeriod) {
         return new RedditPlugin().createFeed(
-                "Reddit::"+subreddit,
+                "Reddit - "+subreddit,
                 "reddit", "https://www.reddit.com/" + subreddit,
                 newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), invalidationPeriod,
                 scoreMoreThan(minScore));

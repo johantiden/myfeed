@@ -92,9 +92,10 @@ public class DocumentClassifier {
         if(m.has("Facebook")) { s.add(s("Facebook")); }
         if(m.has("Google")) { s.add(s("Google")); }
         if(m.has("Palestin")) { s.add(s("Palestina")); }
-        if(m.has("Baloch")) { s.add(s("Afghanistan")); }
-        if(m.has("Baloch")) { s.add(s("Pakistan")); }
+        if(m.has("Afghanistan") || m.has("Afganistan") || m.has("Baloch")) { s.add(s("Afghanistan")); }
+        if(m.has("Pakistan") || m.has("Baloch")) { s.add(s("Pakistan")); }
         if(m.has("Baloch")) { s.add(s("Baloch")); }
+        if(m.has("Taiwan")) { s.add(s("Taiwan")); }
         if(m.has("Israel")) { s.add(s("Israel")); }
         if(m.has("Schweiz")) { s.add(s("Schweiz")); }
         if(m.has("Tunis")) { s.add(s("Tunisien")); }
@@ -230,8 +231,9 @@ public class DocumentClassifier {
             m.isFromFeed("Dagens Nyheter") && m.anyCategoryEquals("nyheter") ||
             m.isFromFeed("Al Jazeera") ||
             m.isFromFeed("TheLocal") ||
-            m.isFromFeed("New York Times :: World") ||
-            m.isFromFeed("Reddit::r/worldnews") ||
+            m.isFromFeed("New York Times - World") ||
+            m.isFromFeed("Los Angeles Times - World") ||
+            m.isFromFeed("Reddit - r/worldnews") ||
             m.isFromFeed("SVT Nyheter") ||
             m.anyCategoryEquals("sthlm") ||
             m.anyCategoryEquals("debatt") ||
@@ -261,9 +263,9 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-            m.isFromFeed("Reddit::top") ||
-            m.isFromFeed("Reddit::r/all") ||
-            m.isFromFeed("Reddit::r/AskReddit") ||
+            m.isFromFeed("Reddit - top") ||
+            m.isFromFeed("Reddit - r/all") ||
+            m.isFromFeed("Reddit - r/AskReddit") ||
             m.isFromFeed("xkcd");
     }
 
