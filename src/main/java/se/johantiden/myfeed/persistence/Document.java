@@ -114,8 +114,4 @@ public class Document implements Persistable<Document>, Serializable {
     public List<Subject> getSubjects() {
         return subjects;
     }
-
-    public boolean has(String string) {
-        return DocumentPredicates.has(string).test(this);
-    }
 }

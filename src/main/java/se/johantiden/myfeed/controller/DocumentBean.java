@@ -45,7 +45,7 @@ public class DocumentBean {
         this.score = document.score;
         this.userDocumentKey = userDocument.getKey().toString();
         this.videos = new ArrayList<>(document.videos);
-        this.tab = Objects.requireNonNull(document.tab);
+        this.tab = document.tab == null ? "Null" : document.tab;
         this.subjects = document.getSubjects().stream().map(Subject::getTitle).collect(Collectors.toList());
     }
 

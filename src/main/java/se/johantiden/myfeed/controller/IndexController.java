@@ -65,7 +65,6 @@ public class IndexController {
         Optional<Document> document = documentOptional.flatMap(ud -> documentService.find(ud.getDocumentKey()));
 
         Optional<DocumentBean> documentBean = document
-                                              .filter(d -> d.tab != null)
                                               .map(d -> new DocumentBean(documentOptional.get(), d));
 
         if (!documentBean.isPresent()) {

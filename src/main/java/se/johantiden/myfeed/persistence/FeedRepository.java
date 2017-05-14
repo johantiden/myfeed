@@ -99,6 +99,7 @@ public class FeedRepository {
 
         feeds.add(createReddit("r/worldnews", 1000));
         feeds.add(createReddit("r/AskReddit", 1000));
+        feeds.add(createReddit("r/ProgrammerHumor", 600));
         feeds.add(createReddit("r/science", 1000));
         feeds.add(createReddit("top", 1000));
         feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
