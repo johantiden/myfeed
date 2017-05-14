@@ -44,8 +44,8 @@ public class RedditPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
             org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(document.pageUrl);
-            document.score = findVotes(jsoupDocument);
             parseStuffz(document);
+            document.score = findVotes(jsoupDocument);
             document.author = null;
             return document;
         };
@@ -66,15 +66,18 @@ public class RedditPlugin implements Plugin {
         if (linkLinks.size() == 2) {
             Element link = linkLinks.get(0);
             String linkHref = link.attr("href");
+
             if (linkHref.contains("https://gfycat.com")) {
                 parseGfycat(document, linkHref);
             }
 
-            if (linkHref.contains("http://i.imgur.com") && !linkHref.contains("jpg")) {
+            if (linkHref.contains("http://i.imgur.com") && !linkHref.contains("jpg") && !linkHref.contains("png")) {
                 String webmSrc = linkHref.substring(0, linkHref.length()-4) + "webm";
                 String mp4Src = linkHref.substring(0, linkHref.length()-4) + "mp4";
+                String gifvSrc = linkHref.substring(0, linkHref.length()-4) + "gifv";
                 ArrayList<Video> videos = Lists.newArrayList(
                         new Video(webmSrc, "video/webm"),
+                        new Video(gifvSrc, "video/mp4"),
                         new Video(mp4Src, "video/mp4"));
                 document.videos = videos;
             }
@@ -86,6 +89,9 @@ public class RedditPlugin implements Plugin {
                 String id = linkHref.split("/")[3]; //yECd_Sz_zJ8
                 document.imageUrl = null;
                 document.html = "<iframe class=\"image-box\" src=\"https://www.youtube.com/embed/"+id+"?ecver=1?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>";
+            }
+            if (linkHref.contains("i.redd.it") || linkHref.contains("imgur")) {
+                document.imageUrl = linkHref;
             }
         }
     }
