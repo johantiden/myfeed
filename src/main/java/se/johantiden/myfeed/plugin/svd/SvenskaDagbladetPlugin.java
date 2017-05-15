@@ -11,7 +11,6 @@ import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
-import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,16 +27,21 @@ import static se.johantiden.myfeed.util.DocumentPredicates.*;
 public class SvenskaDagbladetPlugin implements Plugin {
 
     private static final Logger log = LoggerFactory.getLogger(SvenskaDagbladetPlugin.class);
+    public static final String SVENSKA_DAGBLADET = "Svenska Dagbladet";
+    private static final Predicate<Document> FILTER = d -> !d.isPaywalled;
+    private final Duration ttl;
+
+    public SvenskaDagbladetPlugin(Duration ttl) {this.ttl = ttl;}
 
     @Override
-    public final Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
+    public final Feed createFeed() {
+        return new FeedImpl(SVENSKA_DAGBLADET, ttl, this, FILTER);
     }
 
     @Override
     public final FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin().createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin(SVENSKA_DAGBLADET, "svd", "https://www.svd.se", "https://www.svd.se/?service=rss", ttl, FILTER).createFeedReader(feed).readAllAvailable();
             return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

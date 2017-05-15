@@ -9,23 +9,25 @@ import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
 public class SlashdotPlugin implements Plugin {
 
+    private final Duration ttl;
+
+    public SlashdotPlugin(Duration ttl) {this.ttl = ttl;}
+
     @Override
-    public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
+    public Feed createFeed() {
+        return new FeedImpl("Slashdot", ttl, this);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin().createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin("Slashdot", "slashdot", "https://slashdot.org", "http://rss.slashdot.org/Slashdot/slashdotMainatom", ttl).createFeedReader(feed).readAllAvailable();
             return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

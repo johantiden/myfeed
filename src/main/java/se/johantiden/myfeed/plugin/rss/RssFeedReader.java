@@ -53,7 +53,7 @@ public class RssFeedReader implements FeedReader {
         try {
             return tryReadAllAvailable();
         } catch (RuntimeException e) {
-            throw new RuntimeException("RssFeed '"+feedName+"' failed:", e);
+            throw new RuntimeException("RssFeed '"+feedName+"' failed url:"+rssUrl+"   :", e);
         }
     }
 
@@ -105,7 +105,7 @@ public class RssFeedReader implements FeedReader {
         unescaped = unescaped.replaceAll("&#8216;", "'");
         unescaped = unescaped.replaceAll("&#8217;", "'");
         unescaped = unescaped.replaceAll("&#252;", "ü");
-        unescaped = unescaped.replaceAll("â€™", "'");
+        unescaped = unescaped.replaceAll("â€™", "ü");
 
         if (!unescaped.equals(string)) {
             log.info("Unescaped! {} -> {}", string, unescaped);

@@ -48,7 +48,7 @@ public class FeedReaderJob {
         inboxService.putIfNew(filtered);
     }
 
-    private String oldestInstant(List<Document> filtered) {
+    private static String oldestInstant(List<Document> filtered) {
 
         Optional<Document> max = filtered.stream().max(Comparator.comparing(Document::getPublishDate).reversed());
 

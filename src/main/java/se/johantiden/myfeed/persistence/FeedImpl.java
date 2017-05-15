@@ -8,7 +8,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -17,29 +16,28 @@ public class FeedImpl implements Feed {
     public static final Feed EMPTY = new EmptyFeed();
     private final String name;
     private final Plugin plugin;
-    private final String webUrl;
-    private final Map<String, String> feedReaderParameters;
     private final List<FeedUser> feedUsers;
-    private final String cssClass;
     private final Duration ttl;
-    private final Predicate<Document> filter;
     private Instant lastRead = Instant.EPOCH;
+    private final Predicate<Document> filter;
 
     public FeedImpl(
             String name,
-            String webUrl,
-            String cssClass, Map<String, String> feedReaderParameters,
             Duration ttl,
-            Predicate<Document> filter,
-            Plugin plugin) {
+            Plugin plugin,
+            Predicate<Document> filter) {
         this.name = name;
-        this.webUrl = webUrl;
-        this.feedReaderParameters = feedReaderParameters;
-        this.cssClass = cssClass;
-        this.ttl = ttl;
+        this.ttl = Objects.requireNonNull(ttl);
+        this.filter = Objects.requireNonNull(filter);
         this.plugin = Objects.requireNonNull(plugin);
-        this.filter = filter  == null ? d -> true : filter;
         this.feedUsers = new ArrayList<>();
+    }
+
+    public FeedImpl(
+            String name,
+            Duration ttl,
+            Plugin plugin) {
+        this(name, ttl, plugin, d -> true);
     }
 
     @Override
@@ -48,18 +46,8 @@ public class FeedImpl implements Feed {
     }
 
     @Override
-    public Map<String, String> getFeedReaderParameters() {
-        return feedReaderParameters;
-    }
-
-    @Override
     public List<FeedUser> getFeedUsers() {
         return feedUsers;
-    }
-
-    @Override
-    public String getCssClass() {
-        return cssClass;
     }
 
     @Override
@@ -73,11 +61,6 @@ public class FeedImpl implements Feed {
     }
 
     @Override
-    public String getWebUrl() {
-        return webUrl;
-    }
-
-    @Override
     public void setLastRead(Instant lastRead) {
         this.lastRead = lastRead;
     }
@@ -85,6 +68,11 @@ public class FeedImpl implements Feed {
     @Override
     public boolean isInvalidated() {
         return lastRead == null || lastRead.plus(ttl).isBefore(Instant.now());
+    }
+
+    @Override
+    public Predicate<Document> getFilter() {
+        return filter;
     }
 
     @Override
@@ -104,22 +92,10 @@ public class FeedImpl implements Feed {
         if (plugin != null ? !plugin.equals(feed.plugin) : feed.plugin != null) {
             return false;
         }
-        if (webUrl != null ? !webUrl.equals(feed.webUrl) : feed.webUrl != null) {
-            return false;
-        }
-        if (feedReaderParameters != null ? !feedReaderParameters.equals(feed.feedReaderParameters) : feed.feedReaderParameters != null) {
-            return false;
-        }
         if (feedUsers != null ? !feedUsers.equals(feed.feedUsers) : feed.feedUsers != null) {
             return false;
         }
-        if (cssClass != null ? !cssClass.equals(feed.cssClass) : feed.cssClass != null) {
-            return false;
-        }
         if (ttl != null ? !ttl.equals(feed.ttl) : feed.ttl != null) {
-            return false;
-        }
-        if (filter != null ? !filter.equals(feed.filter) : feed.filter != null) {
             return false;
         }
         return !(lastRead != null ? !lastRead.equals(feed.lastRead) : feed.lastRead != null);
@@ -130,12 +106,8 @@ public class FeedImpl implements Feed {
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (plugin != null ? plugin.hashCode() : 0);
-        result = 31 * result + (webUrl != null ? webUrl.hashCode() : 0);
-        result = 31 * result + (feedReaderParameters != null ? feedReaderParameters.hashCode() : 0);
         result = 31 * result + (feedUsers != null ? feedUsers.hashCode() : 0);
-        result = 31 * result + (cssClass != null ? cssClass.hashCode() : 0);
         result = 31 * result + (ttl != null ? ttl.hashCode() : 0);
-        result = 31 * result + (filter != null ? filter.hashCode() : 0);
         result = 31 * result + (lastRead != null ? lastRead.hashCode() : 0);
         return result;
     }
@@ -143,10 +115,5 @@ public class FeedImpl implements Feed {
     @Override
     public Key<Feed> getKey() {
         return Keys.feed(this);
-    }
-    
-    @Override
-    public Predicate<Document> getFilter() {
-        return filter;
     }
 }

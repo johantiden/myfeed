@@ -25,10 +25,11 @@ public class Keys {
     }
 
     public static Key<Feed> feed(Feed feed) {
+        return feedByName(feed.getName());
+    }
 
-        String uniqueness = feed.getName() + feed.getFeedReaderParameters();
-        return new Key<>(uniqueness);
-
+    public static Key<Feed> feedByName(String feedName) {
+        return new Key<>(feedName);
     }
 
     public static Key<Subject> subject(String keySeed) {

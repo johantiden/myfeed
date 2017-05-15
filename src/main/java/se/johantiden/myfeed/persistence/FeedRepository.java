@@ -9,6 +9,7 @@ import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import se.johantiden.myfeed.plugin.slashdot.SlashdotPlugin;
 import se.johantiden.myfeed.plugin.svd.SvenskaDagbladetPlugin;
+import se.johantiden.myfeed.plugin.svt.SVTPlugin;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -16,8 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static se.johantiden.myfeed.util.Maps2.newHashMap;
 
 public class FeedRepository {
 
@@ -31,35 +30,10 @@ public class FeedRepository {
     private static List<Feed> allFeedsHack(UserRepository userRepository) {
         List<Feed> feeds = new ArrayList<>();
 
-        feeds.add(new HackerNewsPlugin().createFeed(
-                "HackerNews",
-                "hackernews",
-                "https://news.ycombinator.com/news",
-                newHashMap("rssUrl", "https://news.ycombinator.com/rss"),
-                INVALIDATION_PERIOD,
-                null));
-
-        feeds.add(new SlashdotPlugin().createFeed(
-                "Slashdot",
-                "slashdot",
-                "https://slashdot.org",
-                newHashMap("rssUrl", "http://rss.slashdot.org/Slashdot/slashdotMainatom"),
-                INVALIDATION_PERIOD, null));
-
-        feeds.add(new SvenskaDagbladetPlugin().createFeed(
-                "Svenska Dagbladet",
-                "svd",
-                "https://www.svd.se",
-                newHashMap("rssUrl", "https://www.svd.se/?service=rss"),
-                INVALIDATION_PERIOD,
-                d -> !d.isPaywalled));
-
-        DagensNyheterPlugin dn = new DagensNyheterPlugin();
-        feeds.add(dn.createFeed(
-                "Dagens Nyheter",
-                "dn",
-                "https://www.dn.se",
-                newHashMap("rssUrl", "http://www.dn.se/nyheter/rss/"), INVALIDATION_PERIOD, null));
+        feeds.add(new HackerNewsPlugin(INVALIDATION_PERIOD).createFeed());
+        feeds.add(new SlashdotPlugin(INVALIDATION_PERIOD).createFeed());
+        feeds.add(new SvenskaDagbladetPlugin(INVALIDATION_PERIOD).createFeed());
+        feeds.add(new DagensNyheterPlugin(INVALIDATION_PERIOD).createFeed());
 
         feeds.add(createRss(
                 "xkcd",
@@ -67,11 +41,7 @@ public class FeedRepository {
                 "https://xkcd.com",
                 "https://xkcd.com/atom.xml", Duration.ofDays(30)));
 
-        feeds.add(createRss(
-                "SVT Nyheter",
-                "svt",
-                "https://www.svt.se/nyheter",
-                "https://www.svt.se/nyheter/rss.xml", INVALIDATION_PERIOD));
+        feeds.add(new SVTPlugin(INVALIDATION_PERIOD).createFeed());
 
         feeds.add(createRss(
                 "Ars Technica",
@@ -127,24 +97,16 @@ public class FeedRepository {
     }
 
     private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl, Duration invalidationPeriod) {
-        RssPlugin rss = new RssPlugin();
-        return rss.createFeed(
-                feedName,
-                cssClass,
-                webUrl,
-                newHashMap("rssUrl", rssUrl), invalidationPeriod, null);
+        RssPlugin rss = new RssPlugin(feedName, cssClass, webUrl, rssUrl, invalidationPeriod);
+        return rss.createFeed();
     }
 
     private static Feed createReddit(String subreddit, double minScore) {
         return createReddit(subreddit, minScore, INVALIDATION_PERIOD);
     }
 
-    private static Feed createReddit(String subreddit, double minScore, Duration invalidationPeriod) {
-        return new RedditPlugin().createFeed(
-                "Reddit - "+subreddit,
-                "reddit", "https://www.reddit.com/" + subreddit,
-                newHashMap("rssUrl", "https://www.reddit.com/" + subreddit + "/.rss"), invalidationPeriod,
-                scoreMoreThan(minScore));
+    private static Feed createReddit(String subreddit, double minScore, Duration ttl) {
+        return new RedditPlugin(subreddit, ttl, scoreMoreThan(minScore)).createFeed();
     }
 
     private static Predicate<Document> scoreMoreThan(double score) {

@@ -11,24 +11,31 @@ import se.johantiden.myfeed.plugin.rss.RssPlugin;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static se.johantiden.myfeed.util.JCollections.map;
 
 public class DagensNyheterPlugin implements Plugin {
 
+    private static final String DAGENS_NYHETER = "Dagens Nyheter";
+
+    private final Duration ttl;
+
+    public DagensNyheterPlugin(Duration ttl) {
+        this.ttl = Objects.requireNonNull(ttl);
+    }
+
     @Override
-    public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
+    public Feed createFeed() {
+        return new FeedImpl(DAGENS_NYHETER, ttl, this);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin().createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin(feed.getName(), "dn", "https://www.dn.se", "http://www.dn.se/nyheter/rss/", ttl).createFeedReader(feed).readAllAvailable();
             return map(documents, createEntryMapper());
         };
     }

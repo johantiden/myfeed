@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -27,18 +28,39 @@ import java.util.stream.Collectors;
 public class RedditPlugin implements Plugin {
 
     private static final Logger log = LoggerFactory.getLogger(RedditPlugin.class);
+    private final Duration ttl;
+    private final Predicate<Document> filter;
+    private final String subreddit;
+
+    public RedditPlugin(String subreddit, Duration ttl, Predicate<Document> filter) {
+        this.subreddit = Objects.requireNonNull(subreddit);
+        this.ttl = Objects.requireNonNull(ttl);
+        this.filter = filter;
+    }
 
     @Override
-    public Feed createFeed(String feedName, String cssClass, String webUrl, Map<String, String> readerParameters, Duration ttl, Predicate<Document> filter) {
-        return new FeedImpl(feedName, webUrl, cssClass, readerParameters, ttl, filter, this);
+    public Feed createFeed() {
+        return new FeedImpl(getFeedName(), ttl, this, filter);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin().createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin(getFeedName(), "reddit", getWebUrl(), getRssUrl(), ttl, filter).createFeedReader(feed).readAllAvailable();
             return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
         };
+    }
+
+    private String getRssUrl() {
+        return "https://www.reddit.com/" + subreddit + "/.rss";
+    }
+
+    private String getWebUrl() {
+        return "https://www.reddit.com/" + subreddit;
+    }
+
+    private String getFeedName() {
+        return "Reddit - "+ subreddit;
     }
 
     private static Function<Document, Document> createEntryMapper() {

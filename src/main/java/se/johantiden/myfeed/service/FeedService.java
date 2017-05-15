@@ -17,7 +17,7 @@ public class FeedService {
 
     public Feed popOldestInvalidatedFeed() {
         Comparator<Feed> comparator = Comparator.nullsFirst(Comparator.comparing(Feed::getLastRead))
-                .thenComparing(Feed::getWebUrl);
+                .thenComparing(Feed::getName);
 
         List<Feed> feeds = feedRepository.invalidatedFeeds();
         Feed feed = feeds.stream()

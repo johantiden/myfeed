@@ -42,7 +42,6 @@
 
             <div class="subject" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
                 <a href="javascript:void(0);" >{{subject}}</a>
-                <!--<a style="font-size: small; color: #BBBBBB; font-weight: normal;" href="http://omni.se/sok?q={{subject}}" >Omni:{{subject}}</a>-->
             </div>
 
             <div class="title" ng-if="document.title"><a class="link" href="{{document.pageUrl}}" >{{document.title}}</a></div>

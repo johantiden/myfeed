@@ -35,6 +35,7 @@ public class DocumentClassifier {
         };
 
         if(m.anyCategoryEquals("ledare")) { s.add(s("Ledare")); }
+        if(m.anyCategoryEquals("sport")) { s.add(s("Sport")); }
         if(m.has("your") && m.has("briefing")) { s.add(s("Briefing")); }
         if(m.has("obama")) { s.add(s("Obama")); }
         if(m.has("trump")) { s.add(s("Trump")); }
