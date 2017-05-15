@@ -2,16 +2,24 @@ package se.johantiden.myfeed.util;
 
 import se.johantiden.myfeed.persistence.Document;
 
-import java.util.function.BiPredicate;
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class DocumentPredicates {
 
+    public static Predicate<Document> has(String... strings) {
+        return d -> Arrays.stream(strings).anyMatch(s -> has(s).test(d));
+    }
+
     public static Predicate<Document> has(String string) {
         String string2 = string.toLowerCase();
         return d -> d.text != null && d.text.toLowerCase().contains(string2) ||
-                            d.title != null && d.title.toLowerCase().contains(string2) ||
-                            d.categories.stream().anyMatch(c -> c.name.toLowerCase().contains(string2));
+                    d.title != null && d.title.toLowerCase().contains(string2) ||
+                    d.pageUrl != null && d.pageUrl.toLowerCase().contains(string2) ||
+                    d.categories.stream().anyMatch(c -> c.name.toLowerCase().contains(string2));
+    }
+    public static Predicate<Document> hasCaseSensitive(String... strings) {
+        return d -> Arrays.stream(strings).anyMatch(s -> hasCaseSensitive(s).test(d));
     }
 
     public static Predicate<Document> hasCaseSensitive(String string) {
@@ -37,6 +45,10 @@ public class DocumentPredicates {
 
     public static Predicate<Document> anySubjectEquals(String string) {
         return d -> d.subjects.stream().anyMatch(subject -> subject.getTitle().equalsIgnoreCase(string));
+    }
+
+    public static Predicate<Document> authorEquals(String string) {
+        return d -> d.author != null && d.author.name.equals(string);
     }
 
     public static Predicate<Document> isFromFeed(String feedName) {

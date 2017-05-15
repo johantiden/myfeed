@@ -12,12 +12,12 @@ public class DocumentMatcher {
         this.document = Objects.requireNonNull(document);
     }
 
-    public boolean has(String string) {
-        return DocumentPredicates.has(string).test(document);
+    public boolean has(String... strings) {
+        return DocumentPredicates.has(strings).test(document);
     }
 
-    public boolean hasCaseSensitive(String string) {
-        return DocumentPredicates.hasCaseSensitive(string).test(document);
+    public boolean hasCaseSensitive(String... strings) {
+        return DocumentPredicates.hasCaseSensitive(strings).test(document);
     }
 
     public boolean isFromFeed(String feedName) {
@@ -40,5 +40,7 @@ public class DocumentMatcher {
         return DocumentPredicates.anySubjectEquals(subject).test(document);
     }
 
-
+    public boolean authorEquals(String author) {
+        return DocumentPredicates.authorEquals(author).test(document);
+    }
 }

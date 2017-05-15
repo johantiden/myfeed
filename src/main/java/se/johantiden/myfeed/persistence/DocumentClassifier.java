@@ -1,10 +1,14 @@
 package se.johantiden.myfeed.persistence;
 
+import com.google.common.collect.Lists;
 import se.johantiden.myfeed.classification.DocumentMatcher;
+import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.controller.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class DocumentClassifier {
@@ -34,13 +38,12 @@ public class DocumentClassifier {
             }
         };
 
+        if(m.anyCategoryEquals("ekonomi")) { s.add(s("Ekonomi")); }
         if(m.anyCategoryEquals("ledare")) { s.add(s("Ledare")); }
         if(m.anyCategoryEquals("sport")) { s.add(s("Sport")); }
         if(m.has("your") && m.has("briefing")) { s.add(s("Briefing")); }
-        if(m.has("obama")) { s.add(s("Obama")); }
-        if(m.has("trump")) { s.add(s("Trump")); }
         if(m.has("Tim Berners-Lee")) { s.add(s("Tim Berners-Lee")); }
-        if(m.has("german") || m.has("tysk") || m.has("merkel")) { s.add(s("Tyskland")); }
+        if(m.has("german") || m.has("tysk") || m.has("merkel") || m.has("Brandenburg")) { s.add(s("Tyskland")); }
         if(m.has("merkel")) { s.add(s("Merkel")); }
         if(m.has("Hitler") || m.hasCaseSensitive("Nazi")) { s.add(s("Nazism")); }
         if(m.has("twitter") || m.has("tweet")) { s.add(s("Twitter")); }
@@ -49,56 +52,70 @@ public class DocumentClassifier {
         if(m.has("turist")) { s.add(s("Turist")); }
         if(m.has("formel 1")) { s.add(s("Formel 1")); }
         if(m.has("rallycross")) { s.add(s("Rallycross")); }
-        if(m.has("GP-hoppning")) { s.add(s("Hästsport")); }
-        if(m.has("hockey") || m.has("Henrik Lundqvist") || m.has("New York Rangers") || m.has("Nicklas Bäckström")) { s.add(s("Hockey")); }
-        if(m.has("fotboll") || m.has("allsvensk") || m.has("Champions League") || m.has("premier league") || m.has("superettan") || m.has("Benfica ") || m.has("Malmö FF")) { s.add(s("Fotboll")); }
-        if(m.has("handboll") || m.has("H65")) { s.add(s("Handboll")); }
-        if(m.has("bordtennis") || m.has("pingis")) { s.add(s("Bordtennis")); }
+        if(m.has("GP-hoppning","travlopp")) { s.add(s("Hästsport")); }
+        if(m.has("Tennis","Federer")) { s.add(s("Tennis")); }
+        if(m.has("sprang maran")) { s.add(s("Löpning")); }
+        if(m.has("hockey", "Henrik Lundqvist", "New York Rangers", "Nicklas Bäckström")) { s.add(s("Hockey")); }
+        if(m.has("fotboll", "allsvensk", "Champions League", "premier league", "superettan", "Benfica ", "Malmö FF")) { s.add(s("Fotboll")); }
+        if(m.has("handboll", "H65")) { s.add(s("Handboll")); }
+        if(m.hasCaseSensitive("NBA")) { s.add(s("Basket")); }
+        if(m.has("bordtennis", "pingis")) { s.add(s("Bordtennis")); }
         if(m.has("Giro") && m.has("Italia")) { s.add(s("Cykling")); }
         if(m.has("Diamond League")) { s.add(s("Friidrott")); }
         if(m.has("V75")) { s.add(s("Trav")); }
-        if(m.has("Johaug")) { s.add(s("Skidor")); }
+        if(m.has("Johaug", "alpin", "skidor", "Charlotte Kalla")) { s.add(s("Skidor")); }
         if(m.has("speedway")) { s.add(s("Speedway")); }
         if(anySubjectEquals(s, "sport") && m.hasCaseSensitive("OS") || m.has("olympisk")) { s.add(s("OS")); }
         if(m.has("netflix")) { s.add(s("Netflix")); }
         if(m.has("Boko Haram")) { s.add(s("Boko Haram")); }
-        if(m.has("väder") && !m.has("blåsväder") || m.has("Cyclone") || m.has("Cyklon") || m.has("Thunder")) { s.add(s("Väder")); }
+        if(m.has("väder") && !m.has("blåsväder", "Cyclone", "Cyklon", "Thunder")) { s.add(s("Väder")); }
         if(m.has("Eurovision")) { s.add(s("Eurovision")); }
         if(m.has("Nepal")) { s.add(s("Nepal")); }
-        if(m.has("Syria") || m.has("Syrien") || m.has("Damascus") || m.has("Damaskus")) { s.add(s("Syrien")); }
-        if(m.has("Venezuela") || m.has("Maduro")) { s.add(s("Venezuela")); }
-        if(m.has("North Korea") || m.has("Nordkorea")) { s.add(s("Nordkorea")); }
-        if(m.has("South Korea") || m.has("Sydkorea") || m.has("Seoul")) { s.add(s("Sydkorea")); }
-        if(m.has("Myanmar") || m.has("Burma")|| m.has("Aung San Suu Kyi")) { s.add(s("Myanmar")); }
+        if(m.has("Syria", "Syrien", "syrisk", "Syrier", "Damascus", "Damaskus")) { s.add(s("Syrien")); }
+        if(m.has("Venezuela", "Maduro")) { s.add(s("Venezuela")); }
+        if(m.has("North Korea", "Nordkorea")) { s.add(s("Nordkorea")); }
+        if(m.has("South Korea", "Sydkorea", "Seoul")) { s.add(s("Sydkorea")); }
+        if(m.has("Myanmar", "Burma")|| m.has("Aung San Suu Kyi")) { s.add(s("Myanmar")); }
         if(m.hasCaseSensitive("Iran") || m.has("Rouhani")) { s.add(s("Iran")); }
         if(m.has("Rouhani")) { s.add(s("Rouhani")); }
-        if(m.has("China") || m.has("Kina") || m.has("Xi Jinping") || m.has("Kines")) { s.add(s("Kina")); }
+        if(m.has("China", "Kina", "Xi Jinping", "Kines")) { s.add(s("Kina")); }
         if(m.has("Net Neutrality")) { s.add(s("Net Neutrality")); }
         if(m.has("Albanien")) { s.add(s("Albanien")); }
-        if(m.has("Bosnia") || m.has("Bosnien")) { s.add(s("Bosnien")); }
+        if(m.has("Bosnia", "Bosnien")) { s.add(s("Bosnien")); }
         if(m.has("Belgium")) { s.add(s("Belgien")); }
         if(m.has("India")) { s.add(s("Indien")); }
         if(m.has("Brazil")) { s.add(s("Brasilien")); }
         if(m.has("Egypt")) { s.add(s("Egypten")); }
-        if(m.has("Yemen")) { s.add(s("Yemen")); }
+        if(m.has("Yemen", "Jemen")) { s.add(s("Jemen")); }
+        if(m.has("Danmark", "Köpenhamn")) { s.add(s("Danmark")); }
         if(m.has("Bangladesh")) { s.add(s("Bangladesh")); }
         if(m.has("Malaysia")) { s.add(s("Malaysia")); }
         if(m.has("AskReddit")) { s.add(s("AskReddit")); }
         if(m.anyCategoryEquals("science")) { s.add(s("Forskning")); }
-        if(m.has("France") || m.has("Frankrike") || m.has("Fransk") || m.has("French") || m.has("Paris")) { s.add(s("Frankrike")); }
+        if(m.has("France", "Frankrike", "Fransk", "French", "Paris")) { s.add(s("Frankrike")); }
         if(m.has("Australia")) { s.add(s("Australia")); }
-        if(m.has("Göteborg") || m.has("Gothenburg")) { s.add(s("Göteborg")); }
+        if(m.has("Göteborg", "Gothenburg")) { s.add(s("Göteborg")); }
         if(m.has("Malmö")) { s.add(s("Malmö")); }
-        if(m.has("Dutch")) { s.add(s("Nederländerna")); }
+        if(m.has("Dutch", "Netherlands")) { s.add(s("Nederländerna")); }
+        if(m.has("Italien")) { s.add(s("Italien")); }
+        if(m.has("Tjeckien", "Tjeckisk", "Czech")) { s.add(s("Tjeckien")); }
+        if(m.has("Libyen")) { s.add(s("Libyen")); }
+        if(m.has("Kuwait")) { s.add(s("Kuwait")); }
+        if(m.has("Saudi Arabia", "Saudiarabien")) { s.add(s("Saudiarabien")); }
+        if(m.has("Uganda")) { s.add(s("Uganda")); }
+        if(m.has("South Africa")) { s.add(s("Sydafrika")); }
         if(m.has("European Union") || m.hasCaseSensitive("EU")) { s.add(s("EU")); }
-        if(m.has("Europe") || m.has("Europa")) { s.add(s("Europa")); }
-        if(m.has("Elfenbenskusten") || m.has("Ivory Coast")) { s.add(s("Elfenbenskusten")); }
-        if(m.has(STORBRITANNIEN) || m.has("London") || m.has("England") || m.has("Britain") || m.has("Scotland")) { s.add(s(STORBRITANNIEN)); }
-        if(m.hasCaseSensitive("US") || m.has("U.S.") || m.has("america") && !m.has("south america") || m.hasCaseSensitive("FBI")) { s.add(s("USA")); }
+        if(m.has("Europe", "Europa")) { s.add(s("Europa")); }
+        if(m.has("Elfenbenskusten", "Ivory Coast", "Ivorian")) { s.add(s("Elfenbenskusten")); }
+        if(m.has(STORBRITANNIEN, "London", "England", "Britain", "Scotland")) { s.add(s(STORBRITANNIEN)); }
+        if(m.hasCaseSensitive("US", "FBI") || m.has("america") && !m.has("south america") || m.has("U.S.", "america", "obama", "trump")) { s.add(s("USA")); }
+        if(m.has("obama")) { s.add(s("Obama")); }
+        if(m.has("trump")) { s.add(s("Trump")); }
         if(m.hasCaseSensitive("FBI")) { s.add(s("FBI")); }
-        if(m.has("Mexiko") || m.has("Mexico") || m.has("Mexican")) { s.add(s("Mexico")); }
-        if(m.has("Turkey") || m.has("Turkish") || m.has("Turkiet")) { s.add(s("Turkiet")); }
-        if(m.has("Greece") || m.has("Greek") || m.has("Grekland") || m.has("Grek")) { s.add(s("Grekland")); }
+        if(m.has("Mexiko", "Mexico", "Mexican")) { s.add(s("Mexico")); }
+        if(m.has("Turkey", "Turkish", "Turkiet", "Recep Tayyip Erdogan", "Istanbul")) { s.add(s("Turkiet")); }
+        if(m.has("Greece", "Greek", "Grekland", "Grek")) { s.add(s("Grekland")); }
+        if(m.has("Österrike", "Austria")) { s.add(s("Österrike")); }
         if(m.has("Spotify")) { s.add(s("Spotify")); }
         if(m.has("Microsoft")) { s.add(s("Microsoft")); }
         if(m.has("Samsung")) { s.add(s("Samsung")); }
@@ -107,60 +124,65 @@ public class DocumentClassifier {
         if(m.has("Facebook")) { s.add(s("Facebook")); }
         if(m.has("Google")) { s.add(s("Google")); }
         if(m.has("Palestin")) { s.add(s("Palestina")); }
-        if(m.has("Afghanistan") || m.has("Afganistan") || m.has("Baloch")) { s.add(s("Afghanistan")); }
-        if(m.has("Pakistan") || m.has("Baloch")) { s.add(s("Pakistan")); }
+        if(m.has("Afghanistan", "Afganistan", "Baloch")) { s.add(s("Afghanistan")); }
+        if(m.has("Pakistan", "Baloch")) { s.add(s("Pakistan")); }
         if(m.has("Baloch")) { s.add(s("Baloch")); }
         if(m.has("Taiwan")) { s.add(s("Taiwan")); }
         if(m.has("Israel")) { s.add(s("Israel")); }
         if(m.has("Schweiz")) { s.add(s("Schweiz")); }
+        if(m.has("Ungern")) { s.add(s("Ungern")); }
         if(m.has("Tunis")) { s.add(s("Tunisien")); }
         if(m.has("Portugal")) { s.add(s("Portugal")); }
         if(m.has("Japan")) { s.add(s("Japan")); }
         if(m.has("Argentin")) { s.add(s("Argentina")); }
-        if(m.has("Russia") || m.has("Ryssland") || m.has("Rysk") || m.hasCaseSensitive("Moskva")) { s.add(s("Ryssland")); }
-        if(m.has("Canada") || m.has("Kanada") || m.has("Canadian") || m.has("Kanaden")) { s.add(s("Kanada")); }
+        if(m.has("Russia", "Ryssland", "Rysk") || m.hasCaseSensitive("Moskva")) { s.add(s("Ryssland")); }
+        if(m.has("Canada", "Kanada", "Canadian", "Kanaden")) { s.add(s("Kanada")); }
         if(m.has("Museum")) { s.add(s("Museum")); }
-        if(m.has("musik") || m.has("hiphop")) { s.add(s("Musik")); }
+        if(m.has("musik", "hiphop")) { s.add(s("Musik")); }
+        if(m.has("konstnär")) { s.add(s("Konst")); }
+        if(m.has("författare")) { s.add(s("Böcker")); }
+        if(m.has("dramaserie")) { s.add(s("Film/TV")); }
         if(m.has("terror")) { s.add(s("Terror")); }
         if(m.has("Nigeria")) { s.add(s("Nigeria")); }
+        if(m.authorEquals("TT")) { s.add(s("TT"));}
         if(m.has("Finland")) { s.add(s("Finland")); }
         if(m.has("South Sudan")) { s.add(s("Sydsudan")); }
         if(m.has("Ebola")) { s.add(s("Ebola")); }
         if(m.has("Cholera") | m.has("Kolera")) { s.add(s("Kolera")); }
-        if(m.has("Kiev") || m.has("Ukrain")) { s.add(s("Ukraina")); }
-        if(m.has("IT-attacken") || m.has("Ransomware") || m.has("Cyberattack") || m.has("cyber") && m.has("attack") || m.has("Malware") || m.has("WanaCry") || m.has("WannaCry") || m.has("Hacker") && !m.has("Hacker News") && !m.has("HackerNews") || m.has("hacking") || m.has("security") && m.has("computer") || m.has("IT-utpressning") || m.has("IT-angrepp") || m.has("Internet Security")) { s.add(s("IT-Säkerhet")); }
+        if(m.has("Kiev", "Ukrain")) { s.add(s("Ukraina")); }
+        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "cyber") && m.has("attack", "Malware", "WanaCry", "WannaCry", "Hacker") && !m.has("Hacker News") && !m.has("HackerNews", "hacking", "security") && m.has("computer", "IT-utpressning", "IT-angrepp", "Internet Security")) { s.add(s("IT-Säkerhet")); }
         if(m.has("Brexit")) { s.add(s("Brexit")); }
         if(m.has("Stockholm")) { s.add(s("Stockholm")); }
-        if(anySubjectEquals(s, "Stockholm") || m.has("Östersund") || m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå") || m.has("Liseberg") || m.has("Strömsund") || m.has("Norrköping") || m.hasCaseSensitive("Swedish") || m.hasCaseSensitive("Swede") || m.hasCaseSensitive("Västervik") || m.has("Katrineholm") || m.has("Uppsala")) {
+        if(anySubjectEquals(s, "Stockholm") || m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
             s.add(s("Inrikes")); }
-        if(m.has("Norge") || m.has("Norway") || m.has("norska")) { s.add(s("Norge")); }
+        if(m.has("Norge", "Norway", "norska")) { s.add(s("Norge")); }
         if(m.has("Feministiskt initiativ")) { s.add(s("Feministiskt Initiativ")); }
-        if(m.has("Miljöpartiet") || m.hasCaseSensitive("MP") && !anySubjectEquals(s, STORBRITANNIEN)) { s.add(s("Miljöpartiet")); }
-        if(m.has("Sverigemokraterna") && m.hasCaseSensitive("SD") || m.has("Jimmie Åkesson")) { s.add(s("Sverigemokraterna")); }
+        if((m.has("Miljöpartiet") || m.hasCaseSensitive("MP ", "MP.", " MP")) && !anySubjectEquals(s, STORBRITANNIEN)) { s.add(s("Miljöpartiet")); }
+        if(m.has("Sverigemokraterna") && m.hasCaseSensitive("SD", "Jimmie Åkesson")) { s.add(s("Sverigemokraterna")); }
         if(m.has("Jimmie Åkesson")) { s.add(s("Jimmie Åkesson")); }
         if(m.hasCaseSensitive("LO")) { s.add(s("LO")); }
-        if(m.has("Moderaterna") || m.has("Kinberg Batra")) { s.add(s("Moderaterna")); }
+        if(m.has("Moderaterna", "Kinberg Batra")) { s.add(s("Moderaterna")); }
         if(m.has("Kinberg Batra")) { s.add(s("Kinberg Batra")); }
         if(m.has("debatt")) { s.add(s("Debatt")); }
         if(m.has("Kongo-Kinshasa")) { s.add(s("Kongo-Kinshasa")); }
         if(m.hasCaseSensitive("Oman")) { s.add(s("Oman")); }
         if(m.hasCaseSensitive("CCTV")) { s.add(s("Foliehatt")); }
-        if(m.hasCaseSensitive("Iraq") || m.hasCaseSensitive("Irak")) { s.add(s("Irak")); }
-        if(m.hasCaseSensitive("Cuba") || m.hasCaseSensitive("Kuba")) { s.add(s("Kuba")); }
+        if(m.hasCaseSensitive("Iraq", "Irak")) { s.add(s("Irak")); }
+        if(m.hasCaseSensitive("Cuba", "Kuba")) { s.add(s("Kuba")); }
         if(m.has("kvinnor") && m.has("män")) { s.add(s("Kvinnor")); }
         if(m.has("kvinnor") && m.has("män")) { s.add(s("Män")); }
         if(m.isFromFeed("TheLocal") && m.has("recipe:")) { s.add(s("Recipe")); }
         if(m.isFromFeed("HackerNews") && m.has("hiring")) { s.add(s("Hiring")); }
         if(m.has("Vänsterpartiet")) { s.add(s("Vänsterpartiet")); }
-        if(m.has("Centerpartiet") || m.has("Annie Lööf")) { s.add(s("Centerpartiet")); }
+        if(m.has("Centerpartiet", "Annie Lööf")) { s.add(s("Centerpartiet")); }
         if(m.has("Annie Lööf")) { s.add(s("Annie Lööf")); }
-        if(m.has("Vänsterpartiet") || m.has("Jonas Sjöstedt")) { s.add(s("Vänsterpartiet")); }
+        if(m.has("Vänsterpartiet", "Jonas Sjöstedt")) { s.add(s("Vänsterpartiet")); }
         if(m.has("Jonas Sjöstedt")) { s.add(s("Jonas Sjöstedt")); }
-        if(m.has("Kristdemokraterna") || m.has("Busch Thor") || m.hasCaseSensitive("KD")) { s.add(s("Kristdemokraterna")); }
+        if(m.has("Kristdemokraterna", "Busch Thor") || m.hasCaseSensitive("KD")) { s.add(s("Kristdemokraterna")); }
         if(m.has("Busch Thor")) { s.add(s("Ebba Busch Thor")); }
         if(m.has("Idagsidan")) { s.add(s("Idagsidan")); }
         if(m.has("historian")) { s.add(s("History")); }
-        if(m.has("Daesh") || m.hasCaseSensitive("ISIL") || m.hasCaseSensitive("ISIS") || m.has("terror") && m.hasCaseSensitive("IS")) { s.add(s("Daesh")); }
+        if(m.has("Daesh") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) { s.add(s("Daesh")); }
         if(m.has("Socialdemokraterna") && !s.contains("Tyskland")) { s.add(s("Socialdemokraterna")); }
         if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(s("Mat")); }
 
@@ -173,10 +195,11 @@ public class DocumentClassifier {
         if(m.has("dödsfäll")) { s.add(s("Dödsfälla")); }
         if(m.anyCategoryEquals("motor")) { s.add(s("Motor")); }
         if(m.anyCategoryEquals("serier")) { s.add(s("Serier")); }
-        if(m.hasCaseSensitive("Här är") || m.has("– här är") || m.has("- här är")) { s.add(s("Här är")); }
+        if(m.hasCaseSensitive("Här är") || m.has("– här är", "- här är")) { s.add(s("Här är")); }
         if(m.has("turist")) { s.add(s("Turist")); }
         if(d.pageUrl.contains("uutiset")) { s.add(s("Uutiset")); }
         if(m.isFromFeed("Svenska Dagbladet") && m.startsWithCaseSensitive("VIDEO")) { s.add(s("VIDEO")); }
+        if(m.has("fragesport")) { s.add(s("Frågesport")); }
 
 
         return s;
@@ -336,6 +359,46 @@ public class DocumentClassifier {
             m.anySubjectEquals("leagueoflegends") ||
             m.anySubjectEquals("Idagsidan") ||
             m.anySubjectEquals("Mat") ||
-            m.anySubjectEquals("NewsGrid");
+            m.anySubjectEquals("NewsGrid") ||
+            m.anySubjectEquals("Frågesport");
+    }
+
+    public static void appendUrlFoldersAsCategory(Document document) {
+
+        DocumentMatcher m = new DocumentMatcher(document);
+
+        List<String> folders = parseUrlFolders(document.pageUrl).stream()
+                               .filter(DocumentClassifier::isSingleWord)
+                               .collect(Collectors.toList());
+
+        folders.stream()
+                .filter(f -> !m.anyCategoryEquals(f))
+                .map(f -> new NameAndUrl(f, endUrlAt(f, document.pageUrl)))
+                .forEach(document.categories::add);
+
+    }
+
+    private static String endUrlAt(String firstFolder, String pageUrl) {
+
+        int i = pageUrl.indexOf(firstFolder);
+
+        String substring = pageUrl.substring(0, i + firstFolder.length());
+        return substring;
+    }
+
+    private static boolean isSingleWord(String string) {
+        boolean matches = string.matches("[a-zA-Z]{2,}");
+        return matches;
+    }
+
+    private static List<String> parseUrlFolders(String pageUrl) {
+        StringTokenizer stringTokenizer = new StringTokenizer(pageUrl);
+
+        List<String> folders = Lists.newArrayList();
+
+        while (stringTokenizer.hasMoreTokens()) {
+            folders.add(stringTokenizer.nextToken("/"));
+        }
+        return folders;
     }
 }

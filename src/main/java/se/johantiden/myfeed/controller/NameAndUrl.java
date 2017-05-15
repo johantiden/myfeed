@@ -19,7 +19,7 @@ public class NameAndUrl implements Serializable {
             return;
         }
 
-        if (url.contains("google")) {
+        if (url.contains("google") && !url.contains("cloud.google.com")) {
             throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
         }
     }

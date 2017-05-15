@@ -21,6 +21,18 @@ public class SVTPlugin implements Plugin {
         this.invalidationPeriod = invalidationPeriod;
     }
 
+    private static Predicate<Document> notIsLokalaNyheter() {
+
+        return d -> {
+            boolean lokalt = d.pageUrl.contains("nyheter/lokalt/");
+            if(lokalt) {
+                return false;
+            }
+            return true;
+        };
+
+    }
+
     @Override
     public Feed createFeed() {
         return new FeedImpl(SVT_NYHETER, invalidationPeriod, this, notIsLokalaNyheter());
@@ -31,20 +43,10 @@ public class SVTPlugin implements Plugin {
         return () -> {
             List<Document> documents = new RssPlugin(SVT_NYHETER, "https://www.svt.se/nyheter", "svt", "https://www.svt.se/nyheter/rss.xml", invalidationPeriod, notIsLokalaNyheter())
                                        .createFeedReader(createFeed()).readAllAvailable();
-            return documents.stream().filter(notIsLokalaNyheter()).collect(Collectors.toList());
+            return documents.stream()
+                   .filter(notIsLokalaNyheter())
+                   .collect(Collectors.toList());
         };
-    }
-
-    private static Predicate<Document> notIsLokalaNyheter() {
-
-        return d -> {
-            boolean lokalt = d.pageUrl.contains("nyheter/lokalt/");
-            if (lokalt) {
-                return false;
-            }
-            return true;
-        };
-
     }
 
 

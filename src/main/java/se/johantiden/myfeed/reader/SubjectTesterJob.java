@@ -22,6 +22,7 @@ public class SubjectTesterJob {
         List<Document> documents = documentService.find(d -> d.subjects.isEmpty() || d.tab == null);
 
         documents.forEach(d -> {
+            DocumentClassifier.appendUrlFoldersAsCategory(d);
             List<Subject> subjects = DocumentClassifier.getSubjectFor(d);
             d.subjects.clear();
             d.subjects.addAll(subjects);

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class HackerNewsPlugin implements Plugin {
 
-    public static final String HACKER_NEWS = "Hacker News";
+    public static final String HACKER_NEWS = "HackerNews";
     private final Duration ttl;
 
     public HackerNewsPlugin(Duration ttl) {this.ttl = ttl;}
