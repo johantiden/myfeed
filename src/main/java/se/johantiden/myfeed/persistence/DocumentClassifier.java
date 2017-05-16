@@ -181,9 +181,9 @@ public class DocumentClassifier {
         if(m.has("Kristdemokraterna", "Busch Thor") || m.hasCaseSensitive("KD")) { s.add(s("Kristdemokraterna")); }
         if(m.has("Busch Thor")) { s.add(s("Ebba Busch Thor")); }
         if(m.has("Idagsidan")) { s.add(s("Idagsidan")); }
-        if(m.has("historian")) { s.add(s("History")); }
+        if(m.has("historian", "1500", "1600", "1700", "1800")) { s.add(s("Historia")); }
         if(m.has("Daesh") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) { s.add(s("Daesh")); }
-        if(m.has("Socialdemokraterna") && !s.contains("Tyskland")) { s.add(s("Socialdemokraterna")); }
+        if(m.has("Socialdemokraterna") && !anySubjectEquals(s, "Tyskland")) { s.add(s("Socialdemokraterna")); }
         if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(s("Mat")); }
 
         // Badness:
