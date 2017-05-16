@@ -15,21 +15,19 @@ public class RssPlugin implements Plugin {
     private final String rssUrl;
     private final String feedName;
     private final String webUrl;
-    private final String cssClass;
     private final Duration ttl;
     private final Predicate<Document> filter;
 
-    public RssPlugin(String feedName, String cssClass, String webUrl, String rssUrl, Duration ttl, Predicate<Document> filter) {
+    public RssPlugin(String feedName, String webUrl, String rssUrl, Duration ttl, Predicate<Document> filter) {
         this.rssUrl = rssUrl;
         this.feedName = feedName;
         this.webUrl = webUrl;
-        this.cssClass = cssClass;
         this.ttl = ttl;
         this.filter = Objects.requireNonNull(filter);
     }
 
-    public RssPlugin(String feedName, String cssClass, String webUrl, String rssUrl, Duration ttl) {
-        this(feedName, cssClass, webUrl, rssUrl, ttl, d -> true);
+    public RssPlugin(String feedName, String webUrl, String rssUrl, Duration ttl) {
+        this(feedName, webUrl, rssUrl, ttl, d -> true);
     }
 
     @Override
@@ -39,6 +37,6 @@ public class RssPlugin implements Plugin {
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
-        return new RssFeedReader(rssUrl, cssClass, feedName, webUrl, feed);
+        return new RssFeedReader(rssUrl, feedName, webUrl, feed);
     }
 }

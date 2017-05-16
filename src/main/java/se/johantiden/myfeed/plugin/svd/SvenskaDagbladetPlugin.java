@@ -41,7 +41,7 @@ public class SvenskaDagbladetPlugin implements Plugin {
     @Override
     public final FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(SVENSKA_DAGBLADET, "svd", "https://www.svd.se", "https://www.svd.se/?service=rss", ttl, FILTER).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin(SVENSKA_DAGBLADET, "https://www.svd.se", "https://www.svd.se/?service=rss", ttl, FILTER).createFeedReader(feed).readAllAvailable();
             return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

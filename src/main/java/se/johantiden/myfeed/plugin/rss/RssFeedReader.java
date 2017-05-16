@@ -35,16 +35,14 @@ public class RssFeedReader implements FeedReader {
     private static final Logger log = LoggerFactory.getLogger(RssFeedReader.class);
     private final Feed feed;
     private final String rssUrl;
-    private final String cssClass;
     private final String feedName;
     private final String feedWebUrl;
 
-    public RssFeedReader(String rssUrl, String cssClass, String feedName, String feedWebUrl, Feed feed) {
+    public RssFeedReader(String rssUrl, String feedName, String feedWebUrl, Feed feed) {
         this.feed = feed;
         this.feedName = feedName;
         this.feedWebUrl = feedWebUrl;
         this.rssUrl = requireNonNull(rssUrl);
-        this.cssClass = cssClass;
     }
 
     @Override
@@ -83,7 +81,7 @@ public class RssFeedReader implements FeedReader {
             NameAndUrl feed = new NameAndUrl(feedName, feedWebUrl);
             NameAndUrl author = new NameAndUrl(authorName, authorUrl);
 
-            Document document = new Document(this.feed.getKey(), feed, title, text, author, cssClass, link, imageUrl, publishedDate, html, categories);
+            Document document = new Document(this.feed.getKey(), feed, title, text, author, link, imageUrl, publishedDate, html, categories);
 
             if (DocumentPredicates.hasEscapeCharacters().test(document)) {
                 throw new RuntimeException("Escape characters!");
@@ -92,7 +90,7 @@ public class RssFeedReader implements FeedReader {
         });
     }
 
-    private List<NameAndUrl> getCategories(SyndEntry e) {
+    private static List<NameAndUrl> getCategories(SyndEntry e) {
         return e.getCategories().stream()
                 .map(c -> new NameAndUrl(unescape(c.getName()), c.getTaxonomyUri()))
                 .collect(Collectors.toList());

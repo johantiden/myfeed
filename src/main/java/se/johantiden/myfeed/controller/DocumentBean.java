@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DocumentBean {
@@ -21,7 +20,6 @@ public class DocumentBean {
     public final String text;
     public final Double score;
     public final NameAndUrl author;
-    public final String cssClass;
     public final String pageUrl;
     public final String imageUrl;
     public final Instant publishedDate;
@@ -36,7 +34,6 @@ public class DocumentBean {
         this.title = document.title;
         this.text = document.text;
         this.author = document.author;
-        this.cssClass = document.cssClass;
         this.pageUrl = document.pageUrl;
         this.imageUrl = document.imageUrl;
         this.publishedDate = document.publishedDate;
@@ -47,10 +44,6 @@ public class DocumentBean {
         this.videos = new ArrayList<>(document.videos);
         this.tab = document.tab == null ? "Null" : document.tab;
         this.subjects = document.getSubjects().stream().map(Subject::getTitle).collect(Collectors.toList());
-    }
-
-    public final String getCssClass() {
-        return cssClass;
     }
 
     public final String getTitle() {
@@ -154,7 +147,6 @@ public class DocumentBean {
                 ", text='" + text + '\'' +
                 ", score=" + score +
                 ", author=" + author +
-                ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +

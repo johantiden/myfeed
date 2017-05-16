@@ -46,7 +46,7 @@ public class RedditPlugin implements Plugin {
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(getFeedName(), "reddit", getWebUrl(), getRssUrl(), ttl, filter).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin(getFeedName(), getWebUrl(), getRssUrl(), ttl, filter).createFeedReader(feed).readAllAvailable();
             return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

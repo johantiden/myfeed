@@ -29,7 +29,7 @@ public class DagensNyheterPlugin implements Plugin {
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(feed.getName(), "dn", "https://www.dn.se", "http://www.dn.se/nyheter/rss/", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin(feed.getName(), "https://www.dn.se", "http://www.dn.se/nyheter/rss/", ttl).createFeedReader(feed).readAllAvailable();
             return documents;
         };
     }

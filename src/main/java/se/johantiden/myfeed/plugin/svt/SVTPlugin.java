@@ -41,7 +41,7 @@ public class SVTPlugin implements Plugin {
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(SVT_NYHETER, "https://www.svt.se/nyheter", "svt", "https://www.svt.se/nyheter/rss.xml", invalidationPeriod, notIsLokalaNyheter())
+            List<Document> documents = new RssPlugin(SVT_NYHETER, "https://www.svt.se/nyheter", "https://www.svt.se/nyheter/rss.xml", invalidationPeriod, notIsLokalaNyheter())
                                        .createFeedReader(createFeed()).readAllAvailable();
             return documents.stream()
                    .filter(notIsLokalaNyheter())

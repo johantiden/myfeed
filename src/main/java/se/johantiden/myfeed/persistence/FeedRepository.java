@@ -37,7 +37,6 @@ public class FeedRepository {
 
         feeds.add(createRss(
                 "xkcd",
-                "xkcd",
                 "https://xkcd.com",
                 "https://xkcd.com/atom.xml", Duration.ofDays(30)));
 
@@ -45,31 +44,26 @@ public class FeedRepository {
 
         feeds.add(createRss(
                 "Ars Technica",
-                "arstechnica",
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "Breakit",
-                "breakit",
                 "http://www.breakit.se",
                 "http://www.breakit.se/feed/artiklar", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "Al Jazeera",
-                "aljazeera",
                 "http://www.aljazeera.com",
                 "http://www.aljazeera.com/xml/rss/all.xml", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "New York Times - World",
-                "nyt",
                 "https://www.nytimes.com/section/world",
                 "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "Los Angeles Times - World",
-                "lat",
                 "http://www.latimes.com/world/rss2.0.xml",
                 "http://www.latimes.com/world/rss2.0.xml", INVALIDATION_PERIOD));
 
@@ -83,7 +77,6 @@ public class FeedRepository {
 
         feeds.add(createRss(
                 "TheLocal",
-                "thelocal",
                 "https://www.thelocal.se/",
                 "https://www.thelocal.se/feeds/rss.php", INVALIDATION_PERIOD));
 
@@ -102,8 +95,8 @@ public class FeedRepository {
         }
     }
 
-    private static Feed createRss(String feedName, String cssClass, String webUrl, String rssUrl, Duration invalidationPeriod) {
-        RssPlugin rss = new RssPlugin(feedName, cssClass, webUrl, rssUrl, invalidationPeriod);
+    private static Feed createRss(String feedName, String webUrl, String rssUrl, Duration invalidationPeriod) {
+        RssPlugin rss = new RssPlugin(feedName, webUrl, rssUrl, invalidationPeriod);
         return rss.createFeed();
     }
 

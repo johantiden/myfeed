@@ -5,7 +5,6 @@ import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.controller.Subject;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
-import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -25,7 +24,6 @@ public class Document implements Persistable<Document>, Serializable {
     public String title;
     public final String text;
     public NameAndUrl author;
-    public final String cssClass;
     public final String pageUrl;
     public String imageUrl;
     public final Instant publishedDate;
@@ -42,7 +40,6 @@ public class Document implements Persistable<Document>, Serializable {
             String title,
             String text,
             NameAndUrl author,
-            String cssClass,
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
@@ -54,7 +51,6 @@ public class Document implements Persistable<Document>, Serializable {
         this.title = title;
         this.text = text;
         this.author = author;
-        this.cssClass = cssClass;
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;

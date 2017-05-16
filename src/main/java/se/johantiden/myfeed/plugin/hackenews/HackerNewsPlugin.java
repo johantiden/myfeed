@@ -27,7 +27,7 @@ public class HackerNewsPlugin implements Plugin {
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(HACKER_NEWS, "hackernews", "https://news.ycombinator.com/news", "https://news.ycombinator.com/rss", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin(HACKER_NEWS, "https://news.ycombinator.com/news", "https://news.ycombinator.com/rss", ttl).createFeedReader(feed).readAllAvailable();
             return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
