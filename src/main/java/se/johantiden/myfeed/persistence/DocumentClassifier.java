@@ -68,7 +68,7 @@ public class DocumentClassifier {
         if(anySubjectEquals(s, "sport") && m.hasCaseSensitive("OS") || m.has("olympisk")) { s.add(s("OS")); }
         if(m.has("netflix")) { s.add(s("Netflix")); }
         if(m.has("Boko Haram")) { s.add(s("Boko Haram")); }
-        if(m.has("väder") && !m.has("blåsväder", "Cyclone", "Cyklon", "Thunder")) { s.add(s("Väder")); }
+        if(m.has("väder ", "väder.", " väder", "blåsväder", "Cyclone", "Cyklon", "Thunder")) { s.add(s("Väder")); }
         if(m.has("Eurovision")) { s.add(s("Eurovision")); }
         if(m.has("Nepal")) { s.add(s("Nepal")); }
         if(m.has("Syria", "Syrien", "syrisk", "Syrier", "Damascus", "Damaskus")) { s.add(s("Syrien")); }
