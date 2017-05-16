@@ -39,6 +39,10 @@ public class DocumentPredicates {
                             d.title != null && d.title.toLowerCase().startsWith(string2);
     }
 
+    public static Predicate<Document> anyCategoryEquals(String... strings) {
+        return d -> Arrays.stream(strings).anyMatch(s -> anyCategoryEquals(s).test(d));
+    }
+
     public static Predicate<Document> anyCategoryEquals(String string) {
         return d -> d.categories.stream().anyMatch(c -> c.name.equalsIgnoreCase(string));
     }

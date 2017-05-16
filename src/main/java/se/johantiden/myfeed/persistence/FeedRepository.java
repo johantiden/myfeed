@@ -50,6 +50,12 @@ public class FeedRepository {
                 "http://feeds.arstechnica.com/arstechnica/index", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
+                "Breakit",
+                "breakit",
+                "http://www.breakit.se",
+                "http://www.breakit.se/feed/artiklar", INVALIDATION_PERIOD));
+
+        feeds.add(createRss(
                 "Al Jazeera",
                 "aljazeera",
                 "http://www.aljazeera.com",

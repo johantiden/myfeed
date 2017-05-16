@@ -38,7 +38,7 @@ public class DocumentClassifier {
             }
         };
 
-        if(m.anyCategoryEquals("ekonomi")) { s.add(s("Ekonomi")); }
+        if(m.anyCategoryEquals("ekonomi", "Näringsliv")) { s.add(s("Ekonomi")); }
         if(m.anyCategoryEquals("ledare")) { s.add(s("Ledare")); }
         if(m.anyCategoryEquals("sport")) { s.add(s("Sport")); }
         if(m.has("your") && m.has("briefing")) { s.add(s("Briefing")); }
@@ -200,6 +200,7 @@ public class DocumentClassifier {
         if(d.pageUrl.contains("uutiset")) { s.add(s("Uutiset")); }
         if(m.isFromFeed("Svenska Dagbladet") && m.startsWithCaseSensitive("VIDEO")) { s.add(s("VIDEO")); }
         if(m.has("fragesport")) { s.add(s("Frågesport")); }
+        if(m.anyCategoryEquals("Junior")) { s.add(s("Junior")); }
 
 
         return s;
@@ -315,6 +316,7 @@ public class DocumentClassifier {
             m.anySubjectEquals("Forskning") ||
             m.anyCategoryEquals("ProgrammerHumor") ||
             m.isFromFeed("HackerNews") ||
+            m.isFromFeed("Breakit") ||
             m.anySubjectEquals("IT-Säkerhet") ||
             m.anySubjectEquals("Netflix") ||
             m.anySubjectEquals("Spotify") ||
@@ -360,7 +362,8 @@ public class DocumentClassifier {
             m.anySubjectEquals("Idagsidan") ||
             m.anySubjectEquals("Mat") ||
             m.anySubjectEquals("NewsGrid") ||
-            m.anySubjectEquals("Frågesport");
+            m.anySubjectEquals("Frågesport") ||
+            m.anySubjectEquals("Junior");
     }
 
     public static void appendUrlFoldersAsCategory(Document document) {
@@ -373,6 +376,7 @@ public class DocumentClassifier {
 
         folders.stream()
                 .filter(f -> !m.anyCategoryEquals(f))
+                .filter(f -> !f.equals("artikel") && !f.equals("comments"))
                 .map(f -> new NameAndUrl(f, endUrlAt(f, document.pageUrl)))
                 .forEach(document.categories::add);
 

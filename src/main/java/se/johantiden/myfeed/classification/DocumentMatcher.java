@@ -32,8 +32,8 @@ public class DocumentMatcher {
         return DocumentPredicates.startsWithCaseSensitive(string).test(document);
     }
 
-    public boolean anyCategoryEquals(String category) {
-        return DocumentPredicates.anyCategoryEquals(category).test(document);
+    public boolean anyCategoryEquals(String... categories) {
+        return DocumentPredicates.anyCategoryEquals(categories).test(document);
     }
 
     public boolean anySubjectEquals(String subject) {

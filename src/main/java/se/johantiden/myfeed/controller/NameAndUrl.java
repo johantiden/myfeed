@@ -9,19 +9,8 @@ public class NameAndUrl implements Serializable {
     public final String url;
 
     public NameAndUrl(String name, String url) {
-        verifyUrl(url);
         this.name = name;
         this.url = url;
-    }
-
-    private void verifyUrl(String url) {
-        if (url == null) {
-            return;
-        }
-
-        if (url.contains("google") && !url.contains("cloud.google.com")) {
-            throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
-        }
     }
 
     public final String getName() {
