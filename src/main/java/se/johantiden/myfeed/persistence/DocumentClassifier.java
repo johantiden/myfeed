@@ -152,7 +152,7 @@ public class DocumentClassifier {
         if(m.has("Kiev", "Ukrain")) { s.add(s("Ukraina")); }
         if(m.has("IT-attacken", "Ransomware", "Cyberattack", "cyber") && m.has("attack", "Malware", "WanaCry", "WannaCry", "Hacker") && !m.has("Hacker News") && !m.has("HackerNews", "hacking", "security") && m.has("computer", "IT-utpressning", "IT-angrepp", "Internet Security")) { s.add(s("IT-Säkerhet")); }
         if(m.has("Brexit")) { s.add(s("Brexit")); }
-        if(m.has("Stockholm")) { s.add(s("Stockholm")); }
+        if(m.has("Stockholm") || m.anyCategoryEquals("sthlm")) { s.add(s("Stockholm")); }
         if(anySubjectEquals(s, "Stockholm") || m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
             s.add(s("Inrikes")); }
         if(m.has("Norge", "Norway", "norska")) { s.add(s("Norge")); }
