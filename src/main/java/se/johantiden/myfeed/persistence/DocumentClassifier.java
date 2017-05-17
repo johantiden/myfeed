@@ -25,6 +25,10 @@ public class DocumentClassifier {
 
     public static final String UNMATCHED_TAB = "Unmatched";
     public static final String STORBRITANNIEN = "Storbritannien";
+    public static final String HISTORIA = "Historia";
+    public static final String BÖCKER = "Böcker";
+    public static final String MUSEUM = "Museum";
+    public static final String EUROVISION = "Eurovision";
 
     private DocumentClassifier() {
     }
@@ -69,7 +73,7 @@ public class DocumentClassifier {
         if(m.has("netflix")) { s.add(s("Netflix")); }
         if(m.has("Boko Haram")) { s.add(s("Boko Haram")); }
         if(m.has("väder ", "väder.", " väder", "blåsväder", "Cyclone", "Cyklon", "Thunder")) { s.add(s("Väder")); }
-        if(m.has("Eurovision")) { s.add(s("Eurovision")); }
+        if(m.has(EUROVISION)) { s.add(s(EUROVISION)); }
         if(m.has("Nepal")) { s.add(s("Nepal")); }
         if(m.has("Syria", "Syrien", "syrisk", "Syrier", "Damascus", "Damaskus")) { s.add(s("Syrien")); }
         if(m.has("Venezuela", "Maduro")) { s.add(s("Venezuela")); }
@@ -137,10 +141,10 @@ public class DocumentClassifier {
         if(m.has("Argentin")) { s.add(s("Argentina")); }
         if(m.has("Russia", "Ryssland", "Rysk") || m.hasCaseSensitive("Moskva")) { s.add(s("Ryssland")); }
         if(m.has("Canada", "Kanada", "Canadian", "Kanaden")) { s.add(s("Kanada")); }
-        if(m.has("Museum")) { s.add(s("Museum")); }
+        if(m.has(MUSEUM)) { s.add(s(MUSEUM)); }
         if(m.has("musik", "hiphop")) { s.add(s("Musik")); }
         if(m.has("konstnär")) { s.add(s("Konst")); }
-        if(m.has("författare")) { s.add(s("Böcker")); }
+        if(m.has("författare")) { s.add(s(BÖCKER)); }
         if(m.has("dramaserie")) { s.add(s("Film/TV")); }
         if(m.has("terror")) { s.add(s("Terror")); }
         if(m.has("Nigeria")) { s.add(s("Nigeria")); }
@@ -181,7 +185,7 @@ public class DocumentClassifier {
         if(m.has("Kristdemokraterna", "Busch Thor") || m.hasCaseSensitive("KD")) { s.add(s("Kristdemokraterna")); }
         if(m.has("Busch Thor")) { s.add(s("Ebba Busch Thor")); }
         if(m.has("Idagsidan")) { s.add(s("Idagsidan")); }
-        if(m.has("historian", "1500", "1600", "1700", "1800")) { s.add(s("Historia")); }
+        if(m.has("historian", "1500", "1600", "1700", "1800")) { s.add(s(HISTORIA)); }
         if(m.has("Daesh") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) { s.add(s("Daesh")); }
         if(m.has("Socialdemokraterna") && !anySubjectEquals(s, "Tyskland")) { s.add(s("Socialdemokraterna")); }
         if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(s("Mat")); }
@@ -282,10 +286,10 @@ public class DocumentClassifier {
             m.anyCategoryEquals("kultur-noje") ||
             m.anyCategoryEquals("movies") ||
             m.anyCategoryEquals("dnbok") ||
-            m.anySubjectEquals("Eurovision")||
-            m.anySubjectEquals("Museum") ||
-            m.anySubjectEquals("Books") ||
-            m.anySubjectEquals("History");
+            m.anySubjectEquals(EUROVISION)||
+            m.anySubjectEquals(MUSEUM) ||
+            m.anySubjectEquals(BÖCKER) ||
+            m.anySubjectEquals(HISTORIA);
     }
 
     private static boolean isNews(Document d) {
