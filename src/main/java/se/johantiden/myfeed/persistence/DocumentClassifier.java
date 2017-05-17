@@ -44,7 +44,7 @@ public class DocumentClassifier {
     public static final String NEWS_GRID = "NewsGrid";
     public static final String FRÅGESPORT = "Frågesport";
     public static final String JUNIOR = "Junior";
-    public static final String SPORT = "sport";
+    public static final String SPORT = "Sport";
     public static final String STOCKHOLM = "Stockholm";
     public static final String TYSKLAND = "Tyskland";
     public static final String EKONOMI = "Ekonomi";

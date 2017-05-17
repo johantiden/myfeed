@@ -16,16 +16,23 @@
 </head>
 <body>
 <div ng-app="myApp" ng-controller="myCtrl">
-    <div class="navbar">
-        <input type="text" ng-model="search" >
-        <div ng-repeat="(tabName, _) in tabs" class="tab-button {{selectedTabName == tabName ? 'selected' : ''}} {{((documents | filter:withTab(tabName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="selectTab(tabName)">
-            {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName) | filter:{read:false}).length) > 0">({{(documents | filter:withTab(tabName) | filter:{read:false}).length}})</span>
-        </div>
 
-        <div class="mark-all-div" >
-            <button id="mark-all-as-read-button" ng-if="(documents | filter:tabOrSearchFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(documents | filter:tabOrSearchFilter | filter:{read:false}).length}} as read</button>
+
+    <div class="navbar">
+        <div class="nav-center">
+            <div ng-repeat="(tabName, _) in tabs" class="tab-button {{selectedTabName == tabName ? 'selected' : ''}} {{((documents | filter:withTab(tabName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="selectTab(tabName)">
+                {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName) | filter:{read:false}).length) > 0">({{(documents | filter:withTab(tabName) | filter:{read:false}).length}})</span>
+            </div>
         </div>
     </div>
+
+    <div class="nav-left">
+        <input type="text" ng-model="search" >
+    </div>
+    <div class="nav-right" >
+        <button id="mark-all-as-read-button" ng-if="(documents | filter:tabOrSearchFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(documents | filter:tabOrSearchFilter | filter:{read:false}).length}} as read</button>
+    </div>
+
     <div class="document-box {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
         ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
         <button class="read-button" ng-model="document.read" ng-click="setDocumentRead(document, true)" ng-if="!document.read" ></button>

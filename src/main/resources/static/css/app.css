@@ -5,6 +5,7 @@
 body {
     margin: 0;
     font-size: large;
+    background-color: #CCCCCC;
 }
 
 p {
@@ -18,25 +19,69 @@ a {
 }
 
 .navbar {
-    border-bottom: 1px solid #EEEEFF;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width:100%;
+    text-align: center;
+    background-color: white;
+    border-bottom: 1px solid #AABBAA;
+    min-height: 50px;
+}
+
+.nav-center {
+    top: 0;
+    width: 70%;
     margin-left: auto;
     margin-right: auto;
-    min-width: 800px;
-    width:100%;
+    display: inline-block;
+}
+
+.nav-left {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 10%;
+    text-align: center;
+    padding: 20px;
+}
+.nav-left > *, .nav-right > * {
+    width: 100%;
+}
+.nav-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 10%;
+    text-align: center;
+    padding: 20px;
 }
 
 .document-box {
     background-color: white;
-    max-width: 100%;
+    max-width: 70vw;
 
-    border-top: 4px solid #FFEEDD;
+    /*border-top: 4px solid #FFEEDD;*/
+    border: 1px solid #AABBAA;
+    border-radius: 2px;
+
     margin-top: 4px;
     word-wrap: break-word;
     transform-origin: left top;
     margin-left: auto;
     margin-right: auto;
     padding-left: 10px;
+    padding-top: 1px;
+    
+    max-height: 2000px;
+    -webkit-transition: max-height 2s; /* Safari */
+    transition: max-height 2s;
+}
+
+#mark-all-as-read-button {
+    background-color: #EEEEEE;
+    border: 1px solid #AABBAA;
+    border-radius: 2px;
+    cursor: pointer;
 }
 
 .image-box {
@@ -57,8 +102,8 @@ a {
     vertical-align: top;
     margin: 0;
     padding-left: 2px;
-    padding-right: 2px;doc
-    max-width: 80%;
+    padding-right: 2px;
+    max-width: 60vw;
 }
 
 .top-row > *, .top-row > * > * {
@@ -96,15 +141,16 @@ div.text {
 }
 
 .read-button {
-    top: 0;
-    bottom: 0;
+    top: 1px;
+    bottom: 1px;
     min-height: 40px;
     width: 40px;
     background-color: #EEEEEE;
-    border: 1px solid #BBBBBB;
-    border-radius: 3px;
+    border: 1px solid #AABBAA;
+    border-radius: 2px;
     margin: 0;
     display: inline-block;
+    content: 'x';
 }
 
 .title > a {
@@ -124,9 +170,12 @@ div.text {
 .tab-button {
     display: inline-block;
     color: black;
-    padding: 4px 4px 4px 4px;
+    padding: 20px 4px 20px 4px;
+    margin: 1px;
     cursor: pointer;
     /*font-size: x-large;*/
+    background-color: #EEEEEE;
+    border: solid 1px #AABBAA;
     text-align: center;
 }
 
@@ -144,10 +193,6 @@ div.text {
 
 .inf-scroll {
     margin-top: 25px;
-}
-
-.mark-all-div {
-    display: inline-block;
 }
 
 .debug-info {

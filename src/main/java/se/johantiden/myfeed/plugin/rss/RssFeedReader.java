@@ -104,6 +104,7 @@ public class RssFeedReader implements FeedReader {
         unescaped = unescaped.replaceAll("&#8217;", "'");
         unescaped = unescaped.replaceAll("&#252;", "ü");
         unescaped = unescaped.replaceAll("â€™", "ü");
+        unescaped = unescaped.replaceAll("&amp;", "&");
 
         if (!unescaped.equals(string)) {
             log.info("Unescaped! {} -> {}", string, unescaped);
