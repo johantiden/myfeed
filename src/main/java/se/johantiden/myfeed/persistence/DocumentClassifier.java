@@ -391,7 +391,7 @@ public class DocumentClassifier {
     }
 
     private static boolean isSingleWord(String string) {
-        boolean matches = string.matches("[a-zA-Z]{2,}");
+        boolean matches = string.matches("([a-zA-Z]{2,})|([a-zA-Z]{2,}\\-[a-zA-Z]{2,})");
         return matches;
     }
 

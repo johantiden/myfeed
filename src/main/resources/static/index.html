@@ -28,10 +28,14 @@
     </div>
     <div class="document-box {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
         ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
+        <button class="read-button" ng-model="document.read" ng-click="setDocumentRead(document, true)" ng-if="!document.read" ></button>
 
         <div class="content-box">
+
             <div class="top-row">
-                <button class="read-button" ng-model="document.read" ng-click="setDocumentRead(document, true)" ng-if="!document.read" ></button>
+                <div class="subject" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
+                    <a href="javascript:void(0);" >{{subject}}</a>
+                </div>
                 <!--<div class="tab" ng-if="document.tab" ng-click="selectTab(document.tab)"><a href="javascript:void(0);" >{{document.tab}}</a></div>-->
                 <div class="feedName" ng-if="document.feed.name"><a href="{{document.feed.url}}">{{document.feed.name}}</a></div>
                 <!--<div class="score" ng-if="document.score"> | {{document.score}}</div>-->
@@ -40,9 +44,7 @@
                 <div class="time-since" ng-if="document.publishedDateShort"> | {{document.publishedDateShort}}</div>
             </div>
 
-            <div class="subject" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
-                <a href="javascript:void(0);" >{{subject}}</a>
-            </div>
+
 
             <div class="title" ng-if="document.title"><a class="link" href="{{document.pageUrl}}" >{{document.title}}</a></div>
             <div class="text" ng-if="document.text && !document.html">{{document.text}}</div>
