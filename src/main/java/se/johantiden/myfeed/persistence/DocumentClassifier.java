@@ -16,19 +16,39 @@ public class DocumentClassifier {
     public static final String NEWS = "Nyheter";
     public static final String BIZ = "Biz";
     public static final String TECH = "Tech";
-    public static final String SPORT = "Sport";
     public static final String BAD = "Bad";
     public static final String ERROR = "Errors";
     public static final String FUN = "Fun";
-    private static final String WEATHER = "Väder";
     public static final String CULTURE = "Kultur";
-
     public static final String UNMATCHED_TAB = "Unmatched";
     public static final String STORBRITANNIEN = "Storbritannien";
     public static final String HISTORIA = "Historia";
     public static final String BÖCKER = "Böcker";
     public static final String MUSEUM = "Museum";
     public static final String EUROVISION = "Eurovision";
+    public static final String VÄDER = "väder";
+    public static final String FOTBOLL = "fotboll";
+    public static final String FORSKNING = "Forskning";
+    public static final String IT_SÄKERHET = "IT-Säkerhet";
+    public static final String NETFLIX = "Netflix";
+    public static final String SPOTIFY = "Spotify";
+    public static final String HIRING = "Hiring";
+    public static final String RECIPE = "Recipe";
+    public static final String WEBB_TV = "webb-tv";
+    public static final String SERIER = "serier";
+    public static final String CARS = "cars";
+    public static final String DEALMASTER = "dealmaster";
+    public static final String LEAGUEOFLEGENDS = "leagueoflegends";
+    public static final String IDAGSIDAN = "Idagsidan";
+    public static final String MAT = "Mat";
+    public static final String NEWS_GRID = "NewsGrid";
+    public static final String FRÅGESPORT = "Frågesport";
+    public static final String JUNIOR = "Junior";
+    public static final String SPORT = "sport";
+    public static final String STOCKHOLM = "Stockholm";
+    public static final String TYSKLAND = "Tyskland";
+    public static final String EKONOMI = "Ekonomi";
+    public static final String PERFECT_GUIDE = "Perfect Guide";
 
     private DocumentClassifier() {
     }
@@ -42,12 +62,12 @@ public class DocumentClassifier {
             }
         };
 
-        if(m.anyCategoryEquals("ekonomi", "Näringsliv")) { s.add(s("Ekonomi")); }
+        if(m.anyCategoryEquals("ekonomi", "Näringsliv")) { s.add(s(EKONOMI)); }
         if(m.anyCategoryEquals("ledare")) { s.add(s("Ledare")); }
         if(m.anyCategoryEquals("sport")) { s.add(s("Sport")); }
         if(m.has("your") && m.has("briefing")) { s.add(s("Briefing")); }
         if(m.has("Tim Berners-Lee")) { s.add(s("Tim Berners-Lee")); }
-        if(m.has("german") || m.has("tysk") || m.has("merkel") || m.has("Brandenburg")) { s.add(s("Tyskland")); }
+        if(m.has("german") || m.has("tysk") || m.has("merkel") || m.has("Brandenburg")) { s.add(s(TYSKLAND)); }
         if(m.has("merkel")) { s.add(s("Merkel")); }
         if(m.has("Hitler") || m.hasCaseSensitive("Nazi")) { s.add(s("Nazism")); }
         if(m.has("twitter") || m.has("tweet")) { s.add(s("Twitter")); }
@@ -60,7 +80,7 @@ public class DocumentClassifier {
         if(m.has("Tennis","Federer")) { s.add(s("Tennis")); }
         if(m.has("sprang maran")) { s.add(s("Löpning")); }
         if(m.has("hockey", "Henrik Lundqvist", "New York Rangers", "Nicklas Bäckström")) { s.add(s("Hockey")); }
-        if(m.has("fotboll", "allsvensk", "Champions League", "premier league", "superettan", "Benfica ", "Malmö FF")) { s.add(s("Fotboll")); }
+        if(m.has(FOTBOLL, "allsvensk", "Champions League", "premier league", "superettan", "Benfica ", "Malmö FF")) { s.add(s("Fotboll")); }
         if(m.has("handboll", "H65")) { s.add(s("Handboll")); }
         if(m.hasCaseSensitive("NBA")) { s.add(s("Basket")); }
         if(m.has("bordtennis", "pingis")) { s.add(s("Bordtennis")); }
@@ -69,7 +89,7 @@ public class DocumentClassifier {
         if(m.has("V75")) { s.add(s("Trav")); }
         if(m.has("Johaug", "alpin", "skidor", "Charlotte Kalla")) { s.add(s("Skidor")); }
         if(m.has("speedway")) { s.add(s("Speedway")); }
-        if(anySubjectEquals(s, "sport") && m.hasCaseSensitive("OS") || m.has("olympisk")) { s.add(s("OS")); }
+        if(anySubjectEquals(s, SPORT) && m.hasCaseSensitive("OS") || m.has("olympisk")) { s.add(s("OS")); }
         if(m.has("netflix")) { s.add(s("Netflix")); }
         if(m.has("Boko Haram")) { s.add(s("Boko Haram")); }
         if(m.has("väder ", "väder.", " väder", "blåsväder", "Cyclone", "Cyklon", "Thunder")) { s.add(s("Väder")); }
@@ -95,7 +115,7 @@ public class DocumentClassifier {
         if(m.has("Bangladesh")) { s.add(s("Bangladesh")); }
         if(m.has("Malaysia")) { s.add(s("Malaysia")); }
         if(m.has("AskReddit")) { s.add(s("AskReddit")); }
-        if(m.anyCategoryEquals("science")) { s.add(s("Forskning")); }
+        if(m.anyCategoryEquals("science")) { s.add(s(FORSKNING)); }
         if(m.has("France", "Frankrike", "Fransk", "French", "Paris")) { s.add(s("Frankrike")); }
         if(m.has("Australia")) { s.add(s("Australia")); }
         if(m.has("Göteborg", "Gothenburg")) { s.add(s("Göteborg")); }
@@ -120,7 +140,7 @@ public class DocumentClassifier {
         if(m.has("Turkey", "Turkish", "Turkiet", "Recep Tayyip Erdogan", "Istanbul")) { s.add(s("Turkiet")); }
         if(m.has("Greece", "Greek", "Grekland", "Grek")) { s.add(s("Grekland")); }
         if(m.has("Österrike", "Austria")) { s.add(s("Österrike")); }
-        if(m.has("Spotify")) { s.add(s("Spotify")); }
+        if(m.has(SPOTIFY)) { s.add(s(SPOTIFY)); }
         if(m.has("Microsoft")) { s.add(s("Microsoft")); }
         if(m.has("Samsung")) { s.add(s("Samsung")); }
         if(m.has("Apple")) { s.add(s("Apple")); }
@@ -154,10 +174,10 @@ public class DocumentClassifier {
         if(m.has("Ebola")) { s.add(s("Ebola")); }
         if(m.has("Cholera") | m.has("Kolera")) { s.add(s("Kolera")); }
         if(m.has("Kiev", "Ukrain")) { s.add(s("Ukraina")); }
-        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "cyber") && m.has("attack", "Malware", "WanaCry", "WannaCry", "Hacker") && !m.has("Hacker News") && !m.has("HackerNews", "hacking", "security") && m.has("computer", "IT-utpressning", "IT-angrepp", "Internet Security")) { s.add(s("IT-Säkerhet")); }
+        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "cyber") && m.has("attack", "Malware", "WanaCry", "WannaCry", "Hacker") && !m.has("Hacker News") && !m.has("HackerNews", "hacking", "security") && m.has("computer", "IT-utpressning", "IT-angrepp", "Internet Security")) { s.add(s(IT_SÄKERHET)); }
         if(m.has("Brexit")) { s.add(s("Brexit")); }
-        if(m.has("Stockholm") || m.anyCategoryEquals("sthlm")) { s.add(s("Stockholm")); }
-        if(anySubjectEquals(s, "Stockholm") || m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
+        if(m.has("Stockholm") || m.anyCategoryEquals("sthlm")) { s.add(s(STOCKHOLM)); }
+        if(anySubjectEquals(s, STOCKHOLM) || m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
             s.add(s("Inrikes")); }
         if(m.has("Norge", "Norway", "norska")) { s.add(s("Norge")); }
         if(m.has("Feministiskt initiativ")) { s.add(s("Feministiskt Initiativ")); }
@@ -175,8 +195,8 @@ public class DocumentClassifier {
         if(m.hasCaseSensitive("Cuba", "Kuba")) { s.add(s("Kuba")); }
         if(m.has("kvinnor") && m.has("män")) { s.add(s("Kvinnor")); }
         if(m.has("kvinnor") && m.has("män")) { s.add(s("Män")); }
-        if(m.isFromFeed("TheLocal") && m.has("recipe:")) { s.add(s("Recipe")); }
-        if(m.isFromFeed("HackerNews") && m.has("hiring")) { s.add(s("Hiring")); }
+        if(m.isFromFeed("TheLocal") && m.has("recipe:")) { s.add(s(RECIPE)); }
+        if(m.isFromFeed("HackerNews") && m.has("hiring")) { s.add(s(HIRING)); }
         if(m.has("Vänsterpartiet")) { s.add(s("Vänsterpartiet")); }
         if(m.has("Centerpartiet", "Annie Lööf")) { s.add(s("Centerpartiet")); }
         if(m.has("Annie Lööf")) { s.add(s("Annie Lööf")); }
@@ -184,27 +204,28 @@ public class DocumentClassifier {
         if(m.has("Jonas Sjöstedt")) { s.add(s("Jonas Sjöstedt")); }
         if(m.has("Kristdemokraterna", "Busch Thor") || m.hasCaseSensitive("KD")) { s.add(s("Kristdemokraterna")); }
         if(m.has("Busch Thor")) { s.add(s("Ebba Busch Thor")); }
-        if(m.has("Idagsidan")) { s.add(s("Idagsidan")); }
+        if(m.has(IDAGSIDAN)) { s.add(s(IDAGSIDAN)); }
         if(m.has("historian", "1500", "1600", "1700", "1800")) { s.add(s(HISTORIA)); }
         if(m.has("Daesh") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) { s.add(s("Daesh")); }
-        if(m.has("Socialdemokraterna") && !anySubjectEquals(s, "Tyskland")) { s.add(s("Socialdemokraterna")); }
-        if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(s("Mat")); }
+        if(m.has("Socialdemokraterna") && !anySubjectEquals(s, TYSKLAND)) { s.add(s("Socialdemokraterna")); }
+        if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(s(MAT)); }
 
         // Badness:
-        if(m.hasCaseSensitive("NewsGrid")) { s.add(s("NewsGrid")); }
+        if(m.hasCaseSensitive(NEWS_GRID)) { s.add(s(NEWS_GRID)); }
         if(m.has("cars technica")) { s.add(s("Cars")); }
-        if(m.has("webb-tv")) { s.add(s("webb-tv")); }
-        if(m.has("leagueoflegends")) { s.add(s("leagueoflegends")); }
-        if(m.anyCategoryEquals("dealmaster")) { s.add(s("dealmaster")); }
+        if(m.has(WEBB_TV)) { s.add(s(WEBB_TV)); }
+        if(m.has(LEAGUEOFLEGENDS)) { s.add(s(LEAGUEOFLEGENDS)); }
+        if(m.anyCategoryEquals(DEALMASTER)) { s.add(s(DEALMASTER)); }
         if(m.has("dödsfäll")) { s.add(s("Dödsfälla")); }
         if(m.anyCategoryEquals("motor")) { s.add(s("Motor")); }
-        if(m.anyCategoryEquals("serier")) { s.add(s("Serier")); }
+        if(m.anyCategoryEquals(SERIER)) { s.add(s("Serier")); }
         if(m.hasCaseSensitive("Här är") || m.has("– här är", "- här är")) { s.add(s("Här är")); }
         if(m.has("turist")) { s.add(s("Turist")); }
         if(d.pageUrl.contains("uutiset")) { s.add(s("Uutiset")); }
         if(m.isFromFeed("Svenska Dagbladet") && m.startsWithCaseSensitive("VIDEO")) { s.add(s("VIDEO")); }
-        if(m.has("fragesport")) { s.add(s("Frågesport")); }
-        if(m.anyCategoryEquals("Junior")) { s.add(s("Junior")); }
+        if(m.has("fragesport")) { s.add(s(FRÅGESPORT)); }
+        if(m.anyCategoryEquals(JUNIOR)) { s.add(s(JUNIOR)); }
+        if(m.anyCategoryEquals(PERFECT_GUIDE)) { s.add(s(PERFECT_GUIDE)); }
 
 
         return s;
@@ -246,7 +267,7 @@ public class DocumentClassifier {
         }
 
         if(isVäder(document)) {
-            return WEATHER;
+            return VÄDER;
         }
 
         if(isNews(document)) {
@@ -259,7 +280,7 @@ public class DocumentClassifier {
     private static boolean isVäder(Document d) {
         DocumentMatcher m = new DocumentMatcher(d);
 
-        return m.anySubjectEquals("väder");
+        return m.anySubjectEquals(VÄDER);
     }
 
     private static boolean isSport(Document d) {
@@ -268,7 +289,7 @@ public class DocumentClassifier {
         return
             m.anyCategoryEquals("sport") ||
             m.has("bordtennis") ||
-            m.anySubjectEquals("fotboll") ||
+            m.anySubjectEquals(FOTBOLL) ||
             m.has("handboll") ||
             m.has("hockey") ||
             m.has("soccer") ||
@@ -317,14 +338,13 @@ public class DocumentClassifier {
         return
             m.isFromFeed("Ars Technica") ||
             m.isFromFeed("Slashdot") ||
-            m.anySubjectEquals("Forskning") ||
-            m.anyCategoryEquals("ProgrammerHumor") ||
             m.isFromFeed("HackerNews") ||
             m.isFromFeed("Breakit") ||
-            m.anySubjectEquals("IT-Säkerhet") ||
-            m.anySubjectEquals("Netflix") ||
-            m.anySubjectEquals("Spotify") ||
-            m.anySubjectEquals("Security");
+            m.anyCategoryEquals("ProgrammerHumor") ||
+            m.anySubjectEquals(FORSKNING) ||
+            m.anySubjectEquals(IT_SÄKERHET) ||
+            m.anySubjectEquals(NETFLIX) ||
+            m.anySubjectEquals(SPOTIFY);
     }
 
     private static boolean isFun(Document d) {
@@ -342,7 +362,8 @@ public class DocumentClassifier {
 
         return
             m.anyCategoryEquals("näringsliv") ||
-            m.anyCategoryEquals("ekonomi");
+            m.anyCategoryEquals("ekonomi") ||
+            m.anySubjectEquals(EKONOMI) ;
     }
 
 
@@ -356,18 +377,19 @@ public class DocumentClassifier {
         // Only match on subjects here to give the user a reason why it is "bad"
         DocumentMatcher m = new DocumentMatcher(d);
         return
-            m.anySubjectEquals("Hiring") ||
-            m.anySubjectEquals("Recipe") ||
-            m.anySubjectEquals("webb-tv") ||
-            m.anySubjectEquals("serier") ||
-            m.anySubjectEquals("cars") ||
-            m.anySubjectEquals("dealmaster") ||
-            m.anySubjectEquals("leagueoflegends") ||
-            m.anySubjectEquals("Idagsidan") ||
-            m.anySubjectEquals("Mat") ||
-            m.anySubjectEquals("NewsGrid") ||
-            m.anySubjectEquals("Frågesport") ||
-            m.anySubjectEquals("Junior");
+            m.anySubjectEquals(HIRING) ||
+            m.anySubjectEquals(RECIPE) ||
+            m.anySubjectEquals(WEBB_TV) ||
+            m.anySubjectEquals(SERIER) ||
+            m.anySubjectEquals(CARS) ||
+            m.anySubjectEquals(DEALMASTER) ||
+            m.anySubjectEquals(LEAGUEOFLEGENDS) ||
+            m.anySubjectEquals(IDAGSIDAN) ||
+            m.anySubjectEquals(MAT) ||
+            m.anySubjectEquals(NEWS_GRID) ||
+            m.anySubjectEquals(FRÅGESPORT) ||
+            m.anySubjectEquals(JUNIOR) ||
+            m.anySubjectEquals(PERFECT_GUIDE);
     }
 
     public static void appendUrlFoldersAsCategory(Document document) {
