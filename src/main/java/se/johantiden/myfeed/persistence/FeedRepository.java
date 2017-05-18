@@ -64,8 +64,13 @@ public class FeedRepository {
 
         feeds.add(createRss(
                 "Los Angeles Times - World",
-                "http://www.latimes.com/world/rss2.0.xml",
+                "http://www.latimes.com",
                 "http://www.latimes.com/world/rss2.0.xml", INVALIDATION_PERIOD));
+
+        feeds.add(createRss(
+                "Reuters - World",
+                "http://www.reuters.com/news/world",
+                "http://feeds.reuters.com/Reuters/worldNews", INVALIDATION_PERIOD));
 
         feeds.add(createReddit("r/worldnews", 1000));
         feeds.add(createReddit("r/AskReddit", 1000));
