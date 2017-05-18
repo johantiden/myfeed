@@ -53,6 +53,8 @@ public class DocumentClassifier {
     public static final String I_AM_A = "IAmA";
     public static final String BLACK_PEOPLE_TWITTER = "BlackPeopleTwitter";
     public static final String THE_DENNIS = "The_Dennis";
+    private static final String NUMBER_OF_PEOPLE = "Number of People";
+    public static final String NUTIDSTESTET = "nutidstestet";
 
     private DocumentClassifier() {
     }
@@ -230,10 +232,12 @@ public class DocumentClassifier {
         if(m.isFromFeed("Svenska Dagbladet") && m.startsWithCaseSensitive("VIDEO")) { s.add(s("VIDEO")); }
         if(m.has("fragesport")) { s.add(s(FRÅGESPORT)); }
         if(m.anyCategoryEquals(JUNIOR)) { s.add(s(JUNIOR)); }
+        if(m.anyCategoryEquals(NUTIDSTESTET)) { s.add(s(NUTIDSTESTET)); }
         if(m.anyCategoryEquals(PERFECT_GUIDE)) { s.add(s(PERFECT_GUIDE)); }
         if(m.has("Reddit") && m.anyCategoryEquals("IAmA")) { s.add(s(I_AM_A)); }
         if(m.has("Reddit") && m.anyCategoryEquals(BLACK_PEOPLE_TWITTER)) { s.add(s(BLACK_PEOPLE_TWITTER)); }
         if(m.has("Reddit") && m.anyCategoryEquals(THE_DENNIS)) { s.add(s(THE_DENNIS)); }
+        if(m.has("Reddit") && m.has("-- number", "--number")) { s.add(s(NUMBER_OF_PEOPLE)); }
 
 
         return s;
@@ -408,7 +412,9 @@ public class DocumentClassifier {
             m.anySubjectEquals(PERFECT_GUIDE) ||
             m.anySubjectEquals(I_AM_A) ||
             m.anySubjectEquals(BLACK_PEOPLE_TWITTER) ||
-            m.anySubjectEquals(THE_DENNIS);
+            m.anySubjectEquals(THE_DENNIS) ||
+            m.anySubjectEquals(NUMBER_OF_PEOPLE) ||
+            m.anySubjectEquals(NUTIDSTESTET);
     }
 
     public static void appendUrlFoldersAsCategory(Document document) {
