@@ -10,6 +10,8 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.controller.NameAndUrl;
@@ -78,6 +80,7 @@ public class RssFeedReader implements FeedReader {
             if (html != null && html.toLowerCase().contains("google-analytics")) {
                 throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
             }
+
             NameAndUrl feed = new NameAndUrl(feedName, feedWebUrl);
             NameAndUrl author = new NameAndUrl(authorName, authorUrl);
 

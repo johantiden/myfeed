@@ -3,6 +3,8 @@ package se.johantiden.myfeed.persistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.UserRepository;
+import se.johantiden.myfeed.plugin.BreakitPlugin;
+import se.johantiden.myfeed.plugin.ReutersPlugin;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
 import se.johantiden.myfeed.plugin.hackenews.HackerNewsPlugin;
 import se.johantiden.myfeed.plugin.reddit.RedditPlugin;
@@ -34,6 +36,8 @@ public class FeedRepository {
         feeds.add(new SlashdotPlugin(INVALIDATION_PERIOD).createFeed());
         feeds.add(new SvenskaDagbladetPlugin(INVALIDATION_PERIOD).createFeed());
         feeds.add(new DagensNyheterPlugin(INVALIDATION_PERIOD).createFeed());
+        feeds.add(new ReutersPlugin(INVALIDATION_PERIOD).createFeed());
+        feeds.add(new BreakitPlugin(INVALIDATION_PERIOD).createFeed());
 
         feeds.add(createRss(
                 "xkcd",
@@ -46,11 +50,6 @@ public class FeedRepository {
                 "Ars Technica",
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index", INVALIDATION_PERIOD));
-
-        feeds.add(createRss(
-                "Breakit",
-                "http://www.breakit.se",
-                "http://www.breakit.se/feed/artiklar", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "Al Jazeera",
@@ -67,10 +66,6 @@ public class FeedRepository {
                 "http://www.latimes.com",
                 "http://www.latimes.com/world/rss2.0.xml", INVALIDATION_PERIOD));
 
-        feeds.add(createRss(
-                "Reuters - World",
-                "http://www.reuters.com/news/world",
-                "http://feeds.reuters.com/Reuters/worldNews", INVALIDATION_PERIOD));
 
         feeds.add(createReddit("r/worldnews", 1000));
         feeds.add(createReddit("r/AskReddit", 1000));

@@ -1,11 +1,9 @@
-package se.johantiden.myfeed.plugin.slashdot;
+package se.johantiden.myfeed.plugin;
 
 import org.jsoup.Jsoup;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.FeedReader;
-import se.johantiden.myfeed.plugin.Plugin;
 import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.time.Duration;
@@ -14,11 +12,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public class SlashdotPlugin implements Plugin {
+public class ReutersPlugin implements Plugin {
 
     private final Duration ttl;
 
-    public SlashdotPlugin(Duration ttl) {this.ttl = ttl;}
+    public ReutersPlugin(Duration ttl) {this.ttl = ttl;}
 
     @Override
     public Feed createFeed() {
@@ -28,11 +26,10 @@ public class SlashdotPlugin implements Plugin {
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin("Slashdot", "https://slashdot.org", "http://rss.slashdot.org/Slashdot/slashdotMainatom", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin("Reuters - World", "http://www.reuters.com/news/world", "http://feeds.reuters.com/Reuters/worldNews", ttl).createFeedReader(feed).readAllAvailable();
             return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
-
 
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
@@ -46,10 +43,9 @@ public class SlashdotPlugin implements Plugin {
 
     public static String prune(String html) {
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
-        doc.select("p").remove();
-        doc.select(".share_submission").remove();
-        doc.select("head").remove();
-        String pruned2 = doc.body().html();
-        return pruned2;
+        doc.select(".feedflare").remove();
+        doc.select("img").remove();
+        String pruned = doc.body().html();
+        return pruned;
     }
 }

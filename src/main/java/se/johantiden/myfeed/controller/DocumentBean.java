@@ -29,6 +29,8 @@ public class DocumentBean {
     public final List<String> subjects;
 
     public DocumentBean(UserDocument userDocument, Document document) {
+        verifyHtml(document.feed, document.html);
+
         this.feed = document.feed;
         this.categories = document.categories;
         this.title = document.title;
@@ -44,6 +46,28 @@ public class DocumentBean {
         this.videos = new ArrayList<>(document.videos);
         this.tab = document.tab == null ? "Null" : document.tab;
         this.subjects = document.getSubjects().stream().map(Subject::getTitle).collect(Collectors.toList());
+    }
+
+    private void verifyHtml(NameAndUrl feed, String html) {
+        if (html == null) {
+            return;
+        }
+
+        if (feed.name.contains("xkcd")) {
+            return;
+        }
+
+        if (html.contains("<img") || html.contains("< img")) {
+            throw new RuntimeException("No images allowed!");
+        }
+        if (html.contains("<script") || html.contains("< script")) {
+            throw new RuntimeException("No script allowed!");
+        }
+
+        if (html.contains("twitter_icon_large.png") || html.contains("facebook_icon_large.png") || html.contains("plus.google.com")) {
+            throw new RuntimeException("Ping images detected!");
+        }
+
     }
 
     public final String getTitle() {
