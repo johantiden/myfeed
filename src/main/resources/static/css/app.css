@@ -71,10 +71,6 @@ a {
     margin-right: auto;
     padding-left: 10px;
     padding-top: 1px;
-    
-    max-height: 2000px;
-    -webkit-transition: max-height 2s; /* Safari */
-    transition: max-height 2s;
 }
 
 #mark-all-as-read-button {
