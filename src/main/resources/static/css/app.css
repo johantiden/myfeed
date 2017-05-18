@@ -69,23 +69,24 @@ a {
 }
 
 .document-box {
-    background-color: white;
-    max-width: 70vw;
-
+    background-color: #DDDDDD;
+    max-width: 60vw;
     /*border-top: 4px solid #FFEEDD;*/
     border: 1px solid #1F1D95;
     border-radius: 2px;
-
+    padding-left: 50px;
+    padding-right: 50px;
     margin-top: 4px;
     word-wrap: break-word;
     transform-origin: left top;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 10px;
-    padding-top: 1px;
+    cursor: pointer;
 }
 
-
+.document-box:hover {
+    background-color: #8785E7;
+}
 
 .image-box {
     display: block;
@@ -106,7 +107,13 @@ a {
     margin: 0;
     padding-left: 2px;
     padding-right: 2px;
-    max-width: 60vw;
+    right: 0;
+    width: 100%;
+    cursor: auto;
+    border-left: 1px solid #1F1D95;
+    border-right: 1px solid #1F1D95;
+
+    background-color: white;
 }
 
 .top-row > *, .top-row > * > * {
@@ -134,24 +141,13 @@ div.text {
     -webkit-box-orient: vertical;
 }
 
-.read-input {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #BBBBBB;
-    background-color: #DDDDDD;
-    border-radius: 20px;
-    margin: 0;
-}
-
 .read-button {
-    top: 1px;
-    bottom: 1px;
     min-height: 40px;
     width: 40px;
     background-color: #EEEEEE;
     border: 1px solid #1F1D95;
     border-radius: 2px;
-    margin: 0;
+    margin: 1;
     display: inline-block;
     cursor: pointer;
 }

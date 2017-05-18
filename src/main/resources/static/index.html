@@ -35,10 +35,11 @@
     </div>
 
     <div class="document-box {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
-        ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
-        <button class="read-button" ng-model="document.read" ng-click="setDocumentRead(document, true)" ng-if="!document.read" ></button>
+        ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100"
+         ng-click="setDocumentRead(document, true)">
+        <!--<button class="read-button" ng-model="document.read" ng-click="setDocumentRead(document, true)" ng-if="!document.read" ></button>-->
 
-        <div class="content-box">
+        <div class="content-box"  ng-click="$event.stopPropagation()">
 
             <div class="top-row">
                 <div class="subject" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
