@@ -3,6 +3,7 @@ package se.johantiden.myfeed.persistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.UserRepository;
+import se.johantiden.myfeed.plugin.AlJazeeraPlugin;
 import se.johantiden.myfeed.plugin.BreakitPlugin;
 import se.johantiden.myfeed.plugin.ReutersPlugin;
 import se.johantiden.myfeed.plugin.dn.DagensNyheterPlugin;
@@ -38,6 +39,7 @@ public class FeedRepository {
         feeds.add(new DagensNyheterPlugin(INVALIDATION_PERIOD).createFeed());
         feeds.add(new ReutersPlugin(INVALIDATION_PERIOD).createFeed());
         feeds.add(new BreakitPlugin(INVALIDATION_PERIOD).createFeed());
+        feeds.add(new AlJazeeraPlugin(INVALIDATION_PERIOD).createFeed());
 
         feeds.add(createRss(
                 "xkcd",
@@ -50,11 +52,6 @@ public class FeedRepository {
                 "Ars Technica",
                 "https://arstechnica.com/",
                 "http://feeds.arstechnica.com/arstechnica/index", INVALIDATION_PERIOD));
-
-        feeds.add(createRss(
-                "Al Jazeera",
-                "http://www.aljazeera.com",
-                "http://www.aljazeera.com/xml/rss/all.xml", INVALIDATION_PERIOD));
 
         feeds.add(createRss(
                 "New York Times - World",
