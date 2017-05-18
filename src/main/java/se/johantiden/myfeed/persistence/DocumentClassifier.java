@@ -49,6 +49,10 @@ public class DocumentClassifier {
     public static final String TYSKLAND = "Tyskland";
     public static final String EKONOMI = "Ekonomi";
     public static final String PERFECT_GUIDE = "Perfect Guide";
+    private static final boolean TAB_FROM_SOURCE_ONLY = false;
+    public static final String I_AM_A = "IAmA";
+    public static final String BLACK_PEOPLE_TWITTER = "BlackPeopleTwitter";
+    public static final String THE_DENNIS = "The_Dennis";
 
     private DocumentClassifier() {
     }
@@ -174,7 +178,7 @@ public class DocumentClassifier {
         if(m.has("Ebola")) { s.add(s("Ebola")); }
         if(m.has("Cholera") | m.has("Kolera")) { s.add(s("Kolera")); }
         if(m.has("Kiev", "Ukrain")) { s.add(s("Ukraina")); }
-        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "cyber") && m.has("attack", "Malware", "WanaCry", "WannaCry", "Hacker") && !m.has("Hacker News") && !m.has("HackerNews", "hacking", "security") && m.has("computer", "IT-utpressning", "IT-angrepp", "Internet Security")) { s.add(s(IT_SÄKERHET)); }
+        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "malware", "WanaCry", "WannaCry", "Hacker", "hacking", "IT-utpressning", "IT-angrepp", "Internet Security", "eternalblue")) { s.add(s(IT_SÄKERHET)); }
         if(m.has("Brexit")) { s.add(s("Brexit")); }
         if(m.has("Stockholm") || m.anyCategoryEquals("sthlm")) { s.add(s(STOCKHOLM)); }
         if(anySubjectEquals(s, STOCKHOLM) || m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
@@ -209,6 +213,7 @@ public class DocumentClassifier {
         if(m.has("Daesh") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) { s.add(s("Daesh")); }
         if(m.has("Socialdemokraterna") && !anySubjectEquals(s, TYSKLAND)) { s.add(s("Socialdemokraterna")); }
         if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(s(MAT)); }
+        if(m.anyCategoryEquals("gaming")) { s.add(s("Gaming")); }
 
         // Badness:
         if(m.hasCaseSensitive(NEWS_GRID)) { s.add(s(NEWS_GRID)); }
@@ -226,6 +231,9 @@ public class DocumentClassifier {
         if(m.has("fragesport")) { s.add(s(FRÅGESPORT)); }
         if(m.anyCategoryEquals(JUNIOR)) { s.add(s(JUNIOR)); }
         if(m.anyCategoryEquals(PERFECT_GUIDE)) { s.add(s(PERFECT_GUIDE)); }
+        if(m.has("Reddit") && m.anyCategoryEquals("IAmA")) { s.add(s(I_AM_A)); }
+        if(m.has("Reddit") && m.anyCategoryEquals(BLACK_PEOPLE_TWITTER)) { s.add(s(BLACK_PEOPLE_TWITTER)); }
+        if(m.has("Reddit") && m.anyCategoryEquals(THE_DENNIS)) { s.add(s(THE_DENNIS)); }
 
 
         return s;
@@ -279,7 +287,6 @@ public class DocumentClassifier {
 
     private static boolean isVäder(Document d) {
         DocumentMatcher m = new DocumentMatcher(d);
-
         return m.anySubjectEquals(VÄDER);
     }
 
@@ -317,14 +324,17 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
+            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Al Jazeera") ||
+            TAB_FROM_SOURCE_ONLY && m.isFromFeed("SVT Nyheter") ||
             m.isFromFeed("Dagens Nyheter") && m.anyCategoryEquals("nyheter") ||
-            m.isFromFeed("Al Jazeera") ||
             m.isFromFeed("TheLocal") ||
-            m.isFromFeed("New York Times - World") ||
             m.isFromFeed("Los Angeles Times - World") ||
             m.isFromFeed("Reddit - r/worldnews") ||
             m.anyCategoryEquals("worldnews") ||
-            m.isFromFeed("SVT Nyheter") ||
+            m.isFromFeed("Al Jazeera") && m.anyCategoryEquals("news", "insidestory", "opinion", "features", "indepth") ||
+            m.isFromFeed("SVT Nyheter") && m.anyCategoryEquals("nyheter") ||
+            m.isFromFeed("New York Times - World") ||
+            m.has("Reddit") && m.anyCategoryEquals("politics", "news", "worldnews", "esist") ||
             m.anyCategoryEquals("sthlm") ||
             m.anyCategoryEquals("debatt") ||
             m.anyCategoryEquals("världen") ||
@@ -336,11 +346,14 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-            m.isFromFeed("Ars Technica") ||
-            m.isFromFeed("Slashdot") ||
-            m.isFromFeed("HackerNews") ||
+            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Ars Technica") ||
+            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Slashdot") ||
+            TAB_FROM_SOURCE_ONLY && m.isFromFeed("HackerNews") ||
             m.isFromFeed("Breakit") ||
             m.anyCategoryEquals("ProgrammerHumor") ||
+            m.isFromFeed("HackerNews") ||
+            m.isFromFeed("Ars Technica") && m.anyCategoryEquals("tech-policy", "gadgets", "gaming", "facebook", "opposable thumbs", "the-multiverse") ||
+            m.isFromFeed("Slashdot") && m.anyCategoryEquals("story") ||
             m.anySubjectEquals(FORSKNING) ||
             m.anySubjectEquals(IT_SÄKERHET) ||
             m.anySubjectEquals(NETFLIX) ||
@@ -351,9 +364,10 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-            m.isFromFeed("Reddit - top") ||
-            m.isFromFeed("Reddit - r/all") ||
-            m.isFromFeed("Reddit - r/AskReddit") ||
+            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - top") ||
+            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - r/all") ||
+            m.anyCategoryEquals("AskReddit") ||
+            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned") ||
             m.isFromFeed("xkcd");
     }
 
@@ -363,6 +377,8 @@ public class DocumentClassifier {
         return
             m.anyCategoryEquals("näringsliv") ||
             m.anyCategoryEquals("ekonomi") ||
+            m.isFromFeed("New York Times - World") && m.anyCategoryEquals("business") ||
+            m.isFromFeed("Slashdot") && m.anyCategoryEquals("business") ||
             m.anySubjectEquals(EKONOMI) ;
     }
 
@@ -389,23 +405,27 @@ public class DocumentClassifier {
             m.anySubjectEquals(NEWS_GRID) ||
             m.anySubjectEquals(FRÅGESPORT) ||
             m.anySubjectEquals(JUNIOR) ||
-            m.anySubjectEquals(PERFECT_GUIDE);
+            m.anySubjectEquals(PERFECT_GUIDE) ||
+            m.anySubjectEquals(I_AM_A) ||
+            m.anySubjectEquals(BLACK_PEOPLE_TWITTER) ||
+            m.anySubjectEquals(THE_DENNIS);
     }
 
     public static void appendUrlFoldersAsCategory(Document document) {
 
         DocumentMatcher m = new DocumentMatcher(document);
 
-        List<String> folders = parseUrlFolders(document.pageUrl).stream()
-                               .filter(DocumentClassifier::isSingleWord)
-                               .collect(Collectors.toList());
+        if (!m.isFromFeed("HackerNews")) {
+            List<String> folders = parseUrlFolders(document.pageUrl).stream()
+                                   .filter(DocumentClassifier::urlFilter)
+                                   .collect(Collectors.toList());
 
-        folders.stream()
-                .filter(f -> !m.anyCategoryEquals(f))
-                .filter(f -> !f.equals("artikel") && !f.equals("comments"))
-                .map(f -> new NameAndUrl(f, endUrlAt(f, document.pageUrl)))
-                .forEach(document.categories::add);
-
+            folders.stream()
+            .filter(f -> !m.anyCategoryEquals(f))
+            .filter(f -> !f.equals("artikel") && !f.equals("comments"))
+            .map(f -> new NameAndUrl(f, endUrlAt(f, document.pageUrl)))
+            .forEach(document.categories::add);
+        }
     }
 
     private static String endUrlAt(String firstFolder, String pageUrl) {
@@ -416,7 +436,7 @@ public class DocumentClassifier {
         return substring;
     }
 
-    private static boolean isSingleWord(String string) {
+    private static boolean urlFilter(String string) {
         boolean matches = string.matches("([a-zA-Z]{2,})|([a-zA-Z]{2,}\\-[a-zA-Z]{2,})");
         return matches;
     }

@@ -46,6 +46,8 @@ public class Document implements Persistable<Document>, Serializable {
             String html,
             List<NameAndUrl> categories) {
 
+        verifyHtml(html);
+
         this.feed = feed;
         this.feedKey = feedKey;
         this.title = title;
@@ -57,6 +59,21 @@ public class Document implements Persistable<Document>, Serializable {
         this.html = html;
         this.categories = Objects.requireNonNull(categories);
         this.key = Keys.document(this.pageUrl);
+    }
+
+
+    private void verifyHtml(String html) {
+        if (html == null) {
+            return;
+        }
+
+        if (html.matches("<( )?img")) {
+            throw new RuntimeException("No images allowed!");
+        }
+        if (html.matches("<( )?script")) {
+            throw new RuntimeException("No script allowed!");
+        }
+
     }
 
     public static String dateToShortString(Instant instant) {
