@@ -24,8 +24,13 @@ a {
     width:100%;
     text-align: center;
     background-color: white;
-    border-bottom: 1px solid #AABBAA;
+    border-bottom: 1px solid #1F1D95;
     min-height: 50px;
+}
+
+.logo-img {
+    height: 65px;
+    vertical-align: bottom;
 }
 
 .nav-center {
@@ -49,11 +54,18 @@ a {
 }
 .nav-right {
     position: fixed;
-    top: 0;
+    top: 5px;
     right: 0;
     width: 10%;
     text-align: center;
-    padding: 20px;
+}
+
+#mark-all-as-read-button {
+    background-color: #EEEEEE;
+    border: 1px solid #1F1D95;
+    border-radius: 2px;
+    cursor: pointer;
+    padding: 20px 4px 20px 4px;
 }
 
 .document-box {
@@ -61,7 +73,7 @@ a {
     max-width: 70vw;
 
     /*border-top: 4px solid #FFEEDD;*/
-    border: 1px solid #AABBAA;
+    border: 1px solid #1F1D95;
     border-radius: 2px;
 
     margin-top: 4px;
@@ -73,12 +85,7 @@ a {
     padding-top: 1px;
 }
 
-#mark-all-as-read-button {
-    background-color: #EEEEEE;
-    border: 1px solid #AABBAA;
-    border-radius: 2px;
-    cursor: pointer;
-}
+
 
 .image-box {
     display: block;
@@ -142,7 +149,7 @@ div.text {
     min-height: 40px;
     width: 40px;
     background-color: #EEEEEE;
-    border: 1px solid #AABBAA;
+    border: 1px solid #1F1D95;
     border-radius: 2px;
     margin: 0;
     display: inline-block;
@@ -169,14 +176,15 @@ div.text {
     padding: 20px 4px 20px 4px;
     margin: 1px;
     cursor: pointer;
-    /*font-size: x-large;*/
     background-color: #EEEEEE;
-    border: solid 1px #AABBAA;
+    border: solid 1px #1F1D95;
     text-align: center;
 }
 
 .tab-button.selected {
+    color: white;
     text-decoration: underline;
+    background-color: #1F1D95;
 }
 .tab-button.empty {
     display: none;
