@@ -32,7 +32,7 @@ app.service('documentService', function($http, $cacheFactory) {
     this.getDocuments = function (keys, callback) {
         $http({
             method: 'GET',
-            url: '/rest/userdocument/multi/'+key,
+            url: '/rest/userdocuments?' + param('keys', keys),
             headers: {
                 'Cache-Control': 'no-cache, no-store'
             }
@@ -40,4 +40,12 @@ app.service('documentService', function($http, $cacheFactory) {
             callback(response.data);
         });
     };
+
+    function param(name, list) {
+        "use strict";
+
+        let paramString = '';
+        list.forEach(e => paramString += '&' + name + '=' + e);
+        return paramString.substring(1);
+    }
 });

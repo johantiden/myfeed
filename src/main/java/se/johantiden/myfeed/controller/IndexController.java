@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.Document;
@@ -58,20 +59,37 @@ public class IndexController {
     @RequestMapping("/rest/userdocument/{userDocumentKey}")
     public DocumentBean userDocument(@PathVariable("userDocumentKey") String userDocumentKey) {
 
-        String user = userDocumentKey.split(":")[0];
-        Username userKey = Keys.user(user);
-        Optional<UserDocument> documentOptional = userDocumentService.get(userKey, Key.<UserDocument>create(userDocumentKey));
-
-        Optional<Document> document = documentOptional.flatMap(ud -> documentService.find(ud.getDocumentKey()));
-
-        Optional<DocumentBean> documentBean = document
-                                              .map(d -> new DocumentBean(documentOptional.get(), d));
+        Optional<DocumentBean> documentBean = tryFindUserDocument(userDocumentKey);
 
         if (!documentBean.isPresent()) {
             throw new NotFound404("Not found");
         }
 
         return documentBean.get();
+    }
+
+    private Optional<DocumentBean> tryFindUserDocument(@PathVariable("userDocumentKey") String userDocumentKey) {
+        String user = userDocumentKey.split(":")[0];
+        Username userKey = Keys.user(user);
+        Optional<UserDocument> documentOptional = userDocumentService.get(userKey, Key.<UserDocument>create(userDocumentKey));
+
+        Optional<Document> document = documentOptional.flatMap(ud -> documentService.find(ud.getDocumentKey()));
+
+        return document.map(d -> new DocumentBean(documentOptional.get(), d));
+    }
+
+    @RequestMapping("/rest/userdocuments")
+    public List<DocumentBean> userDocumentsMulti(@RequestParam("keys") List<String> keys) {
+
+
+        return keys.stream()
+                .map(this::tryFindUserDocument)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+
+
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

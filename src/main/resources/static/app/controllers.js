@@ -31,26 +31,39 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             return;
         }
 
-        let callback = document => {
-            $scope.tabs[document.tab] = documentTabPredicate(document.tab);
-            $scope.documents.push(document);
-        };
+        let keyBatches = batcheroo(keys, 30);
 
-        let len = keys.length;
-        let i = 0;
-        function forEachSlowly() {
-            let key = keys[i];
-            documentService.getDocument(key, callback);
-
-            if (i < len) {
-                ++i;
-                setTimeout(forEachSlowly, 5);
+        function getDocumentsSlowly() {
+            getDocumentz(keyBatches[0]);
+            if (keyBatches.length > 0) {
+                keyBatches = keyBatches.splice(1);
+                setTimeout(getDocumentsSlowly, 100);
             }
         }
+        getDocumentsSlowly();
 
-        forEachSlowly(0);
     });
 
+    function getDocumentsSlowly(keyBatches) {
+
+    }
+    function getDocumentz(keys) {
+        documentService.getDocuments(keys, documents => {
+            documents.forEach(document => {
+                $scope.tabs[document.tab] = documentTabPredicate(document.tab);
+                $scope.documents.push(document);
+            });
+        });
+    }
+
+
+    function batcheroo(list, size) {
+        let lists = [];
+        while (list.length > 0) {
+            lists.push(list.splice(0, size));
+        }
+        return lists;
+    }
 
 
     $scope.tab = {};
