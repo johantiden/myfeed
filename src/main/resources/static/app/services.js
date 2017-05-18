@@ -15,6 +15,7 @@ app.service('documentService', function($http, $cacheFactory) {
         }).then(function(response) {
             callback(response.data);
         });
+    };
 
     this.getDocument = function (key, callback) {
         $http({
@@ -27,5 +28,16 @@ app.service('documentService', function($http, $cacheFactory) {
             callback(response.data);
         });
     };
+
+    this.getDocuments = function (keys, callback) {
+        $http({
+            method: 'GET',
+            url: '/rest/userdocument/multi/'+key,
+            headers: {
+                'Cache-Control': 'no-cache, no-store'
+            }
+        }).then(function(response) {
+            callback(response.data);
+        });
     };
 });

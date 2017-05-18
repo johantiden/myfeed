@@ -30,13 +30,28 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         if (keys === undefined) {
             return;
         }
-        keys.forEach(function(key) {
-            documentService.getDocument(key, document => {
-                $scope.tabs[document.tab] = documentTabPredicate(document.tab);
-                $scope.documents.push(document);
-            });
-        });
+
+        let callback = document => {
+            $scope.tabs[document.tab] = documentTabPredicate(document.tab);
+            $scope.documents.push(document);
+        };
+
+        let len = keys.length;
+        let i = 0;
+        function forEachSlowly() {
+            let key = keys[i];
+            documentService.getDocument(key, callback);
+
+            if (i < len) {
+                ++i;
+                setTimeout(forEachSlowly, 5);
+            }
+        }
+
+        forEachSlowly(0);
     });
+
+
 
     $scope.tab = {};
 
@@ -112,8 +127,8 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     });
 
     $scope.withTab = function(tabName) {
-        return function(item) {
-            return $scope.tabs[tabName](item);
+        return function(document) {
+            return $scope.tabs[tabName](document);
         };
     };
 
