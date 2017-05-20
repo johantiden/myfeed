@@ -335,7 +335,7 @@ public class DocumentClassifier {
             m.isFromFeed("Los Angeles Times - World") ||
             m.isFromFeed("Reddit - r/worldnews") ||
             m.anyCategoryEquals("worldnews") ||
-            m.isFromFeed("Al Jazeera") && m.anyCategoryEquals("news", "insidestory", "opinion", "features", "indepth") ||
+            m.isFromFeed("Al Jazeera") && m.anyCategoryEquals("news", "insidestory", "opinion", "features", "indepth", "programmes") ||
             m.isFromFeed("SVT Nyheter") && m.anyCategoryEquals("nyheter") ||
             m.isFromFeed("New York Times - World") ||
             m.has("Reddit") && m.anyCategoryEquals("politics", "news", "worldnews", "esist") ||
@@ -356,7 +356,8 @@ public class DocumentClassifier {
             m.isFromFeed("Breakit") ||
             m.anyCategoryEquals("ProgrammerHumor") ||
             m.isFromFeed("HackerNews") ||
-            m.isFromFeed("Ars Technica") && m.anyCategoryEquals("tech-policy", "gadgets", "gaming", "facebook", "opposable thumbs", "the-multiverse") ||
+            m.isFromFeed("Ars Technica") && m.anyCategoryEquals("tech-policy", "gadgets", "gaming", "facebook", "opposable thumbs", "the-multiverse", "Technology Lab", "Ministry of Innovation") ||
+            m.has("Reddit") && m.anyCategoryEquals("technology") ||
             m.isFromFeed("Slashdot") && m.anyCategoryEquals("story") ||
             m.anySubjectEquals(FORSKNING) ||
             m.anySubjectEquals(IT_SÄKERHET) ||
@@ -371,7 +372,7 @@ public class DocumentClassifier {
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - top") ||
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - r/all") ||
             m.anyCategoryEquals("AskReddit") ||
-            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned") ||
+            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles") ||
             m.isFromFeed("xkcd");
     }
 
@@ -414,7 +415,8 @@ public class DocumentClassifier {
             m.anySubjectEquals(BLACK_PEOPLE_TWITTER) ||
             m.anySubjectEquals(THE_DENNIS) ||
             m.anySubjectEquals(NUMBER_OF_PEOPLE) ||
-            m.anySubjectEquals(NUTIDSTESTET);
+            m.anySubjectEquals(NUTIDSTESTET) ||
+            m.anyCategoryEquals("Jokes", "OldSchoolCool");
     }
 
     public static void appendUrlFoldersAsCategory(Document document) {
