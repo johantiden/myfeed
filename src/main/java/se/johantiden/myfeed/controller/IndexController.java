@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.DocumentClassifier;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.Username;
 import se.johantiden.myfeed.persistence.redis.Key;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 public class IndexController {
 
     private static final Logger log = LoggerFactory.getLogger(IndexController.class);
+    private static final boolean REMOVE_BAD = true;
+    private static final boolean REMOVE_SPORT = true;
     @Autowired
     private UserDocumentService userDocumentService;
     @Autowired
@@ -46,7 +49,19 @@ public class IndexController {
 
         List<String> keys = allUserDocuments.stream()
                             .filter(UserDocument::isUnread)
-                            .filter(ud -> documentService.find(ud.getDocumentKey()).flatMap(d -> Optional.ofNullable(d.tab)).isPresent())
+                            .filter(ud -> {
+                                Optional<String> tab = documentService.find(ud.getDocumentKey()).flatMap(d -> Optional.ofNullable(d.tab));
+
+                                return tab
+                                        .map(t -> {
+                                            boolean isBad = DocumentClassifier.BAD.equals(t);
+                                            boolean isSport = DocumentClassifier.SPORT.equals(t);
+                                            boolean isKultur = DocumentClassifier.CULTURE.equals(t);
+                                            return !isBad && !isSport && !isKultur;
+                                        })
+                                        .orElse(false);
+
+                            })
                             .map(UserDocument::getKey)
                             .map(Object::toString)
                             .collect(Collectors.toList());

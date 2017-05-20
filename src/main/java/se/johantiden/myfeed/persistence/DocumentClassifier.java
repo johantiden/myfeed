@@ -26,7 +26,7 @@ public class DocumentClassifier {
     public static final String BÖCKER = "Böcker";
     public static final String MUSEUM = "Museum";
     public static final String EUROVISION = "Eurovision";
-    public static final String VÄDER = "väder";
+    public static final String VÄDER = "Väder";
     public static final String FOTBOLL = "fotboll";
     public static final String FORSKNING = "Forskning";
     public static final String IT_SÄKERHET = "IT-Säkerhet";
@@ -55,6 +55,7 @@ public class DocumentClassifier {
     public static final String THE_DENNIS = "The_Dennis";
     private static final String NUMBER_OF_PEOPLE = "Number of People";
     public static final String NUTIDSTESTET = "nutidstestet";
+    public static final String RESOR = "resor";
 
     private DocumentClassifier() {
     }
@@ -70,7 +71,7 @@ public class DocumentClassifier {
 
         if(m.anyCategoryEquals("ekonomi", "Näringsliv")) { s.add(s(EKONOMI)); }
         if(m.anyCategoryEquals("ledare")) { s.add(s("Ledare")); }
-        if(m.anyCategoryEquals("sport")) { s.add(s("Sport")); }
+        if(m.anyCategoryEquals("sport", "sports")) { s.add(s("Sport")); }
         if(m.has("your") && m.has("briefing")) { s.add(s("Briefing")); }
         if(m.has("Tim Berners-Lee")) { s.add(s("Tim Berners-Lee")); }
         if(m.has("german") || m.has("tysk") || m.has("merkel") || m.has("Brandenburg")) { s.add(s(TYSKLAND)); }
@@ -180,14 +181,14 @@ public class DocumentClassifier {
         if(m.has("Ebola")) { s.add(s("Ebola")); }
         if(m.has("Cholera") | m.has("Kolera")) { s.add(s("Kolera")); }
         if(m.has("Kiev", "Ukrain")) { s.add(s("Ukraina")); }
-        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "malware", "WanaCry", "WannaCry", "Hacker", "hacking", "IT-utpressning", "IT-angrepp", "Internet Security", "eternalblue")) { s.add(s(IT_SÄKERHET)); }
+        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "malware", "WanaCry", "WannaCry", "Hacker", "hacking", "IT-utpressning", "IT-angrepp", "Internet Security", "eternalblue", "botnet")) { s.add(s(IT_SÄKERHET)); }
         if(m.has("Brexit")) { s.add(s("Brexit")); }
         if(m.has("Stockholm") || m.anyCategoryEquals("sthlm")) { s.add(s(STOCKHOLM)); }
         if(anySubjectEquals(s, STOCKHOLM) || m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
             s.add(s("Inrikes")); }
         if(m.has("Norge", "Norway", "norska")) { s.add(s("Norge")); }
         if(m.has("Feministiskt initiativ")) { s.add(s("Feministiskt Initiativ")); }
-        if((m.has("Miljöpartiet") || m.hasCaseSensitive("MP ", "MP.", " MP")) && !anySubjectEquals(s, STORBRITANNIEN)) { s.add(s("Miljöpartiet")); }
+        if((m.has("Miljöpartiet") || m.hasCaseSensitive(" MP ", " MP.")) && !anySubjectEquals(s, STORBRITANNIEN)) { s.add(s("Miljöpartiet")); }
         if(m.has("Sverigemokraterna") && m.hasCaseSensitive("SD", "Jimmie Åkesson")) { s.add(s("Sverigemokraterna")); }
         if(m.has("Jimmie Åkesson")) { s.add(s("Jimmie Åkesson")); }
         if(m.hasCaseSensitive("LO")) { s.add(s("LO")); }
@@ -234,6 +235,7 @@ public class DocumentClassifier {
         if(m.anyCategoryEquals(JUNIOR)) { s.add(s(JUNIOR)); }
         if(m.anyCategoryEquals(NUTIDSTESTET)) { s.add(s(NUTIDSTESTET)); }
         if(m.anyCategoryEquals(PERFECT_GUIDE)) { s.add(s(PERFECT_GUIDE)); }
+        if(m.anyCategoryEquals(RESOR)) { s.add(s(RESOR)); }
         if(m.has("Reddit") && m.anyCategoryEquals("IAmA")) { s.add(s(I_AM_A)); }
         if(m.has("Reddit") && m.anyCategoryEquals(BLACK_PEOPLE_TWITTER)) { s.add(s(BLACK_PEOPLE_TWITTER)); }
         if(m.has("Reddit") && m.anyCategoryEquals(THE_DENNIS)) { s.add(s(THE_DENNIS)); }
@@ -299,6 +301,7 @@ public class DocumentClassifier {
 
         return
             m.anyCategoryEquals("sport") ||
+            m.anySubjectEquals(SPORT) ||
             m.has("bordtennis") ||
             m.anySubjectEquals(FOTBOLL) ||
             m.has("handboll") ||
@@ -372,7 +375,7 @@ public class DocumentClassifier {
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - top") ||
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - r/all") ||
             m.anyCategoryEquals("AskReddit") ||
-            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles") ||
+            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying") ||
             m.isFromFeed("xkcd");
     }
 
@@ -416,6 +419,7 @@ public class DocumentClassifier {
             m.anySubjectEquals(THE_DENNIS) ||
             m.anySubjectEquals(NUMBER_OF_PEOPLE) ||
             m.anySubjectEquals(NUTIDSTESTET) ||
+            m.anySubjectEquals(RESOR) ||
             m.anyCategoryEquals("Jokes", "OldSchoolCool");
     }
 

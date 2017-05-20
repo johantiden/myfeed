@@ -56,12 +56,12 @@ public class FeedReaderJob {
 
         if (!filtered.isEmpty()) {
             log.debug("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter. Oldest: {}",
-                    feed.getName(), filtered.size(), documents.size()-filtered.size(), oldestInstant(filtered));
+                    feed.getName(), filtered.size(), documents.size()-filtered.size(), oldestInstantDebug(filtered));
         }
         inboxService.putIfNew(filtered);
     }
 
-    private static String oldestInstant(List<Document> filtered) {
+    private static String oldestInstantDebug(List<Document> filtered) {
 
         Optional<Document> max = filtered.stream().max(Comparator.comparing(Document::getPublishDate).reversed());
 
