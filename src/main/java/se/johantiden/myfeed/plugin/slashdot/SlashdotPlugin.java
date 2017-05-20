@@ -29,7 +29,7 @@ public class SlashdotPlugin implements Plugin {
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
             List<Document> documents = new RssPlugin("Slashdot", "https://slashdot.org", "http://rss.slashdot.org/Slashdot/slashdotMainatom", ttl).createFeedReader(feed).readAllAvailable();
-            return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
+            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
 

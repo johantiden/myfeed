@@ -42,7 +42,7 @@ public class SvenskaDagbladetPlugin implements Plugin {
     public final FeedReader createFeedReader(Feed feed) {
         return () -> {
             List<Document> documents = new RssPlugin(SVENSKA_DAGBLADET, "https://www.svd.se", "https://www.svd.se/?service=rss", ttl, FILTER).createFeedReader(feed).readAllAvailable();
-            return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
+            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
 
@@ -50,17 +50,46 @@ public class SvenskaDagbladetPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
             document.isPaywalled = isPaywalled(document);
+            if (!document.isPaywalled) {
+                document.categories = document.categories.stream()
+                                      .filter(c -> c.url == null)
+                                      .map(c -> new NameAndUrl(c.name, document.feed.url + "/" + c.name))
+                                      .collect(Collectors.toList());
 
-            document.categories = document.categories.stream()
-                    .filter(c -> c.url == null)
-                    .map(c -> new NameAndUrl(c.name, document.feed.url + "/" + c.name))
-                    .collect(Collectors.toList());
-
-            if (hasEscapeCharacters().test(document)) {
-                boolean a = true;
+                document.imageUrl = findImage(document);
             }
             return document;
         };
+    }
+
+    private static String findImage(Document document) {
+        org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
+
+        Elements figureImg = doc.select("img.Figure-image");
+        if (!figureImg.isEmpty()) {
+            String src = figureImg.attr("srcset");
+            String s = src.split(" ")[0];
+            return s;
+        }
+
+        Elements flexEmbedImg = doc.select("img.FlexEmbed-item");
+        if (!flexEmbedImg.isEmpty()) {
+            String src = flexEmbedImg.attr("srcset");
+            String s = src.split(" ")[0];
+            return s;
+        }
+
+        return null;
+    }
+
+
+    private static org.jsoup.nodes.Document getJsoupDocument(String pageUrl) {
+        try {
+            return Jsoup.parse(new URL(pageUrl), 10_000);
+        } catch (IOException e) {
+            log.error("Could not jsoup-parse " + pageUrl, e);
+            return null;
+        }
     }
 
     private static boolean isPaywalled(Document document) {

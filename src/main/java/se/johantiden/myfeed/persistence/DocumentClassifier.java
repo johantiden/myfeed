@@ -106,8 +106,8 @@ public class DocumentClassifier {
         if(m.has("North Korea", "Nordkorea")) { s.add(s("Nordkorea")); }
         if(m.has("South Korea", "Sydkorea", "Seoul")) { s.add(s("Sydkorea")); }
         if(m.has("Myanmar", "Burma")|| m.has("Aung San Suu Kyi")) { s.add(s("Myanmar")); }
-        if(m.hasCaseSensitive("Iran") || m.has("Rouhani")) { s.add(s("Iran")); }
-        if(m.has("Rouhani")) { s.add(s("Rouhani")); }
+        if(m.hasCaseSensitive("Iran") || m.has("Rouhani", "Rohani")) { s.add(s("Iran")); }
+        if(m.has("Rouhani", "Rohani")) { s.add(s("Rouhani")); }
         if(m.has("China", "Kina", "Xi Jinping", "Kines")) { s.add(s("Kina")); }
         if(m.has("Net Neutrality")) { s.add(s("Net Neutrality")); }
         if(m.has("Albanien")) { s.add(s("Albanien")); }

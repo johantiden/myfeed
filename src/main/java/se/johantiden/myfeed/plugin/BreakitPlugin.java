@@ -28,7 +28,7 @@ public class BreakitPlugin implements Plugin {
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
             List<Document> documents = new RssPlugin("Breakit", "http://www.breakit.se", "http://www.breakit.se/feed/artiklar", ttl).createFeedReader(feed).readAllAvailable();
-            return documents.parallelStream().map(createEntryMapper()).collect(Collectors.toList());
+            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
 

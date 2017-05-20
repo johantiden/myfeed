@@ -79,6 +79,13 @@ public class SVTPlugin implements Plugin {
             return src;
         }
 
+        Elements video = doc.select("video.svp_video");
+        if (!video.isEmpty()) {
+            String src = video.attr("poster");
+            return src;
+        }
+
+
         return null;
     }
 
