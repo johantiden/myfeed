@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.reader;
 
+import com.google.common.util.concurrent.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import se.johantiden.myfeed.settings.GlobalSettings;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,10 +27,21 @@ public class FeedReaderJob {
     private FeedService feedService;
     @Autowired
     private InboxService inboxService;
+    @Autowired
+    private ExecutorService executorService;
 
-    @Scheduled(fixedRate = 500)
+    private final RateLimiter rateLimiter = RateLimiter.create(3);
+
+    @Scheduled(fixedRate = 500) // Restart if crashed
     public void myRunnable() {
-        consume(feedService.popOldestInvalidatedFeed());
+        executorService.submit(() -> {
+            while (true) {
+                rateLimiter.acquire();
+                Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
+                feed.ifPresent(f -> executorService.submit(() -> consume(f)));
+            }
+        });
+
     }
 
     private void consume(Feed feed) {

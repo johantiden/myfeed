@@ -15,13 +15,14 @@ import se.johantiden.myfeed.persistence.file.BaseSaver;
 import se.johantiden.myfeed.persistence.file.DocumentRepositorySaver;
 import se.johantiden.myfeed.persistence.file.UserDocumentRepositorySaver;
 import se.johantiden.myfeed.persistence.user.UserRepository;
-import se.johantiden.myfeed.reader.FeedReaderService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SpringBootApplication
 @EnableScheduling
@@ -103,6 +104,11 @@ public class Main {
     @Bean
     public UserService userService() {
         return new UserService();
+    }
+
+    @Bean
+    public ExecutorService executorService() {
+        return Executors.newCachedThreadPool();
     }
 
     public static void main(String[] args) {

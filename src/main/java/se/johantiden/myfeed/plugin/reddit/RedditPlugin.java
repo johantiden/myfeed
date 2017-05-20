@@ -94,14 +94,16 @@ public class RedditPlugin implements Plugin {
             }
 
             if (linkHref.contains("http://i.imgur.com") && !linkHref.contains("jpg") && !linkHref.contains("png")) {
-                String webmSrc = linkHref.substring(0, linkHref.length()-4) + "webm";
-                String mp4Src = linkHref.substring(0, linkHref.length()-4) + "mp4";
-                String gifvSrc = linkHref.substring(0, linkHref.length()-4) + "gifv";
+                String imgurRawUrl = getRawImgurUrl(linkHref);
+                String webmSrc = imgurRawUrl + ".webm";
+                String mp4Src = imgurRawUrl + ".mp4";
+                String gifvSrc = imgurRawUrl + ".gifv";
                 ArrayList<Video> videos = Lists.newArrayList(
                         new Video(webmSrc, "video/webm"),
                         new Video(gifvSrc, "video/mp4"),
                         new Video(mp4Src, "video/mp4"));
                 document.videos = videos;
+                return;
             }
             if (linkHref.contains("https://media.giphy.com/media/")) {
                 String id = linkHref.split("/")[4];
@@ -113,9 +115,19 @@ public class RedditPlugin implements Plugin {
                 document.html = "<iframe class=\"image-box\" src=\"https://www.youtube.com/embed/"+id+"?ecver=1?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>";
             }
             if (linkHref.contains("i.redd.it") || linkHref.contains("imgur")) {
-                document.imageUrl = linkHref;
+                if (linkHref.endsWith("jpg") || linkHref.endsWith("png")) {
+                    document.imageUrl = linkHref;
+                } else {
+                    document.imageUrl = linkHref + ".jpg";
+                }
             }
         }
+    }
+
+    static String getRawImgurUrl(String linkHref) {
+        String[] split = linkHref.split("\\.");
+
+        return split[0] + "." + split[1] + "." + split[2];
     }
 
     private static void parseGfycat(Document document, String linkHref) {
