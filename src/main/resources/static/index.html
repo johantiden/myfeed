@@ -43,10 +43,10 @@
 
             <div class="top-row">
                 <!--<div class="tab" ng-if="document.tab" ng-click="selectTab(document.tab)"><a href="javascript:void(0);" >{{document.tab}}</a></div>-->
-                <div class="feedName" ng-if="document.feed.name"><a href="{{document.feed.url}}">{{document.feed.name}}</a></div>
+                <div class="feedName" ng-if="document.feed.name" ng-click="setSearch(document.feed.name)"><a href="javascript:void(0);" >{{document.feed.name}}</a></div>
 
                 <div class="subject" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
-                    <a href="javascript:void(0);" >{{subject}}</a>
+                    | <a href="javascript:void(0);" >{{subject}}</a>
                 </div>
                 <!--<div class="score" ng-if="document.score"> | {{document.score}}</div>-->
                 <div class="category" ng-repeat="category in document.categories"> | <a href="{{category.url}}">{{category.name}}</a></div>
