@@ -3,7 +3,6 @@ package se.johantiden.myfeed.persistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.UserRepository;
-import se.johantiden.myfeed.plugin.AFPPlugin;
 import se.johantiden.myfeed.plugin.AlJazeeraPlugin;
 import se.johantiden.myfeed.plugin.BreakitPlugin;
 import se.johantiden.myfeed.plugin.EngadgetPlugin;
@@ -43,7 +42,6 @@ public class FeedRepository {
         feeds.add(new BreakitPlugin(INVALIDATION_PERIOD).createFeed());
         feeds.add(new AlJazeeraPlugin(INVALIDATION_PERIOD).createFeed());
         feeds.add(new EngadgetPlugin(INVALIDATION_PERIOD).createFeed());
-        feeds.add(new AFPPlugin(INVALIDATION_PERIOD).createFeed());
 
         feeds.add(createRss(
                 "xkcd",
