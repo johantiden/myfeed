@@ -48,6 +48,11 @@ public class FeedRepository {
                 "https://xkcd.com",
                 "https://xkcd.com/atom.xml", Duration.ofDays(30)));
 
+        feeds.add(createRss(
+                "Elvis",
+                "http://www.elvisthecomic.com",
+                "http://www.elvisthecomic.com/feed/", Duration.ofDays(30)));
+
         feeds.add(new SVTPlugin(INVALIDATION_PERIOD).createFeed());
 
         feeds.add(createRss(

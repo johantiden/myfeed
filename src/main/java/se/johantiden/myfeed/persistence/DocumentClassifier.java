@@ -6,6 +6,7 @@ import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.controller.Subject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
@@ -87,7 +88,7 @@ public class DocumentClassifier {
         if(m.has("Tennis","Federer")) { s.add(s("Tennis")); }
         if(m.has("sprang maran")) { s.add(s("Löpning")); }
         if(m.has("hockey", "Henrik Lundqvist", "New York Rangers", "Nicklas Bäckström")) { s.add(s("Hockey")); }
-        if(m.has(FOTBOLL, "allsvensk", "Champions League", "premier league", "superettan", "Benfica ", "Malmö FF")) { s.add(s("Fotboll")); }
+        if(m.has(FOTBOLL, "allsvensk", "Champions League", "premier league", "superettan", "Benfica ", "Malmö FF", "Ronaldo", "La Liga", "Real Madrid")) { s.add(s("Fotboll")); }
         if(m.has("handboll", "H65")) { s.add(s("Handboll")); }
         if(m.hasCaseSensitive("NBA")) { s.add(s("Basket")); }
         if(m.has("bordtennis", "pingis")) { s.add(s("Bordtennis")); }
@@ -99,7 +100,7 @@ public class DocumentClassifier {
         if(anySubjectEquals(s, SPORT) && m.hasCaseSensitive("OS") || m.has("olympisk")) { s.add(s("OS")); }
         if(m.has("netflix")) { s.add(s("Netflix")); }
         if(m.has("Boko Haram")) { s.add(s("Boko Haram")); }
-        if(m.has("väder ", "väder.", " väder", "blåsväder", "Cyclone", "Cyklon")) { s.add(s("Väder")); }
+        if(m.has("väder ", "väder.", " väder", "blåsväder", "Cyclone", "Cyklon") || m.hasCaseSensitive("SMHI")) { s.add(s("Väder")); }
         if(m.has(EUROVISION)) { s.add(s(EUROVISION)); }
         if(m.has("Nepal")) { s.add(s("Nepal")); }
         if(m.has("Syria", "Syrien", "syrisk", "Syrier", "Damascus", "Damaskus")) { s.add(s("Syrien")); }
@@ -130,7 +131,6 @@ public class DocumentClassifier {
         if(m.has("Dutch", "Netherlands")) { s.add(s("Nederländerna")); }
         if(m.has("Italien")) { s.add(s("Italien")); }
         if(m.has("Tjeckien", "Tjeckisk", "Czech")) { s.add(s("Tjeckien")); }
-        if(m.has("Libyen")) { s.add(s("Libyen")); }
         if(m.has("Kuwait")) { s.add(s("Kuwait")); }
         if(m.has("Saudi Arabia", "Saudiarabien")) { s.add(s("Saudiarabien")); }
         if(m.has("Uganda")) { s.add(s("Uganda")); }
@@ -194,6 +194,10 @@ public class DocumentClassifier {
         if(m.hasCaseSensitive("LO")) { s.add(s("LO")); }
         if(m.has("Moderaterna", "Kinberg Batra")) { s.add(s("Moderaterna")); }
         if(m.has("Kinberg Batra")) { s.add(s("Kinberg Batra")); }
+        if(m.has("Pope Francis")) { s.add(s("Pope Francis")); }
+        if(m.has("Angola")) { s.add(s("Angola")); }
+        if(m.has("Libyen", "Libya")) { s.add(s("Libyen")); }
+        if(m.has("Africa") || anySubjectEquals(s, "Angola", "Libyen")) { s.add(s("Africa")); }
         if(m.has("debatt")) { s.add(s("Debatt")); }
         if(m.has("Kongo-Kinshasa")) { s.add(s("Kongo-Kinshasa")); }
         if(m.hasCaseSensitive("Oman")) { s.add(s("Oman")); }
@@ -245,8 +249,11 @@ public class DocumentClassifier {
         return s;
     }
 
-    private static boolean anySubjectEquals(List<Subject> subjects, String subject) {
-        return subjects.stream().anyMatch(s -> s.getTitle().equalsIgnoreCase(subject));
+    private static boolean anySubjectEquals(List<Subject> subjects, String... matchAny) {
+        return Arrays.stream(matchAny).anyMatch(s -> anySubjectEquals(subjects, s));
+    }
+    private static boolean anySubjectEquals(List<Subject> subjects, String match) {
+        return subjects.stream().anyMatch(s -> s.getTitle().equalsIgnoreCase(match));
     }
 
     private static Subject s(final String title) {return new Subject(title);}
