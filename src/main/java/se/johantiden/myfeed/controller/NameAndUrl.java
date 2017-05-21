@@ -20,4 +20,12 @@ public class NameAndUrl implements Serializable {
     public final String getUrl() {
         return url;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+               "name='" + name + '\'' +
+               ", url='" + url + '\'' +
+               '}';
+    }
 }

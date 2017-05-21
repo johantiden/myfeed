@@ -13,29 +13,31 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public class BreakitPlugin implements Plugin {
+public class EngadgetPlugin implements Plugin {
 
     private final Duration ttl;
 
-    public BreakitPlugin(Duration ttl) {this.ttl = ttl;}
+    public EngadgetPlugin(Duration ttl) {this.ttl = ttl;}
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl("Slashdot", ttl, this);
+        return new FeedImpl("Engadget", ttl, this);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin("Breakit", "http://www.breakit.se", "http://www.breakit.se/feed/artiklar", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin("Engadget", "https://www.engadget.com", "https://www.engadget.com/rss.xml", ttl).createFeedReader(feed).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
 
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
+
             document.imageUrl = getImageUrl(document.html);
-            document.html = prune(document.html);
+            document.html = null;
+            document.categories.removeIf(c -> c.name.startsWith("apple"));
             return document;
         };
     }
@@ -47,13 +49,5 @@ public class BreakitPlugin implements Plugin {
             return img.get(0).attr("src");
         }
         return null;
-    }
-
-    public static String prune(String html) {
-        org.jsoup.nodes.Document doc = Jsoup.parse(html);
-        doc.select(".feedflare").remove();
-        doc.select("img").remove();
-        String pruned = doc.body().html();
-        return pruned;
     }
 }

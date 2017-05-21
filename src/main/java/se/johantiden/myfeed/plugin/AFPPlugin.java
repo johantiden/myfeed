@@ -17,24 +17,24 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class AlJazeeraPlugin implements Plugin {
+public class AFPPlugin implements Plugin {
 
-    private static final Logger log = LoggerFactory.getLogger(AlJazeeraPlugin.class);
+    private static final Logger log = LoggerFactory.getLogger(AFPPlugin.class);
     private final Duration invalidationPeriod;
 
-    public AlJazeeraPlugin(Duration invalidationPeriod) {
+    public AFPPlugin(Duration invalidationPeriod) {
         this.invalidationPeriod = invalidationPeriod;
     }
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl("Al Jazeera", invalidationPeriod, this);
+        return new FeedImpl("AFP", invalidationPeriod, this);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin("Al Jazeera", "http://www.aljazeera.com", "http://www.aljazeera.com/xml/rss/all.xml", invalidationPeriod)
+            List<Document> documents = new RssPlugin("AFP", "https://www.afp.com/", "https://www.afp.com/en/rss.xml", invalidationPeriod)
                                        .createFeedReader(createFeed()).readAllAvailable();
             return documents.stream()
                    .map(docMapper())

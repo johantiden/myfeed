@@ -357,6 +357,7 @@ public class DocumentClassifier {
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Slashdot") ||
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("HackerNews") ||
             m.isFromFeed("Breakit") ||
+            m.isFromFeed("Engadget") ||
             m.anyCategoryEquals("ProgrammerHumor") ||
             m.isFromFeed("HackerNews") ||
             m.isFromFeed("Ars Technica") && m.anyCategoryEquals("tech-policy", "gadgets", "gaming", "facebook", "opposable thumbs", "the-multiverse", "Technology Lab", "Ministry of Innovation") ||
