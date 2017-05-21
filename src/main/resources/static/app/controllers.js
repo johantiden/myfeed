@@ -133,7 +133,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             } else {
                 $scope.selectedTabName = 'All';
             }
-        } else {
+        } else if (newValue !== undefined && newValue.length === 0) {
             $scope.selectedTabName = 'All';
         }
         $cookies.put('search', newValue);
