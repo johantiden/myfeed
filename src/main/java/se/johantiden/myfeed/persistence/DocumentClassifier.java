@@ -376,7 +376,7 @@ public class DocumentClassifier {
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - top") ||
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - r/all") ||
             m.anyCategoryEquals("AskReddit") ||
-            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying") ||
+            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying", "space") ||
             m.isFromFeed("xkcd");
     }
 
