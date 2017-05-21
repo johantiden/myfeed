@@ -1,11 +1,8 @@
-package se.johantiden.myfeed.plugin.hackenews;
+package se.johantiden.myfeed.plugin;
 
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.FeedReader;
-import se.johantiden.myfeed.plugin.Plugin;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.time.Duration;
 import java.util.List;

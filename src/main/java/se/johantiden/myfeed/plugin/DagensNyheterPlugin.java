@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.plugin.dn;
+package se.johantiden.myfeed.plugin;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,9 +9,6 @@ import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.FeedReader;
-import se.johantiden.myfeed.plugin.Plugin;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.io.IOException;
 import java.net.URL;
@@ -57,7 +54,7 @@ public class DagensNyheterPlugin implements Plugin {
         org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
 
         Elements articleHeaderImg = doc.select(".article__header-img");
-        if (!articleHeaderImg.isEmpty()) {
+        if(!articleHeaderImg.isEmpty()) {
             String attr = articleHeaderImg.attr("data-srcset");
             JsonNode jsonNode = getJsonNode(attr);
 

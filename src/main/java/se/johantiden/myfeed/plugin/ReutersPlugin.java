@@ -1,20 +1,17 @@
 package se.johantiden.myfeed.plugin;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,7 +39,7 @@ public class ReutersPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
             document.html = prune(document.html);
-            if (document.html.toLowerCase().contains("google-analytics")) {
+            if(document.html.toLowerCase().contains("google-analytics")) {
                 throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
             }
 
@@ -56,13 +53,13 @@ public class ReutersPlugin implements Plugin {
         org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
 
         Elements relatedImg = doc.select(".related-photo-container > img");
-        if (!relatedImg.isEmpty()) {
+        if(!relatedImg.isEmpty()) {
             String src = relatedImg.get(0).attr("src");
             return src;
         }
 
         Elements slideImgs = doc.select(".module-slide-media > img");
-        if (!slideImgs.isEmpty()) {
+        if(!slideImgs.isEmpty()) {
             String src = slideImgs.get(0).attr("data-lazy");
             return src;
         }

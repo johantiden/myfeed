@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.plugin.rss;
+package se.johantiden.myfeed.plugin;
 
 import com.google.common.collect.Lists;
 import com.rometools.rome.feed.synd.SyndContent;
@@ -10,14 +10,11 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.plugin.FeedReader;
 import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.io.IOException;
@@ -53,7 +50,7 @@ public class RssFeedReader implements FeedReader {
         try {
             return tryReadAllAvailable();
         } catch (RuntimeException e) {
-            throw new RuntimeException("RssFeed '"+feedName+"' failed url:"+rssUrl+"   :", e);
+            throw new RuntimeException("RssFeed '" + feedName + "' failed url:" + rssUrl + "   :", e);
         }
     }
 
@@ -74,10 +71,10 @@ public class RssFeedReader implements FeedReader {
             String contentHtml = getContentHtml(e);
             String text = descriptionHtml == null ? null : html2text(descriptionHtml);
             String html = descriptionHtml == null ? null : descriptionHtml;
-            if (html == null) {
+            if(html == null) {
                 html = contentHtml;
             }
-            if (html != null && html.toLowerCase().contains("google-analytics")) {
+            if(html != null && html.toLowerCase().contains("google-analytics")) {
                 throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
             }
 
@@ -86,7 +83,7 @@ public class RssFeedReader implements FeedReader {
 
             Document document = new Document(this.feed.getKey(), feed, title, text, author, link, imageUrl, publishedDate, html, categories);
 
-            if (DocumentPredicates.hasEscapeCharacters().test(document)) {
+            if(DocumentPredicates.hasEscapeCharacters().test(document)) {
                 throw new RuntimeException("Escape characters!");
             }
             return document;
@@ -95,8 +92,8 @@ public class RssFeedReader implements FeedReader {
 
     private static List<NameAndUrl> getCategories(SyndEntry e) {
         return e.getCategories().stream()
-                .map(c -> new NameAndUrl(unescape(c.getName()), c.getTaxonomyUri()))
-                .collect(Collectors.toList());
+               .map(c -> new NameAndUrl(unescape(c.getName()), c.getTaxonomyUri()))
+               .collect(Collectors.toList());
     }
 
     private static String unescape(String string) {
@@ -109,7 +106,7 @@ public class RssFeedReader implements FeedReader {
         unescaped = unescaped.replaceAll("â€™", "ü");
         unescaped = unescaped.replaceAll("&amp;", "&");
 
-        if (!unescaped.equals(string)) {
+        if(!unescaped.equals(string)) {
             log.info("Unescaped! {} -> {}", string, unescaped);
         }
 
@@ -118,7 +115,7 @@ public class RssFeedReader implements FeedReader {
 
     private static String getDescription(SyndEntry e) {
         SyndContent description = e.getDescription();
-        if (description == null) {
+        if(description == null) {
             return null;
         }
         return description.getValue();
@@ -126,10 +123,10 @@ public class RssFeedReader implements FeedReader {
 
     private static String getContentHtml(SyndEntry e) {
         List<SyndContent> contents = e.getContents();
-        if (contents.isEmpty()) {
+        if(contents.isEmpty()) {
             return null;
         }
-        if (contents.size() > 1) {
+        if(contents.size() > 1) {
             log.warn("More than one content!");
         }
 
@@ -141,11 +138,11 @@ public class RssFeedReader implements FeedReader {
     private static Instant getDate(SyndEntry e) {
         @SuppressWarnings("UseOfObsoleteDateTimeApi") Date date = e.getPublishedDate();
 
-        if (date == null) {
+        if(date == null) {
             date = e.getUpdatedDate();
         }
 
-        if (date == null) {
+        if(date == null) {
             return Instant.now();
         }
 
@@ -154,10 +151,10 @@ public class RssFeedReader implements FeedReader {
 
     private static String getAuthorUrl(SyndEntry entry) {
         return Optional.ofNullable(entry)
-                .map(SyndEntry::getAuthors)
-                .flatMap(l -> l.isEmpty() ? Optional.empty() : Optional.ofNullable(l.get(0)))
-                .map(SyndPerson::getUri)
-                .orElse(null);
+               .map(SyndEntry::getAuthors)
+               .flatMap(l -> l.isEmpty() ? Optional.empty() : Optional.ofNullable(l.get(0)))
+               .map(SyndPerson::getUri)
+               .orElse(null);
     }
 
     public static String html2text(String html) {
@@ -167,7 +164,7 @@ public class RssFeedReader implements FeedReader {
     private static String getImageUrl(SyndEntry e) {
         List<SyndEnclosure> enclosures = e.getEnclosures();
 
-        if (enclosures.isEmpty()) {
+        if(enclosures.isEmpty()) {
             return null;
         }
 
@@ -183,7 +180,7 @@ public class RssFeedReader implements FeedReader {
         input.setAllowDoctypes(true);
         input.setXmlHealerOn(true);
 
-        try(XmlReader reader = getXmlReader()) {
+        try (XmlReader reader = getXmlReader()) {
             return input.build(reader);
         } catch (FeedException | IOException e) {
             throw new RuntimeException(e);

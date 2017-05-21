@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.plugin.reddit;
+package se.johantiden.myfeed.plugin;
 
 import com.google.common.collect.Lists;
 import org.jsoup.Jsoup;
@@ -10,16 +10,12 @@ import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.persistence.Video;
-import se.johantiden.myfeed.plugin.FeedReader;
-import se.johantiden.myfeed.plugin.Plugin;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -60,7 +56,7 @@ public class RedditPlugin implements Plugin {
     }
 
     private String getFeedName() {
-        return "Reddit - "+ subreddit;
+        return "Reddit - " + subreddit;
     }
 
     private static Function<Document, Document> createEntryMapper() {
@@ -77,7 +73,7 @@ public class RedditPlugin implements Plugin {
         org.jsoup.nodes.Document rssDocument = Jsoup.parse(document.html);
         document.html = null;
         Elements imgs = rssDocument.select("img");
-        if (!imgs.isEmpty()) {
+        if(!imgs.isEmpty()) {
             Element img = imgs.get(0);
             String imgSrc = img.attr("src");
             document.imageUrl = imgSrc;
@@ -85,37 +81,37 @@ public class RedditPlugin implements Plugin {
 
         Elements linkLinks = rssDocument.select("td > span > a");
 
-        if (linkLinks.size() == 2) {
+        if(linkLinks.size() == 2) {
             Element link = linkLinks.get(0);
             String linkHref = link.attr("href");
 
-            if (linkHref.contains("https://gfycat.com")) {
+            if(linkHref.contains("https://gfycat.com")) {
                 parseGfycat(document, linkHref);
             }
 
-            if (linkHref.contains("http://i.imgur.com") && !linkHref.contains("jpg") && !linkHref.contains("png")) {
+            if(linkHref.contains("http://i.imgur.com") && !linkHref.contains("jpg") && !linkHref.contains("png")) {
                 String imgurRawUrl = getRawImgurUrl(linkHref);
                 String webmSrc = imgurRawUrl + ".webm";
                 String mp4Src = imgurRawUrl + ".mp4";
                 String gifvSrc = imgurRawUrl + ".gifv";
                 ArrayList<Video> videos = Lists.newArrayList(
-                        new Video(webmSrc, "video/webm"),
-                        new Video(gifvSrc, "video/mp4"),
-                        new Video(mp4Src, "video/mp4"));
+                                                            new Video(webmSrc, "video/webm"),
+                                                            new Video(gifvSrc, "video/mp4"),
+                                                            new Video(mp4Src, "video/mp4"));
                 document.videos = videos;
                 return;
             }
-            if (linkHref.contains("https://media.giphy.com/media/")) {
+            if(linkHref.contains("https://media.giphy.com/media/")) {
                 String id = linkHref.split("/")[4];
-                document.imageUrl = "https://i.giphy.com/"+ id + ".gif";
+                document.imageUrl = "https://i.giphy.com/" + id + ".gif";
             }
-            if (linkHref.contains("https://youtu.be/")) {
+            if(linkHref.contains("https://youtu.be/")) {
                 String id = linkHref.split("/")[3]; //yECd_Sz_zJ8
                 document.imageUrl = null;
-                document.html = "<iframe class=\"image-box\" src=\"https://www.youtube.com/embed/"+id+"?ecver=1?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>";
+                document.html = "<iframe class=\"image-box\" src=\"https://www.youtube.com/embed/" + id + "?ecver=1?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>";
             }
-            if (linkHref.contains("i.redd.it") || linkHref.contains("imgur")) {
-                if (linkHref.endsWith("jpg") || linkHref.endsWith("png")) {
+            if(linkHref.contains("i.redd.it") || linkHref.contains("imgur")) {
+                if(linkHref.endsWith("jpg") || linkHref.endsWith("png")) {
                     document.imageUrl = linkHref;
                 } else {
                     document.imageUrl = linkHref + ".jpg";
@@ -133,7 +129,7 @@ public class RedditPlugin implements Plugin {
     private static void parseGfycat(Document document, String linkHref) {
         org.jsoup.nodes.Document gfyCat = getJsoupDocument(linkHref);
         Elements sources = gfyCat.select("video.share-video > source");
-        if (sources.size() > 0) {
+        if(sources.size() > 0) {
             List<Video> videoSources = sources.stream().map(s -> new Video(s.attr("src"), s.attr("type"))).collect(Collectors.toList());
             document.videos = videoSources;
             document.imageUrl = null;
@@ -141,7 +137,7 @@ public class RedditPlugin implements Plugin {
     }
 
     private static Double findVotes(org.jsoup.nodes.Document parse) {
-        if (parse.location().contains("over18")) {
+        if(parse.location().contains("over18")) {
 //                log.info("Skipping NSFW");
             return 0D;
         }
@@ -160,7 +156,7 @@ public class RedditPlugin implements Plugin {
     private static Double findVotes2(org.jsoup.nodes.Document parse) {
 
         Elements select = parse.select(".score > span.number");
-        if (select.size() == 1) {
+        if(select.size() == 1) {
             Element element = select.get(0);
             String html = element.html();
             html = html.replace(",", "");

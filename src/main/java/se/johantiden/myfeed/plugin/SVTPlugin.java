@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.plugin.svt;
+package se.johantiden.myfeed.plugin;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.FeedReader;
-import se.johantiden.myfeed.plugin.Plugin;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.io.IOException;
 import java.net.URL;
@@ -74,13 +71,13 @@ public class SVTPlugin implements Plugin {
         org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
 
         Elements img = doc.select(".lp_track_artikelbild").select(".pic__img--wide");
-        if (!img.isEmpty()) {
+        if(!img.isEmpty()) {
             String src = img.attr("src");
             return src;
         }
 
         Elements video = doc.select("video.svp_video");
-        if (!video.isEmpty()) {
+        if(!video.isEmpty()) {
             String src = video.attr("poster");
             return src;
         }

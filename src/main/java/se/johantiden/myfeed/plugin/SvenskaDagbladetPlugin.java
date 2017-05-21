@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.plugin.svd;
+package se.johantiden.myfeed.plugin;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -8,20 +8,14 @@ import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.FeedReader;
-import se.johantiden.myfeed.plugin.Plugin;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static se.johantiden.myfeed.util.DocumentPredicates.*;
 
 
 public class SvenskaDagbladetPlugin implements Plugin {
@@ -50,7 +44,7 @@ public class SvenskaDagbladetPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
             document.isPaywalled = isPaywalled(document);
-            if (!document.isPaywalled) {
+            if(!document.isPaywalled) {
                 document.categories = document.categories.stream()
                                       .filter(c -> c.url == null)
                                       .map(c -> new NameAndUrl(c.name, document.feed.url + "/" + c.name))
@@ -66,14 +60,14 @@ public class SvenskaDagbladetPlugin implements Plugin {
         org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
 
         Elements figureImg = doc.select("img.Figure-image");
-        if (!figureImg.isEmpty()) {
+        if(!figureImg.isEmpty()) {
             String src = figureImg.attr("srcset");
             String s = src.split(" ")[0];
             return s;
         }
 
         Elements flexEmbedImg = doc.select("img.FlexEmbed-item");
-        if (!flexEmbedImg.isEmpty()) {
+        if(!flexEmbedImg.isEmpty()) {
             String src = flexEmbedImg.attr("srcset");
             String s = src.split(" ")[0];
             return s;
@@ -97,7 +91,7 @@ public class SvenskaDagbladetPlugin implements Plugin {
             org.jsoup.nodes.Document parse = Jsoup.parse(new URL(document.pageUrl), 10_000);
 
             Elements select = parse.select(".paywall-loader");
-            if (!select.isEmpty()) {
+            if(!select.isEmpty()) {
                 log.debug("SVD Paywall: {}", document.pageUrl);
                 return true;
             }

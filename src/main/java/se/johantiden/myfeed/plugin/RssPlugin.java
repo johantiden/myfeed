@@ -1,10 +1,8 @@
-package se.johantiden.myfeed.plugin.rss;
+package se.johantiden.myfeed.plugin;
 
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.FeedReader;
-import se.johantiden.myfeed.plugin.Plugin;
 
 import java.time.Duration;
 import java.util.Objects;

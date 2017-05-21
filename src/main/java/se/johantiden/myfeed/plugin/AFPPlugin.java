@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -58,7 +57,7 @@ public class AFPPlugin implements Plugin {
         org.jsoup.nodes.Document doc = getJsoupDocument(url);
 
         Elements img = doc.select(".article-main-img");
-        if (!img.isEmpty()) {
+        if(!img.isEmpty()) {
             String srcRelative = img.attr("src");
             String host = url.getHost();
 

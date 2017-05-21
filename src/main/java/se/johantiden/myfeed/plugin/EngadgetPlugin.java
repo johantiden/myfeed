@@ -5,7 +5,6 @@ import org.jsoup.select.Elements;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.time.Duration;
 import java.util.List;
@@ -45,7 +44,7 @@ public class EngadgetPlugin implements Plugin {
     private static String getImageUrl(String html) {
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
         Elements img = doc.select("img");
-        if (!img.isEmpty()) {
+        if(!img.isEmpty()) {
             return img.get(0).attr("src");
         }
         return null;

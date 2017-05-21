@@ -1,12 +1,9 @@
-package se.johantiden.myfeed.plugin.slashdot;
+package se.johantiden.myfeed.plugin;
 
 import org.jsoup.Jsoup;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.FeedImpl;
-import se.johantiden.myfeed.plugin.FeedReader;
-import se.johantiden.myfeed.plugin.Plugin;
-import se.johantiden.myfeed.plugin.rss.RssPlugin;
 
 import java.time.Duration;
 import java.util.List;
@@ -37,7 +34,7 @@ public class SlashdotPlugin implements Plugin {
     private static Function<Document, Document> createEntryMapper() {
         return entry -> {
             entry.html = prune(entry.html);
-            if (entry.html.toLowerCase().contains("google-analytics")) {
+            if(entry.html.toLowerCase().contains("google-analytics")) {
                 throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
             }
             return entry;

@@ -1,4 +1,4 @@
-package se.johantiden.myfeed.plugin.reddit;
+package se.johantiden.myfeed.plugin;
 
 import org.junit.Test;
 
