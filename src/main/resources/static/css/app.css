@@ -108,12 +108,12 @@ a {
     padding-left: 2px;
     padding-right: 2px;
     right: 0;
-    width: 100%;
+    width: calc(100% - 8vw);
     cursor: auto;
     border-left: 1px solid #1F1D95;
     border-right: 1px solid #1F1D95;
-
     background-color: white;
+    padding: 3vw 4vw 3vw 4vw;
 }
 
 .top-row > *, .top-row > * > * {
@@ -209,4 +209,10 @@ div.text {
 
 div.category{
     display: none;
+}
+
+.title {
+    margin-bottom: 10px;
+    font-weight:bold;
+    font-size: x-large;
 }
