@@ -108,7 +108,7 @@ public class Main {
 
     @Bean
     public ExecutorService executorService() {
-        return Executors.newCachedThreadPool();
+        return Executors.newFixedThreadPool(5);
     }
 
     public static void main(String[] args) {
