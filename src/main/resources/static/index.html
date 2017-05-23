@@ -20,7 +20,7 @@
 
     <div class="navbar">
         <div class="nav-center">
-            <a href="" ng-click="selectTab('All')"><img class="logo-img" src="fidn1.png"></a>
+            <a href="" ng-click="selectTab('All')"><img class="logo-img" src="fidn1.png"></a><br />
             <div ng-repeat="(tabName, _) in tabs" class="tab-button {{selectedTabName == tabName ? 'selected' : ''}} {{((documents | filter:withTab(tabName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="selectTab(tabName)">
                 {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName) | filter:{read:false}).length) > 0">({{(documents | filter:withTab(tabName) | filter:{read:false}).length}})</span>
             </div>

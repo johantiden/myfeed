@@ -24,7 +24,7 @@ a {
     width:100%;
     text-align: center;
     background-color: white;
-    border-bottom: 1px solid #1F1D95;
+    border-bottom: 1px solid steelblue;
     min-height: 50px;
 }
 
@@ -62,7 +62,7 @@ a {
 
 #mark-all-as-read-button {
     background-color: #EEEEEE;
-    border: 1px solid #1F1D95;
+    border: none;
     border-radius: 2px;
     cursor: pointer;
     padding: 20px 4px 20px 4px;
@@ -72,7 +72,7 @@ a {
     background-color: #DDDDDD;
     max-width: 60vw;
     /*border-top: 4px solid #FFEEDD;*/
-    border: 1px solid #1F1D95;
+    border: 1px solid lightgray;
     border-radius: 2px;
     padding-left: 50px;
     padding-right: 50px;
@@ -85,7 +85,7 @@ a {
 }
 
 .document-box:hover {
-    background-color: #8785E7;
+    background-color: darkgray;
 }
 
 .image-box {
@@ -110,8 +110,8 @@ a {
     right: 0;
     width: calc(100% - 8vw);
     cursor: auto;
-    border-left: 1px solid #1F1D95;
-    border-right: 1px solid #1F1D95;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
     background-color: white;
     padding: 3vw 4vw 3vw 4vw;
 }
@@ -172,15 +172,13 @@ div.text {
     padding: 20px 4px 20px 4px;
     margin: 1px;
     cursor: pointer;
-    background-color: #EEEEEE;
-    border: solid 1px #1F1D95;
+    border: none;
     text-align: center;
 }
 
 .tab-button.selected {
-    color: white;
-    text-decoration: underline;
-    background-color: #1F1D95;
+    color: steelblue;
+    font-weight:bold;
 }
 .tab-button.empty {
     display: none;
@@ -188,7 +186,7 @@ div.text {
 
 .number-badge {
     margin-left: -4px;
-    color: #888888;
+    color: lightgray;
 }
 
 .inf-scroll {
