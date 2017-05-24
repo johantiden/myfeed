@@ -34,14 +34,11 @@ public class FeedReaderJob {
 
     @Scheduled(fixedRate = 500) // Restart if crashed
     public void myRunnable() {
-        executorService.submit(() -> {
-            while (true) {
-                rateLimiter.acquire();
-                Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
-                feed.ifPresent(f -> executorService.submit(() -> consume(f)));
-            }
-        });
-
+        while (true) {
+            rateLimiter.acquire();
+            Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
+            feed.ifPresent(f -> executorService.submit(() -> consume(f)));
+        }
     }
 
     private void consume(Feed feed) {
