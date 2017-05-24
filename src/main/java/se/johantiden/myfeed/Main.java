@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.SchedulingConfigurer;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.FeedRepository;
 import se.johantiden.myfeed.persistence.InboxRepository;
@@ -21,12 +24,13 @@ import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 @SpringBootApplication
 @EnableScheduling
-public class Main {
+@Configuration
+public class Main implements SchedulingConfigurer {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
@@ -106,9 +110,14 @@ public class Main {
         return new UserService();
     }
 
-    @Bean
-    public ExecutorService executorService() {
-        return Executors.newFixedThreadPool(5);
+    @Override
+    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+        taskRegistrar.setScheduler(executor());
+    }
+
+    @Bean(destroyMethod="shutdown")
+    public Executor executor() {
+        return Executors.newScheduledThreadPool(10);
     }
 
     public static void main(String[] args) {

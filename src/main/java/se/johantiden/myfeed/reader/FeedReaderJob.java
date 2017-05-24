@@ -15,7 +15,6 @@ import se.johantiden.myfeed.settings.GlobalSettings;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 @Component
@@ -27,18 +26,15 @@ public class FeedReaderJob {
     private FeedService feedService;
     @Autowired
     private InboxService inboxService;
-    @Autowired
-    private ExecutorService executorService;
 
     private final RateLimiter rateLimiter = RateLimiter.create(3);
 
-    @Scheduled(fixedRate = 500) // Restart if crashed
+    @Scheduled(fixedRate = 1000)
     public void myRunnable() {
-        while (true) {
-            rateLimiter.acquire();
-            Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
-            feed.ifPresent(f -> executorService.submit(() -> consume(f)));
-        }
+        log.info("ENTER FeedReaderJob");
+        Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
+        feed.ifPresent(this::consume);
+        log.info("EXIT  FeedReaderJob");
     }
 
     private void consume(Feed feed) {
