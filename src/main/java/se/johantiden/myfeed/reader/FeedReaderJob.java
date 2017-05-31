@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
@@ -29,7 +30,7 @@ public class FeedReaderJob {
 
     private final RateLimiter rateLimiter = RateLimiter.create(3);
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 100)
     public void myRunnable() {
         log.info("ENTER FeedReaderJob");
         Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
@@ -37,7 +38,9 @@ public class FeedReaderJob {
         log.info("EXIT  FeedReaderJob");
     }
 
+    @Async
     private void consume(Feed feed) {
+        log.info("  ENTER FeedReaderJob.consume");
 
         List<Document> documents = FeedReaderService.readAll(feed);
 
@@ -52,6 +55,9 @@ public class FeedReaderJob {
                     feed.getName(), filtered.size(), documents.size()-filtered.size(), oldestInstantDebug(filtered));
         }
         inboxService.putIfNew(filtered);
+
+        log.info("  EXIT  FeedReaderJob.consume");
+
     }
 
     private static String oldestInstantDebug(List<Document> filtered) {

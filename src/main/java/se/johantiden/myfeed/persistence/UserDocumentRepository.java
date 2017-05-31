@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.persistence;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.util.Chrono;
 
@@ -7,7 +8,6 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -21,21 +21,18 @@ public class UserDocumentRepository implements Serializable {
     public static final transient Comparator<UserDocument> YOUNGEST_FIRST =
             Comparator.comparing((Function<UserDocument, Instant> & Serializable)UserDocument::getPublishDate).reversed();
 
-    private final HashMap<Username, SortedSet<UserDocument>> map;
-
-    public UserDocumentRepository() {
-        map = new HashMap<>();
-    }
+    @Autowired
+    public DB db;
 
     public final SortedSet<UserDocument> getAllKeys(Username user) {
         return getOrCreateSetForUser(user);
     }
 
     private SortedSet<UserDocument> getOrCreateSetForUser(Username userKey) {
-        if (!map.containsKey(userKey)) {
-            map.put(userKey, createNewUserSet());
+        if (!db.userDocuments.containsKey(userKey)) {
+            db.userDocuments.put(userKey, createNewUserSet());
         }
-        return map.get(userKey);
+        return db.userDocuments.get(userKey);
     }
 
     public static TreeSet<UserDocument> createNewUserSet() {
@@ -55,7 +52,7 @@ public class UserDocumentRepository implements Serializable {
     public long purgeOlderThan(Duration duration) {
 
         int removed = 0;
-        for (SortedSet<UserDocument> set : map.values()) {
+        for (SortedSet<UserDocument> set : db.userDocuments.values()) {
             int sizeBefore = set.size();
             set.removeIf(olderThan(duration));
             int sizeAfter = set.size();
@@ -77,9 +74,9 @@ public class UserDocumentRepository implements Serializable {
 
     @Override
     public final String toString() {
-        int size = map.isEmpty() ? 0 : map.values().iterator().next().size();
+        int size = db.userDocuments.isEmpty() ? 0 : db.userDocuments.values().iterator().next().size();
         return "UserDocumentRepository{" +
-                " users: " + map.size()+
+                " users: " + db.userDocuments.size()+
                 ", size:" + size +
                 '}';
     }

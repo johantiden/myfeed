@@ -9,14 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import se.johantiden.myfeed.persistence.DB;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.FeedRepository;
 import se.johantiden.myfeed.persistence.InboxRepository;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.persistence.file.BaseSaver;
-import se.johantiden.myfeed.persistence.file.DocumentRepositorySaver;
-import se.johantiden.myfeed.persistence.file.UserDocumentRepositorySaver;
 import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
@@ -36,22 +35,8 @@ public class Main implements SchedulingConfigurer {
 
     @Bean
     public DocumentRepository documentRepository() {
-        Optional<DocumentRepository> loaded = documentRepositorySaver().load();
-        if (loaded.isPresent()) {
-            log.info("Loaded documents {}", loaded.get().size());
-        }
-
-        return loaded.orElse(new DocumentRepository());
-    }
-
-    @Bean
-    public DocumentRepositorySaver documentRepositorySaver() {
-        return new DocumentRepositorySaver();
-    }
-
-    @Bean
-    public UserDocumentRepositorySaver userDocumentRepositorySaver() {
-        return new UserDocumentRepositorySaver(baseSaver());
+        DocumentRepository documentRepository = new DocumentRepository(db());
+        return documentRepository;
     }
 
     @Bean
@@ -89,20 +74,22 @@ public class Main implements SchedulingConfigurer {
         return new InboxRepository();
     }
 
-    @Bean
-    public BaseSaver baseSaver() {
-        return new BaseSaver();
-    }
 
     @Bean
     public UserDocumentRepository userDocumentRepository() {
+        return new UserDocumentRepository();
+    }
 
-
-        Optional<UserDocumentRepository> loaded = userDocumentRepositorySaver().load();
+    @Bean
+    public DB db() {
+        Optional<DB> loaded = BaseSaver.load(BaseSaver.DB);
         if (loaded.isPresent()) {
-            log.info("Loaded userdocuments {}", loaded.get());
+            log.info("Loaded database");
+            DB db = loaded.get();
+            return db;
         }
-        return loaded.orElse(new UserDocumentRepository());
+        log.info("No database file found. Creating fresh.");
+        return new DB();
     }
 
     @Bean
@@ -123,4 +110,5 @@ public class Main implements SchedulingConfigurer {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
+
 }

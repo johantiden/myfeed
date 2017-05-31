@@ -1,47 +1,46 @@
 package se.johantiden.myfeed.persistence;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.util.Chrono;
 
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class DocumentRepository implements Serializable {
+public class DocumentRepository {
 
-    private static final long serialVersionUID = -4911338149956359732L;
+    @Autowired
+    public DB db;
 
-    private final Map<Key<Document>, Document> map;
-
-    public DocumentRepository() {
-        this.map = new HashMap<>();
+    public DocumentRepository(DB db) {
+        this.db = db;
+        resetSubjects();
     }
 
     public final void put(Document document) {
-        map.put(document.getKey(), document);
+        db.documents.put(document.getKey(), document);
     }
 
     public final Optional<Document> find(Key<Document> documentKey) {
-        return Optional.ofNullable(map.get(documentKey));
+        return Optional.ofNullable(db.documents.get(documentKey));
     }
 
     public List<Document> find(Predicate<Document> predicate) {
-        return map.values().stream().filter(predicate).collect(Collectors.toList());
+        return db.documents.values().stream().filter(predicate).collect(Collectors.toList());
     }
 
     public final long purgeOlderThan(Duration duration) {
 
-        List<Map.Entry<Key<Document>, Document>> toBeRemoved = map.entrySet().stream()
+        List<Map.Entry<Key<Document>, Document>> toBeRemoved = db.documents.entrySet().stream()
                 .filter(isOlderThan(duration))
                 .collect(Collectors.toList());
 
-        toBeRemoved.forEach(e -> map.remove(e.getKey()));
+        toBeRemoved.forEach(e -> db.documents.remove(e.getKey()));
 
         return toBeRemoved.size();
     }
@@ -54,15 +53,11 @@ public class DocumentRepository implements Serializable {
     }
 
     public final void purge(Key<Document> documentKey) {
-        map.remove(documentKey);
+        db.documents.remove(documentKey);
     }
 
-    public final int size() {
-        return map.size();
-    }
-
-    public void resetSubjects() {
-        map.values().stream()
+    public final void resetSubjects() {
+        db.documents.values().stream()
                 .forEach(d -> {
                     d.subjects.clear();
                     d.tab = null;

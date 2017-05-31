@@ -20,10 +20,9 @@ import static java.nio.file.StandardOpenOption.WRITE;
 
 public class BaseSaver {
     private static final Logger log = LoggerFactory.getLogger(BaseSaver.class);
-    public static final Path DOCUMENTS = new File("myfeed.documents.json").toPath();
-    public static final Path USER_DOCUMENTS = new File("myfeed.userdocuments.json").toPath();
+    public static final Path DB = new File("db.bin").toPath();
 
-    public <T> Optional<T> load(Path path) {
+    public static <T> Optional<T> load(Path path) {
 
         if (!Files.exists(path)) {
             return Optional.empty();
