@@ -104,7 +104,7 @@ public class Main implements SchedulingConfigurer {
 
     @Bean(destroyMethod="shutdown")
     public Executor executor() {
-        return Executors.newScheduledThreadPool(10);
+        return Executors.newScheduledThreadPool(5);
     }
 
     public static void main(String[] args) {

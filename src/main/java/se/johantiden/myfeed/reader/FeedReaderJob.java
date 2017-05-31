@@ -1,6 +1,5 @@
 package se.johantiden.myfeed.reader;
 
-import com.google.common.util.concurrent.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,7 @@ public class FeedReaderJob {
     @Autowired
     private InboxService inboxService;
 
-    private final RateLimiter rateLimiter = RateLimiter.create(3);
-
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 60_000)
     public void myRunnable() {
         log.info("ENTER FeedReaderJob");
         Optional<Feed> feed = feedService.popOldestInvalidatedFeed();

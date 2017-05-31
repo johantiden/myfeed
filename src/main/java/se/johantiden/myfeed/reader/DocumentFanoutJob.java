@@ -30,7 +30,7 @@ public class DocumentFanoutJob {
     @Autowired
     private DocumentService documentService;
 
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 1000)
     public void consumeOne() {
         Optional<Document> documentOptional = inboxService.pop();
 

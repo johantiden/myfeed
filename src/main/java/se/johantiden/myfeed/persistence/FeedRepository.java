@@ -26,7 +26,7 @@ public class FeedRepository {
 
     public static final int REDDIT_MIN_SCORE = 20000;
     private List<Feed> allFeeds;
-    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(5);
+    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(10);
 
     @Autowired
     private UserRepository userRepository;
