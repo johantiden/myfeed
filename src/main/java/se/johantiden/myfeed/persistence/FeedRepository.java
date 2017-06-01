@@ -56,9 +56,9 @@ public class FeedRepository {
         feeds.add(new SVTPlugin(INVALIDATION_PERIOD).createFeed());
 
         feeds.add(createRss(
-                "Ars Technica",
-                "https://arstechnica.com/",
-                "http://feeds.arstechnica.com/arstechnica/index", INVALIDATION_PERIOD));
+                "tv-time",
+                "http://tv:5000",
+                "http://tv:5000/rss", Duration.ofDays(300)));
 
         feeds.add(createRss(
                 "New York Times - World",

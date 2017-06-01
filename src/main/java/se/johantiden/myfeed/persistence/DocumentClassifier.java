@@ -57,6 +57,7 @@ public class DocumentClassifier {
     private static final String NUMBER_OF_PEOPLE = "Number of People";
     public static final String NUTIDSTESTET = "nutidstestet";
     public static final String RESOR = "resor";
+    private static final String TORRENTS = "Torrents";
 
     private DocumentClassifier() {
     }
@@ -275,6 +276,10 @@ public class DocumentClassifier {
             return CULTURE;
         }
 
+        if(isTorrents(document)) {
+            return TORRENTS;
+        }
+
         if(isFun(document)) {
             return FUN;
         }
@@ -296,6 +301,11 @@ public class DocumentClassifier {
         }
 
         return UNMATCHED_TAB;
+    }
+
+    private static boolean isTorrents(Document d) {
+        DocumentMatcher m = new DocumentMatcher(d);
+        return m.isFromFeed("tv-time");
     }
 
     private static boolean isVäder(Document d) {
