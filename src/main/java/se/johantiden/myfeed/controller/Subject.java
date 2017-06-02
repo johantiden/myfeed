@@ -1,13 +1,10 @@
 package se.johantiden.myfeed.controller;
 
-import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 public class Subject implements Serializable {
 
@@ -40,5 +37,10 @@ public class Subject implements Serializable {
     @Override
     public int hashCode() {
         return title != null ? title.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +title +'}';
     }
 }

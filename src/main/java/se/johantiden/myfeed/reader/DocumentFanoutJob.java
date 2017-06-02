@@ -13,6 +13,7 @@ import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
+import se.johantiden.myfeed.settings.GlobalSettings;
 
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class DocumentFanoutJob {
     @Autowired
     private DocumentService documentService;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = GlobalSettings.FANOUT_INTERVAL)
     public void consumeOne() {
         Optional<Document> documentOptional = inboxService.pop();
 

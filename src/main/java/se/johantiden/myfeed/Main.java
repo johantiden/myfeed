@@ -36,6 +36,7 @@ public class Main implements SchedulingConfigurer {
     @Bean
     public DocumentRepository documentRepository() {
         DocumentRepository documentRepository = new DocumentRepository(db());
+        documentRepository.resetSubjects();
         return documentRepository;
     }
 

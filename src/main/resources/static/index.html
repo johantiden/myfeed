@@ -59,7 +59,7 @@
             <div class="text" ng-if="document.text && !document.html">{{document.text}}</div>
 
 
-            <span class="htmlContent" ng-if="!document.imageUrl && document.videos.length == 0" ng-bind-html="$sce.trustAsHtml(document.html)"></span>
+            <span class="htmlContent" ng-if="document.html" ng-bind-html="$sce.trustAsHtml(document.html)"></span>
             <div class="image-box" ng-if="document.imageUrl && document.videos.length == 0">
                 <a href="{{document.pageUrl}}">
                     <img class="image-box-image" src="{{document.imageUrl}}" />

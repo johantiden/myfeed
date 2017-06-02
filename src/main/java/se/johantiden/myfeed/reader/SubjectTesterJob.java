@@ -19,7 +19,7 @@ public class SubjectTesterJob {
     @Scheduled(fixedRate = 1000)
     public void testSubjects() {
 
-        List<Document> documents = documentService.find(d -> d.subjects.isEmpty() || d.tab == null);
+        List<Document> documents = documentService.find(d -> d.tab == null);
 
         documents.forEach(d -> {
             DocumentClassifier.appendUrlFoldersAsCategory(d);

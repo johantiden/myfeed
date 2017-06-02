@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.persistence;
 
+import com.gargoylesoftware.htmlunit.WaitingRefreshHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.user.UserRepository;
@@ -14,6 +15,7 @@ import se.johantiden.myfeed.plugin.RssPlugin;
 import se.johantiden.myfeed.plugin.SlashdotPlugin;
 import se.johantiden.myfeed.plugin.SvenskaDagbladetPlugin;
 import se.johantiden.myfeed.plugin.SVTPlugin;
+import se.johantiden.myfeed.plugin.WashingtonPostPlugin;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -70,16 +72,17 @@ public class FeedRepository {
                 "http://www.latimes.com",
                 "http://www.latimes.com/world/rss2.0.xml", INVALIDATION_PERIOD));
 
-        feeds.add(createRss(
+        feeds.add(new WashingtonPostPlugin(
                 "Washington Post - The Fact Checker",
                 "https://www.washingtonpost.com/news/fact-checker/",
-                "http://feeds.washingtonpost.com/rss/rss_fact-checker", INVALIDATION_PERIOD));
+                "http://feeds.washingtonpost.com/rss/rss_fact-checker", INVALIDATION_PERIOD)
+                    .createFeed());
 
-        feeds.add(createRss(
+        feeds.add(new WashingtonPostPlugin(
                 "Washington Post - WorldViews",
                 "https://www.washingtonpost.com/news/worldviews/",
-                "http://feeds.washingtonpost.com/rss/rss_blogpost", INVALIDATION_PERIOD));
-
+                "http://feeds.washingtonpost.com/rss/rss_blogpost", INVALIDATION_PERIOD)
+                    .createFeed());
 
         feeds.add(createReddit("r/worldnews", 1000));
         feeds.add(createReddit("r/AskReddit", 1000));

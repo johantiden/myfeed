@@ -27,7 +27,7 @@ public class FeedReaderJob {
     @Autowired
     private InboxService inboxService;
 
-    @Scheduled(fixedRate = 60_000)
+    @Scheduled(fixedRate = GlobalSettings.FEED_READER_INTERVAL)
     public void myRunnable() {
         log.info("ENTER FeedReaderJob");
         Optional<Feed> feed = feedService.popOldestInvalidatedFeed();

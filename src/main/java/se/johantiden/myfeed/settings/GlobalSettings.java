@@ -15,4 +15,6 @@ public class GlobalSettings {
         Instant publishDate = d.getPublishDate();
         return !Chrono.isOlderThan(DOCUMENT_MAX_AGE, publishDate);
     };
+    public static final int FANOUT_INTERVAL = 1000;
+    public static final int FEED_READER_INTERVAL = 60_000;
 }
