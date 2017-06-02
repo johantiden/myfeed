@@ -18,6 +18,11 @@ public final class UserRepository {
         put(Keys.user("karin"));
         put(Keys.user("bjon"));
         put(Keys.user("danne"));
+        put(Keys.user("lisa"));
+        put(Keys.user("test"));
+        put(Keys.user("test1"));
+        put(Keys.user("test2"));
+        put(Keys.user("test3"));
     }
 
     public void put(Username user) {
