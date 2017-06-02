@@ -1,7 +1,6 @@
 package se.johantiden.myfeed.persistence.user;
 
 import se.johantiden.myfeed.persistence.Username;
-import se.johantiden.myfeed.persistence.redis.Key;
 import se.johantiden.myfeed.persistence.redis.Keys;
 
 import java.util.ArrayList;

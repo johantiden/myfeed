@@ -353,6 +353,8 @@ public class DocumentClassifier {
             m.isFromFeed("Dagens Nyheter") && m.anyCategoryEquals("nyheter") ||
             m.isFromFeed("TheLocal") ||
             m.isFromFeed("Los Angeles Times - World") ||
+            m.isFromFeed("Washington Post - The Fact Checker") ||
+            m.isFromFeed("Washington Post - WorldViews") ||
             m.isFromFeed("Reddit - r/worldnews") ||
             m.anyCategoryEquals("worldnews") ||
             m.isFromFeed("Al Jazeera") && m.anyCategoryEquals("news", "insidestory", "opinion", "features", "indepth", "programmes") ||

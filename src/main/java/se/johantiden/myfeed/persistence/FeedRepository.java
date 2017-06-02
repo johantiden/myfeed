@@ -70,6 +70,16 @@ public class FeedRepository {
                 "http://www.latimes.com",
                 "http://www.latimes.com/world/rss2.0.xml", INVALIDATION_PERIOD));
 
+        feeds.add(createRss(
+                "Washington Post - The Fact Checker",
+                "https://www.washingtonpost.com/news/fact-checker/",
+                "http://feeds.washingtonpost.com/rss/rss_fact-checker", INVALIDATION_PERIOD));
+
+        feeds.add(createRss(
+                "Washington Post - WorldViews",
+                "https://www.washingtonpost.com/news/worldviews/",
+                "http://feeds.washingtonpost.com/rss/rss_blogpost", INVALIDATION_PERIOD));
+
 
         feeds.add(createReddit("r/worldnews", 1000));
         feeds.add(createReddit("r/AskReddit", 1000));
