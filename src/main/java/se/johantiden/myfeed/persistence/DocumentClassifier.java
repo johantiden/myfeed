@@ -66,6 +66,9 @@ public class DocumentClassifier {
     public static final String LIBERALERNA = "Liberalerna";
     public static final String FILIPPINERNA = "Filippinerna";
     public static final String RUSSIA = "Ryssland";
+    public static final String AFRIKA = "Afrika";
+    public static final String INRIKES = "Inrikes";
+    public static final String USA = "USA";
 
     private DocumentClassifier() {
     }
@@ -124,7 +127,7 @@ public class DocumentClassifier {
         if(m.has(SPOTIFY)) { s.add(s(SPOTIFY)); }
         if(m.has("Microsoft")) { s.add(s("Microsoft")); }
         if(m.has("Samsung")) { s.add(s("Samsung")); }
-        if(m.has("Apple")) { s.add(s("Apple")); }
+        if(m.hasCaseSensitive("Apple")) { s.add(s("Apple")); }
         if(m.has("block") && m.has("chain")) { s.add(s("Blockchain")); }
         if(m.has("Facebook")) { s.add(s("Facebook")); }
         if(m.has("Google")) { s.add(s("Google")); }
@@ -140,9 +143,6 @@ public class DocumentClassifier {
         if(m.has("Cholera") | m.has("Kolera")) { s.add(s("Kolera")); }
         if(m.has("IT-attacken", "Ransomware", "Cyberattack", "malware", "WanaCry", "WannaCry", "Hacker", "hacking", "IT-utpressning", "IT-angrepp", "Internet Security", "eternalblue", "botnet")) { s.add(s(IT_SÄKERHET)); }
         if(m.has("Brexit")) { s.add(s("Brexit")); }
-        if(m.has("Stockholm") || m.anyCategoryEquals("sthlm")) { s.add(s(STOCKHOLM)); }
-        if(anySubjectEquals(s, STOCKHOLM) || m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
-            s.add(s("Inrikes")); }
         if(m.has("Feministiskt initiativ")) { s.add(s("Feministiskt Initiativ")); }
         if((m.has("Miljöpartiet") || m.hasCaseSensitive(" MP ", " MP.")) && !anySubjectEquals(s, STORBRITANNIEN)) { s.add(s("Miljöpartiet")); }
         if(m.has(SVERIGEMOKRATERNA) && m.hasCaseSensitive("SD")) { s.add(s(SVERIGEMOKRATERNA)); }
@@ -168,7 +168,10 @@ public class DocumentClassifier {
         if(m.has("Socialdemokraterna") && !anySubjectEquals(s, TYSKLAND)) { s.add(s("Socialdemokraterna")); }
         if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(s(MAT)); }
         if(m.anyCategoryEquals("gaming")) { s.add(s("Gaming")); }
-
+        if(m.feedStartsWith("Reddit")) {
+            String redditCategory = d.categories.get(0).name;
+            s.add(s(redditCategory));
+        }
 
         // Badness:
         if(m.hasCaseSensitive(NEWS_GRID)) { s.add(s(NEWS_GRID)); }
@@ -240,11 +243,12 @@ public class DocumentClassifier {
 
     private static void addPlaces(List<Subject> s, DocumentMatcher m) {
         if(m.hasCaseSensitive("Cuba", "Kuba")) { s.add(s("Kuba")); }
-        if(m.hasCaseSensitive("Kamerun", "Cameroon")) { s.add(s("Kamerun")); }
-        if(m.hasCaseSensitive("Iraq", "Irak")) { s.add(s("Irak")); }
+        if(m.hasCaseSensitive("Iraq", "Irak", "Mosul")) {
+            s.add(s("Irak"));
+        }
         if(m.hasCaseSensitive("Oman")) { s.add(s("Oman")); }
 
-        if(m.has("Libyen", "Libya")) { s.add(s("Libyen")); }
+        addAfrica(s, m);
         if(m.has("Nepal")) { s.add(s("Nepal")); }
         if(m.has("Syria", "Syrien", "syrisk", "Syrier", "Damascus", "Damaskus")) { s.add(s("Syrien")); }
         if(m.has("Venezuela", "Maduro")) { s.add(s("Venezuela")); }
@@ -269,18 +273,16 @@ public class DocumentClassifier {
         if(m.has("Malaysia")) { s.add(s("Malaysia")); }
         if(m.has("France", "Frankrike", "Fransk", "French", "Paris")) { s.add(s("Frankrike")); }
         if(m.has("Australia")) { s.add(s("Australia")); }
-        if(m.has("Dutch", "Netherlands")) { s.add(s("Nederländerna")); }
+        if(m.has("Dutch", "Netherlands", "Nederländerna")) { s.add(s("Nederländerna")); }
         if(m.has("Italien")) { s.add(s("Italien")); }
         if(m.has("Tjeckien", "Tjeckisk", "Czech")) { s.add(s("Tjeckien")); }
         if(m.has("Kuwait")) { s.add(s("Kuwait")); }
         if(m.has("Saudi Arabia", "Saudiarabien")) { s.add(s("Saudiarabien")); }
-        if(m.has("Uganda")) { s.add(s("Uganda")); }
+        if(m.has("Qatar")) { s.add(s("Qatar")); }
         if(m.has("South Africa")) { s.add(s("Sydafrika")); }
         if(m.has("European Union") || m.hasCaseSensitive("EU")) { s.add(s("EU")); }
         if(m.has("Europe", "Europa")) { s.add(s("Europa")); }
-        if(m.has("Elfenbenskusten", "Ivory Coast", "Ivorian")) { s.add(s("Elfenbenskusten")); }
-        if(m.has(STORBRITANNIEN, "London", "England", "Britain", "Scotland", "British")) { s.add(s(STORBRITANNIEN)); }
-        if(m.hasCaseSensitive("US", "FBI") || m.has("america") && !m.has("south america") || m.has("U.S.", "america", "obama", "trump")) { s.add(s("USA")); }
+        addUsa(s, m);
         if(m.has("Mexiko", "Mexico", "Mexican")) { s.add(s("Mexico")); }
         if(m.has("Turkey", "Turkish", "Turkiet", "Recep Tayyip Erdogan", "Istanbul")) { s.add(s("Turkiet")); }
         if(m.has("Greece", "Greek", "Grekland", "Grek")) { s.add(s("Grekland")); }
@@ -290,14 +292,10 @@ public class DocumentClassifier {
         if(m.has("South Sudan")) { s.add(s("Sydsudan")); }
         if(m.has("Kiev", "Ukrain")) { s.add(s("Ukraina")); }
         if(m.has("Norge", "Norway", "norska")) { s.add(s("Norge")); }
-        if(m.has("Africa") || anySubjectEquals(s, "Angola", "Libyen")) { s.add(s("Africa")); }
-        if(m.has("Kongo-Kinshasa")) { s.add(s("Kongo-Kinshasa")); }
-        if(m.has("Angola")) { s.add(s("Angola")); }
         if(m.has("Taiwan")) { s.add(s("Taiwan")); }
         if(m.has("Israel", "West Bank")) { s.add(s("Israel")); }
         if(m.has("Schweiz")) { s.add(s("Schweiz")); }
         if(m.has("Ungern")) { s.add(s("Ungern")); }
-        if(m.has("Tunis")) { s.add(s("Tunisien")); }
         if(m.has("Portugal")) { s.add(s("Portugal")); }
         if(m.has("Japan")) { s.add(s("Japan")); }
         if(m.has("Argentin")) { s.add(s("Argentina")); }
@@ -308,16 +306,105 @@ public class DocumentClassifier {
         if(m.has("Pakistan", "Baloch")) { s.add(s("Pakistan")); }
         if(m.has("Manila", FILIPPINERNA, "Philippines")) { s.add(s(FILIPPINERNA)); }
         if(m.has("Irish", "Ireland", "Irland")) { s.add(s("Irland")); }
-        if(m.has("Morocco", "Marocko")) { s.add(s("Marocko")); }
         if(m.has("Belgien", "Belgium")) { s.add(s("Belgien")); }
+        if(m.has("Tibet")) { s.add(s("Tibet")); }
+        if(m.has("Montenegro")) { s.add(s("Montenegro")); }
 
-        if(m.has("Manchester")) { s.add(s("Manchester")); }
-        if(m.has("Bromma flygplats")) { s.add(s("Bromma flygplats")); }
+        addGreatBritain(s, m);
+        addSweden(s, m);
+    }
+
+    private static void addUsa(List<Subject> s, DocumentMatcher m) {
+        if(m.hasCaseSensitive("US", "FBI") || m.has("america") && !m.has("south america") || m.has("U.S.", "america", "obama", "trump")) {
+            s.add(s(USA));
+        }
+        if(m.has("Orlando")) {
+            s.add(s("Orlando"));
+            s.add((s(USA)));
+        }
+    }
+
+    private static void addGreatBritain(List<Subject> s, DocumentMatcher m) {
+        if(m.has("Manchester")) {
+            s.add(s("Manchester"));
+            s.add((s(STORBRITANNIEN)));
+        }
+        if(m.has(STORBRITANNIEN, "London", "England", "Britain", "Scotland", "British", "Britain")) {
+            s.add(s(STORBRITANNIEN));
+        }
+
+    }
+
+    private static void addSweden(List<Subject> s, DocumentMatcher m) {
         if(m.has("Gröna Lund")) {
             s.add(s("Gröna Lund"));
             s.add(s("Stockholm"));
+            s.add(s(INRIKES));
         }
-        if(m.has("Eskilstuna")) { s.add(s("Eskilstuna")); }
+        if(m.has("Eskilstuna")) {
+            s.add(s("Eskilstuna"));
+            s.add(s(INRIKES));
+        }
+        if(m.has("Bromma flygplats")) {
+            s.add(s("Bromma flygplats"));
+            s.add(s(INRIKES));
+        }
+        if(m.has("Kristianstad")) {
+            s.add(s("Kristianstad"));
+            s.add(s(INRIKES));
+        }
+        if(m.has("Arboga")) {
+            s.add(s("Arboga"));
+            s.add(s(INRIKES));
+        }
+        if(m.has("Stockholm") || m.anyCategoryEquals("sthlm")) {
+            s.add(s(STOCKHOLM));
+            s.add(s(INRIKES));
+        }
+        if(m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
+            s.add(s(INRIKES));
+        }
+    }
+
+    private static void addAfrica(List<Subject> s, DocumentMatcher m) {
+        if(m.has("Libyen", "Libya")) {
+            s.add(s("Libyen"));
+            s.add(s(AFRIKA));
+        }
+        if(m.has("Lesotho")) {
+            s.add(s("Lesotho"));
+            s.add(s(AFRIKA));
+        }
+        if(m.has("Morocco", "Marocko")) {
+            s.add(s("Marocko"));
+            s.add(s(AFRIKA));
+        }
+        if(m.has("Tunis")) {
+            s.add(s("Tunisien"));
+            s.add(s(AFRIKA));
+        }
+        if(m.has("Angola")) {
+            s.add(s("Angola"));
+            s.add(s(AFRIKA));
+        }
+
+        if(m.has("Kongo-Kinshasa")) {
+            s.add(s("Kongo-Kinshasa"));
+            s.add(s(AFRIKA));
+        }
+        if(m.has("Elfenbenskusten", "Ivory Coast", "Ivorian")) {
+            s.add(s("Elfenbenskusten"));
+            s.add(s(AFRIKA));
+        }
+        if(m.has("Uganda")) {
+            s.add(s("Uganda"));
+            s.add(s(AFRIKA));
+        }
+        if(m.hasCaseSensitive("Kamerun", "Cameroon")) {
+            s.add(s("Kamerun"));
+            s.add(s(AFRIKA));
+        }
+
     }
 
     private static boolean anySubjectEquals(List<Subject> subjects, String... matchAny) {

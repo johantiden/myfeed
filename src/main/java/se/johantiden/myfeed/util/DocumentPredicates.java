@@ -59,6 +59,10 @@ public class DocumentPredicates {
         return d -> d.feed.name.equals(feedName);
     }
 
+    public static Predicate<Document> feedNameStartsWith(String feedName) {
+        return d -> d.feed.name.startsWith(feedName);
+    }
+
     public static Predicate<Document> hasEscapeCharacters() {
         return has("&quot;").or(has("&#")).or(has("&amp;")).or(has("â€™"));
     }

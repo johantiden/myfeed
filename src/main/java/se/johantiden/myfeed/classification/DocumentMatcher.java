@@ -24,6 +24,10 @@ public class DocumentMatcher {
         return DocumentPredicates.isFromFeed(feedName).test(document);
     }
 
+    public boolean feedStartsWith(String match) {
+        return DocumentPredicates.feedNameStartsWith(match).test(document);
+    }
+
     public boolean startsWith(String string) {
         return DocumentPredicates.startsWith(string).test(document);
     }

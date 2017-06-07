@@ -55,9 +55,10 @@ public class IndexController {
                                 return tab
                                         .map(t -> {
                                             boolean isBad = DocumentClassifier.BAD.equals(t);
-                                            boolean isSport = DocumentClassifier.SPORT.equals(t);
-                                            boolean isKultur = DocumentClassifier.CULTURE.equals(t);
-                                            return !isBad && !isSport && !isKultur;
+                                            return !isBad;
+//                                            boolean isSport = DocumentClassifier.SPORT.equals(t);
+//                                            boolean isKultur = DocumentClassifier.CULTURE.equals(t);
+//                                            return !isBad && !isSport && !isKultur;
                                         })
                                         .orElse(false);
 
