@@ -48,7 +48,7 @@ public class DocumentPredicates {
     }
 
     public static Predicate<Document> anySubjectEquals(String string) {
-        return d -> d.subjects.stream().anyMatch(subject -> subject.getTitle().equalsIgnoreCase(string));
+        return d -> d.subjects.stream().anyMatch(subject -> subject.equalsIgnoreCase(string));
     }
 
     public static Predicate<Document> authorEquals(String string) {
@@ -56,11 +56,11 @@ public class DocumentPredicates {
     }
 
     public static Predicate<Document> isFromFeed(String feedName) {
-        return d -> d.feed.name.equals(feedName);
+        return d -> d.feed.getName().equals(feedName);
     }
 
     public static Predicate<Document> feedNameStartsWith(String feedName) {
-        return d -> d.feed.name.startsWith(feedName);
+        return d -> d.feed.getName().startsWith(feedName);
     }
 
     public static Predicate<Document> hasEscapeCharacters() {

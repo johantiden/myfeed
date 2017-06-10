@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedUser;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
@@ -43,12 +42,14 @@ public class DocumentFanoutJob {
 
     private void consume(Document document) {
         log.debug("DocumentFanJob consuming '{}'", document.pageUrl);
-        Feed feed = feedService.getFeed(document.getFeedKey());
-        feed.getFeedUsers().stream()
-                .map(FeedUser::getUser)
-                .forEach(user -> {
-                    log.debug("  -> {}", user);
-                    userDocumentService.putIfNew(new UserDocument(user, document.getKey(), document.publishedDate));
-                });
+        Optional<Feed> feed = feedService.getFeed(document.getFeed().getId());
+        feed.ifPresent(f -> {
+            f.getFeedUsers().stream()
+                    .forEach(user -> {
+                        log.debug("  -> {}", user);
+                        userDocumentService.put(new UserDocument(user, document));
+                    });
+        });
+
     }
 }

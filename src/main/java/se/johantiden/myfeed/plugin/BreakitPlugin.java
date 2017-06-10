@@ -4,7 +4,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.time.Duration;
 import java.util.List;
@@ -14,19 +13,20 @@ import java.util.stream.Collectors;
 
 public class BreakitPlugin implements Plugin {
 
+    public static final String URL = "http://www.breakit.se";
     private final Duration ttl;
 
     public BreakitPlugin(Duration ttl) {this.ttl = ttl;}
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl("Slashdot", ttl, this);
+        return new Feed("Slashdot", ttl, this, URL);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin("Breakit", "http://www.breakit.se", "http://www.breakit.se/feed/artiklar", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin("Breakit", URL, "http://www.breakit.se/feed/artiklar", ttl).createFeedReader(feed).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

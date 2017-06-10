@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.persistence.Video;
 
 import java.io.IOException;
@@ -36,14 +35,14 @@ public class RedditPlugin implements Plugin {
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl(getFeedName(), ttl, this, filter);
+        return new Feed(getFeedName(), ttl, this, getWebUrl());
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(getFeedName(), getWebUrl(), getRssUrl(), ttl, filter).createFeedReader(feed).readAllAvailable();
-            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
+            List<Document> documents = new RssPlugin(getFeedName(), getWebUrl(), getRssUrl(), ttl).createFeedReader(feed).readAllAvailable();
+            return documents.stream().map(createEntryMapper()).filter(filter).collect(Collectors.toList());
         };
     }
 

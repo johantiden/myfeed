@@ -2,25 +2,18 @@ package se.johantiden.myfeed.persistence;
 
 
 import se.johantiden.myfeed.controller.NameAndUrl;
-import se.johantiden.myfeed.controller.Subject;
-import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.redis.Keys;
 
-import java.io.Serializable;
+import javax.persistence.Entity;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Document implements Persistable<Document>, Serializable {
+@Entity
+public class Document extends BaseEntity {
 
-    private static final long serialVersionUID = 7281769259354137360L;
-
-    public final Key<Document> key;
-    public Key<Feed> feedKey;
-    public NameAndUrl feed;
-    public String tab;
+    public Feed feed;
     public String title;
     public final String text;
     public NameAndUrl author;
@@ -32,11 +25,13 @@ public class Document implements Persistable<Document>, Serializable {
     public Double score;
     public boolean isPaywalled;
     public List<Video> videos = new ArrayList<>();
-    public final List<Subject> subjects = new ArrayList<>();
+
+    public boolean subjectsParsed = false;
+    public String tab;
+    public final List<String> subjects = new ArrayList<>();
 
     public Document(
-            Key<Feed> feedKey,
-            NameAndUrl feed,
+            Feed feed,
             String title,
             String text,
             NameAndUrl author,
@@ -47,7 +42,6 @@ public class Document implements Persistable<Document>, Serializable {
             List<NameAndUrl> categories) {
 
         this.feed = feed;
-        this.feedKey = feedKey;
         this.title = title;
         this.text = text;
         this.author = author;
@@ -56,7 +50,6 @@ public class Document implements Persistable<Document>, Serializable {
         this.publishedDate = publishedDate;
         this.html = html;
         this.categories = Objects.requireNonNull(categories);
-        this.key = Keys.document(this.pageUrl);
     }
 
     public static String dateToShortString(Instant instant) {
@@ -90,13 +83,12 @@ public class Document implements Persistable<Document>, Serializable {
         return dateToShortString(publishedDate);
     }
 
-    public final Key<Feed> getFeedKey() {
-        return feedKey;
+    public String getTab() {
+        return tab;
     }
 
-    @Override
-    public final Key<Document> getKey() {
-        return key;
+    public final Feed getFeed() {
+        return feed;
     }
 
     public final Instant getPublishDate() {
@@ -107,7 +99,7 @@ public class Document implements Persistable<Document>, Serializable {
         return score;
     }
 
-    public List<Subject> getSubjects() {
+    public List<String> getSubjects() {
         return subjects;
     }
 }

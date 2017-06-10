@@ -35,12 +35,10 @@ public class RssFeedReader implements FeedReader {
     private final Feed feed;
     private final String rssUrl;
     private final String feedName;
-    private final String feedWebUrl;
 
-    public RssFeedReader(String rssUrl, String feedName, String feedWebUrl, Feed feed) {
+    public RssFeedReader(String rssUrl, String feedName, Feed feed) {
         this.feed = feed;
         this.feedName = feedName;
-        this.feedWebUrl = feedWebUrl;
         this.rssUrl = requireNonNull(rssUrl);
     }
 
@@ -78,10 +76,9 @@ public class RssFeedReader implements FeedReader {
                 throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
             }
 
-            NameAndUrl feed = new NameAndUrl(feedName, feedWebUrl);
             NameAndUrl author = new NameAndUrl(authorName, authorUrl);
 
-            Document document = new Document(this.feed.getKey(), feed, title, text, author, link, imageUrl, publishedDate, html, categories);
+            Document document = new Document(feed, title, text, author, link, imageUrl, publishedDate, html, categories);
 
             if(DocumentPredicates.hasEscapeCharacters().test(document)) {
                 throw new RuntimeException("Escape characters!");

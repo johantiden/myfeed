@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,19 +18,20 @@ import java.util.stream.Collectors;
 public class ReutersPlugin implements Plugin {
 
     private static final Logger log = LoggerFactory.getLogger(ReutersPlugin.class);
+    public static final String URL = "http://www.reuters.com/news/world";
     private final Duration ttl;
 
     public ReutersPlugin(Duration ttl) {this.ttl = ttl;}
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl("Slashdot", ttl, this);
+        return new Feed("Slashdot", ttl, this, URL);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin("Reuters - World", "http://www.reuters.com/news/world", "http://feeds.reuters.com/Reuters/worldNews", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin("Reuters - World", URL, "http://feeds.reuters.com/Reuters/worldNews", ttl).createFeedReader(feed).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

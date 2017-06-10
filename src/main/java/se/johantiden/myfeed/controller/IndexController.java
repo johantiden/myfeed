@@ -11,18 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.DocumentClassifier;
+import se.johantiden.myfeed.persistence.User;
 import se.johantiden.myfeed.persistence.UserDocument;
-import se.johantiden.myfeed.persistence.Username;
-import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.redis.Keys;
+import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,46 +34,29 @@ public class IndexController {
     private UserDocumentService userDocumentService;
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/rest/index/{username}")
-    public Collection<String> index(
+    public Collection<Long> index(
             @PathVariable("username") String username) {
 
         log.info("User: " + username);
-        Username user = Keys.user(username);
+        Optional<User> userOptional = userService.find(username);
 
-        SortedSet<UserDocument> allUserDocuments = userDocumentService.getAllDocumentsFor(user);
+        User user = userOptional.orElseGet(() -> userService.create(username));
 
+        Set<Long> userDocumentIds = userDocumentService.getDocumentIdsFor(user.getId());
 
-        List<String> keys = allUserDocuments.stream()
-                            .filter(UserDocument::isUnread)
-                            .filter(ud -> {
-                                Optional<String> tab = documentService.find(ud.getDocumentKey()).flatMap(d -> Optional.ofNullable(d.tab));
+        log.info("index User:{}, keys:{}", username, userDocumentIds.size());
 
-                                return tab
-                                        .map(t -> {
-                                            boolean isBad = DocumentClassifier.BAD.equals(t);
-                                            return !isBad;
-//                                            boolean isSport = DocumentClassifier.SPORT.equals(t);
-//                                            boolean isKultur = DocumentClassifier.CULTURE.equals(t);
-//                                            return !isBad && !isSport && !isKultur;
-                                        })
-                                        .orElse(false);
-
-                            })
-                            .map(UserDocument::getKey)
-                            .map(Object::toString)
-                            .collect(Collectors.toList());
-
-        log.info("index User:{}, keys:{}", username, keys.size());
-
-        return keys;
+        return userDocumentIds;
     }
 
-    @RequestMapping("/rest/userdocument/{userDocumentKey}")
-    public DocumentBean userDocument(@PathVariable("userDocumentKey") String userDocumentKey) {
+    @RequestMapping("/rest/userdocument/{userDocumentId}")
+    public DocumentBean userDocument(@PathVariable("userDocumentId") Long userDocumentId) {
 
-        Optional<DocumentBean> documentBean = tryFindUserDocument(userDocumentKey);
+        Optional<DocumentBean> documentBean = tryFindUserDocument(userDocumentId);
 
         if (!documentBean.isPresent()) {
             throw new NotFound404("Not found");
@@ -84,21 +65,19 @@ public class IndexController {
         return documentBean.get();
     }
 
-    private Optional<DocumentBean> tryFindUserDocument(@PathVariable("userDocumentKey") String userDocumentKey) {
-        String user = userDocumentKey.split(":")[0];
-        Username userKey = Keys.user(user);
-        Optional<UserDocument> documentOptional = userDocumentService.get(userKey, Key.<UserDocument>create(userDocumentKey));
+    private Optional<DocumentBean> tryFindUserDocument(@PathVariable("userDocumentId") Long userDocumentId) {
+        Optional<UserDocument> userDocumentOptional = userDocumentService.find(userDocumentId);
 
-        Optional<Document> document = documentOptional.flatMap(ud -> documentService.find(ud.getDocumentKey()));
+        Optional<Document> document = userDocumentOptional.map(UserDocument::getDocument);
 
-        return document.map(d -> new DocumentBean(documentOptional.get(), d));
+        return document.map(d -> new DocumentBean(userDocumentOptional.get(), d));
     }
 
     @RequestMapping("/rest/userdocuments")
-    public List<DocumentBean> userDocumentsMulti(@RequestParam("keys") List<String> keys) {
+    public List<DocumentBean> userDocumentsMulti(@RequestParam("keys") List<Long> userDocumentIds) {
 
 
-        return keys.stream()
+        return userDocumentIds.stream()
                 .map(this::tryFindUserDocument)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

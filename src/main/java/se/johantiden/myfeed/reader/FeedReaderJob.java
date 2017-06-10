@@ -42,7 +42,6 @@ public class FeedReaderJob {
         List<Document> documents = FeedReaderService.readAll(feed);
 
         List<Document> filtered = documents.stream()
-                .filter(feed.getFilter())
                 .filter(GlobalSettings.DOCUMENT_MAX_AGE_PREDICATE)
                 .collect(Collectors.toList());
 

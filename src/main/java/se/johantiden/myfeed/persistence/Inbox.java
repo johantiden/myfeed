@@ -1,11 +1,9 @@
 package se.johantiden.myfeed.persistence;
 
-import se.johantiden.myfeed.persistence.redis.Key;
-
 import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class InboxRepository {
+public class Inbox {
 
     private final LinkedBlockingQueue<Document> inbox = new LinkedBlockingQueue<>();
 
@@ -19,12 +17,11 @@ public class InboxRepository {
         inbox.offer(document);
     }
 
-    public Optional<Document> find(Key<Document> documentKey) {
-        return inbox.stream().filter(d -> d.getKey().equals(documentKey)).findAny();
+    public Optional<Document> find(long documentId) {
+        return inbox.stream().filter(d -> d.getId() == documentId).findAny();
     }
 
-    public boolean hasDocument(Key<Document> key) {
-        return inbox.stream()
-                .anyMatch(d -> d.getKey().equals(key));
+    public boolean hasDocument(long documentId) {
+        return find(documentId).isPresent();
     }
 }

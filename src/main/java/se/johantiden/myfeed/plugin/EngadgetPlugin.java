@@ -4,7 +4,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.time.Duration;
 import java.util.List;
@@ -14,19 +13,20 @@ import java.util.stream.Collectors;
 
 public class EngadgetPlugin implements Plugin {
 
+    public static final String URL = "https://www.engadget.com";
     private final Duration ttl;
 
     public EngadgetPlugin(Duration ttl) {this.ttl = ttl;}
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl("Engadget", ttl, this);
+        return new Feed("Engadget", ttl, this, URL);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin("Engadget", "https://www.engadget.com", "https://www.engadget.com/rss.xml", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin("Engadget", URL, "https://www.engadget.com/rss.xml", ttl).createFeedReader(feed).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

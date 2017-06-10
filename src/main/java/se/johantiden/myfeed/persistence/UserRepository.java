@@ -3,10 +3,9 @@ package se.johantiden.myfeed.persistence;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.Optional;
 
 @Transactional
-public interface DocumentRepository extends CrudRepository<Document, Long> {
-
-    List<Document> findDocumentsNotUnparsedSubjects();
+public interface UserRepository extends CrudRepository<User, Long> {
+    User findOneByUsername(String username);
 }

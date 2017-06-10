@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +21,7 @@ public class DagensNyheterPlugin implements Plugin {
 
     private static final Logger log = LoggerFactory.getLogger(DagensNyheterPlugin.class);
     private static final String DAGENS_NYHETER = "Dagens Nyheter";
+    public static final String URL = "https://www.dn.se";
 
     private final Duration ttl;
 
@@ -31,13 +31,13 @@ public class DagensNyheterPlugin implements Plugin {
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl(DAGENS_NYHETER, ttl, this);
+        return new Feed(DAGENS_NYHETER, ttl, this, URL);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(feed.getName(), "https://www.dn.se", "http://www.dn.se/nyheter/rss/", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssPlugin(feed.getName(), URL, "http://www.dn.se/nyheter/rss/", ttl).createFeedReader(feed).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

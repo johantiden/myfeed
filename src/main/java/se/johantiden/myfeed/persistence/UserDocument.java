@@ -1,29 +1,38 @@
 package se.johantiden.myfeed.persistence;
 
-import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.redis.Keys;
-
-import java.io.Serializable;
-import java.time.Instant;
+import javax.persistence.Entity;
 import java.util.Objects;
 
-public class UserDocument implements Persistable<UserDocument>, Serializable {
 
-    private static final long serialVersionUID = 3545729809583935357L;
 
-    private final Instant publishDate;
-    private final Username userKey;
-    private final Key<Document> documentKey;
+/*
+* .filter(UserDocument::isUnread)
+                            .filter(ud -> {
+                                Optional<String> tab = documentService.find(ud.getDocumentKey()).flatMap(d -> Optional.ofNullable(d.tab));
+
+                                return tab
+                                        .map(t -> {
+                                            boolean isBad = DocumentClassifier.BAD.equals(t);
+                                            return !isBad;
+//                                            boolean isSport = DocumentClassifier.SPORT.equals(t);
+//                                            boolean isKultur = DocumentClassifier.CULTURE.equals(t);
+//                                            return !isBad && !isSport && !isKultur;
+                                        })
+                                        .orElse(false);
+
+                            })
+* */
+
+@Entity
+public class UserDocument extends BaseEntity {
+
+    private final User user;
+    private final Document document;
     private boolean read;
 
-    public UserDocument(Username userKey, Key<Document> documentKey, Instant publishDate) {
-        this.publishDate = publishDate;
-        this.userKey = Objects.requireNonNull(userKey);
-        this.documentKey = Objects.requireNonNull(documentKey);
-    }
-
-    public final Instant getPublishDate() {
-        return publishDate;
+    public UserDocument(User user, Document document) {
+        this.user = Objects.requireNonNull(user);
+        this.document = Objects.requireNonNull(document);
     }
 
     public final void setRead(boolean read) {
@@ -38,16 +47,11 @@ public class UserDocument implements Persistable<UserDocument>, Serializable {
         return !read;
     }
 
-    @Override
-    public final Key<UserDocument> getKey() {
-        return Keys.userDocument(userKey, documentKey);
+    public User getUser() {
+        return user;
     }
 
-    public final Username getUserKey() {
-        return userKey;
-    }
-
-    public final Key<Document> getDocumentKey() {
-        return documentKey;
+    public Document getDocument() {
+        return document;
     }
 }

@@ -5,11 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import se.johantiden.myfeed.persistence.User;
 import se.johantiden.myfeed.persistence.UserService;
-import se.johantiden.myfeed.persistence.Username;
 import se.johantiden.myfeed.service.UserDocumentService;
-
-import java.util.Collection;
 
 @Component
 public class DocumentPurgeReadJob {
@@ -25,10 +23,10 @@ public class DocumentPurgeReadJob {
     public void purgeRead() {
         log.debug("Purging read documents!");
 
-        Collection<Username> users = userService.getAllUsers();
+        Iterable<User> users = userService.getAllUsers();
 
-        for (Username user : users) {
-            long removed = userDocumentService.purgeReadDocuments(user);
+        for (User user : users) {
+            long removed = userDocumentService.purgeReadDocuments(user.getId());
             log.debug("Removed {} UserDocuments for {}", removed, user);
         }
     }

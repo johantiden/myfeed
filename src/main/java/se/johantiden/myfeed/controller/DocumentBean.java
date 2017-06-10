@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.controller;
 
 import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.Video;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class DocumentBean {
 
-    public final String userDocumentKey;
+    public final long userDocumentId;
     public final NameAndUrl feed;
     public final List<NameAndUrl> categories;
     public final String title;
@@ -31,7 +32,7 @@ public class DocumentBean {
     public DocumentBean(UserDocument userDocument, Document document) {
         verifyHtml(document.feed, document.html);
 
-        this.feed = document.feed;
+        this.feed = new NameAndUrl(document.feed.getName(), document.feed.getUrl());
         this.categories = document.categories;
         this.title = document.title;
         this.text = document.text;
@@ -42,18 +43,18 @@ public class DocumentBean {
         this.html = document.html;
         this.read = userDocument.isRead();
         this.score = document.score;
-        this.userDocumentKey = userDocument.getKey().toString();
+        this.userDocumentId = userDocument.getId();
         this.videos = new ArrayList<>(document.videos);
         this.tab = document.tab;
-        this.subjects = document.getSubjects().stream().map(Subject::getTitle).collect(Collectors.toList());
+        this.subjects = document.getSubjects();
     }
 
-    private void verifyHtml(NameAndUrl feed, String html) {
+    private void verifyHtml(Feed feed, String html) {
         if (html == null) {
             return;
         }
 
-        if (feed.name.contains("xkcd")) {
+        if (feed.getName().contains("xkcd")) {
             return;
         }
 
@@ -118,8 +119,8 @@ public class DocumentBean {
         return score;
     }
 
-    public final String getUserDocumentKey() {
-        return userDocumentKey;
+    public final long getUserDocumentId() {
+        return userDocumentId;
     }
 
     public final List<Video> getVideos() {
@@ -164,7 +165,7 @@ public class DocumentBean {
     @Override
     public final String toString() {
         return "DocumentBean{" +
-                "userDocumentKey='" + userDocumentKey + '\'' +
+                "userDocumentId='" + userDocumentId + '\'' +
                 ", feed=" + feed +
                 ", categories=" + categories +
                 ", title='" + title + '\'' +

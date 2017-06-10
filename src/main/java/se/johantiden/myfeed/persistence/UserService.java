@@ -1,16 +1,25 @@
 package se.johantiden.myfeed.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import se.johantiden.myfeed.persistence.user.UserRepository;
 
-import java.util.Collection;
+import java.util.Optional;
 
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    public Collection<Username> getAllUsers() {
-        return userRepository.getAllUsers();
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> find(String username) {
+        return Optional.ofNullable(userRepository.findOneByUsername(username));
+    }
+
+    public User create(String username) {
+        User user = new User(username);
+        userRepository.save(user);
+        return user;
     }
 }

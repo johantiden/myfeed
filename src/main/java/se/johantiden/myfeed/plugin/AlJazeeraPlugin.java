@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 public class AlJazeeraPlugin implements Plugin {
 
     private static final Logger log = LoggerFactory.getLogger(AlJazeeraPlugin.class);
+    public static final String URL = "http://www.aljazeera.com";
     private final Duration invalidationPeriod;
 
     public AlJazeeraPlugin(Duration invalidationPeriod) {
@@ -27,13 +27,13 @@ public class AlJazeeraPlugin implements Plugin {
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl("Al Jazeera", invalidationPeriod, this);
+        return new Feed("Al Jazeera", invalidationPeriod, this, URL);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin("Al Jazeera", "http://www.aljazeera.com", "http://www.aljazeera.com/xml/rss/all.xml", invalidationPeriod)
+            List<Document> documents = new RssPlugin("Al Jazeera", URL, "http://www.aljazeera.com/xml/rss/all.xml", invalidationPeriod)
                                        .createFeedReader(createFeed()).readAllAvailable();
             return documents.stream()
                    .map(docMapper())

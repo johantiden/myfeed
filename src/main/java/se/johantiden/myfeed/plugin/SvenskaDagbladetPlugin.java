@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,20 +22,24 @@ public class SvenskaDagbladetPlugin implements Plugin {
     private static final Logger log = LoggerFactory.getLogger(SvenskaDagbladetPlugin.class);
     public static final String SVENSKA_DAGBLADET = "Svenska Dagbladet";
     private static final Predicate<Document> FILTER = d -> !d.isPaywalled;
+    public static final String URL = "https://www.svd.se";
     private final Duration ttl;
 
     public SvenskaDagbladetPlugin(Duration ttl) {this.ttl = ttl;}
 
     @Override
     public final Feed createFeed() {
-        return new FeedImpl(SVENSKA_DAGBLADET, ttl, this, FILTER);
+        return new Feed(SVENSKA_DAGBLADET, ttl, this, URL);
     }
 
     @Override
     public final FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(SVENSKA_DAGBLADET, "https://www.svd.se", "https://www.svd.se/?service=rss", ttl, FILTER).createFeedReader(feed).readAllAvailable();
-            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
+            List<Document> documents = new RssPlugin(SVENSKA_DAGBLADET, URL, "https://www.svd.se/?service=rss", ttl).createFeedReader(feed).readAllAvailable();
+            return documents.stream()
+                    .map(createEntryMapper())
+                    .filter(FILTER)
+                    .collect(Collectors.toList());
         };
     }
 
@@ -47,7 +50,7 @@ public class SvenskaDagbladetPlugin implements Plugin {
             if(!document.isPaywalled) {
                 document.categories = document.categories.stream()
                                       .filter(c -> c.url == null)
-                                      .map(c -> new NameAndUrl(c.name, document.feed.url + "/" + c.name))
+                                      .map(c -> new NameAndUrl(c.name, document.feed.getUrl() + "/" + c.name))
                                       .collect(Collectors.toList());
 
                 document.imageUrl = findImage(document);

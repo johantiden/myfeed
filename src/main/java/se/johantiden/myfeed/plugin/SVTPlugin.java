@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +19,7 @@ public class SVTPlugin implements Plugin {
 
     private static final Logger log = LoggerFactory.getLogger(SVTPlugin.class);
     public static final String SVT_NYHETER = "SVT Nyheter";
+    public static final String URL = "https://www.svt.se/nyheter";
     private final Duration invalidationPeriod;
 
     public SVTPlugin(Duration invalidationPeriod) {
@@ -40,18 +40,18 @@ public class SVTPlugin implements Plugin {
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl(SVT_NYHETER, invalidationPeriod, this, notIsLokalaNyheter());
+        return new Feed(SVT_NYHETER, invalidationPeriod, this, URL);
     }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(SVT_NYHETER, "https://www.svt.se/nyheter", "https://www.svt.se/nyheter/rss.xml", invalidationPeriod, notIsLokalaNyheter())
+            List<Document> documents = new RssPlugin(SVT_NYHETER, URL, "https://www.svt.se/nyheter/rss.xml", invalidationPeriod)
                                        .createFeedReader(createFeed()).readAllAvailable();
             return documents.stream()
-                   .filter(notIsLokalaNyheter())
-                   .map(docMapper())
-                   .collect(Collectors.toList());
+                    .map(docMapper())
+                    .filter(notIsLokalaNyheter())
+                    .collect(Collectors.toList());
         };
     }
 

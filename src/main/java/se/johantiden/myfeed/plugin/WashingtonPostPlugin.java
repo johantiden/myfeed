@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -34,7 +33,7 @@ public class WashingtonPostPlugin implements Plugin {
 
     @Override
     public Feed createFeed() {
-        return new FeedImpl(feedName, invalidationPeriod, this);
+        return new Feed(feedName, invalidationPeriod, this, webUrl);
     }
 
     @Override
