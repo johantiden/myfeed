@@ -46,7 +46,7 @@ public class IndexController {
 
         User user = userOptional.orElseGet(() -> userService.create(username));
 
-        Set<Long> userDocumentIds = userDocumentService.getDocumentIdsFor(user.getId());
+        Set<Long> userDocumentIds = userDocumentService.getReadyUserDocumentIdsFor(user.getId());
 
         log.info("index User:{}, keys:{}", username, userDocumentIds.size());
 

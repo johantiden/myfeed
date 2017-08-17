@@ -1,5 +1,7 @@
 package se.johantiden.myfeed.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentRepository;
@@ -9,11 +11,20 @@ import java.util.Optional;
 
 public class DocumentService {
 
+    private static final Logger log = LoggerFactory.getLogger(DocumentService.class);
     @Autowired
     private DocumentRepository documentRepository;
 
     public void resetSubjects() {
-        throw new RuntimeException("Not implemented");
+//        Objects.requireNonNull(documentRepository);
+//
+//        documentRepository.findAll().forEach(d -> {
+//            d.getSubjects().clear();
+//            d.getTabs().clear();
+//            d.setTabsParsed(false);
+//            d.setSubjectsParsed(false);
+//        });
+        log.warn("resetSubjects NOT IMPLEMENTED");
     }
 
     public void put(Iterable<Document> documents) {
@@ -21,15 +32,17 @@ public class DocumentService {
     }
 
     public void put(Document document) {
-        Optional<Document> optional = Optional.ofNullable(documentRepository.findOne(document.getId()));
-        if(optional.isPresent()) {
-            merge(optional.get(), document);
+        if (document.getId() != null) {
+            Optional<Document> optional = Optional.ofNullable(documentRepository.findOne(document.getId()));
+            if (optional.isPresent()) {
+                merge(optional.get(), document);
+            }
         }
         documentRepository.save(document);
     }
 
     private void merge(Document existing, Document newDocument) {
-        throw new RuntimeException("Not implemented");
+        documentRepository.save(newDocument);
     }
 
     public boolean hasDocument(long documentId) {
@@ -40,8 +53,12 @@ public class DocumentService {
         return Optional.ofNullable(documentRepository.findOne(documentId));
     }
 
-    public List<Document> findDocumentsNotUnparsedSubjects() {
-        return documentRepository.findDocumentsNotUnparsedSubjects();
+    public List<Document> findDocumentsNotParsedSubjects() {
+        return documentRepository.findDocumentsNotParsedSubjects();
+    }
+
+    public List<Document> findDocumentsNotParsedTabs() {
+        return documentRepository.findDocumentsNotParsedTabs();
     }
 
 

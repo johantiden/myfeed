@@ -12,8 +12,8 @@ public class UserDocumentService {
     @Autowired
     private UserDocumentRepository userDocumentRepository;
 
-    public Set<Long> getDocumentIdsFor(long userId) {
-        return userDocumentRepository.getAllKeysForUser(userId);
+    public Set<Long> getReadyUserDocumentIdsFor(long userId) {
+        return userDocumentRepository.getReadyUserDocumentIdsForUser(userId);
     }
 
     public void put(UserDocument userDocument) {
@@ -48,8 +48,8 @@ public class UserDocumentService {
         return Optional.ofNullable(userDocumentRepository.findOne(userDocumentId));
     }
 
-    public long purgeReadDocuments(long userId) {
-        Set<UserDocument> allReadDocuments = userDocumentRepository.findAllWithRead(userId, true);
+    public long purgeReadDocuments() {
+        Set<UserDocument> allReadDocuments = userDocumentRepository.findAllRead();
         int size = allReadDocuments.size();
         userDocumentRepository.delete(allReadDocuments);
         return size;

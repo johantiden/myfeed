@@ -10,7 +10,6 @@ import se.johantiden.myfeed.persistence.Feed;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,22 +18,16 @@ public class AlJazeeraFeed extends Feed {
 
     private static final Logger log = LoggerFactory.getLogger(AlJazeeraFeed.class);
     public static final String URL = "http://www.aljazeera.com";
-    private final Duration invalidationPeriod;
+    public static final String NAME = "Al Jazeera";
+    public static final String URL_RSS = "http://www.aljazeera.com/xml/rss/all.xml";
 
-    public AlJazeeraFeed(Duration invalidationPeriod) {
-        this.invalidationPeriod = invalidationPeriod;
+    public AlJazeeraFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
-    @Override
-    public Feed createFeed() {
-        return new Feed("Al Jazeera", invalidationPeriod, this, URL);
-    }
-
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeed("Al Jazeera", URL, "http://www.aljazeera.com/xml/rss/all.xml", invalidationPeriod)
-                                       .createFeedReader(createFeed()).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream()
                    .map(docMapper())
                    .collect(Collectors.toList());

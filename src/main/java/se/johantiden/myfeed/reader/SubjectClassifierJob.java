@@ -7,10 +7,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentClassifier;
-import se.johantiden.myfeed.persistence.Subject;
 import se.johantiden.myfeed.service.DocumentService;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class SubjectClassifierJob {
@@ -21,23 +21,23 @@ public class SubjectClassifierJob {
 
     @Scheduled(fixedRate = 1000)
     public void testSubjects() {
-        try {
+//        try {
             tryPop();
-        } catch (RuntimeException e) {
-            log.error("Could not find subjects", e);
-        }
+//        } catch (RuntimeException e) {
+//            log.error("Could not find subjects", e);
+//        }
     }
 
     private void tryPop() {
-        List<Document> documents = documentService.findDocumentsNotUnparsedSubjects();
+        List<Document> documents = documentService.findDocumentsNotParsedSubjects();
 
         documents.forEach(d -> {
-            DocumentClassifier.appendUrlFoldersAsCategory(d);
-            List<Subject> subjects = DocumentClassifier.getSubjectFor(d);
-            d.subjects.clear();
-            d.subjects.addAll(subjects);
-            String tab = DocumentClassifier.getTabFor(d);
-            d.tabs.clear(); = tab;
+            d.setSubjectsParsed(true);
+            DocumentClassifier.appendUrlFoldersAsSubjects(d);
+            Set<String> subjects = DocumentClassifier.getSubjectFor(d);
+            d.getSubjects().clear();
+            d.getSubjects().addAll(subjects);
+            documentService.put(d);
         });
     }
 }

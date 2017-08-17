@@ -1,17 +1,13 @@
 package se.johantiden.myfeed.persistence;
 
-import java.io.Serializable;
 
-public class Video implements Serializable {
-    private static final long serialVersionUID = 7559774172003829234L;
+import javax.persistence.Entity;
+
+@Entity
+public class Video extends BaseEntity {
 
     private final String src;
     private final String type;
-
-    public Video(String src) {
-        this.src = src;
-        type = null;
-    }
 
     public Video(String src, String type) {
         this.src = src;

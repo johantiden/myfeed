@@ -1,7 +1,6 @@
 package se.johantiden.myfeed.controller;
 
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.Video;
 
@@ -9,15 +8,14 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class DocumentBean {
 
     public final long userDocumentId;
     public final NameAndUrl feed;
-    public final List<NameAndUrl> categories;
     public final String title;
-    public final String tab;
+    public final List<String> tabs;
     public final String text;
     public final Double score;
     public final NameAndUrl author;
@@ -30,10 +28,9 @@ public class DocumentBean {
     public final List<String> subjects;
 
     public DocumentBean(UserDocument userDocument, Document document) {
-        verifyHtml(document.feed, document.html);
+        verifyHtml(document.html, document.getFeedName());
 
-        this.feed = new NameAndUrl(document.feed.getName(), document.feed.getUrl());
-        this.categories = document.categories;
+        this.feed = new NameAndUrl(document.getFeedName(), document.getFeedUrl());
         this.title = document.title;
         this.text = document.text;
         this.author = document.author;
@@ -45,16 +42,16 @@ public class DocumentBean {
         this.score = document.score;
         this.userDocumentId = userDocument.getId();
         this.videos = new ArrayList<>(document.videos);
-        this.tab = document.tab;
+        this.tabs = document.getTabs();
         this.subjects = document.getSubjects();
     }
 
-    private void verifyHtml(Feed feed, String html) {
+    private void verifyHtml(String html, String feedName) {
         if (html == null) {
             return;
         }
 
-        if (feed.getName().contains("xkcd")) {
+        if (feedName.contains("xkcd")) {
             return;
         }
 
@@ -103,10 +100,6 @@ public class DocumentBean {
         return feed;
     }
 
-    public final List<NameAndUrl> getCategories() {
-        return categories;
-    }
-
     public final NameAndUrl getAuthor() {
         return author;
     }
@@ -127,8 +120,8 @@ public class DocumentBean {
         return videos;
     }
 
-    public String getTab() {
-        return tab;
+    public List<String> getTabs() {
+        return tabs;
     }
 
     public List<String> getSubjects() {
@@ -167,7 +160,6 @@ public class DocumentBean {
         return "DocumentBean{" +
                 "userDocumentId='" + userDocumentId + '\'' +
                 ", feed=" + feed +
-                ", categories=" + categories +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
                 ", score=" + score +

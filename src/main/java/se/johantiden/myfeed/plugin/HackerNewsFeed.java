@@ -3,27 +3,23 @@ package se.johantiden.myfeed.plugin;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class HackerNewsFeed {
+public class HackerNewsFeed extends Feed {
 
-    public static final String HACKER_NEWS = "HackerNews";
+    public static final String NAME = "HackerNews";
     public static final String URL = "https://news.ycombinator.com/news";
-    private final Duration ttl;
+    public static final String URL_RSS = "https://news.ycombinator.com/rss";
 
-    public HackerNewsFeed(Duration ttl) {this.ttl = ttl;}
-
-    @Override
-    public Feed createFeed() {
-        return new Feed(HACKER_NEWS, ttl, createFeedReader(), URL);
+    public HackerNewsFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
-    public FeedReader createFeedReader() {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeed(HACKER_NEWS, URL, "https://news.ycombinator.com/rss", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

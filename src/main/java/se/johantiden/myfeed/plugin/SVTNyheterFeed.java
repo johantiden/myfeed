@@ -9,7 +9,6 @@ import se.johantiden.myfeed.persistence.Feed;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -22,8 +21,8 @@ public class SVTNyheterFeed extends Feed {
     public static final String URL = "https://www.svt.se/nyheter";
     public static final String URL_RSS = "https://www.svt.se/nyheter/rss.xml";
 
-    public SVTNyheterFeed(Duration ttl) {
-        super(NAME, URL, ttl, createFeedReader(ttl));
+    public SVTNyheterFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
     private static Predicate<Document> notIsLokalaNyheter() {
@@ -35,9 +34,9 @@ public class SVTNyheterFeed extends Feed {
 
     }
 
-    public static FeedReader createFeedReader(Duration ttl) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeed(NAME, URL, URL_RSS, ttl).getFeedReader().readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream()
                     .map(docMapper())
                     .filter(notIsLokalaNyheter())

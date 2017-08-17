@@ -16,29 +16,32 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class WashingtonPostFeed {
+public class WashingtonPostFeed extends Feed {
 
     private static final Logger log = LoggerFactory.getLogger(WashingtonPostFeed.class);
-    private final Duration invalidationPeriod;
-    private final String feedName;
-    private final String webUrl;
-    private final String rssUrl;
+    public static final String NAME = "Washington Post - The Fact Checker";
+    public static final String URL = "https://www.washingtonpost.com/news/fact-checker/";
+    public static final String URL_RSS = "http://feeds.washingtonpost.com/rss/rss_fact-checker";
+//    private final Duration invalidationPeriod;
+//    private final String feedName;
+//    private final String webUrl;
+//    private final String rssUrl;
 
-    public WashingtonPostFeed(String feedName, String webUrl, String rssUrl, Duration invalidationPeriod) {
-        this.invalidationPeriod = invalidationPeriod;
-        this.feedName = feedName;
-        this.webUrl = webUrl;
-        this.rssUrl = rssUrl;
+    public WashingtonPostFeed(Duration ttl) {
+        super(NAME, URL, createFeedReader(ttl));
     }
 
-    public Feed createFeed() {
-        return new Feed(feedName, invalidationPeriod, createFeedReader(), webUrl);
-    }
 
-    public FeedReader createFeedReader() {
+//    public WashingtonPostFeed(String feedName, String webUrl, String rssUrl, Duration invalidationPeriod) {
+//        this.invalidationPeriod = invalidationPeriod;
+//        this.feedName = feedName;
+//        this.webUrl = webUrl;
+//        this.rssUrl = rssUrl;
+//    }
+
+    private static FeedReader createFeedReader(Duration ttl) {
         return () -> {
-            List<Document> documents = new RssPlugin(feedName, webUrl, rssUrl, invalidationPeriod)
-                                       .createFeedReader(createFeed()).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream()
                    .map(docMapper())
                    .collect(Collectors.toList());

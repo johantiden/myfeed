@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.persistence;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.util.Set;
@@ -11,9 +12,9 @@ public interface UserDocumentRepository extends CrudRepository<UserDocument, Lon
 //    public static final transient Comparator<UserDocument> YOUNGEST_FIRST =
 //            Comparator.comparing((Function<UserDocument, Instant> & Serializable)UserDocument::getPublishDate).reversed();
 
-    Set<Long> getAllKeysForUser(long userId);
+    Set<Long> getReadyUserDocumentIdsForUser(@Param("userId") long userId);
 
-    Set<UserDocument> findAllWithRead(long userId, boolean read);
+    Set<UserDocument> findAllRead();
 
 //    public long purgeOlderThan(Duration duration) {
 //

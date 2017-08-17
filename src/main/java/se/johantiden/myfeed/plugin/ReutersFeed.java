@@ -9,26 +9,25 @@ import se.johantiden.myfeed.persistence.Feed;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public class ReutersFeed implements Plugin {
+public class ReutersFeed extends Feed {
 
     private static final Logger log = LoggerFactory.getLogger(ReutersFeed.class);
     public static final String URL = "http://www.reuters.com/news/world";
     public static final String NAME = "Reuters - World";
-    private final Duration ttl;
+    public static final String URL_RSS = "http://feeds.reuters.com/Reuters/worldNews";
 
-    public ReutersFeed(Duration ttl) {this.ttl = ttl;}
+    public ReutersFeed() {
+        super(NAME, URL, createFeedReader());
+    }
 
-
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeed(NAME, "http://feeds.reuters.com/Reuters/worldNews", ttl, URL).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

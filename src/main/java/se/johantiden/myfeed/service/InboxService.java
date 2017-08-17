@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Inbox;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class InboxService {
@@ -30,8 +31,11 @@ public class InboxService {
     }
 
     public void putIfNew(Document document) {
-        boolean isAlreadyInDocuments = documentService.hasDocument(document.getId());
-        boolean isAlreadyInInbox = inbox.hasDocument(document.getId());
+        Objects.requireNonNull(document);
+        Objects.requireNonNull(documentService);
+
+        boolean isAlreadyInDocuments = document.getId() != null && documentService.hasDocument(document.getId());
+        boolean isAlreadyInInbox = document.getId() != null && inbox.hasDocument(document.getId());
         if (!isAlreadyInInbox && !isAlreadyInDocuments) {
             log.info("Adding new document to inbox: {}", document.pageUrl);
             inbox.put(document);

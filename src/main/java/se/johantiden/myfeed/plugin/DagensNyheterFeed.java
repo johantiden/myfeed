@@ -11,28 +11,24 @@ import se.johantiden.myfeed.persistence.Feed;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class DagensNyheterFeed implements Plugin {
+public class DagensNyheterFeed extends Feed {
 
     private static final Logger log = LoggerFactory.getLogger(DagensNyheterFeed.class);
-    private static final String DAGENS_NYHETER = "Dagens Nyheter";
+    private static final String NAME = "Dagens Nyheter";
     public static final String URL = "https://www.dn.se";
+    public static final String RSS_URL = "http://www.dn.se/nyheter/rss/";
 
-    private final Duration ttl;
-
-    public DagensNyheterFeed(Duration ttl) {
-        this.ttl = Objects.requireNonNull(ttl);
+    public DagensNyheterFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeed(feed.getName(), "http://www.dn.se/nyheter/rss/", ttl, URL).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, RSS_URL).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

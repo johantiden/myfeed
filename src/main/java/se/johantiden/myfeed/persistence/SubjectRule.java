@@ -6,11 +6,12 @@ import java.util.Objects;
 @Entity
 public class SubjectRule extends Rule {
 
+    private final String subject;
+    private final String elExpression;
 
-    private final Tab tab;
-
-    public SubjectRule(Tab tab) {
-        this.tab = Objects.requireNonNull(tab);
+    public SubjectRule(String subject, String elExpression) {
+        this.subject = Objects.requireNonNull(subject);
+        this.elExpression = Objects.requireNonNull(elExpression);
     }
 
     @Override
@@ -18,4 +19,11 @@ public class SubjectRule extends Rule {
         return false;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getElExpression() {
+        return elExpression;
+    }
 }

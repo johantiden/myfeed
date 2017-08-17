@@ -7,10 +7,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentClassifier;
-import se.johantiden.myfeed.persistence.Subject;
 import se.johantiden.myfeed.service.DocumentService;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class TabClassifierJob {
@@ -20,24 +20,26 @@ public class TabClassifierJob {
     private DocumentService documentService;
 
     @Scheduled(fixedRate = 1000)
-    public void testSubjects() {
-        try {
+    public void testTabs() {
+//        try {
             tryPop();
-        } catch (RuntimeException e) {
-            log.error("Could not find subjects", e);
-        }
+//        } catch (RuntimeException e) {
+//            log.error("Could not find tabs", e);
+//        }
     }
 
     private void tryPop() {
-        List<Document> documents = documentService.findDocumentsNotUnparsedSubjects();
+        List<Document> documents = documentService.findDocumentsNotParsedTabs();
 
-        documents.forEach(d -> {
-            DocumentClassifier.appendUrlFoldersAsCategory(d);
-            List<Subject> subjects = DocumentClassifier.getSubjectFor(d);
-            d.subjects.clear();
-            d.subjects.addAll(subjects);
-            String tab = DocumentClassifier.getTabFor(d);
-            d.tabs.clear(); = tab;
-        });
+        documents.stream()
+                .filter(Document::isSubjectsParsed)
+                .forEach(d -> {
+                    d.setTabsParsed(true);
+                    DocumentClassifier.appendUrlFoldersAsSubjects(d);
+                    Set<String> tabs = DocumentClassifier.getTabsFor(d);
+                    d.getTabs().clear();
+                    d.getTabs().addAll(tabs);
+                    documentService.put(d);
+                });
     }
 }

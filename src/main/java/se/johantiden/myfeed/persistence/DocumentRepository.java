@@ -8,5 +8,6 @@ import java.util.List;
 @Transactional
 public interface DocumentRepository extends CrudRepository<Document, Long> {
 
-    List<Document> findDocumentsNotUnparsedSubjects();
+    List<Document> findDocumentsNotParsedSubjects();
+    List<Document> findDocumentsNotParsedTabs();
 }

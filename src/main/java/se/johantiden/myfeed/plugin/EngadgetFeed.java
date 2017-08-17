@@ -32,7 +32,6 @@ public class EngadgetFeed extends Feed {
 
             document.imageUrl = getImageUrl(document.html);
             document.html = null;
-            document.categories.removeIf(c -> c.name.startsWith("apple"));
             return document;
         };
     }

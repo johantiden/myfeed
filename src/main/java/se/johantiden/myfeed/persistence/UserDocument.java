@@ -1,34 +1,36 @@
 package se.johantiden.myfeed.persistence;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import java.util.Objects;
 
-
-
-/*
-* .filter(UserDocument::isUnread)
-                            .filter(ud -> {
-                                Optional<String> tab = documentService.find(ud.getDocumentKey()).flatMap(d -> Optional.ofNullable(d.tab));
-
-                                return tab
-                                        .map(t -> {
-                                            boolean isBad = DocumentClassifier.BAD.equals(t);
-                                            return !isBad;
-//                                            boolean isSport = DocumentClassifier.SPORT.equals(t);
-//                                            boolean isKultur = DocumentClassifier.CULTURE.equals(t);
-//                                            return !isBad && !isSport && !isKultur;
-                                        })
-                                        .orElse(false);
-
-                            })
-* */
-
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "UserDocument.getReadyUserDocumentIdsForUser",
+            query = "SELECT ud.id FROM UserDocument ud WHERE" +
+                    " ud.user.id = :userId AND" +
+                    " ud.read = false AND" +
+                    " ud.document.subjectsParsed = true AND" +
+                    " ud.document.tabsParsed = true"),
+    @NamedQuery(name = "UserDocument.findAllRead",
+            query = "SELECT ud FROM UserDocument ud WHERE" +
+                    " ud.read = true")
+})
 public class UserDocument extends BaseEntity {
 
+    @ManyToOne(targetEntity = User.class)
     private final User user;
+    @ManyToOne(targetEntity = Document.class)
     private final Document document;
     private boolean read;
+
+    // JPA
+    protected UserDocument() {
+        user = null;
+        document = null;
+    }
 
     public UserDocument(User user, Document document) {
         this.user = Objects.requireNonNull(user);

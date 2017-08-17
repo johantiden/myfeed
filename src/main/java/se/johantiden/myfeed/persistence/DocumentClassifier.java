@@ -1,12 +1,14 @@
 package se.johantiden.myfeed.persistence;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import se.johantiden.myfeed.classification.DocumentMatcher;
-import se.johantiden.myfeed.controller.NameAndUrl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
@@ -72,8 +74,8 @@ public class DocumentClassifier {
     private DocumentClassifier() {
     }
 
-    public static List<String> getSubjectFor(Document d) {
-        List<String> s = new ArrayList<>();
+    public static Set<String> getSubjectFor(Document d) {
+        Set<String> s = new HashSet<>();
         DocumentMatcher m = new DocumentMatcher(d) {
             @Override
             public boolean anySubjectEquals(String subject) {
@@ -173,7 +175,7 @@ public class DocumentClassifier {
         if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(MAT); }
         if(m.anyCategoryEquals("gaming")) { s.add("Gaming"); }
         if(m.feedStartsWith("Reddit")) {
-            String redditCategory = d.categories.get(0).name;
+            String redditCategory = d.getSourceCategories().iterator().next();
             s.add(redditCategory);
         }
 
@@ -203,7 +205,7 @@ public class DocumentClassifier {
         return s;
     }
 
-    private static void addPeople(List<String> s, DocumentMatcher m) {
+    private static void addPeople(Collection<String> s, DocumentMatcher m) {
 
         if(m.has("Busch Thor")) {
             s.add("Ebba Busch Thor");
@@ -245,7 +247,7 @@ public class DocumentClassifier {
 
     }
 
-    private static void addPlaces(List<String> s, DocumentMatcher m) {
+    private static void addPlaces(Collection<String> s, DocumentMatcher m) {
         if(m.hasCaseSensitive("Cuba", "Kuba")) { s.add("Kuba"); }
         if(m.hasCaseSensitive("Iraq", "Irak", "Mosul")) {
             s.add("Irak");
@@ -318,7 +320,7 @@ public class DocumentClassifier {
         addSweden(s, m);
     }
 
-    private static void addUsa(List<String> s, DocumentMatcher m) {
+    private static void addUsa(Collection<String> s, DocumentMatcher m) {
         if(m.hasCaseSensitive("US", "FBI") || m.has("america") && !m.has("south america") || m.has("U.S.", "america", "obama", "trump")) {
             s.add(USA);
         }
@@ -328,7 +330,7 @@ public class DocumentClassifier {
         }
     }
 
-    private static void addGreatBritain(List<String> s, DocumentMatcher m) {
+    private static void addGreatBritain(Collection<String> s, DocumentMatcher m) {
         if(m.has("Manchester")) {
             s.add("Manchester");
             s.add((STORBRITANNIEN));
@@ -339,7 +341,7 @@ public class DocumentClassifier {
 
     }
 
-    private static void addSweden(List<String> s, DocumentMatcher m) {
+    private static void addSweden(Collection<String> s, DocumentMatcher m) {
         if(m.has("Gröna Lund")) {
             s.add("Gröna Lund");
             s.add("Stockholm");
@@ -370,7 +372,7 @@ public class DocumentClassifier {
         }
     }
 
-    private static void addAfrica(List<String> s, DocumentMatcher m) {
+    private static void addAfrica(Collection<String> s, DocumentMatcher m) {
         if(m.has("Libyen", "Libya")) {
             s.add("Libyen");
             s.add(AFRIKA);
@@ -411,55 +413,55 @@ public class DocumentClassifier {
 
     }
 
-    private static boolean anySubjectEquals(List<String> subjects, String... matchAny) {
-        return Arrays.stream(matchAny).anyMatch(s -> anySubjectEquals(subjects, s));
+    private static boolean anySubjectEquals(Collection<String> subjects, Collection<String> matchAny) {
+        return matchAny.stream().anyMatch(s -> anySubjectEquals(subjects, s));
     }
-    private static boolean anySubjectEquals(List<String> subjects, String match) {
+    private static boolean anySubjectEquals(Collection<String> subjects, String match) {
         return subjects.stream().anyMatch(s -> s.equalsIgnoreCase(match));
     }
 
-    public static String getTabFor(Document document) {
+    public static Set<String> getTabsFor(Document document) {
         if(isError(document)) {
-            return ERROR;
+            return Collections.singleton(ERROR);
         }
 
         if(isBad(document)) {
-            return BAD;
+            return Collections.singleton(BAD);
         }
 
         if(isTech(document)) {
-            return TECH;
+            return Collections.singleton(TECH);
         }
 
         if(isCulture(document)) {
-            return CULTURE;
+            return Collections.singleton(CULTURE);
         }
 
         if(isTorrents(document)) {
-            return TORRENTS;
+            return Collections.singleton(TORRENTS);
         }
 
         if(isFun(document)) {
-            return FUN;
+            return Collections.singleton(FUN);
         }
 
         if(isBiz(document)) {
-            return BIZ;
+            return Collections.singleton(BIZ);
         }
 
         if(isSport(document)) {
-            return SPORT;
+            return Collections.singleton(SPORT);
         }
 
         if(isVäder(document)) {
-            return VÄDER;
+            return Collections.singleton(VÄDER);
         }
 
         if(isNews(document)) {
-            return NEWS;
+            return Collections.singleton(NEWS);
         }
 
-        return UNMATCHED_TAB;
+        return Collections.singleton(UNMATCHED_TAB);
     }
 
     private static boolean isTorrents(Document d) {
@@ -603,7 +605,7 @@ public class DocumentClassifier {
             m.anyCategoryEquals("Jokes", "OldSchoolCool");
     }
 
-    public static void appendUrlFoldersAsCategory(Document document) {
+    public static void appendUrlFoldersAsSubjects(Document document) {
 
         DocumentMatcher m = new DocumentMatcher(document);
 
@@ -613,19 +615,15 @@ public class DocumentClassifier {
                                    .collect(Collectors.toList());
 
             folders.stream()
-            .filter(f -> !m.anyCategoryEquals(f))
-            .filter(f -> !f.equals("artikel") && !f.equals("comments"))
-            .map(f -> new NameAndUrl(f, endUrlAt(f, document.pageUrl)))
-            .forEach(document.categories::add);
+                .filter(f -> !m.anyCategoryEquals(f))
+                .filter(f -> !f.equals("artikel"))
+                .filter(f -> !f.equals("comments"))
+                .filter(f -> !f.equals("worldNews"))
+                .filter(f -> !f.equals("Reuters"))
+                .filter(f -> !f.equals("story"))
+                .map(StringUtils::capitalize)
+                .forEach(document.getSubjects()::add);
         }
-    }
-
-    private static String endUrlAt(String firstFolder, String pageUrl) {
-
-        int i = pageUrl.indexOf(firstFolder);
-
-        String substring = pageUrl.substring(0, i + firstFolder.length());
-        return substring;
     }
 
     private static boolean urlFilter(String string) {

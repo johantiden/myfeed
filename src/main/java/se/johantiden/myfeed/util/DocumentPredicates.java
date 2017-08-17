@@ -16,7 +16,7 @@ public class DocumentPredicates {
         return d -> d.text != null && d.text.toLowerCase().contains(string2) ||
                     d.title != null && d.title.toLowerCase().contains(string2) ||
                     d.pageUrl != null && d.pageUrl.toLowerCase().contains(string2) ||
-                    d.categories.stream().anyMatch(c -> c.name.toLowerCase().contains(string2));
+                    d.getSubjects().stream().anyMatch(s -> s.toLowerCase().contains(string2));
     }
     public static Predicate<Document> hasCaseSensitive(String... strings) {
         return d -> Arrays.stream(strings).anyMatch(s -> hasCaseSensitive(s).test(d));
@@ -25,7 +25,7 @@ public class DocumentPredicates {
     public static Predicate<Document> hasCaseSensitive(String string) {
         return d -> d.text != null && d.text.contains(string) ||
                             d.title != null && d.title.contains(string) ||
-                            d.categories.stream().anyMatch(c -> c.name.contains(string));
+                            d.getSubjects().stream().anyMatch(s -> s.contains(string));
     }
 
     public static Predicate<Document> startsWithCaseSensitive(String string) {
@@ -44,11 +44,11 @@ public class DocumentPredicates {
     }
 
     public static Predicate<Document> anyCategoryEquals(String string) {
-        return d -> d.categories.stream().anyMatch(c -> c.name.equalsIgnoreCase(string));
+        return d -> d.getSubjects().stream().anyMatch(s -> s.equalsIgnoreCase(string));
     }
 
     public static Predicate<Document> anySubjectEquals(String string) {
-        return d -> d.subjects.stream().anyMatch(subject -> subject.equalsIgnoreCase(string));
+        return d -> d.getSubjects().stream().anyMatch(subject -> subject.equalsIgnoreCase(string));
     }
 
     public static Predicate<Document> authorEquals(String string) {
@@ -56,11 +56,11 @@ public class DocumentPredicates {
     }
 
     public static Predicate<Document> isFromFeed(String feedName) {
-        return d -> d.feed.getName().equals(feedName);
+        return d -> d.getFeedName().equals(feedName);
     }
 
     public static Predicate<Document> feedNameStartsWith(String feedName) {
-        return d -> d.feed.getName().startsWith(feedName);
+        return d -> d.getFeedName().startsWith(feedName);
     }
 
     public static Predicate<Document> hasEscapeCharacters() {

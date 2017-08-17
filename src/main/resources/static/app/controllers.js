@@ -50,8 +50,10 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     function getDocumentz(keys) {
         documentService.getDocuments(keys, documents => {
             documents.forEach(document => {
-                $scope.tabs[document.tab] = documentTabPredicate(document.tab);
-                $scope.documents.push(document);
+                document.tabs.forEach(tab => {
+                    $scope.tabs[tab] = documentTabPredicate(tab);
+                    $scope.documents.push(document);
+                });
             });
         });
     }
@@ -79,7 +81,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
     };
 
     var documentTabPredicate = function (tab) {
-        return dock => dock.tab === tab;
+        return doc => doc.tabs.some(t => t === tab);
     };
 
     $scope.selectTab = function(tabName) {

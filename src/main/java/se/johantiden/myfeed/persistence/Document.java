@@ -1,37 +1,76 @@
 package se.johantiden.myfeed.persistence;
 
 
+import com.google.common.collect.Lists;
 import se.johantiden.myfeed.controller.NameAndUrl;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 @Entity
-public class Document extends BaseEntity {
+@NamedQueries({
+        @NamedQuery(name = "Document.findDocumentsNotParsedSubjects", query = "SELECT d FROM Document d WHERE d.subjectsParsed = false"),
+        @NamedQuery(name = "Document.findDocumentsNotParsedTabs", query = "SELECT d FROM Document d WHERE d.tabsParsed = false"),
 
-    public Feed feed;
+})
+public class Document extends BaseEntity {
+    @Column(length = 2000)
     public String title;
+
+    @Column(length = 2000)
     public final String text;
+
     public NameAndUrl author;
+
+    @Column(length = 2000)
     public final String pageUrl;
+
+    @Column(length = 2000)
     public String imageUrl;
+
     public final Instant publishedDate;
+
+    @Column(length = 2000)
     public String html;
-    public List<NameAndUrl> categories;
+
     public Double score;
     public boolean isPaywalled;
-    public List<Video> videos = new ArrayList<>();
+    public ArrayList<Video> videos = new ArrayList<>();
 
-    public boolean subjectsParsed = false;
-    public String tab;
-    public final List<String> subjects = new ArrayList<>();
+    private boolean subjectsParsed = false;
+    private final ArrayList<String> subjects;
+
+    private boolean tabsParsed = false;
+    private final ArrayList<String> tabs;
+
+    private final String feedName;
+    private final String feedUrl;
+
+    @Column(length = 2000)
+    private final ArrayList<String> sourceCategories;
+
+    // JPA
+    protected Document() {
+
+        text = null;
+        pageUrl = null;
+        publishedDate = null;
+        subjects = new ArrayList<>();
+        tabs = new ArrayList<>();
+        feedName = null;
+        feedUrl = null;
+        sourceCategories = new ArrayList<>();
+    }
 
     public Document(
-            Feed feed,
             String title,
             String text,
             NameAndUrl author,
@@ -39,9 +78,10 @@ public class Document extends BaseEntity {
             String imageUrl,
             Instant publishedDate,
             String html,
-            List<NameAndUrl> categories) {
+            Set<String> sourceCategories,
+            String feedName,
+            String feedUrl) {
 
-        this.feed = feed;
         this.title = title;
         this.text = text;
         this.author = author;
@@ -49,7 +89,11 @@ public class Document extends BaseEntity {
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.html = html;
-        this.categories = Objects.requireNonNull(categories);
+        this.tabs = new ArrayList<>();
+        this.subjects = new ArrayList<>();
+        this.feedName = feedName;
+        this.feedUrl = feedUrl;
+        this.sourceCategories = Lists.newArrayList(sourceCategories);
     }
 
     public static String dateToShortString(Instant instant) {
@@ -79,16 +123,32 @@ public class Document extends BaseEntity {
         return "";
     }
 
+    public boolean isSubjectsParsed() {
+        return subjectsParsed;
+    }
+
+    public void setSubjectsParsed(boolean subjectsParsed) {
+        this.subjectsParsed = subjectsParsed;
+    }
+
+    public boolean isTabsParsed() {
+        return tabsParsed;
+    }
+
+    public void setTabsParsed(boolean tabsParsed) {
+        this.tabsParsed = tabsParsed;
+    }
+
+    public List<String> getSourceCategories() {
+        return sourceCategories;
+    }
+
     public String getPublishedShortString() {
         return dateToShortString(publishedDate);
     }
 
-    public String getTab() {
-        return tab;
-    }
-
-    public final Feed getFeed() {
-        return feed;
+    public ArrayList<String> getTabs() {
+        return tabs;
     }
 
     public final Instant getPublishDate() {
@@ -101,5 +161,13 @@ public class Document extends BaseEntity {
 
     public List<String> getSubjects() {
         return subjects;
+    }
+
+    public String getFeedName() {
+        return feedName;
+    }
+
+    public String getFeedUrl() {
+        return feedUrl;
     }
 }
