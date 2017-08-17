@@ -1,68 +1,37 @@
 package se.johantiden.myfeed.persistence;
 
-import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.user.User;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import javax.transaction.Transactional;
+import java.util.Set;
 
-public class UserDocumentRepository {
+@Transactional
+public interface UserDocumentRepository extends CrudRepository<UserDocument, Long> {
 
-    public static final Comparator<UserDocument> YOUNGEST_FIRST =
-            Comparator.comparing(UserDocument::getPublishDate).reversed();
+//    public static final transient Comparator<UserDocument> YOUNGEST_FIRST =
+//            Comparator.comparing((Function<UserDocument, Instant> & Serializable)UserDocument::getPublishDate).reversed();
 
-    private final Map<Key<User>, SortedSet<UserDocument>> map = new HashMap<>();
+    Set<Long> getReadyUserDocumentIdsForUser(@Param("userId") long userId);
 
-    public SortedSet<UserDocument> getAllKeys(Key<User> user) {
-        return getOrCreateSetForUser(user);
-    }
+    Set<UserDocument> findAllRead();
 
-    private SortedSet<UserDocument> getOrCreateSetForUser(Key<User> userKey) {
-        if (!map.containsKey(userKey)) {
-            map.put(userKey, new TreeSet<>(YOUNGEST_FIRST));
-        }
-        return map.get(userKey);
-    }
+//    public long purgeOlderThan(Duration duration) {
+//
+//        int removed = 0;
+//        for (SortedSet<UserDocument> set : db.userDocuments.values()) {
+//            int sizeBefore = set.size();
+//            set.removeIf(olderThan(duration));
+//            int sizeAfter = set.size();
+//            removed += sizeBefore-sizeAfter;
+//        }
+//        return removed;
+//    }
 
-    public void put(UserDocument userDocument) {
-        getOrCreateSetForUser(userDocument.getUserKey()).add(userDocument);
-    }
-
-    public Optional<UserDocument> find(Key<User> userKey, Key<UserDocument> userDocumentKey) {
-        return getOrCreateSetForUser(userKey).stream()
-                .filter(ud -> ud.getKey().equals(userDocumentKey))
-                .findAny();
-    }
-
-    private static Function<Instant, Double> youngestFirstInstant() {
-        return i -> (double) -i.toEpochMilli();
-    }
-
-    public long purgeOlderThan(Duration duration) {
-
-        int removed = 0;
-        for (SortedSet<UserDocument> set : map.values()) {
-            int sizeBefore = set.size();
-            set.removeIf(isOlderThan(duration));
-            int sizeAfter = set.size();
-            removed += sizeBefore-sizeAfter;
-        }
-        return removed;
-    }
-
-    private Predicate<? super UserDocument> isOlderThan(Duration duration) {
-        return userDocument -> userDocument.getPublishDate().plus(duration).isAfter(Instant.now());
-    }
-
-    public void remove(UserDocument userDocument) {
-        getOrCreateSetForUser(userDocument.getUserKey()).remove(userDocument);
-    }
+//    public static Predicate<? super UserDocument> olderThan(Duration duration) {
+//        return userDocument -> {
+//            boolean isOlder = Chrono.isOlderThan(duration, userDocument.getPublishDate());
+//            return isOlder;
+//        };
+//    }
 }

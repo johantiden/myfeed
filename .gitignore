@@ -12,3 +12,4 @@ buildNumber.properties
 *.iml
 
 dump.rdb
+db.bin

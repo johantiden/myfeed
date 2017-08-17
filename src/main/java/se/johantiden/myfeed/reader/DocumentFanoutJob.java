@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedUser;
+import se.johantiden.myfeed.persistence.User;
 import se.johantiden.myfeed.persistence.UserDocument;
+import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.service.DocumentService;
-import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
+import se.johantiden.myfeed.settings.GlobalSettings;
 
 import java.util.Optional;
 
@@ -26,11 +26,11 @@ public class DocumentFanoutJob {
     @Autowired
     private UserDocumentService userDocumentService;
     @Autowired
-    private FeedService feedService;
+    private UserService userService;
     @Autowired
     private DocumentService documentService;
 
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = GlobalSettings.FANOUT_INTERVAL)
     public void consumeOne() {
         Optional<Document> documentOptional = inboxService.pop();
 
@@ -41,19 +41,17 @@ public class DocumentFanoutJob {
     }
 
     private void consume(Document document) {
-        log.info("DocumentFanJob consuming '{}'", document.pageUrl);
-        Feed feed = feedService.getFeed(document.getFeed());
-        feed.getFeedUsers().stream()
-                .map(FeedUser::getUser)
-                .filter(u -> u.getUserGlobalFilter().test(document))
-                .forEach(user -> {
-                    log.info("  -> {}", user.getUsername());
-                    boolean flagged = user.getFlagFilter().test(document);
-                    if (flagged) {
-                        log.warn("Flagged: {}", document.pageUrl);
-                    }
+        log.debug("DocumentFanJob consuming '{}'", document.pageUrl);
 
-                    userDocumentService.putIfNew(new UserDocument(user.getKey(), document.getKey(), document.publishedDate, flagged));
+        hack();
+
+        userService.getAllUsers().stream()
+                .forEach(user -> {
+                    log.info("  -> {}", user);
+                    userDocumentService.put(new UserDocument(user, document));
                 });
+
     }
+
+    private User hack() {return userService.find("johan").orElseGet(() -> userService.create("johan"));}
 }

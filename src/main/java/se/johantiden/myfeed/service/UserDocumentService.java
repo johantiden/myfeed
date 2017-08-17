@@ -1,71 +1,58 @@
 package se.johantiden.myfeed.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import se.johantiden.myfeed.persistence.user.User;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
-import se.johantiden.myfeed.persistence.redis.Key;
 
-import java.time.Duration;
 import java.util.Optional;
-import java.util.SortedSet;
+import java.util.Set;
 
 public class UserDocumentService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserDocumentService.class);
     @Autowired
     private UserDocumentRepository userDocumentRepository;
 
-    public SortedSet<UserDocument> getAllDocumentsFor(Key<User> user) {
-        return userDocumentRepository.getAllKeys(user);
+    public Set<Long> getReadyUserDocumentIdsFor(long userId) {
+        return userDocumentRepository.getReadyUserDocumentIdsForUser(userId);
     }
 
     public void put(UserDocument userDocument) {
-        userDocumentRepository.put(userDocument);
+        userDocumentRepository.save(userDocument);
     }
 
-    public void setRead(Key<User> user, Key<UserDocument> userDocumentKey, boolean read) {
+    public void setRead(long userDocumentId, boolean read) {
 
-        if (user == null) {
-            log.info("No user: No check");
-            return;
-        }
+        Optional<UserDocument> documentOptional = Optional.ofNullable(userDocumentRepository.findOne(userDocumentId));
 
-        Optional<UserDocument> documentOptional = userDocumentRepository.find(user, userDocumentKey);
-
-        UserDocument doc = documentOptional.orElseThrow(() -> new IllegalStateException("Could not find " + userDocumentKey));
+        UserDocument doc = documentOptional.orElseThrow(() -> new IllegalStateException("Could not find userDocument " + userDocumentId));
 
         doc.setRead(read);
         put(doc);
 
     }
 
-    public void putIfNew(UserDocument userDocument) {
-        Optional<UserDocument> optional = userDocumentRepository.find(userDocument.getUserKey(), userDocument.getKey());
-        if (optional.isPresent()) {
-            log.warn("putIfNew but was not new. (This can probably be optimized)");
-        } else {
-            put(userDocument);
-        }
+//    public void putIfNew(UserDocument userDocument) {
+//        Optional<UserDocument> optional = userDocumentRepository.findOne(userDocument.getId());
+//        if (optional.isPresent()) {
+//            log.debug("putIfNew but was not new. (This can probably be optimized)");
+//        } else {
+//            put(userDocument);
+//        }
+//    }
+
+//    public long purgeOlderThan(Duration duration) {
+//        return userDocumentRepository.purgeOlderThan(duration);
+//    }
+
+    public Optional<UserDocument> find(long userDocumentId) {
+        return Optional.ofNullable(userDocumentRepository.findOne(userDocumentId));
     }
 
-    public long purgeOlderThan(Duration duration) {
-        return userDocumentRepository.purgeOlderThan(duration);
+    public long purgeReadDocuments() {
+        Set<UserDocument> allReadDocuments = userDocumentRepository.findAllRead();
+        int size = allReadDocuments.size();
+        userDocumentRepository.delete(allReadDocuments);
+        return size;
     }
 
-    public Optional<UserDocument> get(Key<User> userKey, Key<UserDocument> userDocumentKey) {
-        return userDocumentRepository.find(userKey, userDocumentKey);
-    }
-
-    public long purgeReadDocuments(Key<User> userKey) {
-        SortedSet<UserDocument> allUserDocuments = getAllDocumentsFor(userKey);
-
-        int sizeBefore = allUserDocuments.size();
-        allUserDocuments.removeIf(UserDocument::isRead);
-        int sizeAfter = allUserDocuments.size();
-
-        return sizeBefore-sizeAfter;
-    }
 }

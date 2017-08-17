@@ -3,6 +3,7 @@ package se.johantiden.myfeed.reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
@@ -24,33 +25,38 @@ public class FeedReaderJob {
     @Autowired
     private FeedService feedService;
     @Autowired
-    private FeedReaderService feedReaderService;
-    @Autowired
     private InboxService inboxService;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = GlobalSettings.FEED_READER_INTERVAL)
     public void myRunnable() {
-        consume(feedService.popOldestInvalidatedFeed());
+        log.info("ENTER FeedReaderJob");
+        Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
+        feed.ifPresent(this::consume);
+        log.info("EXIT  FeedReaderJob");
     }
 
+    @Async
     private void consume(Feed feed) {
+        log.info("  ENTER FeedReaderJob.consume");
 
-        List<Document> documents = feedReaderService.readAll(feed);
+        List<Document> documents = FeedReaderService.readAll(feed);
 
         List<Document> filtered = documents.stream()
-                .filter(feed.getFilter())
                 .filter(GlobalSettings.DOCUMENT_MAX_AGE_PREDICATE)
                 .collect(Collectors.toList());
 
 
         if (!filtered.isEmpty()) {
             log.debug("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter. Oldest: {}",
-                    feed.getName(), filtered.size(), documents.size()-filtered.size(), oldestInstant(filtered));
+                    feed.getName(), filtered.size(), documents.size()-filtered.size(), oldestInstantDebug(filtered));
         }
         inboxService.putIfNew(filtered);
+
+        log.info("  EXIT  FeedReaderJob.consume");
+
     }
 
-    private String oldestInstant(List<Document> filtered) {
+    private static String oldestInstantDebug(List<Document> filtered) {
 
         Optional<Document> max = filtered.stream().max(Comparator.comparing(Document::getPublishDate).reversed());
 

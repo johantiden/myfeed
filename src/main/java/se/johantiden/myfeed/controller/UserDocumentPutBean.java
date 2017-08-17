@@ -6,11 +6,10 @@ public class UserDocumentPutBean {
     public String feedUrl;
     public String title;
     public String text;
-    public String cssClass;
     public String pageUrl;
     public String username;
     public boolean read;
-    public String userDocumentKey;
+    public long userDocumentId;
 
     public String getFeedName() {
         return feedName;
@@ -18,10 +17,6 @@ public class UserDocumentPutBean {
 
     public String getFeedUrl() {
         return feedUrl;
-    }
-
-    public String getCssClass() {
-        return cssClass;
     }
 
     public String getTitle() {
@@ -51,7 +46,6 @@ public class UserDocumentPutBean {
                 ", feedUrl='" + feedUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
-                ", cssClass='" + cssClass + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
                 ", username='" + username + '\'' +
                 ", read=" + read +
