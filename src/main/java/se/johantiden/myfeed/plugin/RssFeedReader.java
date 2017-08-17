@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.io.IOException;
@@ -25,6 +24,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
@@ -32,15 +32,13 @@ import static java.util.Objects.requireNonNull;
 public class RssFeedReader implements FeedReader {
 
     private static final Logger log = LoggerFactory.getLogger(RssFeedReader.class);
-    private final Feed feed;
     private final String rssUrl;
     private final String feedName;
-    private final String feedWebUrl;
+    private final String feedUrl;
 
-    public RssFeedReader(String rssUrl, String feedName, String feedWebUrl, Feed feed) {
-        this.feed = feed;
-        this.feedName = feedName;
-        this.feedWebUrl = feedWebUrl;
+    public RssFeedReader(String feedName, String feedUrl, String rssUrl) {
+        this.feedName = requireNonNull(feedName);
+        this.feedUrl = requireNonNull(feedUrl);
         this.rssUrl = requireNonNull(rssUrl);
     }
 
@@ -66,7 +64,7 @@ public class RssFeedReader implements FeedReader {
             String authorName = e.getAuthor();
             String authorUrl = getAuthorUrl(e);
             Instant publishedDate = getDate(e);
-            List<NameAndUrl> categories = getCategories(e);
+            Set<String> categories = getCategories(e);
             String descriptionHtml = getDescription(e);
             String contentHtml = getContentHtml(e);
             String text = descriptionHtml == null ? null : html2text(descriptionHtml);
@@ -78,10 +76,9 @@ public class RssFeedReader implements FeedReader {
                 throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
             }
 
-            NameAndUrl feed = new NameAndUrl(feedName, feedWebUrl);
             NameAndUrl author = new NameAndUrl(authorName, authorUrl);
 
-            Document document = new Document(this.feed.getKey(), feed, title, text, author, link, imageUrl, publishedDate, html, categories);
+            Document document = new Document(title, text, author, link, imageUrl, publishedDate, html, categories, feedName, feedUrl);
 
             if(DocumentPredicates.hasEscapeCharacters().test(document)) {
                 throw new RuntimeException("Escape characters!");
@@ -90,10 +87,10 @@ public class RssFeedReader implements FeedReader {
         });
     }
 
-    private static List<NameAndUrl> getCategories(SyndEntry e) {
+    private static Set<String> getCategories(SyndEntry e) {
         return e.getCategories().stream()
-               .map(c -> new NameAndUrl(unescape(c.getName()), c.getTaxonomyUri()))
-               .collect(Collectors.toList());
+               .map(c -> unescape(c.getName()))
+               .collect(Collectors.toSet());
     }
 
     private static String unescape(String string) {

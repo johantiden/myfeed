@@ -1,28 +1,25 @@
 package se.johantiden.myfeed;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
-import se.johantiden.myfeed.persistence.DB;
-import se.johantiden.myfeed.persistence.DocumentRepository;
-import se.johantiden.myfeed.persistence.FeedRepository;
-import se.johantiden.myfeed.persistence.InboxRepository;
-import se.johantiden.myfeed.persistence.UserDocumentRepository;
+import se.johantiden.myfeed.persistence.FeedPopulator;
+import se.johantiden.myfeed.persistence.Inbox;
+import se.johantiden.myfeed.persistence.User;
 import se.johantiden.myfeed.persistence.UserService;
-import se.johantiden.myfeed.persistence.file.BaseSaver;
-import se.johantiden.myfeed.persistence.user.UserRepository;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
-import java.util.Optional;
+import javax.sql.DataSource;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -31,18 +28,11 @@ import java.util.concurrent.Executors;
 @Configuration
 public class Main implements SchedulingConfigurer {
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
-
-    @Bean
-    public DocumentRepository documentRepository() {
-        DocumentRepository documentRepository = new DocumentRepository(db());
-        documentRepository.resetSubjects();
-        return documentRepository;
-    }
-
     @Bean
     public DocumentService documentService() {
-        return new DocumentService();
+        DocumentService documentService = new DocumentService();
+        documentService.resetSubjects();
+        return documentService;
     }
 
     @Bean
@@ -51,8 +41,8 @@ public class Main implements SchedulingConfigurer {
     }
 
     @Bean
-    public FeedRepository feedRepository() {
-        return new FeedRepository();
+    public FeedPopulator feedPopulator() {
+        return new FeedPopulator(feedService());
     }
 
     @Bean
@@ -61,41 +51,19 @@ public class Main implements SchedulingConfigurer {
     }
 
     @Bean
-    public UserRepository userRepository() {
-        return new UserRepository();
-    }
-
-    @Bean
     public InboxService inboxService() {
         return new InboxService();
     }
 
     @Bean
-    public InboxRepository inboxRepository() {
-        return new InboxRepository();
-    }
-
-
-    @Bean
-    public UserDocumentRepository userDocumentRepository() {
-        return new UserDocumentRepository();
-    }
-
-    @Bean
-    public DB db() {
-        Optional<DB> loaded = BaseSaver.load(BaseSaver.DB);
-        if (loaded.isPresent()) {
-            log.info("Loaded database");
-            DB db = loaded.get();
-            return db;
-        }
-        log.info("No database file found. Creating fresh.");
-        return new DB();
+    public Inbox inboxRepository() {
+        return new Inbox();
     }
 
     @Bean
     public UserService userService() {
-        return new UserService();
+        UserService userService = new UserService();
+        return userService;
     }
 
     @Override
@@ -106,6 +74,13 @@ public class Main implements SchedulingConfigurer {
     @Bean(destroyMethod="shutdown")
     public Executor executor() {
         return Executors.newScheduledThreadPool(5);
+    }
+
+    @Bean
+    @Primary
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSource dataSource() {
+        return DataSourceBuilder.create().build();
     }
 
     public static void main(String[] args) {

@@ -8,15 +8,14 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class DocumentBean {
 
-    public final String userDocumentKey;
+    public final long userDocumentId;
     public final NameAndUrl feed;
-    public final List<NameAndUrl> categories;
     public final String title;
-    public final String tab;
+    public final List<String> tabs;
     public final String text;
     public final Double score;
     public final NameAndUrl author;
@@ -29,10 +28,9 @@ public class DocumentBean {
     public final List<String> subjects;
 
     public DocumentBean(UserDocument userDocument, Document document) {
-        verifyHtml(document.feed, document.html);
+        verifyHtml(document.html, document.getFeedName());
 
-        this.feed = document.feed;
-        this.categories = document.categories;
+        this.feed = new NameAndUrl(document.getFeedName(), document.getFeedUrl());
         this.title = document.title;
         this.text = document.text;
         this.author = document.author;
@@ -42,18 +40,18 @@ public class DocumentBean {
         this.html = document.html;
         this.read = userDocument.isRead();
         this.score = document.score;
-        this.userDocumentKey = userDocument.getKey().toString();
+        this.userDocumentId = userDocument.getId();
         this.videos = new ArrayList<>(document.videos);
-        this.tab = document.tab;
-        this.subjects = document.getSubjects().stream().map(Subject::getTitle).collect(Collectors.toList());
+        this.tabs = document.getTabs();
+        this.subjects = document.getSubjects();
     }
 
-    private void verifyHtml(NameAndUrl feed, String html) {
+    private void verifyHtml(String html, String feedName) {
         if (html == null) {
             return;
         }
 
-        if (feed.name.contains("xkcd")) {
+        if (feedName.contains("xkcd")) {
             return;
         }
 
@@ -102,10 +100,6 @@ public class DocumentBean {
         return feed;
     }
 
-    public final List<NameAndUrl> getCategories() {
-        return categories;
-    }
-
     public final NameAndUrl getAuthor() {
         return author;
     }
@@ -118,16 +112,16 @@ public class DocumentBean {
         return score;
     }
 
-    public final String getUserDocumentKey() {
-        return userDocumentKey;
+    public final long getUserDocumentId() {
+        return userDocumentId;
     }
 
     public final List<Video> getVideos() {
         return videos;
     }
 
-    public String getTab() {
-        return tab;
+    public List<String> getTabs() {
+        return tabs;
     }
 
     public List<String> getSubjects() {
@@ -164,9 +158,8 @@ public class DocumentBean {
     @Override
     public final String toString() {
         return "DocumentBean{" +
-                "userDocumentKey='" + userDocumentKey + '\'' +
+                "userDocumentId='" + userDocumentId + '\'' +
                 ", feed=" + feed +
-                ", categories=" + categories +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
                 ", score=" + score +

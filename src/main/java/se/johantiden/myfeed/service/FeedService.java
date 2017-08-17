@@ -1,39 +1,41 @@
 package se.johantiden.myfeed.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedRepository;
-import se.johantiden.myfeed.persistence.redis.Key;
 
 import java.time.Instant;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FeedService {
 
-    @Autowired
-    private FeedRepository feedRepository;
+    private final Set<Feed> feeds = new HashSet<>();
 
     public Optional<Feed> popOldestInvalidatedFeed() {
-        Comparator<Feed> comparator = Comparator.nullsFirst(Comparator.comparing(Feed::getLastRead))
-                .thenComparing(Feed::getName);
 
-        List<Feed> feeds = feedRepository.invalidatedFeeds();
+        List<Feed> feeds = findAllInvalidatedFeeds();
 
         if (feeds.isEmpty()) {
             return Optional.empty();
         }
 
         Feed feed = feeds.stream()
-                .sorted(comparator)
-                .findFirst()
+                .findAny()
                 .get();
         feed.setLastRead(Instant.now());
         return Optional.of(feed);
     }
 
-    public Feed getFeed(Key<Feed> feed) {
-        return feedRepository.get(feed);
+    private List<Feed> findAllInvalidatedFeeds() {
+
+        return feeds.stream()
+                .filter(Feed::isInvalidated)
+                .collect(Collectors.toList());
+    }
+
+    public void put(Feed feed) {
+        feeds.add(feed);
     }
 }

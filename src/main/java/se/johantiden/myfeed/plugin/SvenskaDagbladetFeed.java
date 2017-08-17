@@ -4,39 +4,35 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
-public class SvenskaDagbladetPlugin implements Plugin {
+public class SvenskaDagbladetFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(SvenskaDagbladetPlugin.class);
-    public static final String SVENSKA_DAGBLADET = "Svenska Dagbladet";
+    private static final Logger log = LoggerFactory.getLogger(SvenskaDagbladetFeed.class);
+    public static final String NAME = "Svenska Dagbladet";
     private static final Predicate<Document> FILTER = d -> !d.isPaywalled;
-    private final Duration ttl;
+    public static final String URL = "https://www.svd.se";
 
-    public SvenskaDagbladetPlugin(Duration ttl) {this.ttl = ttl;}
-
-    @Override
-    public final Feed createFeed() {
-        return new FeedImpl(SVENSKA_DAGBLADET, ttl, this, FILTER);
+    public SvenskaDagbladetFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
-    @Override
-    public final FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssPlugin(SVENSKA_DAGBLADET, "https://www.svd.se", "https://www.svd.se/?service=rss", ttl, FILTER).createFeedReader(feed).readAllAvailable();
-            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
+            List<Document> documents = new RssFeedReader(NAME, "https://www.svd.se/?service=rss", URL).readAllAvailable();
+            return documents.stream()
+                    .map(createEntryMapper())
+                    .filter(FILTER)
+                    .collect(Collectors.toList());
         };
     }
 
@@ -45,11 +41,6 @@ public class SvenskaDagbladetPlugin implements Plugin {
         return document -> {
             document.isPaywalled = isPaywalled(document);
             if(!document.isPaywalled) {
-                document.categories = document.categories.stream()
-                                      .filter(c -> c.url == null)
-                                      .map(c -> new NameAndUrl(c.name, document.feed.url + "/" + c.name))
-                                      .collect(Collectors.toList());
-
                 document.imageUrl = findImage(document);
             }
             return document;

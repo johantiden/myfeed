@@ -4,29 +4,25 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public class EngadgetPlugin implements Plugin {
+public class EngadgetFeed extends Feed {
 
-    private final Duration ttl;
+    public static final String URL = "https://www.engadget.com";
+    public static final String URL_RSS = "https://www.engadget.com/rss.xml";
+    public static final String NAME = "Engadget";
 
-    public EngadgetPlugin(Duration ttl) {this.ttl = ttl;}
-
-    @Override
-    public Feed createFeed() {
-        return new FeedImpl("Engadget", ttl, this);
+    public EngadgetFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssPlugin("Engadget", "https://www.engadget.com", "https://www.engadget.com/rss.xml", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
@@ -36,7 +32,6 @@ public class EngadgetPlugin implements Plugin {
 
             document.imageUrl = getImageUrl(document.html);
             document.html = null;
-            document.categories.removeIf(c -> c.name.startsWith("apple"));
             return document;
         };
     }

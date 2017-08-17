@@ -6,52 +6,41 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class SVTPlugin implements Plugin {
+public class SVTNyheterFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(SVTPlugin.class);
-    public static final String SVT_NYHETER = "SVT Nyheter";
-    private final Duration invalidationPeriod;
+    private static final Logger log = LoggerFactory.getLogger(SVTNyheterFeed.class);
+    public static final String NAME = "SVT Nyheter";
+    public static final String URL = "https://www.svt.se/nyheter";
+    public static final String URL_RSS = "https://www.svt.se/nyheter/rss.xml";
 
-    public SVTPlugin(Duration invalidationPeriod) {
-        this.invalidationPeriod = invalidationPeriod;
+    public SVTNyheterFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
     private static Predicate<Document> notIsLokalaNyheter() {
 
         return d -> {
             boolean lokalt = d.pageUrl.contains("nyheter/lokalt/");
-            if(lokalt) {
-                return false;
-            }
-            return true;
+            return !lokalt;
         };
 
     }
 
-    @Override
-    public Feed createFeed() {
-        return new FeedImpl(SVT_NYHETER, invalidationPeriod, this, notIsLokalaNyheter());
-    }
-
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssPlugin(SVT_NYHETER, "https://www.svt.se/nyheter", "https://www.svt.se/nyheter/rss.xml", invalidationPeriod, notIsLokalaNyheter())
-                                       .createFeedReader(createFeed()).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream()
-                   .filter(notIsLokalaNyheter())
-                   .map(docMapper())
-                   .collect(Collectors.toList());
+                    .map(docMapper())
+                    .filter(notIsLokalaNyheter())
+                    .collect(Collectors.toList());
         };
     }
 

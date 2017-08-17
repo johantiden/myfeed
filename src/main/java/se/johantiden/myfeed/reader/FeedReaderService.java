@@ -13,7 +13,7 @@ public final class FeedReaderService {
     }
 
     public static List<Document> readAll(Feed feed) {
-        FeedReader reader = findFeedReader(feed);
+        FeedReader reader = feed.getFeedReader();
         List<Document> documents = reader.readAllAvailable();
 
         documents.stream()
@@ -26,7 +26,4 @@ public final class FeedReaderService {
         return documents;
     }
 
-    private static FeedReader findFeedReader(Feed feed) {
-        return feed.getPlugin().createFeedReader(feed);
-    }
 }

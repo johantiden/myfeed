@@ -8,54 +8,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 import se.johantiden.myfeed.persistence.Video;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class RedditPlugin implements Plugin {
+public class RedditFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(RedditPlugin.class);
-    private final Duration ttl;
-    private final Predicate<Document> filter;
-    private final String subreddit;
+    private static final Logger log = LoggerFactory.getLogger(RedditFeed.class);
 
-    public RedditPlugin(String subreddit, Duration ttl, Predicate<Document> filter) {
-        this.subreddit = Objects.requireNonNull(subreddit);
-        this.ttl = Objects.requireNonNull(ttl);
-        this.filter = filter;
+    public RedditFeed(String subreddit, Predicate<Document> filter) {
+        super(getFeedName(subreddit), getWebUrl(subreddit), createFeedReader(subreddit, filter));
     }
 
-    @Override
-    public Feed createFeed() {
-        return new FeedImpl(getFeedName(), ttl, this, filter);
-    }
-
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader(String subreddit, Predicate<Document> filter) {
         return () -> {
-            List<Document> documents = new RssPlugin(getFeedName(), getWebUrl(), getRssUrl(), ttl, filter).createFeedReader(feed).readAllAvailable();
-            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
+            List<Document> documents = new RssFeedReader(getFeedName(subreddit), getWebUrl(subreddit), getRssUrl(subreddit)).readAllAvailable();
+            return documents.stream().map(createEntryMapper()).filter(filter).collect(Collectors.toList());
         };
     }
 
-    private String getRssUrl() {
+    private static String getRssUrl(String subreddit) {
         return "https://www.reddit.com/" + subreddit + "/.rss";
     }
 
-    private String getWebUrl() {
+    private static String getWebUrl(String subreddit) {
         return "https://www.reddit.com/" + subreddit;
     }
 
-    private String getFeedName() {
+    private static String getFeedName(String subreddit) {
         return "Reddit - " + subreddit;
     }
 
@@ -63,7 +49,9 @@ public class RedditPlugin implements Plugin {
         return document -> {
             org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(document.pageUrl);
             parseStuffz(document);
-            document.score = findVotes(jsoupDocument);
+            if (!isNSFW(jsoupDocument)) {
+                document.score = findVotes(jsoupDocument);
+            }
             document.author = null;
             return document;
         };
@@ -131,15 +119,19 @@ public class RedditPlugin implements Plugin {
         Elements sources = gfyCat.select("video.share-video > source");
         if(sources.size() > 0) {
             List<Video> videoSources = sources.stream().map(s -> new Video(s.attr("src"), s.attr("type"))).collect(Collectors.toList());
-            document.videos = videoSources;
+            document.videos.clear();
+            document.videos.addAll(videoSources);
             document.imageUrl = null;
         }
     }
 
+    private static boolean isNSFW(org.jsoup.nodes.Document parse) {
+        return parse.location().contains("over18");
+    }
+
     private static Double findVotes(org.jsoup.nodes.Document parse) {
         if(parse.location().contains("over18")) {
-//                log.info("Skipping NSFW");
-            return 0D;
+            throw new IllegalStateException("Cannot find score for NSFW documents. Please filter them out before checking votes.");
         }
         return findVotes2(parse);
     }

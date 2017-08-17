@@ -1,47 +1,33 @@
 package se.johantiden.myfeed.plugin;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class WashingtonPostPlugin implements Plugin {
+public class AlJazeeraFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(WashingtonPostPlugin.class);
-    private final Duration invalidationPeriod;
-    private final String feedName;
-    private final String webUrl;
-    private final String rssUrl;
+    private static final Logger log = LoggerFactory.getLogger(AlJazeeraFeed.class);
+    public static final String URL = "http://www.aljazeera.com";
+    public static final String NAME = "Al Jazeera";
+    public static final String URL_RSS = "http://www.aljazeera.com/xml/rss/all.xml";
 
-    public WashingtonPostPlugin(String feedName, String webUrl, String rssUrl, Duration invalidationPeriod) {
-        this.invalidationPeriod = invalidationPeriod;
-        this.feedName = feedName;
-        this.webUrl = webUrl;
-        this.rssUrl = rssUrl;
+    public AlJazeeraFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
-    @Override
-    public Feed createFeed() {
-        return new FeedImpl(feedName, invalidationPeriod, this);
-    }
-
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssPlugin(feedName, webUrl, rssUrl, invalidationPeriod)
-                                       .createFeedReader(createFeed()).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream()
                    .map(docMapper())
                    .collect(Collectors.toList());
@@ -52,24 +38,11 @@ public class WashingtonPostPlugin implements Plugin {
 
 
         return document -> {
+
             document.imageUrl = findImage(document);
-            document.imageUrl = parseImgFromHtml(document.html);
-            document.html = null;
             return document;
         };
 
-    }
-
-    private static String parseImgFromHtml(String html) {
-
-        org.jsoup.nodes.Document doc = Jsoup.parse(html);
-        Elements imgs = doc.select("img");
-        if (!imgs.isEmpty()) {
-            Element img = imgs.get(0);
-            String src = img.attr("src");
-            return src;
-        }
-        return null;
     }
 
     private static String findImage(Document document) {

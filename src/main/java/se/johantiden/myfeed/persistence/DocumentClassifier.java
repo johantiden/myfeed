@@ -1,13 +1,14 @@
 package se.johantiden.myfeed.persistence;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import se.johantiden.myfeed.classification.DocumentMatcher;
-import se.johantiden.myfeed.controller.NameAndUrl;
-import se.johantiden.myfeed.controller.Subject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
@@ -69,12 +70,14 @@ public class DocumentClassifier {
     public static final String AFRIKA = "Afrika";
     public static final String INRIKES = "Inrikes";
     public static final String USA = "USA";
+    public static final String MILJÖPARTIET = "Miljöpartiet";
+    public static final String SYDAFRIKA = "Sydafrika";
 
     private DocumentClassifier() {
     }
 
-    public static List<Subject> getSubjectFor(Document d) {
-        List<Subject> s = new ArrayList<>();
+    public static Set<String> getSubjectFor(Document d) {
+        Set<String> s = new HashSet<>();
         DocumentMatcher m = new DocumentMatcher(d) {
             @Override
             public boolean anySubjectEquals(String subject) {
@@ -82,382 +85,406 @@ public class DocumentClassifier {
             }
         };
 
-        if(m.anyCategoryEquals("ekonomi", "Näringsliv")) { s.add(s(EKONOMI)); }
-        if(m.anyCategoryEquals("ledare")) { s.add(s("Ledare")); }
-        if(m.anyCategoryEquals("sport", "sports")) { s.add(s("Sport")); }
-        if(m.has("your") && m.has("briefing")) { s.add(s("Briefing")); }
-        if(m.has("Tim Berners-Lee")) { s.add(s("Tim Berners-Lee")); }
-        if(m.has("german") || m.has("tysk") || m.has("merkel") || m.has("Brandenburg")) { s.add(s(TYSKLAND)); }
-        if(m.has("merkel")) { s.add(s("Merkel")); }
-        if(m.has("Hitler") || m.hasCaseSensitive("Nazi")) { s.add(s("Nazism")); }
-        if(m.has("twitter") || m.has("tweet")) { s.add(s("Twitter")); }
-        if(m.has("macron")) { s.add(s("Macron")); }
-        if(m.anyCategoryEquals("film")) { s.add(s("Film")); }
-        if(m.has("turist")) { s.add(s("Turist")); }
-        if(m.has("formel 1")) { s.add(s("Formel 1")); }
-        if(m.has("rallycross")) { s.add(s("Rallycross")); }
-        if(m.has("GP-hoppning","travlopp")) { s.add(s("Hästsport")); }
-        if(m.has("Tennis","Federer")) { s.add(s("Tennis")); }
-        if(m.has("sprang maran")) { s.add(s("Löpning")); }
-        if(m.has("hockey", "Henrik Lundqvist", "New York Rangers", "Nicklas Bäckström")) { s.add(s("Hockey")); }
-        if(m.has(FOTBOLL, "allsvensk", "Champions League", "premier league", "superettan", "Benfica ", "Malmö FF", "Ronaldo", "La Liga", "Real Madrid")) { s.add(s("Fotboll")); }
-        if(m.has("handboll", "H65")) { s.add(s("Handboll")); }
-        if(m.hasCaseSensitive("NBA")) { s.add(s("Basket")); }
-        if(m.has("bordtennis", "pingis")) { s.add(s("Bordtennis")); }
-        if(m.has("Giro") && m.has("Italia")) { s.add(s("Cykling")); }
-        if(m.has("Diamond League")) { s.add(s("Friidrott")); }
-        if(m.has("V75")) { s.add(s("Trav")); }
-        if(m.has("Johaug", "alpin", "skidor", "Charlotte Kalla")) { s.add(s("Skidor")); }
-        if(m.has("speedway")) { s.add(s("Speedway")); }
-        if(anySubjectEquals(s, SPORT) && m.hasCaseSensitive("OS") || m.has("olympisk")) { s.add(s("OS")); }
-        if(m.has("netflix")) { s.add(s("Netflix")); }
-        if(m.has("Boko Haram")) { s.add(s("Boko Haram")); }
-        if(m.has("Climate", "Klimat")) { s.add(s("Klimat")); }
-        if(m.has("väder ", "väder.", " väder", "blåsväder", "Cyclone", "Cyklon") || m.hasCaseSensitive("SMHI")) { s.add(s("Väder")); }
-        if(m.has(EUROVISION)) { s.add(s(EUROVISION)); }
-        if(m.has("Rouhani", "Rohani")) { s.add(s("Rouhani")); }
-        if(m.has("Net Neutrality")) { s.add(s("Net Neutrality")); }
-        if(m.has("AskReddit")) { s.add(s("AskReddit")); }
-        if(m.anyCategoryEquals("science")) { s.add(s(FORSKNING)); }
-        if(m.has("Göteborg", "Gothenburg")) { s.add(s("Göteborg")); }
-        if(m.has("Malmö")) { s.add(s("Malmö")); }
-        if(m.has("obama")) { s.add(s("Obama")); }
-        if(m.has("trump")) { s.add(s("Trump")); }
-        if(m.hasCaseSensitive("FBI")) { s.add(s("FBI")); }
-        if(m.has(SPOTIFY)) { s.add(s(SPOTIFY)); }
-        if(m.has("Microsoft")) { s.add(s("Microsoft")); }
-        if(m.has("Samsung")) { s.add(s("Samsung")); }
-        if(m.hasCaseSensitive("Apple")) { s.add(s("Apple")); }
-        if(m.has("block") && m.has("chain")) { s.add(s("Blockchain")); }
-        if(m.has("Facebook")) { s.add(s("Facebook")); }
-        if(m.has("Google")) { s.add(s("Google")); }
-        if(m.has("Baloch")) { s.add(s("Baloch")); }
-        if(m.has(MUSEUM)) { s.add(s(MUSEUM)); }
-        if(m.has("musik", "hiphop")) { s.add(s("Musik")); }
-        if(m.has("konstnär")) { s.add(s("Konst")); }
-        if(m.has("författare")) { s.add(s(BÖCKER)); }
-        if(m.has("dramaserie")) { s.add(s("Film/TV")); }
-        if(m.has("terror")) { s.add(s("Terror")); }
-        if(m.authorEquals("TT")) { s.add(s("TT"));}
-        if(m.has("Ebola")) { s.add(s("Ebola")); }
-        if(m.has("Cholera") | m.has("Kolera")) { s.add(s("Kolera")); }
-        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "malware", "WanaCry", "WannaCry", "Hacker", "hacking", "IT-utpressning", "IT-angrepp", "Internet Security", "eternalblue", "botnet")) { s.add(s(IT_SÄKERHET)); }
-        if(m.has("Brexit")) { s.add(s("Brexit")); }
-        if(m.has("Feministiskt initiativ")) { s.add(s("Feministiskt Initiativ")); }
-        if((m.has("Miljöpartiet") || m.hasCaseSensitive(" MP ", " MP.")) && !anySubjectEquals(s, STORBRITANNIEN)) { s.add(s("Miljöpartiet")); }
-        if(m.has(SVERIGEMOKRATERNA) && m.hasCaseSensitive("SD")) { s.add(s(SVERIGEMOKRATERNA)); }
-        if(m.has("Moderaterna", "Kinberg Batra")) { s.add(s("Moderaterna")); }
-        if(m.has("Kinberg Batra")) { s.add(s("Kinberg Batra")); }
-        if(m.has("Pope Francis")) { s.add(s("Pope Francis")); }
-        if(m.has("debatt")) { s.add(s("Debatt")); }
-        if(m.hasCaseSensitive("CCTV")) { s.add(s("Foliehatt")); }
+        if(m.anyCategoryEquals("ekonomi", "Näringsliv")) { s.add(EKONOMI); }
+        if(m.anyCategoryEquals("ledare")) { s.add("Ledare"); }
+        if(m.anyCategoryEquals("sport", "sports")) { s.add("Sport"); }
+        if(m.has("your") && m.has("briefing")) { s.add("Briefing"); }
+        if(m.has("Tim Berners-Lee")) { s.add("Tim Berners-Lee"); }
+        if(m.has("german") || m.has("tysk") || m.has("merkel") || m.has("Brandenburg")) { s.add(TYSKLAND); }
+        if(m.has("merkel")) { s.add("Merkel"); }
+        if(m.has("Hitler") || m.hasCaseSensitive("Nazi")) { s.add("Nazism"); }
+        if(m.has("twitter") || m.has("tweet")) { s.add("Twitter"); }
+        if(m.has("macron")) { s.add("Macron"); }
+        if(m.anyCategoryEquals("film")) { s.add("Film"); }
+        if(m.has("turist")) { s.add("Turist"); }
+        if(m.has("formel 1")) { s.add("Formel 1"); }
+        if(m.has("rallycross")) { s.add("Rallycross"); }
+        if(m.has("GP-hoppning","travlopp")) { s.add("Hästsport"); }
+        if(m.has("Tennis","Federer")) { s.add("Tennis"); }
+        if(m.has("sprang maran")) { s.add("Löpning"); }
+        if(m.has("hockey", "Henrik Lundqvist", "New York Rangers", "Nicklas Bäckström")) { s.add("Hockey"); }
+        if(m.has(FOTBOLL, "allsvensk", "Champions League", "premier league", "superettan", "Benfica ", "Malmö FF", "Ronaldo", "La Liga", "Real Madrid")) {
+            s.add("Fotboll"); }
+        if(m.has("handboll", "H65")) { s.add("Handboll"); }
+        if(m.hasCaseSensitive("NBA")) { s.add("Basket"); }
+        if(m.has("bordtennis", "pingis")) { s.add("Bordtennis"); }
+        if(m.has("Giro") && m.has("Italia")) { s.add("Cykling"); }
+        if(m.has("Diamond League")) { s.add("Friidrott"); }
+        if(m.has("V75")) { s.add("Trav"); }
+        if(m.has("Johaug", "alpin", "skidor", "Charlotte Kalla")) { s.add("Skidor"); }
+        if(m.has("speedway")) { s.add("Speedway"); }
+        if(anySubjectEquals(s, SPORT) && m.hasCaseSensitive("OS") || m.has("olympisk")) { s.add("OS"); }
+        if(m.has("netflix")) { s.add("Netflix"); }
+        if(m.has("Boko Haram")) { s.add("Boko Haram"); }
+        if(m.has("Climate", "Klimat")) { s.add("Klimat"); }
+        if(m.has("väder ", "väder.", " väder", "blåsväder", "Cyclone", "Cyklon") || m.hasCaseSensitive("SMHI")) {
+            s.add("Väder"); }
+        if(m.has(EUROVISION)) { s.add(EUROVISION); }
+        if(m.has("Rouhani", "Rohani")) { s.add("Rouhani"); }
+        if(m.has("Net Neutrality")) { s.add("Net Neutrality"); }
+        if(m.anyCategoryEquals("science")) { s.add(FORSKNING); }
+        if(m.has("Göteborg", "Gothenburg")) { s.add("Göteborg"); }
+        if(m.has("Malmö")) { s.add("Malmö"); }
+        if(m.has("obama")) { s.add("Obama"); }
+        if(m.has("trump")) { s.add("Trump"); }
+        if(m.hasCaseSensitive("FBI")) { s.add("FBI"); }
+        if(m.has(SPOTIFY)) { s.add(SPOTIFY); }
+        if(m.has("Microsoft")) { s.add("Microsoft"); }
+        if(m.has("Samsung")) { s.add("Samsung"); }
+        if(m.hasCaseSensitive("Apple")) { s.add("Apple"); }
+        if(m.has("block") && m.has("chain")) { s.add("Blockchain"); }
+        if(m.has("Facebook")) { s.add("Facebook"); }
+        if(m.has("Google")) { s.add("Google"); }
+        if(m.has("Baloch")) { s.add("Baloch"); }
+        if(m.has(MUSEUM)) { s.add(MUSEUM); }
+        if(m.has("musik", "hiphop")) { s.add("Musik"); }
+        if(m.has("konstnär")) { s.add("Konst"); }
+        if(m.has("författare")) { s.add(BÖCKER); }
+        if(m.has("dramaserie")) { s.add("Film/TV"); }
+        if(m.has("terror")) { s.add("Terror"); }
+        if(m.authorEquals("TT")) { s.add("TT");}
+        if(m.has("Ebola")) { s.add("Ebola"); }
+        if(m.has("Cholera") | m.has("Kolera")) { s.add("Kolera"); }
+        if(m.has("IT-attacken", "Ransomware", "Cyberattack", "malware", "WanaCry", "WannaCry", "Hacker", "hacking", "IT-utpressning", "IT-angrepp", "Internet Security", "eternalblue", "botnet")) {
+            s.add(IT_SÄKERHET); }
+        if(m.has("Brexit")) { s.add("Brexit"); }
+        if(m.has("Feministiskt initiativ")) { s.add("Feministiskt Initiativ"); }
+        if((m.has(MILJÖPARTIET) || m.hasCaseSensitive(" MP ", " MP.")) && !anySubjectEquals(s, STORBRITANNIEN)) {
+            s.add(MILJÖPARTIET); }
+        if(m.has(SVERIGEMOKRATERNA) && m.hasCaseSensitive("SD")) { s.add(SVERIGEMOKRATERNA); }
+        if(m.has("Moderaterna", "Kinberg Batra")) { s.add("Moderaterna"); }
+        if(m.has("Kinberg Batra")) { s.add("Kinberg Batra"); }
+        if(m.has("Pope Francis")) { s.add("Pope Francis"); }
+        if(m.has("debatt")) { s.add("Debatt"); }
+        if(m.hasCaseSensitive("CCTV")) { s.add("Foliehatt"); }
         addPlaces(s, m);
-        if(m.has("kvinnor") && m.has("män")) { s.add(s("Kvinnor")); }
-        if(m.has("kvinnor") && m.has("män")) { s.add(s("Män")); }
-        if(m.isFromFeed("TheLocal") && m.has("recipe:")) { s.add(s(RECIPE)); }
-        if(m.isFromFeed("HackerNews") && m.has("hiring")) { s.add(s(HIRING)); }
-        if(m.has(VÄNSTERPARTIET)) { s.add(s(VÄNSTERPARTIET)); }
-        if(m.has(CENTERPARTIET)) { s.add(s(CENTERPARTIET)); }
-        if(m.has(VÄNSTERPARTIET)) { s.add(s(VÄNSTERPARTIET)); }
-        if(m.has(KRISTDEMOKRATERNA) || m.hasCaseSensitive("KD")) { s.add(s(KRISTDEMOKRATERNA)); }
+        if(m.has("kvinnor") && m.has("män")) { s.add("Kvinnor"); }
+        if(m.has("kvinnor") && m.has("män")) { s.add("Män"); }
+        if(m.isFromFeed("TheLocal") && m.has("recipe:")) { s.add(RECIPE); }
+        if(m.isFromFeed("HackerNews") && m.has("hiring")) { s.add(HIRING); }
+        if(m.has(VÄNSTERPARTIET)) { s.add(VÄNSTERPARTIET); }
+        if(m.has(CENTERPARTIET)) { s.add(CENTERPARTIET); }
+        if(m.has(VÄNSTERPARTIET)) { s.add(VÄNSTERPARTIET); }
+        if(m.has(KRISTDEMOKRATERNA) || m.hasCaseSensitive("KD")) { s.add(KRISTDEMOKRATERNA); }
 
         addPeople(s, m);
-        if(m.has(IDAGSIDAN)) { s.add(s(IDAGSIDAN)); }
-        if(m.has("historian", "1500", "1600", "1700", "1800")) { s.add(s(HISTORIA)); }
-        if(m.has("Daesh") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) { s.add(s("Daesh")); }
-        if(m.has("Socialdemokraterna") && !anySubjectEquals(s, TYSKLAND)) { s.add(s("Socialdemokraterna")); }
-        if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(s(MAT)); }
-        if(m.anyCategoryEquals("gaming")) { s.add(s("Gaming")); }
+        if(m.has(IDAGSIDAN)) { s.add(IDAGSIDAN); }
+        if(m.has("historian", "1500", "1600", "1700", "1800")) { s.add(HISTORIA); }
+        if(m.has("Daesh", "Islamic State") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) {
+            s.add("Daesh"); }
+        if(m.has("Socialdemokraterna") && !anySubjectEquals(s, TYSKLAND)) { s.add("Socialdemokraterna"); }
+        if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(MAT); }
+        if(m.anyCategoryEquals("gaming")) { s.add("Gaming"); }
         if(m.feedStartsWith("Reddit")) {
-            String redditCategory = d.categories.get(0).name;
-            s.add(s(redditCategory));
+            String redditCategory = d.getSourceCategories().iterator().next();
+            s.add(redditCategory);
         }
 
         // Badness:
-        if(m.hasCaseSensitive(NEWS_GRID)) { s.add(s(NEWS_GRID)); }
-        if(m.has("cars technica")) { s.add(s("Cars")); }
-        if(m.has(WEBB_TV)) { s.add(s(WEBB_TV)); }
-        if(m.has(LEAGUEOFLEGENDS)) { s.add(s(LEAGUEOFLEGENDS)); }
-        if(m.anyCategoryEquals(DEALMASTER)) { s.add(s(DEALMASTER)); }
-        if(m.has("dödsfäll")) { s.add(s("Dödsfälla")); }
-        if(m.anyCategoryEquals("motor")) { s.add(s("Motor")); }
-        if(m.anyCategoryEquals(SERIER)) { s.add(s("Serier")); }
-        if(m.hasCaseSensitive("Här är") || m.has("– här är", "- här är")) { s.add(s("Här är")); }
-        if(m.has("turist")) { s.add(s("Turist")); }
-        if(d.pageUrl.contains(UUTISET)) { s.add(s("Uutiset")); }
-        if(m.isFromFeed("Svenska Dagbladet") && m.startsWithCaseSensitive("VIDEO")) { s.add(s("VIDEO")); }
-        if(m.has("fragesport")) { s.add(s(FRÅGESPORT)); }
-        if(m.anyCategoryEquals(JUNIOR)) { s.add(s(JUNIOR)); }
-        if(m.anyCategoryEquals(NUTIDSTESTET)) { s.add(s(NUTIDSTESTET)); }
-        if(m.anyCategoryEquals(PERFECT_GUIDE)) { s.add(s(PERFECT_GUIDE)); }
-        if(m.anyCategoryEquals(RESOR)) { s.add(s(RESOR)); }
-        if(m.has("Reddit") && m.anyCategoryEquals("IAmA")) { s.add(s(I_AM_A)); }
-        if(m.has("Reddit") && m.anyCategoryEquals(BLACK_PEOPLE_TWITTER)) { s.add(s(BLACK_PEOPLE_TWITTER)); }
-        if(m.has("Reddit") && m.anyCategoryEquals(THE_DENNIS)) { s.add(s(THE_DENNIS)); }
-        if(m.has("Reddit") && m.has("-- number", "--number")) { s.add(s(NUMBER_OF_PEOPLE)); }
+        if(m.hasCaseSensitive(NEWS_GRID)) { s.add(NEWS_GRID); }
+        if(m.has("cars technica")) { s.add("Cars"); }
+        if(m.has(WEBB_TV)) { s.add(WEBB_TV); }
+        if(m.has(LEAGUEOFLEGENDS)) { s.add(LEAGUEOFLEGENDS); }
+        if(m.anyCategoryEquals(DEALMASTER)) { s.add(DEALMASTER); }
+        if(m.has("dödsfäll")) { s.add("Dödsfälla"); }
+        if(m.anyCategoryEquals("motor")) { s.add("Motor"); }
+        if(m.anyCategoryEquals(SERIER)) { s.add("Serier"); }
+        if(m.hasCaseSensitive("Här är") || m.has("– här är", "- här är")) { s.add("Här är"); }
+        if(m.has("turist")) { s.add("Turist"); }
+        if(d.pageUrl.contains(UUTISET)) { s.add("Uutiset"); }
+        if(m.isFromFeed("Svenska Dagbladet") && m.startsWithCaseSensitive("VIDEO")) { s.add("VIDEO"); }
+        if(m.has("fragesport")) { s.add(FRÅGESPORT); }
+        if(m.anyCategoryEquals(JUNIOR)) { s.add(JUNIOR); }
+        if(m.anyCategoryEquals(NUTIDSTESTET)) { s.add(NUTIDSTESTET); }
+        if(m.anyCategoryEquals(PERFECT_GUIDE)) { s.add(PERFECT_GUIDE); }
+        if(m.anyCategoryEquals(RESOR)) { s.add(RESOR); }
+        if(m.has("Reddit") && m.anyCategoryEquals("IAmA")) { s.add(I_AM_A); }
+        if(m.has("Reddit") && m.anyCategoryEquals(BLACK_PEOPLE_TWITTER)) { s.add(BLACK_PEOPLE_TWITTER); }
+        if(m.has("Reddit") && m.anyCategoryEquals(THE_DENNIS)) { s.add(THE_DENNIS); }
+        if(m.has("Reddit") && m.has("-- number", "--number")) { s.add(NUMBER_OF_PEOPLE); }
 
         return s;
     }
 
-    private static void addPeople(List<Subject> s, DocumentMatcher m) {
+    private static void addPeople(Collection<String> s, DocumentMatcher m) {
 
         if(m.has("Busch Thor")) {
-            s.add(s("Ebba Busch Thor"));
-            s.add(s(KRISTDEMOKRATERNA));
+            s.add("Ebba Busch Thor");
+            s.add(KRISTDEMOKRATERNA);
+        }
+        if(m.has("Alice Bah Kuhnke")) {
+            s.add("Alice Bah Kuhnke");
+            s.add(MILJÖPARTIET);
+        }
+        if(m.has("Mugabe")) {
+            s.add(SYDAFRIKA);
         }
         if(m.has("Jonas Sjöstedt")) {
-            s.add(s("Jonas Sjöstedt"));
-            s.add(s(VÄNSTERPARTIET));
+            s.add("Jonas Sjöstedt");
+            s.add(VÄNSTERPARTIET);
         }
         if(m.has("Annie Lööf")) {
-            s.add(s("Annie Lööf"));
-            s.add(s(CENTERPARTIET));
+            s.add("Annie Lööf");
+            s.add(CENTERPARTIET);
         }
-
+        if(m.has("Löfven")) {
+            s.add("Stefan Löfven");
+        }
         if(m.has("Jimmie Åkesson")) {
-            s.add(s("Jimmie Åkesson"));
-            s.add(s(SVERIGEMOKRATERNA));
+            s.add("Jimmie Åkesson");
+            s.add(SVERIGEMOKRATERNA);
         }
         if(m.has("Björklund")) {
-            s.add(s("Jan Björklund"));
-            s.add(s(LIBERALERNA));
+            s.add("Jan Björklund");
+            s.add(LIBERALERNA);
         }
         if (m.has("Varadkar")) {
-            s.add(s("Leo Varadkar"));
-            s.add(s("Irland"));
+            s.add("Leo Varadkar");
+            s.add("Irland");
         }
         if (m.has("Duterte")) {
-            s.add(s("Rodrigo Duterte"));
-            s.add(s(FILIPPINERNA));
+            s.add("Rodrigo Duterte");
+            s.add(FILIPPINERNA);
         }
         if (m.has("Putin")) {
-            s.add(s("Vladimir Putin"));
-            s.add(s(RUSSIA));
+            s.add("Vladimir Putin");
+            s.add(RUSSIA);
+        }
+        if (m.has("Malala")) {
+            s.add("Malala Yousafzai");
+        }
+        if (m.has("Kim Wall")) {
+            s.add("Kim Wall");
         }
         if (anySubjectEquals(s, STORBRITANNIEN) && m.hasCaseSensitive("May")) {
-            s.add(s("Theresa May"));
-            s.add(s(STORBRITANNIEN));
+            s.add("Theresa May");
+            s.add(STORBRITANNIEN);
         }
+
 
     }
 
-    private static void addPlaces(List<Subject> s, DocumentMatcher m) {
-        if(m.hasCaseSensitive("Cuba", "Kuba")) { s.add(s("Kuba")); }
+    private static void addPlaces(Collection<String> s, DocumentMatcher m) {
+        if(m.hasCaseSensitive("Cuba", "Kuba")) { s.add("Kuba"); }
         if(m.hasCaseSensitive("Iraq", "Irak", "Mosul")) {
-            s.add(s("Irak"));
+            s.add("Irak");
         }
-        if(m.hasCaseSensitive("Oman")) { s.add(s("Oman")); }
+        if(m.hasCaseSensitive("Oman")) { s.add("Oman"); }
 
         addAfrica(s, m);
-        if(m.has("Nepal")) { s.add(s("Nepal")); }
-        if(m.has("Syria", "Syrien", "syrisk", "Syrier", "Damascus", "Damaskus")) { s.add(s("Syrien")); }
-        if(m.has("Venezuela", "Maduro")) { s.add(s("Venezuela")); }
-        if(m.has("North Korea", "Nordkorea")) { s.add(s("Nordkorea")); }
-        if(m.has("South Korea", "Sydkorea", "Seoul")) { s.add(s("Sydkorea")); }
-        if(m.has("Myanmar", "Burma")|| m.has("Aung San Suu Kyi")) { s.add(s("Myanmar")); }
-        if(m.hasCaseSensitive("Iran") || m.has("Rouhani", "Rohani")) { s.add(s("Iran")); }
-        if(m.has("China", "Kina", "Xi Jinping", "Kines")) { s.add(s("Kina")); }
-        if(m.has("Albanien")) { s.add(s("Albanien")); }
-        if(m.has("Bosnia", "Bosnien")) { s.add(s("Bosnien")); }
-        if(m.has("Belgium")) { s.add(s("Belgien")); }
-        if(m.has("India", "Indien")) { s.add(s("Indien")); }
-        if(m.has("Brazil")) { s.add(s("Brasilien")); }
-        if(m.has("Egypt")) { s.add(s("Egypten")); }
-        if(m.has("Yemen", "Jemen")) { s.add(s("Jemen")); }
-        if(m.has("Danmark", "Köpenhamn")) { s.add(s("Danmark")); }
+        if(m.has("Nepal")) { s.add("Nepal"); }
+        if(m.has("Syria", "Syrien", "syrisk", "Syrier", "Damascus", "Damaskus")) { s.add("Syrien"); }
+        if(m.has("Venezuela", "Maduro")) { s.add("Venezuela"); }
+        if(m.has("North Korea", "Nordkorea")) { s.add("Nordkorea"); }
+        if(m.has("South Korea", "Sydkorea", "Seoul")) { s.add("Sydkorea"); }
+        if(m.has("Myanmar", "Burma")|| m.has("Aung San Suu Kyi")) { s.add("Myanmar"); }
+        if(m.hasCaseSensitive("Iran") || m.has("Rouhani", "Rohani")) { s.add("Iran"); }
+        if(m.has("China", "Kina", "Xi Jinping", "Kines")) { s.add("Kina"); }
+        if(m.has("Albanien")) { s.add("Albanien"); }
+        if(m.has("Bosnia", "Bosnien")) { s.add("Bosnien"); }
+        if(m.has("Belgium")) { s.add("Belgien"); }
+        if(m.has("India", "Indien")) { s.add("Indien"); }
+        if(m.has("Brazil")) { s.add("Brasilien"); }
+        if(m.has("Chile")) { s.add("Chile"); }
+        if(m.has("Egypt")) { s.add("Egypten"); }
+        if(m.has("Spanien", "Spain", "Spanish", "Barcelona")) { s.add("Spanien"); }
+        if(m.has("Barcelona")) { s.add("Barcelona"); }
+        if(m.has("Sierra Leone")) { s.add("Sierra Leone"); }
+        if(m.has("Kenya")) { s.add("Kenya"); }
+        if(m.has("Hong Kong")) { s.add("Hong Kong"); }
+        if(m.has("Yemen", "Jemen")) { s.add("Jemen"); }
+        if(m.has("Danmark", "Köpenhamn")) { s.add("Danmark"); }
         if(m.has("Köpenhamn")) {
-            s.add(s("Köpenhamn"));
-            s.add(s("Danmark"));
+            s.add("Köpenhamn");
+            s.add("Danmark");
         }
-        if(m.has("Bangladesh")) { s.add(s("Bangladesh")); }
-        if(m.has("Malaysia")) { s.add(s("Malaysia")); }
-        if(m.has("France", "Frankrike", "Fransk", "French", "Paris")) { s.add(s("Frankrike")); }
-        if(m.has("Australia")) { s.add(s("Australia")); }
-        if(m.has("Dutch", "Netherlands", "Nederländerna")) { s.add(s("Nederländerna")); }
-        if(m.has("Italien")) { s.add(s("Italien")); }
-        if(m.has("Tjeckien", "Tjeckisk", "Czech")) { s.add(s("Tjeckien")); }
-        if(m.has("Kuwait")) { s.add(s("Kuwait")); }
-        if(m.has("Saudi Arabia", "Saudiarabien")) { s.add(s("Saudiarabien")); }
-        if(m.has("Qatar")) { s.add(s("Qatar")); }
-        if(m.has("South Africa")) { s.add(s("Sydafrika")); }
-        if(m.has("European Union") || m.hasCaseSensitive("EU")) { s.add(s("EU")); }
-        if(m.has("Europe", "Europa")) { s.add(s("Europa")); }
+        if(m.has("Bangladesh")) { s.add("Bangladesh"); }
+        if(m.has("Malaysia")) { s.add("Malaysia"); }
+        if(m.has("France", "Frankrike", "Fransk", "French", "Paris")) { s.add("Frankrike"); }
+        if(m.has("Australia")) { s.add("Australia"); }
+        if(m.has("Dutch", "Netherlands", "Nederländerna")) { s.add("Nederländerna"); }
+        if(m.has("Italien")) { s.add("Italien"); }
+        if(m.has("Tjeckien", "Tjeckisk", "Czech")) { s.add("Tjeckien"); }
+        if(m.has("Kuwait")) { s.add("Kuwait"); }
+        if(m.has("Saudi Arabia", "Saudiarabien")) { s.add("Saudiarabien"); }
+        if(m.has("Qatar")) { s.add("Qatar"); }
+        if(m.has("South Africa")) { s.add(SYDAFRIKA); }
+        if(m.has("European Union") || m.hasCaseSensitive("EU")) { s.add("EU"); }
+        if(m.has("Europe", "Europa")) { s.add("Europa"); }
         addUsa(s, m);
-        if(m.has("Mexiko", "Mexico", "Mexican")) { s.add(s("Mexico")); }
-        if(m.has("Turkey", "Turkish", "Turkiet", "Recep Tayyip Erdogan", "Istanbul")) { s.add(s("Turkiet")); }
-        if(m.has("Greece", "Greek", "Grekland", "Grek")) { s.add(s("Grekland")); }
-        if(m.has("Österrike", "Austria")) { s.add(s("Österrike")); }
-        if(m.has("Finland")) { s.add(s("Finland")); }
-        if(m.has("Nigeria")) { s.add(s("Nigeria")); }
-        if(m.has("South Sudan")) { s.add(s("Sydsudan")); }
-        if(m.has("Kiev", "Ukrain")) { s.add(s("Ukraina")); }
-        if(m.has("Norge", "Norway", "norska")) { s.add(s("Norge")); }
-        if(m.has("Taiwan")) { s.add(s("Taiwan")); }
-        if(m.has("Israel", "West Bank")) { s.add(s("Israel")); }
-        if(m.has("Schweiz")) { s.add(s("Schweiz")); }
-        if(m.has("Ungern")) { s.add(s("Ungern")); }
-        if(m.has("Portugal")) { s.add(s("Portugal")); }
-        if(m.has("Japan")) { s.add(s("Japan")); }
-        if(m.has("Argentin")) { s.add(s("Argentina")); }
-        if(m.has("Russia", RUSSIA, "Rysk") || m.hasCaseSensitive("Moskva")) { s.add(s(RUSSIA)); }
-        if(m.has("Canada", "Kanada", "Canadian", "Kanaden")) { s.add(s("Kanada")); }
-        if(m.has("Palestin")) { s.add(s("Palestina")); }
-        if(m.has("Afghanistan", "Afganistan", "Baloch", "kabul")) { s.add(s("Afghanistan")); }
-        if(m.has("Pakistan", "Baloch")) { s.add(s("Pakistan")); }
-        if(m.has("Manila", FILIPPINERNA, "Philippines")) { s.add(s(FILIPPINERNA)); }
-        if(m.has("Irish", "Ireland", "Irland")) { s.add(s("Irland")); }
-        if(m.has("Belgien", "Belgium")) { s.add(s("Belgien")); }
-        if(m.has("Tibet")) { s.add(s("Tibet")); }
-        if(m.has("Montenegro")) { s.add(s("Montenegro")); }
+        if(m.has("Mexiko", "Mexico", "Mexican")) { s.add("Mexico"); }
+        if(m.has("Turkey", "Turkish", "Turkiet", "Recep Tayyip Erdogan", "Istanbul")) { s.add("Turkiet"); }
+        if(m.has("Greece", "Greek", "Grekland", "Grek")) { s.add("Grekland"); }
+        if(m.has("Österrike", "Austria")) { s.add("Österrike"); }
+        if(m.has("Finland")) { s.add("Finland"); }
+        if(m.has("Nigeria")) { s.add("Nigeria"); }
+        if(m.has("South Sudan")) { s.add("Sydsudan"); }
+        if(m.has("Kiev", "Ukrain")) { s.add("Ukraina"); }
+        if(m.has("Norge", "Norway", "norska")) { s.add("Norge"); }
+        if(m.has("Taiwan")) { s.add("Taiwan"); }
+        if(m.has("Israel", "West Bank")) { s.add("Israel"); }
+        if(m.has("Schweiz")) { s.add("Schweiz"); }
+        if(m.has("Ungern")) { s.add("Ungern"); }
+        if(m.has("Portugal")) { s.add("Portugal"); }
+        if(m.has("Japan")) { s.add("Japan"); }
+        if(m.has("Argentin")) { s.add("Argentina"); }
+        if(m.has("Russia", RUSSIA, "Rysk") || m.hasCaseSensitive("Moskva")) { s.add(RUSSIA); }
+        if(m.has("Canada", "Kanada", "Canadian", "Kanaden")) { s.add("Kanada"); }
+        if(m.has("Palestin")) { s.add("Palestina"); }
+        if(m.has("Afghanistan", "Afganistan", "Baloch", "kabul")) { s.add("Afghanistan"); }
+        if(m.has("Pakistan", "Baloch")) { s.add("Pakistan"); }
+        if(m.has("Manila", FILIPPINERNA, "Philippines")) { s.add(FILIPPINERNA); }
+        if(m.has("Irish", "Ireland", "Irland")) { s.add("Irland"); }
+        if(m.has("Belgien", "Belgium")) { s.add("Belgien"); }
+        if(m.has("Tibet")) { s.add("Tibet"); }
+        if(m.has("Montenegro")) { s.add("Montenegro"); }
 
         addGreatBritain(s, m);
         addSweden(s, m);
     }
 
-    private static void addUsa(List<Subject> s, DocumentMatcher m) {
-        if(m.hasCaseSensitive("US", "FBI") || m.has("america") && !m.has("south america") || m.has("U.S.", "america", "obama", "trump")) {
-            s.add(s(USA));
+    private static void addUsa(Collection<String> s, DocumentMatcher m) {
+        if(m.hasCaseSensitive("US", "FBI") || m.has("america") && !m.has("south america", "americas") || m.has("U.S.", "obama", "trump")) {
+            s.add(USA);
         }
         if(m.has("Orlando")) {
-            s.add(s("Orlando"));
-            s.add((s(USA)));
+            s.add("Orlando");
+            s.add((USA));
         }
     }
 
-    private static void addGreatBritain(List<Subject> s, DocumentMatcher m) {
+    private static void addGreatBritain(Collection<String> s, DocumentMatcher m) {
         if(m.has("Manchester")) {
-            s.add(s("Manchester"));
-            s.add((s(STORBRITANNIEN)));
+            s.add("Manchester");
+            s.add((STORBRITANNIEN));
         }
         if(m.has(STORBRITANNIEN, "London", "England", "Britain", "Scotland", "British", "Britain")) {
-            s.add(s(STORBRITANNIEN));
+            s.add(STORBRITANNIEN);
         }
 
     }
 
-    private static void addSweden(List<Subject> s, DocumentMatcher m) {
+    private static void addSweden(Collection<String> s, DocumentMatcher m) {
         if(m.has("Gröna Lund")) {
-            s.add(s("Gröna Lund"));
-            s.add(s("Stockholm"));
-            s.add(s(INRIKES));
+            s.add("Gröna Lund");
+            s.add("Stockholm");
+            s.add(INRIKES);
         }
         if(m.has("Eskilstuna")) {
-            s.add(s("Eskilstuna"));
-            s.add(s(INRIKES));
+            s.add("Eskilstuna");
+            s.add(INRIKES);
         }
         if(m.has("Bromma flygplats")) {
-            s.add(s("Bromma flygplats"));
-            s.add(s(INRIKES));
+            s.add("Bromma flygplats");
+            s.add(INRIKES);
         }
         if(m.has("Kristianstad")) {
-            s.add(s("Kristianstad"));
-            s.add(s(INRIKES));
+            s.add("Kristianstad");
+            s.add(INRIKES);
         }
         if(m.has("Arboga")) {
-            s.add(s("Arboga"));
-            s.add(s(INRIKES));
+            s.add("Arboga");
+            s.add(INRIKES);
         }
         if(m.has("Stockholm") || m.anyCategoryEquals("sthlm")) {
-            s.add(s(STOCKHOLM));
-            s.add(s(INRIKES));
+            s.add(STOCKHOLM);
+            s.add(INRIKES);
         }
         if(m.anyCategoryEquals("Sverige") || m.hasCaseSensitive("Umeå", "Liseberg", "Strömsund", "Norrköping", "Östersund", "Swedish", "Swede", "Västervik", "Katrineholm", "Uppsala", "Linköping")) {
-            s.add(s(INRIKES));
+            s.add(INRIKES);
         }
     }
 
-    private static void addAfrica(List<Subject> s, DocumentMatcher m) {
+    private static void addAfrica(Collection<String> s, DocumentMatcher m) {
         if(m.has("Libyen", "Libya")) {
-            s.add(s("Libyen"));
-            s.add(s(AFRIKA));
+            s.add("Libyen");
+            s.add(AFRIKA);
         }
         if(m.has("Lesotho")) {
-            s.add(s("Lesotho"));
-            s.add(s(AFRIKA));
+            s.add("Lesotho");
+            s.add(AFRIKA);
         }
         if(m.has("Morocco", "Marocko")) {
-            s.add(s("Marocko"));
-            s.add(s(AFRIKA));
+            s.add("Marocko");
+            s.add(AFRIKA);
         }
         if(m.has("Tunis")) {
-            s.add(s("Tunisien"));
-            s.add(s(AFRIKA));
+            s.add("Tunisien");
+            s.add(AFRIKA);
         }
         if(m.has("Angola")) {
-            s.add(s("Angola"));
-            s.add(s(AFRIKA));
+            s.add("Angola");
+            s.add(AFRIKA);
         }
 
         if(m.has("Kongo-Kinshasa")) {
-            s.add(s("Kongo-Kinshasa"));
-            s.add(s(AFRIKA));
+            s.add("Kongo-Kinshasa");
+            s.add(AFRIKA);
         }
         if(m.has("Elfenbenskusten", "Ivory Coast", "Ivorian")) {
-            s.add(s("Elfenbenskusten"));
-            s.add(s(AFRIKA));
+            s.add("Elfenbenskusten");
+            s.add(AFRIKA);
         }
         if(m.has("Uganda")) {
-            s.add(s("Uganda"));
-            s.add(s(AFRIKA));
+            s.add("Uganda");
+            s.add(AFRIKA);
         }
         if(m.hasCaseSensitive("Kamerun", "Cameroon")) {
-            s.add(s("Kamerun"));
-            s.add(s(AFRIKA));
+            s.add("Kamerun");
+            s.add(AFRIKA);
         }
 
     }
 
-    private static boolean anySubjectEquals(List<Subject> subjects, String... matchAny) {
-        return Arrays.stream(matchAny).anyMatch(s -> anySubjectEquals(subjects, s));
+    private static boolean anySubjectEquals(Collection<String> subjects, Collection<String> matchAny) {
+        return matchAny.stream().anyMatch(s -> anySubjectEquals(subjects, s));
     }
-    private static boolean anySubjectEquals(List<Subject> subjects, String match) {
-        return subjects.stream().anyMatch(s -> s.getTitle().equalsIgnoreCase(match));
+    private static boolean anySubjectEquals(Collection<String> subjects, String match) {
+        return subjects.stream().anyMatch(s -> s.equalsIgnoreCase(match));
     }
 
-    private static Subject s(final String title) {return new Subject(title);}
-
-    public static String getTabFor(Document document) {
+    public static Set<String> getTabsFor(Document document) {
         if(isError(document)) {
-            return ERROR;
+            return Collections.singleton(ERROR);
         }
 
         if(isBad(document)) {
-            return BAD;
+            return Collections.singleton(BAD);
         }
 
         if(isTech(document)) {
-            return TECH;
+            return Collections.singleton(TECH);
         }
 
         if(isCulture(document)) {
-            return CULTURE;
+            return Collections.singleton(CULTURE);
         }
 
         if(isTorrents(document)) {
-            return TORRENTS;
+            return Collections.singleton(TORRENTS);
         }
 
         if(isFun(document)) {
-            return FUN;
+            return Collections.singleton(FUN);
         }
 
         if(isBiz(document)) {
-            return BIZ;
+            return Collections.singleton(BIZ);
         }
 
         if(isSport(document)) {
-            return SPORT;
+            return Collections.singleton(SPORT);
         }
 
         if(isVäder(document)) {
-            return VÄDER;
+            return Collections.singleton(VÄDER);
         }
 
         if(isNews(document)) {
-            return NEWS;
+            return Collections.singleton(NEWS);
         }
 
-        return UNMATCHED_TAB;
+        return Collections.singleton(UNMATCHED_TAB);
     }
 
     private static boolean isTorrents(Document d) {
@@ -552,7 +579,7 @@ public class DocumentClassifier {
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - top") ||
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - r/all") ||
             m.anyCategoryEquals("AskReddit") ||
-            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying", "space") ||
+            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying", "space", "mildlyinfuriating") ||
             m.isFromFeed("xkcd");
     }
 
@@ -598,10 +625,10 @@ public class DocumentClassifier {
             m.anySubjectEquals(NUTIDSTESTET) ||
             m.anySubjectEquals(RESOR) ||
             m.anySubjectEquals(UUTISET) ||
-            m.anyCategoryEquals("Jokes", "OldSchoolCool");
+            m.anyCategoryEquals("Jokes", "OldSchoolCool", "GetMotivated");
     }
 
-    public static void appendUrlFoldersAsCategory(Document document) {
+    public static void appendUrlFoldersAsCategories(Document document) {
 
         DocumentMatcher m = new DocumentMatcher(document);
 
@@ -611,19 +638,15 @@ public class DocumentClassifier {
                                    .collect(Collectors.toList());
 
             folders.stream()
-            .filter(f -> !m.anyCategoryEquals(f))
-            .filter(f -> !f.equals("artikel") && !f.equals("comments"))
-            .map(f -> new NameAndUrl(f, endUrlAt(f, document.pageUrl)))
-            .forEach(document.categories::add);
+                .filter(f -> !m.anyCategoryEquals(f))
+                .filter(f -> !f.equals("artikel"))
+                .filter(f -> !f.equals("comments"))
+                .filter(f -> !f.equals("worldNews"))
+                .filter(f -> !f.equals("Reuters"))
+                .filter(f -> !f.equals("story"))
+                .map(StringUtils::capitalize)
+                .forEach(document.getSourceCategories()::add);
         }
-    }
-
-    private static String endUrlAt(String firstFolder, String pageUrl) {
-
-        int i = pageUrl.indexOf(firstFolder);
-
-        String substring = pageUrl.substring(0, i + firstFolder.length());
-        return substring;
     }
 
     private static boolean urlFilter(String string) {

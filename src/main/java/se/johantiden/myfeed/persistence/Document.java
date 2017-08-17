@@ -1,42 +1,76 @@
 package se.johantiden.myfeed.persistence;
 
 
+import com.google.common.collect.Lists;
 import se.johantiden.myfeed.controller.NameAndUrl;
-import se.johantiden.myfeed.controller.Subject;
-import se.johantiden.myfeed.persistence.redis.Key;
-import se.johantiden.myfeed.persistence.redis.Keys;
 
-import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
-public class Document implements Persistable<Document>, Serializable {
+@Entity
+@NamedQueries({
+        @NamedQuery(name = "Document.findDocumentsNotParsedSubjects", query = "SELECT d FROM Document d WHERE d.subjectsParsed = false"),
+        @NamedQuery(name = "Document.findDocumentsNotParsedTabs", query = "SELECT d FROM Document d WHERE d.tabsParsed = false"),
 
-    private static final long serialVersionUID = 7281769259354137360L;
-
-    public final Key<Document> key;
-    public Key<Feed> feedKey;
-    public NameAndUrl feed;
-    public String tab;
+})
+public class Document extends BaseEntity {
+    @Column(length = 2000)
     public String title;
+
+    @Column(length = 2000)
     public final String text;
+
     public NameAndUrl author;
+
+    @Column(length = 2000)
     public final String pageUrl;
+
+    @Column(length = 2000)
     public String imageUrl;
+
     public final Instant publishedDate;
+
+    @Column(length = 2000)
     public String html;
-    public List<NameAndUrl> categories;
+
     public Double score;
     public boolean isPaywalled;
-    public List<Video> videos = new ArrayList<>();
-    public final List<Subject> subjects = new ArrayList<>();
+    public ArrayList<Video> videos = new ArrayList<>();
+
+    private boolean subjectsParsed = false;
+    private final ArrayList<String> subjects;
+
+    private boolean tabsParsed = false;
+    private final ArrayList<String> tabs;
+
+    private final String feedName;
+    private final String feedUrl;
+
+    @Column(length = 2000)
+    private final ArrayList<String> sourceCategories;
+
+    // JPA
+    protected Document() {
+
+        text = null;
+        pageUrl = null;
+        publishedDate = null;
+        subjects = new ArrayList<>();
+        tabs = new ArrayList<>();
+        feedName = null;
+        feedUrl = null;
+        sourceCategories = new ArrayList<>();
+    }
 
     public Document(
-            Key<Feed> feedKey,
-            NameAndUrl feed,
             String title,
             String text,
             NameAndUrl author,
@@ -44,10 +78,10 @@ public class Document implements Persistable<Document>, Serializable {
             String imageUrl,
             Instant publishedDate,
             String html,
-            List<NameAndUrl> categories) {
+            Set<String> sourceCategories,
+            String feedName,
+            String feedUrl) {
 
-        this.feed = feed;
-        this.feedKey = feedKey;
         this.title = title;
         this.text = text;
         this.author = author;
@@ -55,8 +89,11 @@ public class Document implements Persistable<Document>, Serializable {
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.html = html;
-        this.categories = Objects.requireNonNull(categories);
-        this.key = Keys.document(this.pageUrl);
+        this.tabs = new ArrayList<>();
+        this.subjects = new ArrayList<>();
+        this.feedName = feedName;
+        this.feedUrl = feedUrl;
+        this.sourceCategories = Lists.newArrayList(sourceCategories);
     }
 
     public static String dateToShortString(Instant instant) {
@@ -86,17 +123,32 @@ public class Document implements Persistable<Document>, Serializable {
         return "";
     }
 
+    public boolean isSubjectsParsed() {
+        return subjectsParsed;
+    }
+
+    public void setSubjectsParsed(boolean subjectsParsed) {
+        this.subjectsParsed = subjectsParsed;
+    }
+
+    public boolean isTabsParsed() {
+        return tabsParsed;
+    }
+
+    public void setTabsParsed(boolean tabsParsed) {
+        this.tabsParsed = tabsParsed;
+    }
+
+    public List<String> getSourceCategories() {
+        return sourceCategories;
+    }
+
     public String getPublishedShortString() {
         return dateToShortString(publishedDate);
     }
 
-    public final Key<Feed> getFeedKey() {
-        return feedKey;
-    }
-
-    @Override
-    public final Key<Document> getKey() {
-        return key;
+    public ArrayList<String> getTabs() {
+        return tabs;
     }
 
     public final Instant getPublishDate() {
@@ -107,7 +159,15 @@ public class Document implements Persistable<Document>, Serializable {
         return score;
     }
 
-    public List<Subject> getSubjects() {
+    public List<String> getSubjects() {
         return subjects;
+    }
+
+    public String getFeedName() {
+        return feedName;
+    }
+
+    public String getFeedUrl() {
+        return feedUrl;
     }
 }

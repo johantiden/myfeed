@@ -1,12 +1,12 @@
 package se.johantiden.myfeed.plugin;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.persistence.FeedImpl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,25 +16,32 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class AlJazeeraPlugin implements Plugin {
+public class WashingtonPostFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(AlJazeeraPlugin.class);
-    private final Duration invalidationPeriod;
+    private static final Logger log = LoggerFactory.getLogger(WashingtonPostFeed.class);
+    public static final String NAME = "Washington Post - The Fact Checker";
+    public static final String URL = "https://www.washingtonpost.com/news/fact-checker/";
+    public static final String URL_RSS = "http://feeds.washingtonpost.com/rss/rss_fact-checker";
+//    private final Duration invalidationPeriod;
+//    private final String feedName;
+//    private final String webUrl;
+//    private final String rssUrl;
 
-    public AlJazeeraPlugin(Duration invalidationPeriod) {
-        this.invalidationPeriod = invalidationPeriod;
+    public WashingtonPostFeed(Duration ttl) {
+        super(NAME, URL, createFeedReader(ttl));
     }
 
-    @Override
-    public Feed createFeed() {
-        return new FeedImpl("Al Jazeera", invalidationPeriod, this);
-    }
 
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+//    public WashingtonPostFeed(String feedName, String webUrl, String rssUrl, Duration invalidationPeriod) {
+//        this.invalidationPeriod = invalidationPeriod;
+//        this.feedName = feedName;
+//        this.webUrl = webUrl;
+//        this.rssUrl = rssUrl;
+//    }
+
+    private static FeedReader createFeedReader(Duration ttl) {
         return () -> {
-            List<Document> documents = new RssPlugin("Al Jazeera", "http://www.aljazeera.com", "http://www.aljazeera.com/xml/rss/all.xml", invalidationPeriod)
-                                       .createFeedReader(createFeed()).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream()
                    .map(docMapper())
                    .collect(Collectors.toList());
@@ -45,11 +52,24 @@ public class AlJazeeraPlugin implements Plugin {
 
 
         return document -> {
-
             document.imageUrl = findImage(document);
+            document.imageUrl = parseImgFromHtml(document.html);
+            document.html = null;
             return document;
         };
 
+    }
+
+    private static String parseImgFromHtml(String html) {
+
+        org.jsoup.nodes.Document doc = Jsoup.parse(html);
+        Elements imgs = doc.select("img");
+        if (!imgs.isEmpty()) {
+            Element img = imgs.get(0);
+            String src = img.attr("src");
+            return src;
+        }
+        return null;
     }
 
     private static String findImage(Document document) {
