@@ -15,39 +15,29 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class SVTPlugin implements Plugin {
+public class SVTNyheterFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(SVTPlugin.class);
-    public static final String SVT_NYHETER = "SVT Nyheter";
+    private static final Logger log = LoggerFactory.getLogger(SVTNyheterFeed.class);
+    public static final String NAME = "SVT Nyheter";
     public static final String URL = "https://www.svt.se/nyheter";
-    private final Duration invalidationPeriod;
+    public static final String URL_RSS = "https://www.svt.se/nyheter/rss.xml";
 
-    public SVTPlugin(Duration invalidationPeriod) {
-        this.invalidationPeriod = invalidationPeriod;
+    public SVTNyheterFeed(Duration ttl) {
+        super(NAME, URL, ttl, createFeedReader(ttl));
     }
 
     private static Predicate<Document> notIsLokalaNyheter() {
 
         return d -> {
             boolean lokalt = d.pageUrl.contains("nyheter/lokalt/");
-            if(lokalt) {
-                return false;
-            }
-            return true;
+            return !lokalt;
         };
 
     }
 
-    @Override
-    public Feed createFeed() {
-        return new Feed(SVT_NYHETER, invalidationPeriod, this, URL);
-    }
-
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader(Duration ttl) {
         return () -> {
-            List<Document> documents = new RssPlugin(SVT_NYHETER, URL, "https://www.svt.se/nyheter/rss.xml", invalidationPeriod)
-                                       .createFeedReader(createFeed()).readAllAvailable();
+            List<Document> documents = new RssFeed(NAME, URL, URL_RSS, ttl).getFeedReader().readAllAvailable();
             return documents.stream()
                     .map(docMapper())
                     .filter(notIsLokalaNyheter())

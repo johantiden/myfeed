@@ -17,25 +17,24 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
-public class SvenskaDagbladetPlugin implements Plugin {
+public class SvenskaDagbladetFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(SvenskaDagbladetPlugin.class);
+    private static final Logger log = LoggerFactory.getLogger(SvenskaDagbladetFeed.class);
     public static final String SVENSKA_DAGBLADET = "Svenska Dagbladet";
     private static final Predicate<Document> FILTER = d -> !d.isPaywalled;
     public static final String URL = "https://www.svd.se";
     private final Duration ttl;
 
-    public SvenskaDagbladetPlugin(Duration ttl) {this.ttl = ttl;}
+    public SvenskaDagbladetFeed(Duration ttl) {this.ttl = ttl;}
 
     @Override
     public final Feed createFeed() {
-        return new Feed(SVENSKA_DAGBLADET, ttl, this, URL);
+        return new Feed(SVENSKA_DAGBLADET, URL, ttl, createFeedReader());
     }
 
-    @Override
-    public final FeedReader createFeedReader(Feed feed) {
+    public final FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssPlugin(SVENSKA_DAGBLADET, URL, "https://www.svd.se/?service=rss", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeed(SVENSKA_DAGBLADET, "https://www.svd.se/?service=rss", ttl, URL).createFeedReader(feed).readAllAvailable();
             return documents.stream()
                     .map(createEntryMapper())
                     .filter(FILTER)

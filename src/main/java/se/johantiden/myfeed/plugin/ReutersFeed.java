@@ -1,7 +1,5 @@
 package se.johantiden.myfeed.plugin;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
@@ -13,37 +11,35 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class DagensNyheterPlugin implements Plugin {
 
-    private static final Logger log = LoggerFactory.getLogger(DagensNyheterPlugin.class);
-    private static final String DAGENS_NYHETER = "Dagens Nyheter";
-    public static final String URL = "https://www.dn.se";
+public class ReutersFeed implements Plugin {
 
+    private static final Logger log = LoggerFactory.getLogger(ReutersFeed.class);
+    public static final String URL = "http://www.reuters.com/news/world";
+    public static final String NAME = "Reuters - World";
     private final Duration ttl;
 
-    public DagensNyheterPlugin(Duration ttl) {
-        this.ttl = Objects.requireNonNull(ttl);
-    }
+    public ReutersFeed(Duration ttl) {this.ttl = ttl;}
 
-    @Override
-    public Feed createFeed() {
-        return new Feed(DAGENS_NYHETER, ttl, this, URL);
-    }
 
     @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(feed.getName(), URL, "http://www.dn.se/nyheter/rss/", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeed(NAME, "http://feeds.reuters.com/Reuters/worldNews", ttl, URL).createFeedReader(feed).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
 
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
+            document.html = prune(document.html);
+            if(document.html.toLowerCase().contains("google-analytics")) {
+                throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
+            }
+
             document.imageUrl = findImage(document);
             return document;
         };
@@ -53,26 +49,19 @@ public class DagensNyheterPlugin implements Plugin {
     private static String findImage(Document document) {
         org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
 
-        Elements articleHeaderImg = doc.select(".article__header-img");
-        if(!articleHeaderImg.isEmpty()) {
-            String attr = articleHeaderImg.attr("data-srcset");
-            JsonNode jsonNode = getJsonNode(attr);
+        Elements relatedImg = doc.select(".related-photo-container > img");
+        if(!relatedImg.isEmpty()) {
+            String src = relatedImg.get(0).attr("src");
+            return src;
+        }
 
-            String src = jsonNode.get("mobile").asText();
+        Elements slideImgs = doc.select(".module-slide-media > img");
+        if(!slideImgs.isEmpty()) {
+            String src = slideImgs.get(0).attr("data-lazy");
             return src;
         }
 
         return null;
-    }
-
-    private static JsonNode getJsonNode(String attr) {
-        JsonNode jsonNode;
-        try {
-            jsonNode = new ObjectMapper().readTree(attr);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return jsonNode;
     }
 
 
@@ -85,5 +74,11 @@ public class DagensNyheterPlugin implements Plugin {
         }
     }
 
-
+    public static String prune(String html) {
+        org.jsoup.nodes.Document doc = Jsoup.parse(html);
+        doc.select(".feedflare").remove();
+        doc.select("img").remove();
+        String pruned = doc.body().html();
+        return pruned;
+    }
 }

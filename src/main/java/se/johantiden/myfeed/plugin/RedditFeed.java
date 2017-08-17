@@ -20,28 +20,23 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class RedditPlugin implements Plugin {
+public class RedditFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(RedditPlugin.class);
+    private static final Logger log = LoggerFactory.getLogger(RedditFeed.class);
     private final Duration ttl;
     private final Predicate<Document> filter;
     private final String subreddit;
 
-    public RedditPlugin(String subreddit, Duration ttl, Predicate<Document> filter) {
+    public RedditFeed(String subreddit, Duration ttl, Predicate<Document> filter) {
         this.subreddit = Objects.requireNonNull(subreddit);
         this.ttl = Objects.requireNonNull(ttl);
         this.filter = filter;
     }
 
     @Override
-    public Feed createFeed() {
-        return new Feed(getFeedName(), ttl, this, getWebUrl());
-    }
-
-    @Override
     public FeedReader createFeedReader(Feed feed) {
         return () -> {
-            List<Document> documents = new RssPlugin(getFeedName(), getWebUrl(), getRssUrl(), ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeed(getFeedName(), getRssUrl(), ttl, getWebUrl()).createFeedReader(feed).readAllAvailable();
             return documents.stream().map(createEntryMapper()).filter(filter).collect(Collectors.toList());
         };
     }

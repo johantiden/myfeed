@@ -7,14 +7,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentClassifier;
+import se.johantiden.myfeed.persistence.Subject;
 import se.johantiden.myfeed.service.DocumentService;
 
 import java.util.List;
 
 @Component
-public class SubjectTesterJob {
+public class TabClassifierJob {
 
-    private static final Logger log = LoggerFactory.getLogger(SubjectTesterJob.class);
+    private static final Logger log = LoggerFactory.getLogger(TabClassifierJob.class);
     @Autowired
     private DocumentService documentService;
 
@@ -32,11 +33,11 @@ public class SubjectTesterJob {
 
         documents.forEach(d -> {
             DocumentClassifier.appendUrlFoldersAsCategory(d);
-            List<String> subjects = DocumentClassifier.getSubjectFor(d);
+            List<Subject> subjects = DocumentClassifier.getSubjectFor(d);
             d.subjects.clear();
             d.subjects.addAll(subjects);
             String tab = DocumentClassifier.getTabFor(d);
-            d.tab = tab;
+            d.tabs.clear(); = tab;
         });
     }
 }

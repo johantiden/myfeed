@@ -4,14 +4,14 @@ import se.johantiden.myfeed.persistence.Feed;
 
 import java.time.Duration;
 
-public class RssPlugin implements Plugin {
+public class RssFeed implements Plugin {
 
     private final String rssUrl;
     private final String feedName;
     private final String webUrl;
     private final Duration ttl;
 
-    public RssPlugin(String feedName, String webUrl, String rssUrl, Duration ttl) {
+    public RssFeed(String feedName, String webUrl, String rssUrl, Duration ttl) {
         this.rssUrl = rssUrl;
         this.feedName = feedName;
         this.webUrl = webUrl;

@@ -4,28 +4,23 @@ import org.jsoup.Jsoup;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
-public class SlashdotPlugin implements Plugin {
+public class SlashdotFeed extends Feed {
 
     public static final String URL = "https://slashdot.org";
-    private final Duration ttl;
+    public static final String NAME = "Slashdot";
+    public static final String URL_RSS = "http://rss.slashdot.org/Slashdot/slashdotMainatom";
 
-    public SlashdotPlugin(Duration ttl) {this.ttl = ttl;}
-
-    @Override
-    public Feed createFeed() {
-        return new Feed("Slashdot", ttl, this, URL);
+    public SlashdotFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssPlugin("Slashdot", URL, "http://rss.slashdot.org/Slashdot/slashdotMainatom", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }

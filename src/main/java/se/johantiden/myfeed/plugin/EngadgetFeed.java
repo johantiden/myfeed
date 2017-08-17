@@ -5,36 +5,34 @@ import org.jsoup.select.Elements;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public class BreakitPlugin implements Plugin {
+public class EngadgetFeed extends Feed {
 
-    public static final String URL = "http://www.breakit.se";
-    private final Duration ttl;
+    public static final String URL = "https://www.engadget.com";
+    public static final String URL_RSS = "https://www.engadget.com/rss.xml";
+    public static final String NAME = "Engadget";
 
-    public BreakitPlugin(Duration ttl) {this.ttl = ttl;}
-
-    @Override
-    public Feed createFeed() {
-        return new Feed("Slashdot", ttl, this, URL);
+    public EngadgetFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
-    @Override
-    public FeedReader createFeedReader(Feed feed) {
+    public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssPlugin("Breakit", URL, "http://www.breakit.se/feed/artiklar", ttl).createFeedReader(feed).readAllAvailable();
+            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
 
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
+
             document.imageUrl = getImageUrl(document.html);
-            document.html = prune(document.html);
+            document.html = null;
+            document.categories.removeIf(c -> c.name.startsWith("apple"));
             return document;
         };
     }
@@ -46,13 +44,5 @@ public class BreakitPlugin implements Plugin {
             return img.get(0).attr("src");
         }
         return null;
-    }
-
-    public static String prune(String html) {
-        org.jsoup.nodes.Document doc = Jsoup.parse(html);
-        doc.select(".feedflare").remove();
-        doc.select("img").remove();
-        String pruned = doc.body().html();
-        return pruned;
     }
 }
