@@ -70,6 +70,8 @@ public class DocumentClassifier {
     public static final String AFRIKA = "Afrika";
     public static final String INRIKES = "Inrikes";
     public static final String USA = "USA";
+    public static final String MILJÖPARTIET = "Miljöpartiet";
+    public static final String SYDAFRIKA = "Sydafrika";
 
     private DocumentClassifier() {
     }
@@ -120,7 +122,6 @@ public class DocumentClassifier {
         if(m.has(EUROVISION)) { s.add(EUROVISION); }
         if(m.has("Rouhani", "Rohani")) { s.add("Rouhani"); }
         if(m.has("Net Neutrality")) { s.add("Net Neutrality"); }
-        if(m.has("AskReddit")) { s.add("AskReddit"); }
         if(m.anyCategoryEquals("science")) { s.add(FORSKNING); }
         if(m.has("Göteborg", "Gothenburg")) { s.add("Göteborg"); }
         if(m.has("Malmö")) { s.add("Malmö"); }
@@ -148,8 +149,8 @@ public class DocumentClassifier {
             s.add(IT_SÄKERHET); }
         if(m.has("Brexit")) { s.add("Brexit"); }
         if(m.has("Feministiskt initiativ")) { s.add("Feministiskt Initiativ"); }
-        if((m.has("Miljöpartiet") || m.hasCaseSensitive(" MP ", " MP.")) && !anySubjectEquals(s, STORBRITANNIEN)) {
-            s.add("Miljöpartiet"); }
+        if((m.has(MILJÖPARTIET) || m.hasCaseSensitive(" MP ", " MP.")) && !anySubjectEquals(s, STORBRITANNIEN)) {
+            s.add(MILJÖPARTIET); }
         if(m.has(SVERIGEMOKRATERNA) && m.hasCaseSensitive("SD")) { s.add(SVERIGEMOKRATERNA); }
         if(m.has("Moderaterna", "Kinberg Batra")) { s.add("Moderaterna"); }
         if(m.has("Kinberg Batra")) { s.add("Kinberg Batra"); }
@@ -169,7 +170,7 @@ public class DocumentClassifier {
         addPeople(s, m);
         if(m.has(IDAGSIDAN)) { s.add(IDAGSIDAN); }
         if(m.has("historian", "1500", "1600", "1700", "1800")) { s.add(HISTORIA); }
-        if(m.has("Daesh") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) {
+        if(m.has("Daesh", "Islamic State") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) {
             s.add("Daesh"); }
         if(m.has("Socialdemokraterna") && !anySubjectEquals(s, TYSKLAND)) { s.add("Socialdemokraterna"); }
         if(m.has("mat-dryck") || m.anyCategoryEquals("Restaurants")) { s.add(MAT); }
@@ -211,6 +212,13 @@ public class DocumentClassifier {
             s.add("Ebba Busch Thor");
             s.add(KRISTDEMOKRATERNA);
         }
+        if(m.has("Alice Bah Kuhnke")) {
+            s.add("Alice Bah Kuhnke");
+            s.add(MILJÖPARTIET);
+        }
+        if(m.has("Mugabe")) {
+            s.add(SYDAFRIKA);
+        }
         if(m.has("Jonas Sjöstedt")) {
             s.add("Jonas Sjöstedt");
             s.add(VÄNSTERPARTIET);
@@ -219,7 +227,9 @@ public class DocumentClassifier {
             s.add("Annie Lööf");
             s.add(CENTERPARTIET);
         }
-
+        if(m.has("Löfven")) {
+            s.add("Stefan Löfven");
+        }
         if(m.has("Jimmie Åkesson")) {
             s.add("Jimmie Åkesson");
             s.add(SVERIGEMOKRATERNA);
@@ -240,10 +250,17 @@ public class DocumentClassifier {
             s.add("Vladimir Putin");
             s.add(RUSSIA);
         }
+        if (m.has("Malala")) {
+            s.add("Malala Yousafzai");
+        }
+        if (m.has("Kim Wall")) {
+            s.add("Kim Wall");
+        }
         if (anySubjectEquals(s, STORBRITANNIEN) && m.hasCaseSensitive("May")) {
             s.add("Theresa May");
             s.add(STORBRITANNIEN);
         }
+
 
     }
 
@@ -268,7 +285,13 @@ public class DocumentClassifier {
         if(m.has("Belgium")) { s.add("Belgien"); }
         if(m.has("India", "Indien")) { s.add("Indien"); }
         if(m.has("Brazil")) { s.add("Brasilien"); }
+        if(m.has("Chile")) { s.add("Chile"); }
         if(m.has("Egypt")) { s.add("Egypten"); }
+        if(m.has("Spanien", "Spain", "Spanish", "Barcelona")) { s.add("Spanien"); }
+        if(m.has("Barcelona")) { s.add("Barcelona"); }
+        if(m.has("Sierra Leone")) { s.add("Sierra Leone"); }
+        if(m.has("Kenya")) { s.add("Kenya"); }
+        if(m.has("Hong Kong")) { s.add("Hong Kong"); }
         if(m.has("Yemen", "Jemen")) { s.add("Jemen"); }
         if(m.has("Danmark", "Köpenhamn")) { s.add("Danmark"); }
         if(m.has("Köpenhamn")) {
@@ -285,7 +308,7 @@ public class DocumentClassifier {
         if(m.has("Kuwait")) { s.add("Kuwait"); }
         if(m.has("Saudi Arabia", "Saudiarabien")) { s.add("Saudiarabien"); }
         if(m.has("Qatar")) { s.add("Qatar"); }
-        if(m.has("South Africa")) { s.add("Sydafrika"); }
+        if(m.has("South Africa")) { s.add(SYDAFRIKA); }
         if(m.has("European Union") || m.hasCaseSensitive("EU")) { s.add("EU"); }
         if(m.has("Europe", "Europa")) { s.add("Europa"); }
         addUsa(s, m);
@@ -321,7 +344,7 @@ public class DocumentClassifier {
     }
 
     private static void addUsa(Collection<String> s, DocumentMatcher m) {
-        if(m.hasCaseSensitive("US", "FBI") || m.has("america") && !m.has("south america") || m.has("U.S.", "america", "obama", "trump")) {
+        if(m.hasCaseSensitive("US", "FBI") || m.has("america") && !m.has("south america", "americas") || m.has("U.S.", "obama", "trump")) {
             s.add(USA);
         }
         if(m.has("Orlando")) {
@@ -556,7 +579,7 @@ public class DocumentClassifier {
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - top") ||
             TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - r/all") ||
             m.anyCategoryEquals("AskReddit") ||
-            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying", "space") ||
+            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying", "space", "mildlyinfuriating") ||
             m.isFromFeed("xkcd");
     }
 
@@ -602,10 +625,10 @@ public class DocumentClassifier {
             m.anySubjectEquals(NUTIDSTESTET) ||
             m.anySubjectEquals(RESOR) ||
             m.anySubjectEquals(UUTISET) ||
-            m.anyCategoryEquals("Jokes", "OldSchoolCool");
+            m.anyCategoryEquals("Jokes", "OldSchoolCool", "GetMotivated");
     }
 
-    public static void appendUrlFoldersAsSubjects(Document document) {
+    public static void appendUrlFoldersAsCategories(Document document) {
 
         DocumentMatcher m = new DocumentMatcher(document);
 
@@ -622,7 +645,7 @@ public class DocumentClassifier {
                 .filter(f -> !f.equals("Reuters"))
                 .filter(f -> !f.equals("story"))
                 .map(StringUtils::capitalize)
-                .forEach(document.getSubjects()::add);
+                .forEach(document.getSourceCategories()::add);
         }
     }
 

@@ -16,7 +16,8 @@ public class DocumentPredicates {
         return d -> d.text != null && d.text.toLowerCase().contains(string2) ||
                     d.title != null && d.title.toLowerCase().contains(string2) ||
                     d.pageUrl != null && d.pageUrl.toLowerCase().contains(string2) ||
-                    d.getSubjects().stream().anyMatch(s -> s.toLowerCase().contains(string2));
+                    d.getSubjects().stream().anyMatch(s -> s.toLowerCase().contains(string2)) ||
+                    d.getSourceCategories().stream().anyMatch(s -> s.toLowerCase().contains(string2));
     }
     public static Predicate<Document> hasCaseSensitive(String... strings) {
         return d -> Arrays.stream(strings).anyMatch(s -> hasCaseSensitive(s).test(d));
@@ -25,7 +26,8 @@ public class DocumentPredicates {
     public static Predicate<Document> hasCaseSensitive(String string) {
         return d -> d.text != null && d.text.contains(string) ||
                             d.title != null && d.title.contains(string) ||
-                            d.getSubjects().stream().anyMatch(s -> s.contains(string));
+                            d.getSubjects().stream().anyMatch(s -> s.contains(string)) ||
+                            d.getSourceCategories().stream().anyMatch(s -> s.contains(string));
     }
 
     public static Predicate<Document> startsWithCaseSensitive(String string) {
@@ -44,7 +46,7 @@ public class DocumentPredicates {
     }
 
     public static Predicate<Document> anyCategoryEquals(String string) {
-        return d -> d.getSubjects().stream().anyMatch(s -> s.equalsIgnoreCase(string));
+        return d -> d.getSourceCategories().stream().anyMatch(s -> s.equalsIgnoreCase(string));
     }
 
     public static Predicate<Document> anySubjectEquals(String string) {

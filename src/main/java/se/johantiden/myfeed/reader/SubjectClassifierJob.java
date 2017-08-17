@@ -33,7 +33,7 @@ public class SubjectClassifierJob {
 
         documents.forEach(d -> {
             d.setSubjectsParsed(true);
-            DocumentClassifier.appendUrlFoldersAsSubjects(d);
+            DocumentClassifier.appendUrlFoldersAsCategories(d);
             Set<String> subjects = DocumentClassifier.getSubjectFor(d);
             d.getSubjects().clear();
             d.getSubjects().addAll(subjects);

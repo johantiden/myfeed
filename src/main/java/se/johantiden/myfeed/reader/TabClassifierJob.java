@@ -35,7 +35,7 @@ public class TabClassifierJob {
                 .filter(Document::isSubjectsParsed)
                 .forEach(d -> {
                     d.setTabsParsed(true);
-                    DocumentClassifier.appendUrlFoldersAsSubjects(d);
+                    DocumentClassifier.appendUrlFoldersAsCategories(d);
                     Set<String> tabs = DocumentClassifier.getTabsFor(d);
                     d.getTabs().clear();
                     d.getTabs().addAll(tabs);
