@@ -4,7 +4,6 @@ package se.johantiden.myfeed.persistence;
 import com.google.common.collect.Lists;
 import se.johantiden.myfeed.controller.NameAndUrl;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
