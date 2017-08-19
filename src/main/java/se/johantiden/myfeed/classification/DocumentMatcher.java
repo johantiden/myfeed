@@ -4,6 +4,7 @@ import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.util.DocumentPredicates;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class DocumentMatcher {
     private final Document document;
@@ -46,5 +47,9 @@ public class DocumentMatcher {
 
     public boolean authorEquals(String author) {
         return DocumentPredicates.authorEquals(author).test(document);
+    }
+
+    public boolean matches(Pattern pattern) {
+        return DocumentPredicates.matches(pattern).test(document);
     }
 }

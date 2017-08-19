@@ -1,0 +1,36 @@
+<html lang="en" xmlns:javascript="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="icon" type="image/png" href="fidn1.png"><!-- Major Browsers -->
+    <!--[if IE]><link rel="SHORTCUT ICON" href="fidn1.ico"/><![endif]--><!-- Internet Explorer-->
+    <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script type="text/javascript" src="./bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-cookies/angular-cookies.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="./app/app.js"></script>
+    <script type="text/javascript" src="./app/controllers.js"></script>
+    <script type="text/javascript" src="./app/services.js"></script>
+    <title>fidn</title>
+</head>
+<body>
+<div ng-app="myApp" ng-controller="settingsCtrl">
+    <div class="navbar">
+        <div class="nav-center">
+            <a href="/?user={{user}}"><img class="logo-img" src="fidn1.png"></a><br />
+        </div>
+    </div>
+
+    <div style="background-color: WHITE;">
+        <h1>Subject Rules</h1>
+        <div class="subject-box" ng-repeat="subjectRule in subjectRules">
+            <span>Name</span>
+            <span>{{subjectRule.name}}></span>
+            <span>Expression</span>
+            <span>{{subjectRule.expression}}</span>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

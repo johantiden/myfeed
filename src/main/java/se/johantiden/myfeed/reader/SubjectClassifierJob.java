@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentClassifier;
 import se.johantiden.myfeed.service.DocumentService;
+import se.johantiden.myfeed.service.SubjectService;
 
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class SubjectClassifierJob {
@@ -18,26 +18,24 @@ public class SubjectClassifierJob {
     private static final Logger log = LoggerFactory.getLogger(SubjectClassifierJob.class);
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private SubjectService subjectService;
 
     @Scheduled(fixedRate = 1000)
     public void testSubjects() {
-//        try {
+        try {
             tryPop();
-//        } catch (RuntimeException e) {
-//            log.error("Could not find subjects", e);
-//        }
+        } catch (RuntimeException e) {
+            log.error("Could not find subjects", e);
+        }
     }
 
     private void tryPop() {
         List<Document> documents = documentService.findDocumentsNotParsedSubjects();
 
         documents.forEach(d -> {
-            d.setSubjectsParsed(true);
             DocumentClassifier.appendUrlFoldersAsCategories(d);
-            Set<String> subjects = DocumentClassifier.getSubjectFor(d);
-            d.getSubjects().clear();
-            d.getSubjects().addAll(subjects);
-            documentService.put(d);
+            subjectService.parseSubjectsFor(d);
         });
     }
 }

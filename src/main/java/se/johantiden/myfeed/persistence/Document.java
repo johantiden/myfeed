@@ -37,11 +37,13 @@ public class Document extends BaseEntity {
 
     public final Instant publishedDate;
 
-    @Column(length = 2000)
+    @Column(length = 8000)
     public String html;
 
     public Double score;
     public boolean isPaywalled;
+
+    @Column(length = 2000)
     public ArrayList<Video> videos = new ArrayList<>();
 
     private boolean subjectsParsed = false;

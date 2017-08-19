@@ -101,7 +101,7 @@ a {
     margin: 0;
 }
 
-.content-box {
+.content-box, .subject-box {
     display: inline-block;
     vertical-align: top;
     margin: 0;
