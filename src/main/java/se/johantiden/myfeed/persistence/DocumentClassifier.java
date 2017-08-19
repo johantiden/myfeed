@@ -100,6 +100,9 @@ public class DocumentClassifier {
 
         add(l, "Macron", "Macron");
 
+        addPlaces(l);
+        addPeople(l);
+
 /*
         if(m.anyCategoryEquals("film")) { l.add("Film"); }
         if(m.has("turist")) { l.add("Turist"); }
@@ -163,7 +166,6 @@ public class DocumentClassifier {
         if(m.has("Pope Francis")) { l.add("Pope Francis"); }
         if(m.has("debatt")) { l.add("Debatt"); }
         if(m.hasCaseSensitive("CCTV")) { l.add("Foliehatt"); }
-        addPlaces(l, m);
         if(m.has("kvinnor") && m.has("män")) { l.add("Kvinnor"); }
         if(m.has("kvinnor") && m.has("män")) { l.add("Män"); }
         if(m.isFromFeed("TheLocal") && m.has("recipe:")) { l.add(RECIPE); }
@@ -173,7 +175,6 @@ public class DocumentClassifier {
         if(m.has(VÄNSTERPARTIET)) { l.add(VÄNSTERPARTIET); }
         if(m.has(KRISTDEMOKRATERNA) || m.hasCaseSensitive("KD")) { l.add(KRISTDEMOKRATERNA); }
 
-        addPeople(l, m);
         if(m.has(IDAGSIDAN)) { l.add(IDAGSIDAN); }
         if(m.has("historian", "1500", "1600", "1700", "1800")) { l.add(HISTORIA); }
         if(m.has("Daesh", "Islamic State") || m.hasCaseSensitive("ISIL", "ISIS") || m.has("terror")&&m.hasCaseSensitive("IS")) {
@@ -217,8 +218,8 @@ public class DocumentClassifier {
         return list.add(new SubjectRule(name, expression));
     }
 
-    private static void addPeople(Collection<String> s, DocumentMatcher m) {
-
+    private static void addPeople(Collection<SubjectRule> s) {
+/*
         if(m.has("Busch Thor")) {
             s.add("Ebba Busch Thor");
             s.add(KRISTDEMOKRATERNA);
@@ -270,7 +271,7 @@ public class DocumentClassifier {
         if (anySubjectEquals(s, STORBRITANNIEN) && m.hasCaseSensitive("May")) {
             s.add("Theresa May");
             s.add(STORBRITANNIEN);
-        }
+        }*/
     }
 
     private static void addPlaces(Collection<SubjectRule> l) {
