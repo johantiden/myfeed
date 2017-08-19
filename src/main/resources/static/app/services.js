@@ -1,4 +1,5 @@
 app.service('documentService', function($http, $cacheFactory) {
+    "use strict";
 
     this.putDocument = function (item, callback) {
         $http.put("/rest/documents", item).then(callback);
@@ -42,10 +43,26 @@ app.service('documentService', function($http, $cacheFactory) {
     };
 
     function param(name, list) {
-        "use strict";
+
 
         let paramString = '';
         list.forEach(e => paramString += '&' + name + '=' + e);
         return paramString.substring(1);
     }
+});
+
+app.service('settingsService', function($http, $cacheFactory) {
+    "use strict";
+
+    this.getAllSubjectRules = function(callback) {
+        $http({
+            method: 'GET',
+            url: '/rest/settings/subjectRules',
+            headers: {
+                'Cache-Control': 'no-cache, no-store'
+            }
+        }).then(function(response) {
+            callback(response.data);
+        });
+    };
 });

@@ -17,6 +17,7 @@ import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
+import se.johantiden.myfeed.service.SubjectService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
 import javax.sql.DataSource;
@@ -48,6 +49,11 @@ public class Main implements SchedulingConfigurer {
     @Bean
     public UserDocumentService userDocumentService() {
         return new UserDocumentService();
+    }
+
+    @Bean
+    public SubjectService subjectService() {
+        return new SubjectService();
     }
 
     @Bean

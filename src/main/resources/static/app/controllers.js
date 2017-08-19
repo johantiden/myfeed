@@ -1,4 +1,4 @@
-app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, documentService) { // jshint ignore:line
+app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window, documentService) { // jshint ignore:line
     "use strict";
     $scope.documents = [];
     $scope.tabs = {
@@ -13,7 +13,7 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
         $cookies.put('user', user);
     }
     user = $cookies.get('user');
-
+    $scope.user = user;
 
     $scope.setDocumentRead = function(document, read, callback) {
         document.read = read;
@@ -146,24 +146,49 @@ app.controller('myCtrl', function($scope, $location, $sce, $cookies, $window, do
             return $scope.tabs[tabName](document);
         };
     };
-
-    /**
-     * Gets a query parameter.
-     * johan:
-     * - Can't get $location.search() working.
-     * - Can't get ngRoute to work...
-     */
-    function getParameterByName(name) {
-        var url = window.location.href; // jshint ignore:line
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) {
-            return null;
-        }
-        if (!results[2]) {
-            return '';
-        }
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
 });
+
+app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $window, settingsService) { // jshint ignore:line
+    "use strict";
+
+    $scope.subjectRules = [];
+
+
+    settingsService.getAllSubjectRules(function(json) {
+        $scope.subjectRules = json;
+    });
+
+    $scope.$sce = $sce;
+    $scope.$location = $location;
+
+    var user = getParameterByName('user');
+    if (user) {
+        $cookies.put('user', user);
+    }
+    user = $cookies.get('user');
+    $scope.user = user;
+
+
+});
+
+
+
+/**
+ * Gets a query parameter.
+ * johan:
+ * - Can't get $location.search() working.
+ * - Can't get ngRoute to work...
+ */
+function getParameterByName(name) {
+    var url = window.location.href; // jshint ignore:line
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) {
+        return null;
+    }
+    if (!results[2]) {
+        return '';
+    }
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}

@@ -1,9 +1,12 @@
 package se.johantiden.myfeed.util;
 
+import com.google.common.base.Strings;
 import se.johantiden.myfeed.persistence.Document;
 
 import java.util.Arrays;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class DocumentPredicates {
 
@@ -67,5 +70,33 @@ public class DocumentPredicates {
 
     public static Predicate<Document> hasEscapeCharacters() {
         return has("&quot;").or(has("&#")).or(has("&amp;")).or(has("â€™"));
+    }
+
+    public static Predicate<Document> matches(Pattern pattern) {
+
+
+        return d -> {
+
+            String megaConcat =
+                    ifPresent(d.text) +
+                    ifPresent(d.title) +
+                    ifPresent(d.html) +
+                    ifPresent(d.pageUrl) +
+                    d.getSubjects().stream().map(s -> s + " ").reduce(String::join).orElse("") +
+                    d.getSourceCategories().stream().map(s -> s + " ").reduce(String::join).orElse("");
+
+            return pattern.matcher(megaConcat).matches();
+        };
+
+    }
+
+    private static String ifPresent(String text) {
+
+        if (Strings.isNullOrEmpty(text)) {
+            return "";
+        } else {
+            return text + " ";
+        }
+
     }
 }
