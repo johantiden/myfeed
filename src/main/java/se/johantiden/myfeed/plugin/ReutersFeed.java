@@ -46,7 +46,7 @@ public class ReutersFeed extends Feed {
 
 
     private static String findImage(Document document) {
-        org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
+        org.jsoup.nodes.Document doc = getJsoupDocument(document.getPageUrl());
 
         Elements relatedImg = doc.select(".related-photo-container > img");
         if(!relatedImg.isEmpty()) {

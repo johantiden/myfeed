@@ -17,11 +17,11 @@ public class Inbox {
         inbox.offer(document);
     }
 
-    public Optional<Document> find(long documentId) {
-        return inbox.stream().filter(d -> d.getId() == documentId).findAny();
+    public Optional<Document> find(String pageUrl) {
+        return inbox.stream().filter(d -> d.getPageUrl().equals(pageUrl)).findAny();
     }
 
-    public boolean hasDocument(long documentId) {
-        return find(documentId).isPresent();
+    public boolean hasDocument(Document document) {
+        return find(document.getPageUrl()).isPresent();
     }
 }

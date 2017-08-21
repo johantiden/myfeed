@@ -41,7 +41,7 @@ public class DocumentFanoutJob {
     }
 
     private void consume(Document document) {
-        log.debug("DocumentFanJob consuming '{}'", document.pageUrl);
+        log.debug("DocumentFanJob consuming '{}'", document.getPageUrl());
 
         hack();
 

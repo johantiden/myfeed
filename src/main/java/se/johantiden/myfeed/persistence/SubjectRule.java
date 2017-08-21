@@ -57,4 +57,12 @@ public class SubjectRule extends Rule {
         result = 31 * result + (expression != null ? expression.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "SubjectRule{" +
+                "subject='" + subject + '\'' +
+                ", expression='" + expression + '\'' +
+                '}';
+    }
 }

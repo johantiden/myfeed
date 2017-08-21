@@ -34,10 +34,10 @@ public class InboxService {
         Objects.requireNonNull(document);
         Objects.requireNonNull(documentService);
 
-        boolean isAlreadyInDocuments = document.getId() != null && documentService.hasDocument(document.getId());
-        boolean isAlreadyInInbox = document.getId() != null && inbox.hasDocument(document.getId());
+        boolean isAlreadyInDocuments = documentService.hasDocument(document);
+        boolean isAlreadyInInbox = inbox.hasDocument(document);
         if (!isAlreadyInInbox && !isAlreadyInDocuments) {
-            log.info("Adding new document to inbox: {}", document.pageUrl);
+            log.info("Adding new document to inbox: {}", document.getPageUrl());
             inbox.put(document);
         } else if (isAlreadyInDocuments) {
             documentService.put(document);

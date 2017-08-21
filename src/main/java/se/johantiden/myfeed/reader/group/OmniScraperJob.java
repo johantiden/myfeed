@@ -81,7 +81,7 @@ public class OmniScraperJob {
 
     private static boolean isPaywalled(Document document) {
         try {
-            org.jsoup.nodes.Document parse = Jsoup.parse(new URL(document.pageUrl), 10_000);
+            org.jsoup.nodes.Document parse = Jsoup.parse(new URL(document.getPageUrl()), 10_000);
 
             Elements select = parse.select(".paywall-loader");
             if (!select.isEmpty()) {

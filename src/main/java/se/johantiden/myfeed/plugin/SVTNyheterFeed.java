@@ -28,7 +28,7 @@ public class SVTNyheterFeed extends Feed {
     private static Predicate<Document> notIsLokalaNyheter() {
 
         return d -> {
-            boolean lokalt = d.pageUrl.contains("nyheter/lokalt/");
+            boolean lokalt = d.getPageUrl().contains("nyheter/lokalt/");
             return !lokalt;
         };
 
@@ -57,7 +57,7 @@ public class SVTNyheterFeed extends Feed {
     }
 
     private static String findImage(Document document) {
-        org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
+        org.jsoup.nodes.Document doc = getJsoupDocument(document.getPageUrl());
 
         Elements img = doc.select(".lp_track_artikelbild").select(".pic__img--wide");
         if(!img.isEmpty()) {

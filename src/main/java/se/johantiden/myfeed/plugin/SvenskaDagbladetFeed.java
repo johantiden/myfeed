@@ -48,7 +48,7 @@ public class SvenskaDagbladetFeed extends Feed {
     }
 
     private static String findImage(Document document) {
-        org.jsoup.nodes.Document doc = getJsoupDocument(document.pageUrl);
+        org.jsoup.nodes.Document doc = getJsoupDocument(document.getPageUrl());
 
         Elements figureImg = doc.select("img.Figure-image");
         if(!figureImg.isEmpty()) {
@@ -79,11 +79,11 @@ public class SvenskaDagbladetFeed extends Feed {
 
     private static boolean isPaywalled(Document document) {
         try {
-            org.jsoup.nodes.Document parse = Jsoup.parse(new URL(document.pageUrl), 10_000);
+            org.jsoup.nodes.Document parse = Jsoup.parse(new URL(document.getPageUrl()), 10_000);
 
             Elements select = parse.select(".paywall-loader");
             if(!select.isEmpty()) {
-                log.debug("SVD Paywall: {}", document.pageUrl);
+                log.debug("SVD Paywall: {}", document.getPageUrl());
                 return true;
             }
 

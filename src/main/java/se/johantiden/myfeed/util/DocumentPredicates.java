@@ -18,7 +18,7 @@ public class DocumentPredicates {
         String string2 = string.toLowerCase();
         return d -> d.text != null && d.text.toLowerCase().contains(string2) ||
                     d.title != null && d.title.toLowerCase().contains(string2) ||
-                    d.pageUrl != null && d.pageUrl.toLowerCase().contains(string2) ||
+                    d.getPageUrl() != null && d.getPageUrl().toLowerCase().contains(string2) ||
                     d.getSubjects().stream().anyMatch(s -> s.toLowerCase().contains(string2)) ||
                     d.getSourceCategories().stream().anyMatch(s -> s.toLowerCase().contains(string2));
     }
@@ -81,11 +81,11 @@ public class DocumentPredicates {
                     ifPresent(d.text) +
                     ifPresent(d.title) +
                     ifPresent(d.html) +
-                    ifPresent(d.pageUrl) +
+                    ifPresent(d.getPageUrl()) +
                     d.getSubjects().stream().map(s -> s + " ").reduce(String::join).orElse("") +
                     d.getSourceCategories().stream().map(s -> s + " ").reduce(String::join).orElse("");
 
-            return pattern.matcher(megaConcat).matches();
+            return pattern.matcher(megaConcat).find();
         };
 
     }

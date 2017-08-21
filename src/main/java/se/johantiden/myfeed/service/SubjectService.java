@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentClassifier;
-import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.SubjectRule;
 import se.johantiden.myfeed.persistence.SubjectRuleRepository;
 
@@ -17,10 +16,10 @@ import java.util.stream.Collectors;
 public class SubjectService {
 
     @Autowired
-    private SubjectRuleRepository subjectRuleRepository;
+    SubjectRuleRepository subjectRuleRepository;
 
     @Autowired
-    private DocumentRepository documentRepository;
+    DocumentService documentService;
 
     @PostConstruct
     public void postConstruct() {
@@ -49,13 +48,16 @@ public class SubjectService {
         List<SubjectRule> subjectRules = getAllSubectRules();
 
         Set<String> matchingSubjects = subjectRules.stream()
-                .filter(r -> r.isMatch(document))
+                .filter(r -> {
+                    boolean match = r.isMatch(document);
+                    return match;
+                })
                 .map(SubjectRule::getSubject)
                 .collect(Collectors.toSet());
 
         document.getSubjects().clear();
         document.getSubjects().addAll(matchingSubjects);
-        documentRepository.save(document);
+        documentService.put(document);
     }
 
     public List<SubjectRule> getAllSubectRules() {

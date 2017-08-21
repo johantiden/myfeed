@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import se.johantiden.myfeed.persistence.FeedPopulator;
 import se.johantiden.myfeed.persistence.Inbox;
-import se.johantiden.myfeed.persistence.User;
 import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
@@ -32,7 +31,7 @@ public class Main implements SchedulingConfigurer {
     @Bean
     public DocumentService documentService() {
         DocumentService documentService = new DocumentService();
-        documentService.resetSubjects();
+        documentService.postConstruct();
         return documentService;
     }
 
