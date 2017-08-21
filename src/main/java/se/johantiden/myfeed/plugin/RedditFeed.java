@@ -47,7 +47,7 @@ public class RedditFeed extends Feed {
 
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
-            org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(document.pageUrl);
+            org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(document.getPageUrl());
             parseStuffz(document);
             if (!isNSFW(jsoupDocument)) {
                 document.score = findVotes(jsoupDocument);

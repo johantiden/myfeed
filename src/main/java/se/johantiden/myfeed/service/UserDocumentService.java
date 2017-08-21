@@ -1,9 +1,12 @@
 package se.johantiden.myfeed.service;
 
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -54,5 +57,4 @@ public class UserDocumentService {
         userDocumentRepository.delete(allReadDocuments);
         return size;
     }
-
 }

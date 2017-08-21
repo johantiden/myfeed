@@ -24,13 +24,13 @@ public class Document extends BaseEntity {
     @Column(length = 2000)
     public String title;
 
-    @Column(length = 2000)
+    @Column(length = 8000)
     public final String text;
 
     public NameAndUrl author;
 
     @Column(length = 2000)
-    public final String pageUrl;
+    private final String pageUrl;
 
     @Column(length = 2000)
     public String imageUrl;
@@ -170,5 +170,14 @@ public class Document extends BaseEntity {
 
     public String getFeedUrl() {
         return feedUrl;
+    }
+
+    @javax.annotation.Nonnull
+    public String getPageUrl() {
+        return pageUrl;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 }

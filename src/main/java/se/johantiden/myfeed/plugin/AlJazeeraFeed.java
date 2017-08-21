@@ -46,7 +46,7 @@ public class AlJazeeraFeed extends Feed {
     }
 
     private static String findImage(Document document) {
-        URL url = getUrl(document.pageUrl);
+        URL url = getUrl(document.getPageUrl());
         org.jsoup.nodes.Document doc = getJsoupDocument(url);
 
         Elements img = doc.select(".article-main-img");

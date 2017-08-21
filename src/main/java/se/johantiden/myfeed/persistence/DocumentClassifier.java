@@ -86,8 +86,8 @@ public class DocumentClassifier {
         add(l, "Briefing", "your.+briefing");
         add(l, "Tim Berners-Lee", "Tim Berners\\-Lee");
 
-        add(l, TYSKLAND, "german");
-        add(l, TYSKLAND, "tysk");
+        add(l, TYSKLAND, "[Gg]erman");
+        add(l, TYSKLAND, "[Tt]ysk");
         add(l, TYSKLAND, "Brandenburg");
         add(l, TYSKLAND, "merkel");
         add(l, "Angela Merkel", "merkel");
@@ -734,7 +734,7 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(document);
 
         if (!m.isFromFeed("HackerNews")) {
-            List<String> folders = parseUrlFolders(document.pageUrl).stream()
+            List<String> folders = parseUrlFolders(document.getPageUrl()).stream()
                                    .filter(DocumentClassifier::urlFilter)
                                    .collect(Collectors.toList());
 

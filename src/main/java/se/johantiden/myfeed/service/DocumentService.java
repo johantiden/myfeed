@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DocumentService {
@@ -15,38 +17,62 @@ public class DocumentService {
     @Autowired
     private DocumentRepository documentRepository;
 
-    public void resetSubjects() {
-//        Objects.requireNonNull(documentRepository);
+    @PostConstruct
+    public void postConstruct() {
 //
+        resetSubjectsAndTabs();
+    }
+
+    private void resetSubjectsAndTabs() {
+//        Objects.requireNonNull(documentRepository);
 //        documentRepository.findAll().forEach(d -> {
 //            d.getSubjects().clear();
 //            d.getTabs().clear();
 //            d.setTabsParsed(false);
 //            d.setSubjectsParsed(false);
 //        });
-        log.warn("resetSubjects NOT IMPLEMENTED");
     }
 
     public void put(Iterable<Document> documents) {
         documents.forEach(this::put);
     }
 
-    public void put(Document document) {
-        if (document.getId() != null) {
-            Optional<Document> optional = Optional.ofNullable(documentRepository.findOne(document.getId()));
-            if (optional.isPresent()) {
-                merge(optional.get(), document);
+    public Document put(Document document) {
+
+        if (document.getId() == null) {
+            Optional<Document> existing = find(document);
+            if (existing.isPresent()) {
+                return merge(existing.get(), document);
             }
         }
-        documentRepository.save(document);
+        return documentRepository.save(document);
     }
 
-    private void merge(Document existing, Document newDocument) {
-        documentRepository.save(newDocument);
+    private Document merge(Document existing, Document newDocument) {
+
+
+        existing.setScore(newDocument.getScore());
+        Document saved = documentRepository.save(existing);
+        return saved;
     }
 
-    public boolean hasDocument(long documentId) {
-        return find(documentId).isPresent();
+    public boolean hasDocument(Document document) {
+        return find(document).isPresent();
+    }
+
+    private Optional<Document> find(Document document) {
+
+        Optional<Document> existing = Optional.empty();
+
+        if (document.getId() != null) {
+            existing = Optional.ofNullable(documentRepository.findOne(document.getId()));
+        }
+
+        if (!existing.isPresent()) {
+            existing = documentRepository.findOneByPageUrl(document.getPageUrl());
+        }
+
+        return existing;
     }
 
     public Optional<Document> find(long documentId) {

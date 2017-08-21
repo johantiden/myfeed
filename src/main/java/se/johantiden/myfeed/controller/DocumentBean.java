@@ -33,7 +33,7 @@ public class DocumentBean {
         this.title = document.title;
         this.text = document.text;
         this.author = document.author;
-        this.pageUrl = document.pageUrl;
+        this.pageUrl = document.getPageUrl();
         this.imageUrl = document.imageUrl;
         this.publishedDate = document.publishedDate;
         this.html = document.html;
