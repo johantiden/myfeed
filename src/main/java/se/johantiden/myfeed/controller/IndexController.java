@@ -77,11 +77,12 @@ public class IndexController {
     public List<DocumentBean> userDocumentsMulti(@RequestParam("keys") List<Long> userDocumentIds) {
 
 
-        return userDocumentIds.stream()
+        List<DocumentBean> documentBeans = userDocumentIds.stream()
                 .map(this::tryFindUserDocument)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
+        return documentBeans;
 
 
 

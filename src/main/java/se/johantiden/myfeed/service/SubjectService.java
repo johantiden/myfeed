@@ -2,6 +2,7 @@ package se.johantiden.myfeed.service;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import se.johantiden.myfeed.classification.DocumentMatcher;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentClassifier;
 import se.johantiden.myfeed.persistence.SubjectRule;
@@ -63,9 +64,21 @@ public class SubjectService {
                 .map(SubjectRule::getName)
                 .collect(Collectors.toSet());
 
+        hackAddSubredditAsSubject(matchingSubjects, document);
+
+
         document.getSubjects().clear();
         document.getSubjects().addAll(matchingSubjects);
         documentService.put(document);
+    }
+
+    private void hackAddSubredditAsSubject(Set<String> matchingSubjects, Document document) {
+
+        if (new DocumentMatcher(document).has("Reddit")) {
+            String cat = document.getSourceCategories().get(0);
+            matchingSubjects.add(cat);
+        }
+
     }
 
     public List<SubjectRule> getAllSubectRules() {

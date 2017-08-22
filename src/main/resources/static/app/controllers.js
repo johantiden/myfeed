@@ -31,7 +31,7 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
             return;
         }
 
-        let keyBatches = batcheroo(keys, 30);
+        let keyBatches = batcheroo(keys, 1000);
 
         function getDocumentsSlowly() {
             getDocumentz(keyBatches[0]);
@@ -49,8 +49,8 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
             documents.forEach(document => {
                 document.tabs.forEach(tab => {
                     $scope.tabs[tab] = documentTabPredicate(tab);
-                    $scope.documents.push(document);
                 });
+                $scope.documents.push(document);
             });
         });
     }
