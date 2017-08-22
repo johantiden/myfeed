@@ -70,6 +70,7 @@ public class DocumentClassifier {
     public static final String FACEBOOK = "Facebook";
     public static final String PROGRAMMING = "Programming";
     public static final String FINGERPRINT = "Fingerprint";
+    public static final String YOUR_BRIEFING = "Your Briefing";
 
     private DocumentClassifier() {
     }
@@ -175,6 +176,7 @@ public class DocumentClassifier {
         tabs.add(new TabRule(BIZ, FINGERPRINT, false));
 
         boolean hideBad = true;
+        tabs.add(new TabRule(BAD, YOUR_BRIEFING, hideBad));
         tabs.add(new TabRule(BAD, HIRING, hideBad));
         tabs.add(new TabRule(BAD, WEBB_TV, hideBad));
         tabs.add(new TabRule(BAD, SERIER, hideBad));
@@ -201,6 +203,7 @@ public class DocumentClassifier {
         tabs.add(new TabRule(BAD, "OldSchoolCool", hideBad));
         tabs.add(new TabRule(BAD, "GetMotivated", hideBad));
         tabs.add(new TabRule(BAD, "2meirl4meirl", hideBad));
+        tabs.add(new TabRule(BAD, "thisismylifenow", hideBad));
         tabs.add(new TabRule(BAD, "Dagens Nyheter.*blogg", hideBad));
 
         return tabs;
@@ -218,7 +221,7 @@ public class DocumentClassifier {
         add(s, "Ledare", "[Ll]edare");
         add(s, "Ledare", "LEDARE");
         add(s, "Sport", "sport");
-        add(s, "Briefing", "[Yy]our.+[Bb]riefing");
+        add(s, YOUR_BRIEFING, "[Yy]our.+[Bb]riefing");
         add(s, "Tim Berners-Lee", "Tim Berners\\-Lee");
 
         add(s, TYSKLAND, "[Gg]erman");
