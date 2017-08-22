@@ -25,18 +25,11 @@ public class SubjectRule extends Rule {
         this.expression = Objects.requireNonNull(expression);
     }
 
-    @Override
-    public boolean isMatch(Document document) {
-        Pattern pattern = Pattern.compile(expression);
-
-        boolean match = new DocumentMatcher(document).matches(pattern);
-        return match;
-    }
-
     public String getName() {
         return name;
     }
 
+    @Override
     public String getExpression() {
         return expression;
     }

@@ -58,6 +58,8 @@ public class Document extends BaseEntity {
     @Column(length = 2000)
     private final ArrayList<String> sourceCategories;
 
+    private boolean hidden;
+
     // JPA
     protected Document() {
 
@@ -179,5 +181,13 @@ public class Document extends BaseEntity {
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 }

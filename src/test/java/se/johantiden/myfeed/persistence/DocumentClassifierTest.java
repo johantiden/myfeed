@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.persistence;
 
 import org.junit.Test;
+import se.johantiden.myfeed.service.SubjectService;
 
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -30,7 +31,7 @@ public class DocumentClassifierTest {
 
     @Test
     public void testGetDefault() throws Exception {
-        Set<SubjectRule> defaultSubjectRules = DocumentClassifier.getDefaultSubjectRules();
+        Set<SubjectRule> defaultSubjectRules = SubjectService.getDefaultSubjectRules();
         assertThat(defaultSubjectRules.isEmpty(), is(false));
 
     }
