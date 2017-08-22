@@ -128,6 +128,7 @@ public class DocumentClassifier {
         add(s, "Apple");
         add(s, "Facebook");
         add(s, "Google");
+        add(s, "H&M");
 
         add(s, "Net Neutrality", "Net Neutrality");
         add(s, "Blockchain", "[Bb]lock.*chain");
@@ -223,6 +224,9 @@ public class DocumentClassifier {
 
         add(s, "Naturkatastrof", "[Jj]ordbävning");
         add(s, "Naturkatastrof", "[Ee]arthquake");
+        add(s, "Naturkatastrof", "[Ll]andslide");
+
+        add(s, "Talaq", "[Tt]alaq");
 
         add(s, FRÅGESPORT, "fragesport");
         add(s, JUNIOR);
@@ -483,9 +487,6 @@ public class DocumentClassifier {
         add(l, "Nederländerna", "Netherlands");
         add(l, "Nederländerna", "Dutch");
 
-        add(l, "Italien", "Italien");
-        add(l, "Italien", "Italy");
-
         add(l, "Tjeckien", "Tjeckien");
         add(l, "Tjeckien", "Tjeckisk");
         add(l, "Tjeckien", "Czech");
@@ -537,6 +538,11 @@ public class DocumentClassifier {
         add(l, "Norge", "[Nn]orska");
 
         add(l, "Qatar", "Qatar");
+
+        add(l, "Dubai", "Dubai");
+        add(l, "United Arab Emirates", "Dubai");
+        add(l, "United Arab Emirates", "United Arab Emirates");
+        add(l, "United Arab Emirates", "UAE");
 
         add(l, "Saudiarabien", "Saudiarabien");
         add(l, "Saudiarabien", "Saudi Arabia");
@@ -807,6 +813,7 @@ public class DocumentClassifier {
             m.isFromFeed("HackerNews") ||
             m.isFromFeed("Breakit") ||
             m.isFromFeed("Engadget") ||
+            m.has("science") ||
             m.anyCategoryEquals("ProgrammerHumor") ||
             m.isFromFeed("HackerNews") ||
             m.isFromFeed("Ars Technica") && m.anyCategoryEquals("tech-policy", "gadgets", "gaming", "facebook", "opposable thumbs", "the-multiverse", "Technology Lab", "Ministry of Innovation") ||
@@ -823,7 +830,7 @@ public class DocumentClassifier {
 
         return
             m.anyCategoryEquals("AskReddit") ||
-            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying", "space", "mildlyinfuriating") ||
+            m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying", "space", "mildlyinfuriating", "TrumpCriticizesTrump") ||
             m.isFromFeed("xkcd");
     }
 
