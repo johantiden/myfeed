@@ -48,6 +48,11 @@ public class FeedPopulator {
         feeds.add(new EngadgetFeed());
 
         feeds.add(createRss(
+                "Dagens Industri",
+                "https://www.di.se",
+                "https://www.di.se/rss"));
+
+        feeds.add(createRss(
                 "xkcd",
                 "https://xkcd.com",
                 "https://xkcd.com/atom.xml"));

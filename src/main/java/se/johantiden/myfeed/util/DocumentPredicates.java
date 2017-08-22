@@ -78,14 +78,14 @@ public class DocumentPredicates {
         return d -> {
 
             String megaConcat =
-                    ifPresent(d.text) +
+                    ifPresent(d.getFeedName()) +
+                    d.getSubjects().stream().map(s -> s + " ").reduce(String::join).orElse("") +
+                    d.getSourceCategories().stream().map(s -> s + " ").reduce(String::join).orElse("") +
                     ifPresent(d.title) +
+                    ifPresent(d.text) +
                     ifPresent(d.html) +
                     ifPresent(d.getPageUrl()) +
-                    ifPresent(d.getFeedName()) +
-                    ifPresent(d.getFeedUrl()) +
-                    d.getSubjects().stream().map(s -> s + " ").reduce(String::join).orElse("") +
-                    d.getSourceCategories().stream().map(s -> s + " ").reduce(String::join).orElse("");
+                    ifPresent(d.getFeedUrl());
 
             return pattern.matcher(megaConcat).find();
         };
