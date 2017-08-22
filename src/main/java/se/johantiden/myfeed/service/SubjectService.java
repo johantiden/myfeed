@@ -8,7 +8,9 @@ import se.johantiden.myfeed.persistence.SubjectRule;
 import se.johantiden.myfeed.persistence.SubjectRuleRepository;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -31,13 +33,19 @@ public class SubjectService {
 
     private void hackCreateDefaultSubjectRules() {
 
-        List<SubjectRule> defaultSubjectRules = DocumentClassifier.getDefaultSubjectRules();
+        Collection<SubjectRule> defaultSubjectRules = DocumentClassifier.getDefaultSubjectRules();
 
         defaultSubjectRules.forEach(this::put);
     }
 
     public void put(SubjectRule subjectRule) {
         Pattern pattern = Pattern.compile(subjectRule.getExpression());
+
+        Optional<SubjectRule> existing = subjectRuleRepository.findOneByNameAndExpression(subjectRule.getName(), subjectRule.getExpression());
+        if (existing.isPresent()) {
+            throw new IllegalStateException("Subject Rule already present! " + subjectRule + " vs " + existing.get());
+        }
+
         subjectRuleRepository.save(subjectRule);
     }
 
@@ -52,7 +60,7 @@ public class SubjectService {
                     boolean match = r.isMatch(document);
                     return match;
                 })
-                .map(SubjectRule::getSubject)
+                .map(SubjectRule::getName)
                 .collect(Collectors.toSet());
 
         document.getSubjects().clear();

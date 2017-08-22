@@ -82,6 +82,8 @@ public class DocumentPredicates {
                     ifPresent(d.title) +
                     ifPresent(d.html) +
                     ifPresent(d.getPageUrl()) +
+                    ifPresent(d.getFeedName()) +
+                    ifPresent(d.getFeedUrl()) +
                     d.getSubjects().stream().map(s -> s + " ").reduce(String::join).orElse("") +
                     d.getSourceCategories().stream().map(s -> s + " ").reduce(String::join).orElse("");
 
