@@ -204,6 +204,8 @@ public class DocumentClassifier {
         tabs.add(new TabRule(BAD, "GetMotivated", hideBad));
         tabs.add(new TabRule(BAD, "2meirl4meirl", hideBad));
         tabs.add(new TabRule(BAD, "thisismylifenow", hideBad));
+        tabs.add(new TabRule(BAD, "facepalm", hideBad));
+        tabs.add(new TabRule(BAD, "VIDEO:", hideBad));
         tabs.add(new TabRule(BAD, "Dagens Nyheter.*blogg", hideBad));
 
         return tabs;
@@ -652,6 +654,10 @@ public class DocumentClassifier {
         add(l, "USA", "California");
         add(l, "Charlottesville", "Charlottesville");
         add(l, "USA", "Charlottesville");
+        add(l, "Washington", "Washington");
+        add(l, "Washington", "[Vv]ita huset");
+        add(l, "USA", "[Vv]ita huset");
+        add(l, "USA", "Washington");
 
         add(l, "Libanon", "Libanon");
         add(l, "Libanon", "Libanes");

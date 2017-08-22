@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.plugin;
 
+import com.google.common.base.Strings;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
@@ -14,14 +15,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class AlJazeeraFeed extends Feed {
+public class LosAngelesTimesWorldFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(AlJazeeraFeed.class);
-    public static final String URL = "http://www.aljazeera.com";
-    public static final String NAME = "Al Jazeera";
-    public static final String URL_RSS = "http://www.aljazeera.com/xml/rss/all.xml";
+    private static final Logger log = LoggerFactory.getLogger(LosAngelesTimesWorldFeed.class);
+    public static final String NAME = "Los Angeles Times - World";
+    public static final String URL = "http://www.latimes.com";
+    public static final String URL_RSS = "http://www.latimes.com/world/rss2.0.xml";
 
-    public AlJazeeraFeed() {
+    public LosAngelesTimesWorldFeed() {
         super(NAME, URL, createFeedReader());
     }
 
@@ -36,9 +37,7 @@ public class AlJazeeraFeed extends Feed {
 
     private static Function<Document, Document> docMapper() {
 
-
         return document -> {
-
             document.imageUrl = findImage(document);
             return document;
         };
@@ -49,25 +48,20 @@ public class AlJazeeraFeed extends Feed {
         URL url = getUrl(document.getPageUrl());
         org.jsoup.nodes.Document doc = getJsoupDocument(url);
 
-        Elements img = doc.select(".article-main-img");
-        if(!img.isEmpty()) {
-            String srcRelative = img.attr("src");
-            String host = url.getHost();
-
-            String protocol = url.getProtocol();
-            String src = protocol + "://" + host + srcRelative;
-            return src;
-        }
-
-        Elements videoElement = doc.select("video.vjs-tech");
-        if(!videoElement.isEmpty()) {
-            String src = videoElement.get(0).attr("poster");
-            if (src.startsWith("//")) {
-                src = "https:" + src;
+        Elements figureImg = doc.select("figure.trb_em_ic_figure > img");
+        if(!figureImg.isEmpty()) {
+            String src = figureImg.attr("srcset");
+            if (Strings.isNullOrEmpty(src)) {
+                src = figureImg.attr("data-baseurl");
             }
-            return src;
+            if (!Strings.isNullOrEmpty(src)) {
+                String s = src.split(" ")[0];
+                if (s.startsWith("//")) {
+                    s = "https:" + s;
+                }
+                return s;
+            }
         }
-
 
         return null;
     }
