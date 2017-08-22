@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 public class SubjectRule extends Rule {
 
     public static final Comparator<SubjectRule> COMPARATOR = Comparator.comparing(SubjectRule::getName).thenComparing(SubjectRule::getExpression);
-    private final String name;
-    private final String expression;
+    private String name;
+    private String expression;
 
     //JPA
     protected SubjectRule() {
@@ -66,5 +66,13 @@ public class SubjectRule extends Rule {
                 "name='" + name + '\'' +
                 ", expression='" + expression + '\'' +
                 '}';
+    }
+
+    public void setName(String name) {
+        this.name = Objects.requireNonNull(name);
+    }
+
+    public void setExpression(String expression) {
+        this.expression = Objects.requireNonNull(expression);
     }
 }
