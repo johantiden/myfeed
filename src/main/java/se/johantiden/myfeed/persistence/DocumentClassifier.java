@@ -69,6 +69,7 @@ public class DocumentClassifier {
     public static final String MICROSOFT = "Microsoft";
     public static final String FACEBOOK = "Facebook";
     public static final String PROGRAMMING = "Programming";
+    public static final String FINGERPRINT = "Fingerprint";
 
     private DocumentClassifier() {
     }
@@ -83,24 +84,30 @@ public class DocumentClassifier {
         tabs.add(new TabRule(VÄDER, VÄDER, hideWeather));
 
         boolean hideSports = true;
-        tabs.add(new TabRule(SPORT, SPORT, hideSports));
+        tabs.add(new TabRule(SPORT, "[Ss]port", hideSports));
 
         boolean hideCulture = true;
         tabs.add(new TabRule(CULTURE, "kultur", hideCulture));
         tabs.add(new TabRule(CULTURE, "kultur-noje", hideCulture));
         tabs.add(new TabRule(CULTURE, "dnbok", hideCulture));
 
-        tabs.add(new TabRule(NEWS, "Al Jazeera.*news", false));
-        tabs.add(new TabRule(NEWS, "Al Jazeera.*insidestory", false));
-        tabs.add(new TabRule(NEWS, "Al Jazeera.*opinion", false));
-        tabs.add(new TabRule(NEWS, "Al Jazeera.*features", false));
-        tabs.add(new TabRule(NEWS, "Al Jazeera.*indepth", false));
-        tabs.add(new TabRule(NEWS, "Al Jazeera.*programmes", false));
-        tabs.add(new TabRule(NEWS, "SVT Nyheter.*nyheter", false));
+        tabs.add(new TabRule(NEWS, "aljazeera.*news", false));
+        tabs.add(new TabRule(NEWS, "aljazeera.*insidestory", false));
+        tabs.add(new TabRule(NEWS, "aljazeera.*opinion", false));
+        tabs.add(new TabRule(NEWS, "aljazeera.*features", false));
+        tabs.add(new TabRule(NEWS, "aljazeera.*indepth", false));
+        tabs.add(new TabRule(NEWS, "aljazeera.*programmes", false));
+        tabs.add(new TabRule(NEWS, "aljazeera.*focus", false));
+        tabs.add(new TabRule(NEWS, "svt.*nyheter", false));
         tabs.add(new TabRule(NEWS, "Dagens Nyheter.*nyheter", false));
         tabs.add(new TabRule(NEWS, "Dagens Nyheter.*varlden", false));
         tabs.add(new TabRule(NEWS, "Dagens Nyheter.*sverige", false));
         tabs.add(new TabRule(NEWS, "Dagens Nyheter.*debatt", false));
+        tabs.add(new TabRule(NEWS, "Dagens Nyheter.*sthlm", false));
+        tabs.add(new TabRule(NEWS, "Dagens Nyheter.*ledare", false));
+        tabs.add(new TabRule(NEWS, "Dagens Industri.*nyheter", false));
+        tabs.add(new TabRule(NEWS, "Dagens Industri.*opinion", false));
+        tabs.add(new TabRule(NEWS, STOCKHOLM, false));
         tabs.add(new TabRule(NEWS, "TheLocal", false));
         tabs.add(new TabRule(NEWS, "Reuters - World", false));
         tabs.add(new TabRule(NEWS, "Los Angeles Times - World", false));
@@ -164,8 +171,8 @@ public class DocumentClassifier {
         tabs.add(new TabRule(BIZ, "New York Times - World.*business", false));
         tabs.add(new TabRule(BIZ, "Slashdot.*business", false));
         tabs.add(new TabRule(BIZ, "Breakit", false));
-        tabs.add(new TabRule(BIZ, "Dagens Industri", false));
         tabs.add(new TabRule(BIZ, EKONOMI, false));
+        tabs.add(new TabRule(BIZ, FINGERPRINT, false));
 
         boolean hideBad = true;
         tabs.add(new TabRule(BAD, HIRING, hideBad));
@@ -188,11 +195,13 @@ public class DocumentClassifier {
         tabs.add(new TabRule(BAD, RESOR, hideBad));
         tabs.add(new TabRule(BAD, UUTISET, hideBad));
         tabs.add(new TabRule(BAD, HÄR_ÄR, hideBad));
+        tabs.add(new TabRule(BAD, "Dagens Industri.*/bil/", hideBad));
         tabs.add(new TabRule(BAD, "interestingasfuck", hideBad));
         tabs.add(new TabRule(BAD, "Jokes", hideBad));
         tabs.add(new TabRule(BAD, "OldSchoolCool", hideBad));
         tabs.add(new TabRule(BAD, "GetMotivated", hideBad));
-        tabs.add(new TabRule(BAD, "Dagens Nyheter.*blogg", false));
+        tabs.add(new TabRule(BAD, "2meirl4meirl", hideBad));
+        tabs.add(new TabRule(BAD, "Dagens Nyheter.*blogg", hideBad));
 
         return tabs;
     }
@@ -201,7 +210,13 @@ public class DocumentClassifier {
         TreeSet<SubjectRule> s = new TreeSet<>(SubjectRule.COMPARATOR);
         add(s, EKONOMI, "ekonomi");
         add(s, EKONOMI, "näringsliv");
-        add(s, "Ledare", "ledare");
+        add(s, EKONOMI, "[Oo]ljepris");
+        add(s, EKONOMI, "[Oo]ljelager");
+        add(s, EKONOMI, "[Bb]örs");
+        add(s, EKONOMI, "[Aa]ktie");
+
+        add(s, "Ledare", "[Ll]edare");
+        add(s, "Ledare", "LEDARE");
         add(s, "Sport", "sport");
         add(s, "Briefing", "[Yy]our.+[Bb]riefing");
         add(s, "Tim Berners-Lee", "Tim Berners\\-Lee");
@@ -245,6 +260,7 @@ public class DocumentClassifier {
         add(s, "Samsung");
         add(s, "Apple");
         add(s, FACEBOOK);
+        add(s, FINGERPRINT);
         add(s, "Nintendo");
         add(s, "Gaming", "Nintendo");
         add(s, "Google");
@@ -263,7 +279,6 @@ public class DocumentClassifier {
         add(s, "Film/TV", "[Dd]ramaserie");
 
         add(s, "Terror", "[Tt]error");
-        add(s, "TT", "TT");
         add(s, "Ebola", "Ebola");
         add(s, "Kolera", "Kolera");
         add(s, "Kolera", "Cholera");
@@ -368,7 +383,7 @@ public class DocumentClassifier {
 
         add(s, PROGRAMMING, "[Pp]rogramming");
 
-        add(s, "Solförmörkelse", "[Ee]cliipse");
+        add(s, "Solförmörkelse", "[Ee]clipse");
         add(s, "Solförmörkelse", "[Ss]olförmörkelse");
 
         add(s, "Big Ben", "Big Ben");
@@ -632,6 +647,8 @@ public class DocumentClassifier {
         add(l, "USA", "U\\.S\\.");
         add(l, "USA", "Orlando");
         add(l, "USA", "California");
+        add(l, "Charlottesville", "Charlottesville");
+        add(l, "USA", "Charlottesville");
 
         add(l, "Libanon", "Libanon");
         add(l, "Libanon", "Libanes");

@@ -79,8 +79,8 @@ public class DocumentPredicates {
 
             String megaConcat =
                     ifPresent(d.getFeedName()) +
-                    d.getSubjects().stream().map(s -> s + " ").reduce(String::join).orElse("") +
-                    d.getSourceCategories().stream().map(s -> s + " ").reduce(String::join).orElse("") +
+                    String.join(" ", d.getSubjects()) +
+                    String.join(" ", d.getSourceCategories()) +
                     ifPresent(d.title) +
                     ifPresent(d.text) +
                     ifPresent(d.html) +
