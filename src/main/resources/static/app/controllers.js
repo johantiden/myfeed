@@ -44,9 +44,6 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
 
     });
 
-    function getDocumentsSlowly(keyBatches) {
-
-    }
     function getDocumentz(keys) {
         documentService.getDocuments(keys, documents => {
             documents.forEach(document => {

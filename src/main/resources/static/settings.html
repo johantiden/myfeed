@@ -23,11 +23,11 @@
 
     <div style="background-color: WHITE;">
         <h1>Subject Rules</h1>
-        <div class="subject-box" ng-repeat="subjectRule in subjectRules">
+        <div ng-repeat="subjectRule in subjectRules">
             <span>Name</span>
-            <span>{{subjectRule.name}}></span>
+            <input type="text" disabled value="{{subjectRule.name}}">
             <span>Expression</span>
-            <span>{{subjectRule.expression}}</span>
+            <input type="text" disabled value="{{subjectRule.expression}}">
         </div>
     </div>
 
