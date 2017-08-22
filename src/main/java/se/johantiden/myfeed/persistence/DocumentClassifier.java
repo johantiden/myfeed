@@ -87,7 +87,7 @@ public class DocumentClassifier {
         add(s, EKONOMI, "näringsliv");
         add(s, "Ledare", "ledare");
         add(s, "Sport", "sport");
-        add(s, "Briefing", "your.+briefing");
+        add(s, "Briefing", "[Yy]our.+[Bb]riefing");
         add(s, "Tim Berners-Lee", "Tim Berners\\-Lee");
 
         add(s, TYSKLAND, "[Gg]erman");
@@ -179,6 +179,7 @@ public class DocumentClassifier {
 
         add(s, "Mecca", "Mecca");
         add(s, "Mecca", "Hajj");
+        add(s, "Mecca", "[Aa]l-[Aa]qsa");
 
         add(s, "Foliehatt", "CCTV");
 
@@ -225,6 +226,7 @@ public class DocumentClassifier {
         add(s, "Naturkatastrof", "[Jj]ordbävning");
         add(s, "Naturkatastrof", "[Ee]arthquake");
         add(s, "Naturkatastrof", "[Ll]andslide");
+        add(s, "Naturkatastrof", "[Mm]udslide");
 
         add(s, "Talaq", "[Tt]alaq");
 
@@ -587,6 +589,7 @@ public class DocumentClassifier {
         add(l, RYSSLAND, "Russia");
         add(l, RYSSLAND, "[Rr]ysk");
         add(l, RYSSLAND, "Moskva");
+        add(l, RYSSLAND, "Kreml");
 
         add(l, "Kanada", "Kanada");
         add(l, "Kanada", "Canada");
@@ -808,10 +811,8 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-            m.isFromFeed("Ars Technica") ||
             m.isFromFeed("Slashdot") ||
             m.isFromFeed("HackerNews") ||
-            m.isFromFeed("Breakit") ||
             m.isFromFeed("Engadget") ||
             m.has("science") ||
             m.anyCategoryEquals("ProgrammerHumor") ||
