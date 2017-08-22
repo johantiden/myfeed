@@ -49,6 +49,8 @@ public class SubjectService {
         }
 
         subjectRuleRepository.save(subjectRule);
+
+        documentService.invalidateSubjects();
     }
 
     public void parseSubjectsFor(Document document) {
