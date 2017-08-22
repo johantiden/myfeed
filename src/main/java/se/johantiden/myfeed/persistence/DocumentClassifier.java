@@ -127,8 +127,11 @@ public class DocumentClassifier {
         add(s, "Samsung");
         add(s, "Apple");
         add(s, "Facebook");
+        add(s, "Nintendo");
+        add(s, "Gaming", "Nintendo");
         add(s, "Google");
         add(s, "H&M");
+        add(s, "HP");
 
         add(s, "Net Neutrality", "Net Neutrality");
         add(s, "Blockchain", "[Bb]lock.*chain");
@@ -208,6 +211,7 @@ public class DocumentClassifier {
         add(s, "Taliban", "Taliban");
 
         add(s, "Gaming", "[Gg]aming");
+        add(s, "Gaming", "[Gg]ames");
         add(s, "Cars", "cars technica");
         add(s, NEWS_GRID);
         add(s, WEBB_TV);
