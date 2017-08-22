@@ -25,7 +25,7 @@ public class Document extends BaseEntity {
     public String title;
 
     @Column(length = 8000)
-    public final String text;
+    public String text;
 
     public NameAndUrl author;
 

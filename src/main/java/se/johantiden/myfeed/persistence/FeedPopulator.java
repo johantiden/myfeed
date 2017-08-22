@@ -2,6 +2,7 @@ package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.plugin.AlJazeeraFeed;
 import se.johantiden.myfeed.plugin.BreakitFeed;
+import se.johantiden.myfeed.plugin.DagensIndustriFeed;
 import se.johantiden.myfeed.plugin.EngadgetFeed;
 import se.johantiden.myfeed.plugin.ReutersFeed;
 import se.johantiden.myfeed.plugin.DagensNyheterFeed;
@@ -46,11 +47,7 @@ public class FeedPopulator {
         feeds.add(new BreakitFeed());
         feeds.add(new AlJazeeraFeed());
         feeds.add(new EngadgetFeed());
-
-        feeds.add(createRss(
-                "Dagens Industri",
-                "https://www.di.se",
-                "https://www.di.se/rss"));
+        feeds.add(new DagensIndustriFeed());
 
         feeds.add(createRss(
                 "xkcd",
