@@ -17,6 +17,7 @@ import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.SubjectService;
+import se.johantiden.myfeed.service.TabService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
 import javax.sql.DataSource;
@@ -31,7 +32,6 @@ public class Main implements SchedulingConfigurer {
     @Bean
     public DocumentService documentService() {
         DocumentService documentService = new DocumentService();
-        documentService.postConstruct();
         return documentService;
     }
 
@@ -53,6 +53,11 @@ public class Main implements SchedulingConfigurer {
     @Bean
     public SubjectService subjectService() {
         return new SubjectService();
+    }
+
+    @Bean
+    public TabService tabService() {
+        return new TabService();
     }
 
     @Bean

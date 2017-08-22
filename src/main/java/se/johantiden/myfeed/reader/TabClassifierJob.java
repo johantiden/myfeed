@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.DocumentClassifier;
 import se.johantiden.myfeed.service.DocumentService;
+import se.johantiden.myfeed.service.TabService;
 
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class TabClassifierJob {
@@ -18,6 +17,8 @@ public class TabClassifierJob {
     private static final Logger log = LoggerFactory.getLogger(TabClassifierJob.class);
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private TabService tabService;
 
     @Scheduled(fixedRate = 1000)
     public void testTabs() {
@@ -33,13 +34,6 @@ public class TabClassifierJob {
 
         documents.stream()
                 .filter(Document::isSubjectsParsed)
-                .forEach(d -> {
-                    d.setTabsParsed(true);
-                    DocumentClassifier.appendUrlFoldersAsCategories(d);
-                    Set<String> tabs = DocumentClassifier.getTabsFor(d);
-                    d.getTabs().clear();
-                    d.getTabs().addAll(tabs);
-                    documentService.put(d);
-                });
+                .forEach(tabService::parseTabsFor);
     }
 }

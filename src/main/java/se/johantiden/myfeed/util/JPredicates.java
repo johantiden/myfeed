@@ -15,4 +15,8 @@ public class JPredicates {
     public static <T> BinaryOperator<Predicate<T>> and() {
         return Predicate::and;
     }
+
+    public static <T> Predicate<T> not(Predicate<T> a) {
+        return t -> !a.test(t);
+    }
 }

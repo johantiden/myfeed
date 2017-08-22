@@ -16,6 +16,7 @@ import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.UserDocumentService;
+import se.johantiden.myfeed.util.JPredicates;
 
 import java.util.Collection;
 import java.util.List;
@@ -70,22 +71,17 @@ public class IndexController {
 
         Optional<Document> document = userDocumentOptional.map(UserDocument::getDocument);
 
-        return document.map(d -> new DocumentBean(userDocumentOptional.get(), d));
+        return document.filter(JPredicates.not(Document::isHidden)).map(d -> new DocumentBean(userDocumentOptional.get(), d));
     }
 
     @RequestMapping("/rest/userdocuments")
     public List<DocumentBean> userDocumentsMulti(@RequestParam("keys") List<Long> userDocumentIds) {
-
-
         List<DocumentBean> documentBeans = userDocumentIds.stream()
                 .map(this::tryFindUserDocument)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
         return documentBeans;
-
-
-
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
