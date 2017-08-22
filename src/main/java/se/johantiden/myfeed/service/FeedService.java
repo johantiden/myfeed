@@ -21,9 +21,19 @@ public class FeedService {
             return Optional.empty();
         }
 
-        Feed feed = feeds.stream()
-                .findAny()
-                .get();
+        Feed feed;
+        if (feeds.stream().anyMatch(f -> f.getLastRead() == null)) {
+            feed = feeds.stream()
+                    .filter(f -> f.getLastRead() == null)
+                    .findAny()
+                    .get();
+        } else {
+            feed = feeds.stream()
+                    .sorted(Feed.COMPARATOR_OLDEST_INVALIDATED)
+                    .findFirst()
+                    .get();
+        }
+
         feed.setLastRead(Instant.now());
         return Optional.of(feed);
     }

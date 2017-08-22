@@ -4,6 +4,8 @@ import se.johantiden.myfeed.plugin.AlJazeeraFeed;
 import se.johantiden.myfeed.plugin.BreakitFeed;
 import se.johantiden.myfeed.plugin.DagensIndustriFeed;
 import se.johantiden.myfeed.plugin.EngadgetFeed;
+import se.johantiden.myfeed.plugin.LosAngelesTimesWorldFeed;
+import se.johantiden.myfeed.plugin.NewYorkTimesWorldFeed;
 import se.johantiden.myfeed.plugin.ReutersFeed;
 import se.johantiden.myfeed.plugin.DagensNyheterFeed;
 import se.johantiden.myfeed.plugin.HackerNewsFeed;
@@ -54,22 +56,9 @@ public class FeedPopulator {
                 "https://xkcd.com",
                 "https://xkcd.com/atom.xml"));
 
-        feeds.add(createRss(
-                "Elvis",
-                "http://www.elvisthecomic.com",
-                "http://www.elvisthecomic.com/feed/"));
-
         feeds.add(new SVTNyheterFeed());
-
-        feeds.add(createRss(
-                "New York Times - World",
-                "https://www.nytimes.com/section/world",
-                "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"));
-
-        feeds.add(createRss(
-                "Los Angeles Times - World",
-                "http://www.latimes.com",
-                "http://www.latimes.com/world/rss2.0.xml"));
+        feeds.add(new NewYorkTimesWorldFeed());
+        feeds.add(new LosAngelesTimesWorldFeed());
 
         feeds.add(new WashingtonPostFeed(
                 INVALIDATION_PERIOD

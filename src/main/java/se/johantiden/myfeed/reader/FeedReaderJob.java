@@ -37,7 +37,7 @@ public class FeedReaderJob {
 
     @Async
     private void consume(Feed feed) {
-        log.info("  ENTER FeedReaderJob.consume");
+        log.info("  ENTER FeedReaderJob.consume - {}", feed.getName());
 
         List<Document> documents = FeedReaderService.readAll(feed);
 

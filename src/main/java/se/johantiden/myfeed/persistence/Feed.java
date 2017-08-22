@@ -5,10 +5,12 @@ import se.johantiden.myfeed.util.DateConverter;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Feed {
 
+    public static final Comparator<Feed> COMPARATOR_OLDEST_INVALIDATED = Comparator.nullsFirst(Comparator.comparing(Feed::getLastRead));
     private final String name;
     private final FeedReader feedReader;
     private final String url;

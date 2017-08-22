@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class AlJazeeraFeed extends Feed {
+public class NewYorkTimesWorldFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(AlJazeeraFeed.class);
-    public static final String URL = "http://www.aljazeera.com";
-    public static final String NAME = "Al Jazeera";
-    public static final String URL_RSS = "http://www.aljazeera.com/xml/rss/all.xml";
+    private static final Logger log = LoggerFactory.getLogger(NewYorkTimesWorldFeed.class);
+    public static final String URL = "https://www.nytimes.com/section/world";
+    public static final String NAME = "New York Times - World";
+    public static final String URL_RSS = "https://rss.nytimes.com/services/xml/rss/nyt/World.xml";
 
-    public AlJazeeraFeed() {
+    public NewYorkTimesWorldFeed() {
         super(NAME, URL, createFeedReader());
     }
 
@@ -36,9 +36,7 @@ public class AlJazeeraFeed extends Feed {
 
     private static Function<Document, Document> docMapper() {
 
-
         return document -> {
-
             document.imageUrl = findImage(document);
             return document;
         };
@@ -49,25 +47,11 @@ public class AlJazeeraFeed extends Feed {
         URL url = getUrl(document.getPageUrl());
         org.jsoup.nodes.Document doc = getJsoupDocument(url);
 
-        Elements img = doc.select(".article-main-img");
+        Elements img = doc.select("img.media-viewer-candidate");
         if(!img.isEmpty()) {
-            String srcRelative = img.attr("src");
-            String host = url.getHost();
-
-            String protocol = url.getProtocol();
-            String src = protocol + "://" + host + srcRelative;
+            String src = img.attr("src");
             return src;
         }
-
-        Elements videoElement = doc.select("video.vjs-tech");
-        if(!videoElement.isEmpty()) {
-            String src = videoElement.get(0).attr("poster");
-            if (src.startsWith("//")) {
-                src = "https:" + src;
-            }
-            return src;
-        }
-
 
         return null;
     }
