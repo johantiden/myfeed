@@ -85,9 +85,10 @@ public class DocumentClassifier {
         boolean hideSports = true;
         tabs.add(new TabRule(SPORT, SPORT, hideSports));
 
-        tabs.add(new TabRule(CULTURE, "kultur", false));
-        tabs.add(new TabRule(CULTURE, "kultur-noje", false));
-        tabs.add(new TabRule(CULTURE, "dnbok", false));
+        boolean hideCulture = true;
+        tabs.add(new TabRule(CULTURE, "kultur", hideCulture));
+        tabs.add(new TabRule(CULTURE, "kultur-noje", hideCulture));
+        tabs.add(new TabRule(CULTURE, "dnbok", hideCulture));
 
         tabs.add(new TabRule(NEWS, "Al Jazeera.*news", false));
         tabs.add(new TabRule(NEWS, "Al Jazeera.*insidestory", false));
@@ -191,6 +192,7 @@ public class DocumentClassifier {
         tabs.add(new TabRule(BAD, "Jokes", hideBad));
         tabs.add(new TabRule(BAD, "OldSchoolCool", hideBad));
         tabs.add(new TabRule(BAD, "GetMotivated", hideBad));
+        tabs.add(new TabRule(BAD, "Dagens Nyheter.*blogg", false));
 
         return tabs;
     }
