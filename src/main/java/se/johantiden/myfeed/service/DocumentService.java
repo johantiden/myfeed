@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class DocumentService {
@@ -17,28 +15,11 @@ public class DocumentService {
     @Autowired
     private DocumentRepository documentRepository;
 
-    @PostConstruct
-    public void postConstruct() {
-//
-        resetSubjectsAndTabs();
-    }
-
-    private void resetSubjectsAndTabs() {
-//        Objects.requireNonNull(documentRepository);
-//        documentRepository.findAll().forEach(d -> {
-//            d.getSubjects().clear();
-//            d.getTabs().clear();
-//            d.setTabsParsed(false);
-//            d.setSubjectsParsed(false);
-//        });
-    }
-
     public void put(Iterable<Document> documents) {
         documents.forEach(this::put);
     }
 
     public Document put(Document document) {
-
         if (document.getId() == null) {
             Optional<Document> existing = find(document);
             if (existing.isPresent()) {
@@ -49,8 +30,6 @@ public class DocumentService {
     }
 
     private Document merge(Document existing, Document newDocument) {
-
-
         existing.setScore(newDocument.getScore());
         Document saved = documentRepository.save(existing);
         return saved;
@@ -87,22 +66,11 @@ public class DocumentService {
         return documentRepository.findDocumentsNotParsedTabs();
     }
 
-
-//    public long purgeOlderThan(Duration duration) {
-//
-//        List<Map.Entry<Key<Document>, Document>> toBeRemoved = db.documents.entrySet().stream()
-//                                                               .filter(isOlderThan(duration))
-//                                                               .collect(Collectors.toList());
-//
-//        toBeRemoved.forEach(e -> db.documents.remove(e.getKey()));
-//
-//        return toBeRemoved.size();
-//    }
-
-//    private static Predicate<? super Map.Entry<Key<Document>, Document>> isOlderThan(Duration duration) {
-//        return e -> {
-//            Instant publishDate = e.getValue().getPublishDate();
-//            return Chrono.isOlderThan(duration, publishDate);
-//        };
-//    }
+    public void invalidateSubjects() {
+        documentRepository.findAll().forEach(d -> {
+            d.setTabsParsed(false);
+            d.setSubjectsParsed(false);
+            this.put(d);
+        });
+    }
 }
