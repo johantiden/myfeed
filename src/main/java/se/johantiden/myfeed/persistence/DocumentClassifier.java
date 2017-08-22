@@ -176,6 +176,9 @@ public class DocumentClassifier {
         add(s, "Pope Francis");
         add(s, "Debatt", "[Dd]ebatt");
 
+        add(s, "Mecca", "Mecca");
+        add(s, "Mecca", "Hajj");
+
         add(s, "Foliehatt", "CCTV");
 
         add(s, "Kvinnor", REGEX_KVINNOR_MÄN);
@@ -200,6 +203,8 @@ public class DocumentClassifier {
         add(s, "Daesh", "ISIS");
         add(s, "Daesh", "([Tt]error.*IS)|(IS.*[Tt]error)");
 
+        add(s, "Taliban", "Taliban");
+
         add(s, "Gaming", "[Gg]aming");
         add(s, "Cars", "cars technica");
         add(s, NEWS_GRID);
@@ -215,6 +220,9 @@ public class DocumentClassifier {
 
         add(s, "Uutiset", UUTISET);
         add(s, "VIDEO", "^VIDEO");
+
+        add(s, "Naturkatastrof", "[Jj]ordbävning");
+        add(s, "Naturkatastrof", "[Ee]arthquake");
 
         add(s, FRÅGESPORT, "fragesport");
         add(s, JUNIOR);
@@ -306,6 +314,9 @@ public class DocumentClassifier {
         add(s, "Hassan Rouhani", "Rohani");
         add(s, "Iran", "Rouhani");
         add(s, "Iran", "Rohani");
+
+        add(s, "Marcellus Williams");
+        add(s, USA, "Marcellus Williams");
     }
 
     private static void addPlaces(Set<SubjectRule> l) {
@@ -315,14 +326,16 @@ public class DocumentClassifier {
         add(l, AFRIKA, "Libyen");
         add(l, AFRIKA, "Libya");
 
+        add(l, AFRIKA, "Afrika");
+        add(l, AFRIKA, "Africa");
+
         add(l, "Lesotho", "Lesotho");
         add(l, AFRIKA, "Lesotho");
 
         add(l, "Marocko", "Marocko");
         add(l, AFRIKA, "Marocko");
-        add(l, "Marocko", "Morocco");
-        add(l, AFRIKA, "Morocco");
-
+        add(l, "Marocko", "Morocc");
+        add(l, AFRIKA, "Morocc");
 
         add(l, "Tunisien", "Tunis");
         add(l, AFRIKA, "Tunis");
@@ -390,14 +403,20 @@ public class DocumentClassifier {
 
         add(l, "Venezuela", "Venezuela");
         add(l, "Venezuela", "Maduro");
+        add(l, "Nicolás Maduro", "Maduro");
 
         add(l, "Nordkorea", "Nordkorea");
         add(l, "Nordkorea", "North Korea");
+        add(l, "Nordkorea", "N Korea");
+        add(l, "Nordkorea", "Kim Jong-un");
+        add(l, "Kim Jong-un", "Kim Jong-un");
 
         add(l, "Sydkorea", "Sydkorea");
         add(l, "Sydkorea", "South Korea");
         add(l, "Sydkorea", "Seoul");
         add(l, "Seoul", "Seoul");
+        add(l, "Sydkorea", "Moon Jae-in");
+        add(l, "Moon Jae-in", "Moon Jae-in");
 
         add(l, "Myanmar", "Myanmar");
         add(l, "Myanmar", "Burma");
@@ -415,13 +434,21 @@ public class DocumentClassifier {
         add(l, "Kuba", "Cuba");
         add(l, "Kuba", "Kuba");
 
-
         add(l, "Spanien", "Spanien");
         add(l, "Spanien", "Spain");
         add(l, "Spanien", "Spanish");
         add(l, "Spanien", "Barcelona");
 
+        add(l, "Italien", "Italien");
+        add(l, "Italien", "Itali");
+        add(l, "Italien", "Italy");
+
         add(l, "Sierra Leone", "Sierra Leone");
+        add(l, AFRIKA, "Sierra Leone");
+        add(l, "Sierra Leone", "Freetown");
+        add(l, AFRIKA, "Freetown");
+
+        add(l, "Singapore", "Singapore");
 
         add(l, "Hong Kong", "Hong Kong");
 
@@ -464,20 +491,28 @@ public class DocumentClassifier {
         add(l, "Tjeckien", "Czech");
 
         add(l, "USA", "USA");
+        add(l, "USA", "US");
         add(l, "USA", "FBI");
         add(l, "USA", "U\\.S\\.");
         add(l, "USA", "Orlando");
+        add(l, "USA", "California");
+
+        add(l, "Libanon", "Libanon");
+        add(l, "Libanon", "Libanes");
+        add(l, "Libanon", "Lebanon");
+        add(l, "Libanon", "Lebanese");
 
         add(l, "EU", "EU");
+        add(l, "EU", "E\\.U\\.");
         add(l, "EU", "European Union");
+
+        add(l, "United Nations", "United Nations");
+        add(l, "United Nations", "U\\.N\\.");
 
         add(l, "Europa", "Europa");
         add(l, "Europa", "Europe");
 
         add(l, "Finland", "Finland");
-
-        add(l, GÖTEBORG, GÖTEBORG);
-        add(l, GÖTEBORG, "Gothenburg");
 
         add(l, "Grekland", "Grekland");
         add(l, "Grekland", "Greek");
@@ -492,6 +527,8 @@ public class DocumentClassifier {
         add(l, "Mexiko", "Mexico");
         add(l, "Mexiko", "Mexiko");
         add(l, "Mexiko", "Mexican");
+        add(l, "Tijuana", "Tijuana");
+        add(l, "Mexiko", "Tijuana");
 
         add(l, "Nigeria", "Nigeria");
 
@@ -506,6 +543,11 @@ public class DocumentClassifier {
 
         add(l, SYDAFRIKA, SYDAFRIKA);
         add(l, SYDAFRIKA, "South Africa");
+        add(l, AFRIKA, "South Africa");
+        add(l, AFRIKA, SYDAFRIKA);
+
+        add(l, "Tanzania", "Tanzania");
+        add(l, AFRIKA, "Tanzania");
 
         add(l, "Sydsudan", "Sydsudan");
         add(l, "Sydsudan", "South Sudan");
@@ -547,7 +589,7 @@ public class DocumentClassifier {
 
         add(l, "Palestina", "Palestin");
 
-        add(l, "Afghanistan", "Afghanistan");
+        add(l, "Afghanistan", "Afghan");
         add(l, "Afghanistan", "Afganistan");
         add(l, "Afghanistan", "Kabul");
 
@@ -615,6 +657,9 @@ public class DocumentClassifier {
         add(l, "Liseberg", "Liseberg");
         add(l, GÖTEBORG, "Liseberg");
         add(l, INRIKES, "Liseberg");
+
+        add(l, GÖTEBORG, GÖTEBORG);
+        add(l, GÖTEBORG, "Gothenburg");
 
         add(l, "Strömsund", "Strömsund");
         add(l, INRIKES, "Strömsund");
@@ -825,6 +870,7 @@ public class DocumentClassifier {
             m.anySubjectEquals(NUTIDSTESTET) ||
             m.anySubjectEquals(RESOR) ||
             m.anySubjectEquals(UUTISET) ||
+            m.anySubjectEquals("interestingasfuck") ||
             m.anyCategoryEquals("Jokes", "OldSchoolCool", "GetMotivated");
     }
 
