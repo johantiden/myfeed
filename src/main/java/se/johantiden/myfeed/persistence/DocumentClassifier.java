@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import se.johantiden.myfeed.classification.DocumentMatcher;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -50,7 +51,6 @@ public class DocumentClassifier {
     public static final String TYSKLAND = "Tyskland";
     public static final String EKONOMI = "Ekonomi";
     public static final String PERFECT_GUIDE = "Perfect Guide";
-    private static final boolean TAB_FROM_SOURCE_ONLY = false;
     public static final String I_AM_A = "IAmA";
     public static final String BLACK_PEOPLE_TWITTER = "BlackPeopleTwitter";
     public static final String THE_DENNIS = "The_Dennis";
@@ -385,6 +385,8 @@ public class DocumentClassifier {
         add(l, "Syrien", "Syrier");
         add(l, "Syrien", "Damascus");
         add(l, "Syrien", "Damaskus");
+        add(l, "Raqqa", "Raqqa");
+        add(l, "Syrien", "Raqqa");
 
         add(l, "Venezuela", "Venezuela");
         add(l, "Venezuela", "Maduro");
@@ -637,6 +639,8 @@ public class DocumentClassifier {
     }
 
     public static Set<String> getTabsFor(Document document) {
+        Set<String> tabs = new HashSet<>();
+
         if(isError(document)) {
             return Collections.singleton(ERROR);
         }
@@ -646,11 +650,11 @@ public class DocumentClassifier {
         }
 
         if(isTech(document)) {
-            return Collections.singleton(TECH);
+            tabs.add(TECH);
         }
 
         if(isCulture(document)) {
-            return Collections.singleton(CULTURE);
+            tabs.add(CULTURE);
         }
 
         if(isTorrents(document)) {
@@ -658,26 +662,30 @@ public class DocumentClassifier {
         }
 
         if(isFun(document)) {
-            return Collections.singleton(FUN);
+            tabs.add(FUN);
         }
 
         if(isBiz(document)) {
-            return Collections.singleton(BIZ);
+            tabs.add(BIZ);
         }
 
         if(isSport(document)) {
-            return Collections.singleton(SPORT);
+            tabs.add(SPORT);
         }
 
         if(isVäder(document)) {
-            return Collections.singleton(VÄDER);
+            tabs.add(VÄDER);
         }
 
         if(isNews(document)) {
-            return Collections.singleton(NEWS);
+            tabs.add(NEWS);
         }
 
-        return Collections.singleton(UNMATCHED_TAB);
+        if (tabs.isEmpty()) {
+            return Collections.singleton(UNMATCHED_TAB);
+        } else {
+            return tabs;
+        }
     }
 
     private static boolean isTorrents(Document d) {
@@ -725,8 +733,8 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Al Jazeera") ||
-            TAB_FROM_SOURCE_ONLY && m.isFromFeed("SVT Nyheter") ||
+            m.isFromFeed("Al Jazeera") ||
+            m.isFromFeed("SVT Nyheter") ||
             m.isFromFeed("Dagens Nyheter") && m.anyCategoryEquals("nyheter") ||
             m.isFromFeed("TheLocal") ||
             m.isFromFeed("Los Angeles Times - World") ||
@@ -749,9 +757,9 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Ars Technica") ||
-            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Slashdot") ||
-            TAB_FROM_SOURCE_ONLY && m.isFromFeed("HackerNews") ||
+            m.isFromFeed("Ars Technica") ||
+            m.isFromFeed("Slashdot") ||
+            m.isFromFeed("HackerNews") ||
             m.isFromFeed("Breakit") ||
             m.isFromFeed("Engadget") ||
             m.anyCategoryEquals("ProgrammerHumor") ||
@@ -769,8 +777,6 @@ public class DocumentClassifier {
         DocumentMatcher m = new DocumentMatcher(d);
 
         return
-            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - top") ||
-            TAB_FROM_SOURCE_ONLY && m.isFromFeed("Reddit - r/all") ||
             m.anyCategoryEquals("AskReddit") ||
             m.has("Reddit") && m.anyCategoryEquals("gaming", "pics", "gifs", "funny", "PoliticalHumor", "mildlyinteresting", "Design", "aww", "sports", "music", "videos", "todayilearned", "NatureIsFuckingLit", "nottheonion", "MarchAgainstTrump", "Showerthoughts", "photoshopbattles", "oddlysatisfying", "space", "mildlyinfuriating") ||
             m.isFromFeed("xkcd");
@@ -782,6 +788,7 @@ public class DocumentClassifier {
         return
             m.anyCategoryEquals("näringsliv") ||
             m.anyCategoryEquals("ekonomi") ||
+            m.has("investerar") ||
             m.isFromFeed("New York Times - World") && m.anyCategoryEquals("business") ||
             m.isFromFeed("Slashdot") && m.anyCategoryEquals("business") ||
             m.anySubjectEquals(EKONOMI) ;

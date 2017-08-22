@@ -30,6 +30,7 @@
         <input type="text" ng-model="search" >
     </div>
     <div class="nav-right" >
+        <a href="settings.html?user={{user}}">Subjects</a>
         <button id="mark-all-as-read-button" ng-if="(documents | filter:tabOrSearchFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(documents | filter:tabOrSearchFilter | filter:{read:false}).length}} as read</button>
     </div>
 
