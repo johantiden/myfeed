@@ -3,23 +3,25 @@ package se.johantiden.myfeed.persistence;
 import se.johantiden.myfeed.classification.DocumentMatcher;
 
 import javax.persistence.Entity;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Entity
 public class SubjectRule extends Rule {
 
-    private final String subject;
+    public static final Comparator<SubjectRule> COMPARATOR = Comparator.comparing(SubjectRule::getName).thenComparing(SubjectRule::getExpression);
+    private final String name;
     private final String expression;
 
     //JPA
     protected SubjectRule() {
-        subject = null;
+        name = null;
         expression = null;
     }
 
     public SubjectRule(String subject, String expression) {
-        this.subject = Objects.requireNonNull(subject);
+        this.name = Objects.requireNonNull(subject);
         this.expression = Objects.requireNonNull(expression);
     }
 
@@ -31,8 +33,8 @@ public class SubjectRule extends Rule {
         return match;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getName() {
+        return name;
     }
 
     public String getExpression() {
@@ -46,22 +48,22 @@ public class SubjectRule extends Rule {
 
         SubjectRule that = (SubjectRule) o;
 
-        if (subject != null ? !subject.equals(that.subject) : that.subject != null) { return false; }
-        return !(expression != null ? !expression.equals(that.expression) : that.expression != null);
+        if (!name.equals(that.name)) { return false; }
+        return expression.equals(that.expression);
 
     }
 
     @Override
     public int hashCode() {
-        int result = subject != null ? subject.hashCode() : 0;
-        result = 31 * result + (expression != null ? expression.hashCode() : 0);
+        int result = name.hashCode();
+        result = 31 * result + expression.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "SubjectRule{" +
-                "subject='" + subject + '\'' +
+                "name='" + name + '\'' +
                 ", expression='" + expression + '\'' +
                 '}';
     }

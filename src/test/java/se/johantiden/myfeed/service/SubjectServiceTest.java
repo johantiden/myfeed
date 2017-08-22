@@ -9,6 +9,7 @@ import se.johantiden.myfeed.persistence.SubjectRuleRepository;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;

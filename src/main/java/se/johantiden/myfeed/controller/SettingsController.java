@@ -43,7 +43,7 @@ public class SettingsController {
 
     }
     private static SubjectRuleBean toBean(SubjectRule subjectRule) {
-        return new SubjectRuleBean(subjectRule.getSubject(), subjectRule.getExpression());
+        return new SubjectRuleBean(subjectRule.getName(), subjectRule.getExpression());
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

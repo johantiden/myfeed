@@ -1,12 +1,9 @@
 package se.johantiden.myfeed.service;
 
-import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.UserDocument;
 import se.johantiden.myfeed.persistence.UserDocumentRepository;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,19 +30,6 @@ public class UserDocumentService {
         put(doc);
 
     }
-
-//    public void putIfNew(UserDocument userDocument) {
-//        Optional<UserDocument> optional = userDocumentRepository.findOne(userDocument.getId());
-//        if (optional.isPresent()) {
-//            log.debug("putIfNew but was not new. (This can probably be optimized)");
-//        } else {
-//            put(userDocument);
-//        }
-//    }
-
-//    public long purgeOlderThan(Duration duration) {
-//        return userDocumentRepository.purgeOlderThan(duration);
-//    }
 
     public Optional<UserDocument> find(long userDocumentId) {
         return Optional.ofNullable(userDocumentRepository.findOne(userDocumentId));
