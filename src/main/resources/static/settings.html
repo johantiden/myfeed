@@ -28,10 +28,15 @@
     <div style="background-color: WHITE;">
         <h1>Subject Rules</h1>
         <div ng-repeat="subjectRule in subjectRules">
-            <span>Name</span>
-            <input type="text" disabled value="{{subjectRule.name}}">
-            <span>Expression</span>
-            <input type="text" disabled value="{{subjectRule.expression}}">
+            <form action="/rest/settings/subjectRules/edit" method="post" style="margin: 0;">
+                <span style="color: #AAAAAA; width: 50px;">{{subjectRule.id}}</span>
+                <input type="hidden" name="id" value="{{subjectRule.id}}">
+                <span>Name</span>
+                <input type="text" name="name" value="{{subjectRule.name}}">
+                <span>Expression</span>
+                <input type="text" name="expression" value="{{subjectRule.expression}}">
+                <input type="submit" value="Save">
+            </form>
         </div>
     </div>
 

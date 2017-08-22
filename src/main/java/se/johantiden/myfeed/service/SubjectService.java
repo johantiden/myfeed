@@ -11,6 +11,7 @@ import se.johantiden.myfeed.persistence.SubjectRuleRepository;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -43,7 +44,7 @@ public class SubjectService {
         Pattern pattern = Pattern.compile(subjectRule.getExpression());
 
         Optional<SubjectRule> existing = subjectRuleRepository.findOneByNameAndExpression(subjectRule.getName(), subjectRule.getExpression());
-        if (existing.isPresent()) {
+        if (existing.isPresent() && !Objects.equals(subjectRule.getId(), existing.get().getId())) {
             throw new IllegalStateException("Subject Rule already present! " + subjectRule + " vs " + existing.get());
         }
 
@@ -72,7 +73,7 @@ public class SubjectService {
         documentService.put(document);
     }
 
-    private void hackAddSubredditAsSubject(Set<String> matchingSubjects, Document document) {
+    private static void hackAddSubredditAsSubject(Set<String> matchingSubjects, Document document) {
 
         if (new DocumentMatcher(document).has("Reddit")) {
             String cat = document.getSourceCategories().get(0);
@@ -83,5 +84,10 @@ public class SubjectService {
 
     public List<SubjectRule> getAllSubectRules() {
         return Lists.newArrayList(subjectRuleRepository.findAll());
+    }
+
+    public Optional<SubjectRule> findSubjectRule(Long id) {
+        SubjectRule subjectRule = subjectRuleRepository.findOne(id);
+        return Optional.ofNullable(subjectRule);
     }
 }
