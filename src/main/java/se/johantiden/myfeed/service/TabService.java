@@ -4,9 +4,13 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.TabRule;
+import se.johantiden.myfeed.persistence.TabClassifier;
+import se.johantiden.myfeed.persistence.TabRule;
 import se.johantiden.myfeed.persistence.TabRuleRepository;
 
 import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -29,13 +33,13 @@ public class TabService {
     public void postConstruct() {
         boolean isEmpty = !tabRuleRepository.findAll().iterator().hasNext();
         if (isEmpty) {
-            hackCreateDefaultSubjectRules();
+            hackCreateDefaultTabRules();
         }
     }
 
-    private void hackCreateDefaultSubjectRules() {
+    private void hackCreateDefaultTabRules() {
 
-        Collection<TabRule> defaultRules = getDefaultTabRules();
+        Collection<TabRule> defaultRules = TabClassifier.getDefaultTabRules();
 
         defaultRules.forEach(this::put);
     }
@@ -49,25 +53,34 @@ public class TabService {
         }
 
         tabRuleRepository.save(tabRule);
-
-        documentService.invalidateSubjects();
     }
 
     public void parseTabsFor(Document document) {
 
         document.setTabsParsed(true);
         Collection<TabRule> tabRules = getAllTabRules();
-        Set<TabRule> matchingTabs = tabRules.stream()
-                .filter(r -> r.isMatch(document))
+
+        List<TabRule> matchingRules = tabRules.stream()
+                .filter(r -> {
+                    boolean match = r.isMatch(document);
+                    if (match) {
+                        r.setLatestMatch(Timestamp.from(Instant.now()));
+                    }
+                    return match;
+                })
+                .collect(Collectors.toList());
+        tabRuleRepository.save(matchingRules);
+
+        Set<TabRule> distinctMatchingRules = matchingRules.stream()
                 .collect(Collectors.toSet());
 
-        if (matchingTabs.isEmpty()) {
-            matchingTabs.add(new TabRule(UNMATCHED_TAB, "dummy", false));
+        if (distinctMatchingRules.isEmpty()) {
+            distinctMatchingRules.add(new TabRule(UNMATCHED_TAB, "dummy", false));
         }
 
-        document.setHidden(matchingTabs.stream().anyMatch(TabRule::isHideDocument));
+        document.setHidden(distinctMatchingRules.stream().anyMatch(TabRule::isHideDocument));
         document.getTabs().clear();
-        document.getTabs().addAll(matchingTabs.stream().map(TabRule::getName).collect(Collectors.toSet()));
+        document.getTabs().addAll(distinctMatchingRules.stream().map(TabRule::getName).collect(Collectors.toSet()));
         documentService.put(document);
     }
 
@@ -76,8 +89,8 @@ public class TabService {
     }
 
     public Optional<TabRule> findTabRule(Long id) {
-        TabRule subjectRule = tabRuleRepository.findOne(id);
-        return Optional.ofNullable(subjectRule);
+        TabRule tabRule = tabRuleRepository.findOne(id);
+        return Optional.ofNullable(tabRule);
     }
 
     public void deleteTabRule(long id) {
