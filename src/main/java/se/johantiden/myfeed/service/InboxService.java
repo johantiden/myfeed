@@ -37,7 +37,7 @@ public class InboxService {
         boolean isAlreadyInDocuments = documentService.hasDocument(document);
         boolean isAlreadyInInbox = inbox.hasDocument(document);
         if (!isAlreadyInInbox && !isAlreadyInDocuments) {
-            log.info("Adding new document to inbox: {}", document.getPageUrl());
+            log.debug("Adding new document to inbox: {}", document.getPageUrl());
             inbox.put(document);
         } else if (isAlreadyInDocuments) {
             documentService.put(document);

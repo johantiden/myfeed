@@ -166,6 +166,19 @@ app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $wind
     $scope.user = user;
 
 
+    $scope.putSubjectRule = function(subjectRule) {
+        settingsService.putSubjectRule(subjectRule);
+    };
+
+    $scope.createSubjectRule = function(subjectRule) {
+        settingsService.putSubjectRule(subjectRule, function() {
+            $scope.subjectRules.push(subjectRule);
+        });
+    };
+
+    $scope.deleteSubjectRule = function(subjectRule) {
+        settingsService.deleteSubjectRule(subjectRule);
+    };
 });
 
 

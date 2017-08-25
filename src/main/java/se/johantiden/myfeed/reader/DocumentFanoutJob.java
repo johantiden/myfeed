@@ -47,7 +47,7 @@ public class DocumentFanoutJob {
 
         userService.getAllUsers().stream()
                 .forEach(user -> {
-                    log.info("  -> {}", user);
+                    log.debug("  -> {}", user);
                     userDocumentService.put(new UserDocument(user, document));
                 });
 

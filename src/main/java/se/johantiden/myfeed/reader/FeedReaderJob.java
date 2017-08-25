@@ -29,10 +29,10 @@ public class FeedReaderJob {
 
     @Scheduled(fixedRate = GlobalSettings.FEED_READER_INTERVAL)
     public void myRunnable() {
-        log.info("ENTER FeedReaderJob");
+//        log.info("ENTER FeedReaderJob");
         Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
         feed.ifPresent(this::consume);
-        log.info("EXIT  FeedReaderJob");
+//        log.info("EXIT  FeedReaderJob");
     }
 
     @Async
@@ -52,7 +52,7 @@ public class FeedReaderJob {
         }
         inboxService.putIfNew(filtered);
 
-        log.info("  EXIT  FeedReaderJob.consume");
+//        log.info("  EXIT  FeedReaderJob.consume");
 
     }
 

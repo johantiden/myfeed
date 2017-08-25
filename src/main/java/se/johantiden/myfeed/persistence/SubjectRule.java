@@ -56,6 +56,7 @@ public class SubjectRule extends Rule {
     @Override
     public String toString() {
         return "SubjectRule{" +
+                "id='" + getId() + '\'' +
                 "name='" + name + '\'' +
                 ", expression='" + expression + '\'' +
                 '}';

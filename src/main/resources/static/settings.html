@@ -27,16 +27,45 @@
 
     <div style="background-color: WHITE;">
         <h1>Subject Rules</h1>
-        <div ng-repeat="subjectRule in subjectRules">
-            <form action="/rest/settings/subjectRules/edit" method="post" style="margin: 0;">
-                <span style="color: #AAAAAA; width: 50px;">{{subjectRule.id}}</span>
-                <input type="hidden" name="id" value="{{subjectRule.id}}">
-                <span>Name</span>
-                <input type="text" name="name" value="{{subjectRule.name}}">
-                <span>Expression</span>
-                <input type="text" name="expression" value="{{subjectRule.expression}}">
-                <input type="submit" value="Save">
-            </form>
+
+        <div ng-init="subjectRule = {}">
+            <span>Create new:</span>
+            <span>Name</span>
+
+            <input type="text"
+                   ng-model="subjectRule.name"
+                   value="{{subjectRule.name}}">
+
+            <span>Expression</span>
+            <input type="text"
+                   ng-model="subjectRule.expression"
+                   value="{{subjectRule.expression}}">
+
+            <button ng-click="createSubjectRule(subjectRule); subjectRule = {}">Add</button>
+        </div>
+
+        <hr />
+
+        <div ng-repeat="subjectRule in subjectRules | orderBy: '[name, expression]'">
+            <span style="color: #AAAAAA; width: 50px;">{{subjectRule.id}}</span>
+            <span>Name</span>
+            <input type="hidden" ng-init="subjectRule.serverSideName = subjectRule.name" ng-model="subjectRule.serverSideName">
+            <input type="text"
+                   ng-class="{'dirty':subjectRule.name != subjectRule.serverSideName}"
+                   ng-model="subjectRule.name"
+                   value="{{subjectRule.name}}">
+
+            <span>Expression</span>
+            <input type="hidden" ng-init="subjectRule.serverSideExpression = subjectRule.expression" ng-model="subjectRule.serverSideExpression">
+            <input type="text"
+                   ng-class="{'dirty':subjectRule.expression != subjectRule.serverSideExpression}"
+                   ng-model="subjectRule.expression"
+                   value="{{subjectRule.expression}}">
+
+            <button
+                ng-class="{'dirty':subjectRule.name != subjectRule.serverSideName || subjectRule.expression != subjectRule.serverSideExpression}"
+                ng-click="putSubjectRule(subjectRule); subjectRule.serverSideName = subjectRule.name; subjectRule.serverSideExpression = subjectRule.expression">Save</button>
+            <button ng-click="deleteSubjectRule(subjectRule)">Delete</button>
         </div>
     </div>
 

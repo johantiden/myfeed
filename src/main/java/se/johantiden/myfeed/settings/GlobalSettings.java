@@ -16,5 +16,5 @@ public class GlobalSettings {
         return !Chrono.isOlderThan(DOCUMENT_MAX_AGE, publishDate);
     };
     public static final int FANOUT_INTERVAL = 1000;
-    public static final int FEED_READER_INTERVAL = 5_000;
+    public static final int FEED_READER_INTERVAL = 10_000;
 }

@@ -214,3 +214,7 @@ div.category{
     font-weight:bold;
     font-size: x-large;
 }
+
+.dirty {
+    background-color: #FFFFAA;
+}
