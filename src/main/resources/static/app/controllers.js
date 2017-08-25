@@ -148,13 +148,6 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
 app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $window, settingsService) { // jshint ignore:line
     "use strict";
 
-    $scope.subjectRules = [];
-
-
-    settingsService.getAllSubjectRules(function(json) {
-        $scope.subjectRules = json;
-    });
-
     $scope.$sce = $sce;
     $scope.$location = $location;
 
@@ -165,6 +158,11 @@ app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $wind
     user = $cookies.get('user');
     $scope.user = user;
 
+
+    $scope.subjectRules = [];
+    settingsService.getAllSubjectRules(function(json) {
+        $scope.subjectRules = json;
+    });
 
     $scope.putSubjectRule = function(subjectRule) {
         settingsService.putSubjectRule(subjectRule);
@@ -178,6 +176,26 @@ app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $wind
 
     $scope.deleteSubjectRule = function(subjectRule) {
         settingsService.deleteSubjectRule(subjectRule);
+    };
+
+
+    $scope.tabRules = [];
+    settingsService.getAllTabRules(function(json) {
+        $scope.tabRules = json;
+    });
+
+    $scope.putTabRule = function(tabRule) {
+        settingsService.putTabRule(tabRule);
+    };
+
+    $scope.createTabRule = function(tabRule) {
+        settingsService.putTabRule(tabRule, function() {
+            $scope.tabRules.push(tabRule);
+        });
+    };
+
+    $scope.deleteTabRule = function(tabRule) {
+        settingsService.deleteTabRule(tabRule);
     };
 });
 

@@ -26,6 +26,55 @@
     </div>
 
     <div style="background-color: WHITE;">
+        <h1>Tab Rules</h1>
+
+        <div ng-init="tabRule = {}">
+            <span>Create new:</span>
+            <span>Name</span>
+
+            <input type="text"
+                   ng-model="tabRule.name"
+                   value="{{tabRule.name}}">
+
+            <span>Expression</span>
+            <input type="text"
+                   ng-model="tabRule.expression"
+                   value="{{tabRule.expression}}">
+
+            <button ng-click="createTabRule(tabRule); tabRule = {}">Add</button>
+        </div>
+
+        <hr />
+
+        <div ng-repeat="tabRule in tabRules | orderBy: '[name, expression]'">
+            <span style="color: #AAAAAA; width: 50px;">{{tabRule.id}}</span>
+            <span>Name</span>
+            <input type="hidden" ng-init="tabRule.serverSideName = tabRule.name" ng-model="tabRule.serverSideName">
+            <input type="text"
+                   ng-class="{'dirty':tabRule.name != tabRule.serverSideName}"
+                   ng-model="tabRule.name"
+                   value="{{tabRule.name}}">
+
+            <span>Expression</span>
+            <input type="hidden" ng-init="tabRule.serverSideExpression = tabRule.expression" ng-model="tabRule.serverSideExpression">
+            <input type="text"
+                   ng-class="{'dirty':tabRule.expression != tabRule.serverSideExpression}"
+                   ng-model="tabRule.expression"
+                   value="{{tabRule.expression}}">
+
+            <input type="hidden" ng-init="tabRule.serverSideHideDocument = tabRule.hideDocument" ng-model="tabRule.serverSideHideDocument">
+            <input type="checkbox"
+                   ng-class="{'dirty':tabRule.hideDocument != tabRule.serverSideHideDocument}"
+                   ng-model="tabRule.hideDocument">
+
+            <button
+                ng-class="{'dirty':tabRule.name != tabRule.serverSideName || tabRule.expression != tabRule.serverSideExpression}"
+                ng-click="putTabRule(tabRule); tabRule.serverSideName = tabRule.name; tabRule.serverSideExpression = tabRule.expression; tabRule.hideDocument = serverSideHideDocument">Save</button>
+            <button ng-click="deleteTabRule(tabRule)">Delete</button>
+        </div>
+    </div>
+
+    <div style="background-color: WHITE;">
         <h1>Subject Rules</h1>
 
         <div ng-init="subjectRule = {}">

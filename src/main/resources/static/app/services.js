@@ -57,7 +57,7 @@ app.service('settingsService', function($http, $cacheFactory) {
     this.getAllSubjectRules = function(callback) {
         $http({
             method: 'GET',
-            url: '/rest/settings/subjectRules',
+            url: '/rest/subjectRules',
             headers: {
                 'Cache-Control': 'no-cache, no-store'
             }
@@ -67,10 +67,30 @@ app.service('settingsService', function($http, $cacheFactory) {
     };
 
     this.putSubjectRule = function(subjectRule, callback) {
-        $http.put("/rest/settings/subjectRules", subjectRule).then(callback);
+        $http.put("/rest/subjectRules", subjectRule).then(callback);
     };
 
     this.deleteSubjectRule = function(subjectRule, callback) {
-        $http.delete("/rest/settings/subjectRules/"+ subjectRule.id).then(callback);
+        $http.delete("/rest/subjectRules/"+ subjectRule.id).then(callback);
+    };
+
+    this.getAllTabRules = function(callback) {
+        $http({
+            method: 'GET',
+            url: '/rest/tabRules',
+            headers: {
+                'Cache-Control': 'no-cache, no-store'
+            }
+        }).then(function(response) {
+            callback(response.data);
+        });
+    };
+
+    this.putTabRule = function(tabRule, callback) {
+        $http.put("/rest/tabRules", tabRule).then(callback);
+    };
+
+    this.deleteTabRule = function(tabRule, callback) {
+        $http.delete("/rest/tabRules/"+ tabRule.id).then(callback);
     };
 });

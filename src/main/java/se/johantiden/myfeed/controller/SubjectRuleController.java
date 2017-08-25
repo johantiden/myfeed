@@ -20,21 +20,21 @@ import java.util.stream.Collectors;
 
 @RestController
 @EnableAutoConfiguration
-public class SettingsController {
+public class SubjectRuleController {
 
-    private static final Logger log = LoggerFactory.getLogger(SettingsController.class);
+    private static final Logger log = LoggerFactory.getLogger(SubjectRuleController.class);
     @Autowired
     private SubjectService subjectService;
 
-    @RequestMapping("/rest/settings/subjectRules")
+    @RequestMapping("/rest/subjectRules")
     public Collection<SubjectRuleBean> getSubjectRules() {
 
-        List<SubjectRule> subjectRules = subjectService.getAllSubectRules();
+        List<SubjectRule> subjectRules = subjectService.getAllSubjectRules();
 
-        return subjectRules.stream().map(SettingsController::toBean).collect(Collectors.toList());
+        return subjectRules.stream().map(SubjectRuleController::toBean).collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/rest/settings/subjectRules/{subjectRuleId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/rest/subjectRules/{subjectRuleId}", method = RequestMethod.DELETE)
     public void deleteSubjectRule(@PathVariable("subjectRuleId") Long id) {
 
         Optional<SubjectRule> subjectRuleOptional = subjectService.findSubjectRule(id);
@@ -47,7 +47,7 @@ public class SettingsController {
         subjectService.deleteSubjectRule(id);
     }
 
-    @RequestMapping(value = "/rest/settings/subjectRules", method = RequestMethod.PUT)
+    @RequestMapping(value = "/rest/subjectRules", method = RequestMethod.PUT)
     public void putSubjectRule(@RequestBody SubjectRulePutBean subjectRuleBean) {
 
 

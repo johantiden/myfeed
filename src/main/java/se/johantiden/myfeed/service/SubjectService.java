@@ -57,7 +57,7 @@ public class SubjectService {
 
         document.setSubjectsParsed(true);
 
-        List<SubjectRule> subjectRules = getAllSubectRules();
+        List<SubjectRule> subjectRules = getAllSubjectRules();
 
         Set<String> matchingSubjects = subjectRules.stream()
                 .filter(r -> {
@@ -84,7 +84,7 @@ public class SubjectService {
 
     }
 
-    public List<SubjectRule> getAllSubectRules() {
+    public List<SubjectRule> getAllSubjectRules() {
         return Lists.newArrayList(subjectRuleRepository.findAll());
     }
 
