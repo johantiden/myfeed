@@ -85,6 +85,13 @@
                             <span ng-show="tabSortType == 'created' && !tabSortReverse">&darr;</span>
                         </a>
                     </td>
+                    <td>
+                        <a href="#" ng-click="tabSortType = 'latestMatch'; tabSortReverse = !tabSortReverse">
+                            Latest Match
+                            <span ng-show="tabSortType == 'latestMatch' && tabSortReverse">&uarr;</span>
+                            <span ng-show="tabSortType == 'latestMatch' && !tabSortReverse">&darr;</span>
+                        </a>
+                    </td>
                 </tr>
                 </thead>
                 <tr ng-repeat="tabRule in tabRules | orderBy:tabSortType:tabSortReverse">
@@ -110,6 +117,7 @@
                                ng-model="tabRule.hideDocument">
                     </td>
                     <td>{{tabRule.created | date: 'yyyy-MM-dd HH:mm'}}</td>
+                    <td>{{tabRule.latestMatch | date: 'yyyy-MM-dd HH:mm'}}</td>
                     <td>
                         <button
                                 ng-class="{'dirty':tabRule.name != tabRule.serverSideName || tabRule.expression != tabRule.serverSideExpression}"
@@ -118,8 +126,8 @@
                     <td>
                         <button ng-click="deleteTabRule(tabRule)">Delete</button>
                     </td>
-                    <td style="color:WHITE;">
-                        add(s, "{{tabRule.name}}", "{{tabRule.expression}}, {{tabRule.hideDocument}}");
+                    <td style="color:#DDDDDD;">
+                        add(s, "{{tabRule.name}}", "{{tabRule.expression}}", hide{{tabRule.name}});
                     </td>
                 </tr>
             </table>
@@ -180,6 +188,13 @@
                             <span ng-show="subjectSortType == 'created' && !subjectSortReverse">&darr;</span>
                         </a>
                     </td>
+                    <td>
+                        <a href="#" ng-click="subjectSortType = 'latestMatch'; subjectSortReverse = !subjectSortReverse">
+                            Latest Match
+                            <span ng-show="subjectSortType == 'latestMatch' && subjectSortReverse">&uarr;</span>
+                            <span ng-show="subjectSortType == 'latestMatch' && !subjectSortReverse">&darr;</span>
+                        </a>
+                    </td>
                 </tr>
                 </thead>
                 <tr ng-repeat="subjectRule in subjectRules | orderBy:subjectSortType:subjectSortReverse">
@@ -199,6 +214,7 @@
                                value="{{subjectRule.expression}}">
                     </td>
                     <td>{{subjectRule.created | date: 'yyyy-MM-dd HH:mm'}}</td>
+                    <td>{{subjectRule.latestMatch | date: 'yyyy-MM-dd HH:mm'}}</td>
                     <td>
                         <button
                                 ng-class="{'dirty':subjectRule.name != subjectRule.serverSideName || subjectRule.expression != subjectRule.serverSideExpression}"
@@ -207,7 +223,7 @@
                     <td>
                         <button ng-click="deleteSubjectRule(subjectRule)">Delete</button>
                     </td>
-                    <td style="color:WHITE;">
+                    <td style="color:#DDDDDD;">
                         add(s, "{{subjectRule.name}}", "{{subjectRule.expression}}");
                     </td>
                 </tr>

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.TabRule;
 import se.johantiden.myfeed.service.TabService;
 
-import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -83,6 +82,7 @@ public class TabRuleController {
     private static TabRuleBean toBean(TabRule tabRule) {
         Objects.requireNonNull(tabRule);
         Objects.requireNonNull(tabRule.getId());
-        return new TabRuleBean(tabRule.getId(), tabRule.getName(), tabRule.getExpression(), tabRule.isHideDocument(), tabRule.getCreated().toInstant().toEpochMilli());
+        Long time = tabRule.getLatestMatch() == null ? null : tabRule.getLatestMatch().getTime();
+        return new TabRuleBean(tabRule.getId(), tabRule.getName(), tabRule.getExpression(), tabRule.isHideDocument(), tabRule.getCreated().getTime(), time);
     }
 }

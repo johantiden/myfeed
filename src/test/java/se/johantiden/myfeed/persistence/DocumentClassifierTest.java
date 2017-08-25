@@ -30,7 +30,7 @@ public class DocumentClassifierTest {
 
     @Test
     public void testGetDefault() throws Exception {
-        Set<SubjectRule> defaultSubjectRules = DocumentClassifier.getDefaultSubjectRules();
+        Set<SubjectRule> defaultSubjectRules = SubjectClassifier.getDefaultSubjectRules();
         assertThat(defaultSubjectRules.isEmpty(), is(false));
 
     }

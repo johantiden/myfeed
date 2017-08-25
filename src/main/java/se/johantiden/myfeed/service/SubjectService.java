@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.classification.DocumentMatcher;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.DocumentClassifier;
+import se.johantiden.myfeed.persistence.SubjectClassifier;
 import se.johantiden.myfeed.persistence.SubjectRule;
 import se.johantiden.myfeed.persistence.SubjectRuleRepository;
 
 import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +37,7 @@ public class SubjectService {
 
     private void hackCreateDefaultSubjectRules() {
 
-        Collection<SubjectRule> defaultSubjectRules = DocumentClassifier.getDefaultSubjectRules();
+        Collection<SubjectRule> defaultSubjectRules = SubjectClassifier.getDefaultSubjectRules();
 
         defaultSubjectRules.forEach(this::put);
     }
@@ -59,11 +61,18 @@ public class SubjectService {
 
         List<SubjectRule> subjectRules = getAllSubjectRules();
 
-        Set<String> matchingSubjects = subjectRules.stream()
+        Set<SubjectRule> matchingRules = subjectRules.stream()
                 .filter(r -> {
                     boolean match = r.isMatch(document);
+                    if (match) {
+                        r.setLatestMatch(Timestamp.from(Instant.now()));
+                    }
                     return match;
                 })
+                .collect(Collectors.toSet());
+        subjectRuleRepository.save(matchingRules);
+
+        Set<String> matchingSubjects = matchingRules.stream()
                 .map(SubjectRule::getName)
                 .collect(Collectors.toSet());
 

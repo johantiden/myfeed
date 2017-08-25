@@ -49,7 +49,7 @@ public class FeedPopulator {
         feeds.add(new BreakitFeed());
         feeds.add(new AlJazeeraFeed());
         feeds.add(new EngadgetFeed());
-        feeds.add(new DagensIndustriFeed());
+//        feeds.add(new DagensIndustriFeed());
 
         feeds.add(createRss(
                 "xkcd",

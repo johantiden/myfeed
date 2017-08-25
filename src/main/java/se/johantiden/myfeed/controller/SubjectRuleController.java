@@ -81,6 +81,7 @@ public class SubjectRuleController {
     private static SubjectRuleBean toBean(SubjectRule subjectRule) {
         Objects.requireNonNull(subjectRule);
         Objects.requireNonNull(subjectRule.getId());
-        return new SubjectRuleBean(subjectRule.getId(), subjectRule.getName(), subjectRule.getExpression(), subjectRule.getCreated().toInstant().toEpochMilli());
+        Long latestMatch = subjectRule.getLatestMatch() == null ? null : subjectRule.getLatestMatch().getTime();
+        return new SubjectRuleBean(subjectRule.getId(), subjectRule.getName(), subjectRule.getExpression(), subjectRule.getCreated().getTime(), latestMatch);
     }
 }
