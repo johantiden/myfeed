@@ -40,7 +40,7 @@ public class IndexController {
     public Collection<Long> index(
             @PathVariable("username") String username) {
 
-        log.info("User: " + username);
+//        log.info("User: " + username);
         Optional<User> userOptional = userService.find(username);
 
         User user = userOptional.orElseGet(() -> userService.create(username));

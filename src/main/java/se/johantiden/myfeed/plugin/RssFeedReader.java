@@ -108,9 +108,9 @@ public class RssFeedReader implements FeedReader {
         unescaped = unescaped.replaceAll("&ndash;", "–");
         unescaped = unescaped.replaceAll("&mdash;", "—");
 
-        if(!unescaped.equals(string)) {
-            log.info("Unescaped! {} -> {}", string, unescaped);
-        }
+//        if(!unescaped.equals(string)) {
+//            log.debug("Unescaped! {} -> {}", string, unescaped);
+//        }
 
         return unescaped;
     }
