@@ -44,34 +44,84 @@
             <button ng-click="createTabRule(tabRule); tabRule = {}">Add</button>
         </div>
 
-        <hr />
+        <details>
+            <summary>Tab Rules</summary>
 
-        <div ng-repeat="tabRule in tabRules | orderBy: '[name, expression]'">
-            <span style="color: #AAAAAA; width: 50px;">{{tabRule.id}}</span>
-            <span>Name</span>
-            <input type="hidden" ng-init="tabRule.serverSideName = tabRule.name" ng-model="tabRule.serverSideName">
-            <input type="text"
-                   ng-class="{'dirty':tabRule.name != tabRule.serverSideName}"
-                   ng-model="tabRule.name"
-                   value="{{tabRule.name}}">
+            <table>
+                <thead>
+                <tr>
+                    <td>
+                        <a href="#" ng-click="tabSortType = 'id'; tabSortReverse = !tabSortReverse">
+                            Id
+                            <span ng-show="tabSortType == 'id' && tabSortReverse">&uarr;</span>
+                            <span ng-show="tabSortType == 'id' && !tabSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" ng-click="tabSortType = 'name'; tabSortReverse = !tabSortReverse">
+                            Name
+                            <span ng-show="tabSortType == 'name' && tabSortReverse">&uarr;</span>
+                            <span ng-show="tabSortType == 'name' && !tabSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" ng-click="tabSortType = 'expression'; tabSortReverse = !tabSortReverse">
+                            Expression
+                            <span ng-show="tabSortType == 'expression' && tabSortReverse">&uarr;</span>
+                            <span ng-show="tabSortType == 'expression' && !tabSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" ng-click="tabSortType = 'hideDocument'; tabSortReverse = !tabSortReverse">
+                            Hide
+                            <span ng-show="tabSortType == 'hideDocument' && tabSortReverse">&uarr;</span>
+                            <span ng-show="tabSortType == 'hideDocument' && !tabSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" ng-click="tabSortType = 'created'; tabSortReverse = !tabSortReverse">
+                            Created
+                            <span ng-show="tabSortType == 'created' && tabSortReverse">&uarr;</span>
+                            <span ng-show="tabSortType == 'created' && !tabSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                </tr>
+                </thead>
+                <tr ng-repeat="tabRule in tabRules | orderBy:tabSortType:tabSortReverse">
+                    <td style="color: #AAAAAA; width: 50px;">{{tabRule.id}}</td>
+                    <td>
+                        <input type="hidden" ng-init="tabRule.serverSideName = tabRule.name" ng-model="tabRule.serverSideName">
+                        <input type="text"
+                               ng-class="{'dirty':tabRule.name != tabRule.serverSideName}"
+                               ng-model="tabRule.name"
+                               value="{{tabRule.name}}">
+                    </td>
+                    <td>
+                        <input type="hidden" ng-init="tabRule.serverSideExpression = tabRule.expression" ng-model="tabRule.serverSideExpression">
+                        <input type="text"
+                               ng-class="{'dirty':tabRule.expression != tabRule.serverSideExpression}"
+                               ng-model="tabRule.expression"
+                               value="{{tabRule.expression}}">
+                    </td>
+                    <td>
+                        <input type="hidden" ng-init="tabRule.serverSideHideDocument = tabRule.hideDocument" ng-model="tabRule.serverHideDocument">
+                        <input type="checkbox"
+                               ng-class="{'dirty':tabRule.hideDocument != tabRule.serverSideHideDocument}"
+                               ng-model="tabRule.hideDocument">
+                    </td>
+                    <td>{{tabRule.created | date: 'yyyy-MM-dd HH:mm'}}</td>
+                    <td>
+                        <button
+                                ng-class="{'dirty':tabRule.name != tabRule.serverSideName || tabRule.expression != tabRule.serverSideExpression}"
+                                ng-click="putTabRule(tabRule); tabRule.serverSideName = tabRule.name; tabRule.serverSideExpression = tabRule.expression">Save</button>
+                    </td>
+                    <td>
+                        <button ng-click="deleteTabRule(tabRule)">Delete</button>
+                    </td>
+                </tr>
+            </table>
+        </details>
 
-            <span>Expression</span>
-            <input type="hidden" ng-init="tabRule.serverSideExpression = tabRule.expression" ng-model="tabRule.serverSideExpression">
-            <input type="text"
-                   ng-class="{'dirty':tabRule.expression != tabRule.serverSideExpression}"
-                   ng-model="tabRule.expression"
-                   value="{{tabRule.expression}}">
-
-            <input type="hidden" ng-init="tabRule.serverSideHideDocument = tabRule.hideDocument" ng-model="tabRule.serverSideHideDocument">
-            <input type="checkbox"
-                   ng-class="{'dirty':tabRule.hideDocument != tabRule.serverSideHideDocument}"
-                   ng-model="tabRule.hideDocument">
-
-            <button
-                ng-class="{'dirty':tabRule.name != tabRule.serverSideName || tabRule.expression != tabRule.serverSideExpression}"
-                ng-click="putTabRule(tabRule); tabRule.serverSideName = tabRule.name; tabRule.serverSideExpression = tabRule.expression; tabRule.hideDocument = serverSideHideDocument">Save</button>
-            <button ng-click="deleteTabRule(tabRule)">Delete</button>
-        </div>
     </div>
 
     <div style="background-color: WHITE;">
@@ -93,29 +143,71 @@
             <button ng-click="createSubjectRule(subjectRule); subjectRule = {}">Add</button>
         </div>
 
-        <hr />
+        <details>
+            <summary>Subject Rules</summary>
 
-        <div ng-repeat="subjectRule in subjectRules | orderBy: '[name, expression]'">
-            <span style="color: #AAAAAA; width: 50px;">{{subjectRule.id}}</span>
-            <span>Name</span>
-            <input type="hidden" ng-init="subjectRule.serverSideName = subjectRule.name" ng-model="subjectRule.serverSideName">
-            <input type="text"
-                   ng-class="{'dirty':subjectRule.name != subjectRule.serverSideName}"
-                   ng-model="subjectRule.name"
-                   value="{{subjectRule.name}}">
+            <table>
+                <thead>
+                <tr>
+                    <td>
+                        <a href="#" ng-click="subjectSortType = 'id'; subjectSortReverse = !subjectSortReverse">
+                            Id
+                            <span ng-show="subjectSortType == 'id' && subjectSortReverse">&uarr;</span>
+                            <span ng-show="subjectSortType == 'id' && !subjectSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" ng-click="subjectSortType = 'name'; subjectSortReverse = !subjectSortReverse">
+                            Name
+                            <span ng-show="subjectSortType == 'name' && subjectSortReverse">&uarr;</span>
+                            <span ng-show="subjectSortType == 'name' && !subjectSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" ng-click="subjectSortType = 'expression'; subjectSortReverse = !subjectSortReverse">
+                            Expression
+                            <span ng-show="subjectSortType == 'expression' && subjectSortReverse">&uarr;</span>
+                            <span ng-show="subjectSortType == 'expression' && !subjectSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" ng-click="subjectSortType = 'created'; subjectSortReverse = !subjectSortReverse">
+                            Created
+                            <span ng-show="subjectSortType == 'created' && subjectSortReverse">&uarr;</span>
+                            <span ng-show="subjectSortType == 'created' && !subjectSortReverse">&darr;</span>
+                        </a>
+                    </td>
+                </tr>
+                </thead>
+                <tr ng-repeat="subjectRule in subjectRules | orderBy:subjectSortType:subjectSortReverse">
+                    <td style="color: #AAAAAA; width: 50px;">{{subjectRule.id}}</td>
+                    <td>
+                        <input type="hidden" ng-init="subjectRule.serverSideName = subjectRule.name" ng-model="subjectRule.serverSideName">
+                        <input type="text"
+                               ng-class="{'dirty':subjectRule.name != subjectRule.serverSideName}"
+                               ng-model="subjectRule.name"
+                               value="{{subjectRule.name}}">
+                    </td>
+                    <td>
+                        <input type="hidden" ng-init="subjectRule.serverSideExpression = subjectRule.expression" ng-model="subjectRule.serverSideExpression">
+                        <input type="text"
+                               ng-class="{'dirty':subjectRule.expression != subjectRule.serverSideExpression}"
+                               ng-model="subjectRule.expression"
+                               value="{{subjectRule.expression}}">
+                    </td>
+                    <td>{{subjectRule.created | date: 'yyyy-MM-dd HH:mm'}}</td>
+                    <td>
+                        <button
+                                ng-class="{'dirty':subjectRule.name != subjectRule.serverSideName || subjectRule.expression != subjectRule.serverSideExpression}"
+                                ng-click="putSubjectRule(subjectRule); subjectRule.serverSideName = subjectRule.name; subjectRule.serverSideExpression = subjectRule.expression">Save</button>
+                    </td>
+                    <td>
+                        <button ng-click="deleteSubjectRule(subjectRule)">Delete</button>
+                    </td>
+                </tr>
+            </table>
+        </details>
 
-            <span>Expression</span>
-            <input type="hidden" ng-init="subjectRule.serverSideExpression = subjectRule.expression" ng-model="subjectRule.serverSideExpression">
-            <input type="text"
-                   ng-class="{'dirty':subjectRule.expression != subjectRule.serverSideExpression}"
-                   ng-model="subjectRule.expression"
-                   value="{{subjectRule.expression}}">
-
-            <button
-                ng-class="{'dirty':subjectRule.name != subjectRule.serverSideName || subjectRule.expression != subjectRule.serverSideExpression}"
-                ng-click="putSubjectRule(subjectRule); subjectRule.serverSideName = subjectRule.name; subjectRule.serverSideExpression = subjectRule.expression">Save</button>
-            <button ng-click="deleteSubjectRule(subjectRule)">Delete</button>
-        </div>
     </div>
 
 </div>

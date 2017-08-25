@@ -163,14 +163,16 @@ app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $wind
     settingsService.getAllSubjectRules(function(json) {
         $scope.subjectRules = json;
     });
+    $scope.subjectSortType = 'created';
+    $scope.subjectSortReverse = true;
 
     $scope.putSubjectRule = function(subjectRule) {
         settingsService.putSubjectRule(subjectRule);
     };
 
     $scope.createSubjectRule = function(subjectRule) {
-        settingsService.putSubjectRule(subjectRule, function() {
-            $scope.subjectRules.push(subjectRule);
+        settingsService.putSubjectRule(subjectRule, function(response) {
+            $scope.subjectRules.push(response);
         });
     };
 
@@ -189,14 +191,16 @@ app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $wind
     };
 
     $scope.createTabRule = function(tabRule) {
-        settingsService.putTabRule(tabRule, function() {
-            $scope.tabRules.push(tabRule);
+        settingsService.putTabRule(tabRule, function(response) {
+            $scope.tabRules.push(response);
         });
     };
 
     $scope.deleteTabRule = function(tabRule) {
         settingsService.deleteTabRule(tabRule);
     };
+    $scope.tabSortType = 'created';
+    $scope.tabSortReverse = true;
 });
 
 

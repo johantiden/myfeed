@@ -48,13 +48,14 @@ public class SubjectRuleController {
     }
 
     @RequestMapping(value = "/rest/subjectRules", method = RequestMethod.PUT)
-    public void putSubjectRule(@RequestBody SubjectRulePutBean subjectRuleBean) {
+    public SubjectRuleBean putSubjectRule(@RequestBody SubjectRulePutBean subjectRuleBean) {
 
 
         String name = subjectRuleBean.getName();
         String expression = subjectRuleBean.getExpression();
         long id = subjectRuleBean.getId();
 
+        SubjectRule subjectRule;
         if (id > 0) {
             Optional<SubjectRule> subjectRuleOptional = Optional.ofNullable(id)
                     .flatMap(subjectService::findSubjectRule);
@@ -63,21 +64,23 @@ public class SubjectRuleController {
                 throw new NotFound404("Could not find SubjectRule with id " + id);
             }
 
-            SubjectRule subjectRule = subjectRuleOptional.get();
+            subjectRule = subjectRuleOptional.get();
             subjectRule.setName(name);
             subjectRule.setExpression(expression);
-            subjectService.put(subjectRule);
         } else {
             log.info("New subject rule: {}, {}", name, expression);
-            SubjectRule subjectRule = new SubjectRule(name, expression);
-            subjectService.put(subjectRule);
+            subjectRule = new SubjectRule(name, expression);
         }
+
+        subjectService.put(subjectRule);
+        SubjectRuleBean response = toBean(subjectRule);
+        return response;
 
     }
 
     private static SubjectRuleBean toBean(SubjectRule subjectRule) {
         Objects.requireNonNull(subjectRule);
         Objects.requireNonNull(subjectRule.getId());
-        return new SubjectRuleBean(subjectRule.getId(), subjectRule.getName(), subjectRule.getExpression());
+        return new SubjectRuleBean(subjectRule.getId(), subjectRule.getName(), subjectRule.getExpression(), subjectRule.getCreated().toInstant().toEpochMilli());
     }
 }
