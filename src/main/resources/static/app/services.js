@@ -65,4 +65,12 @@ app.service('settingsService', function($http, $cacheFactory) {
             callback(response.data);
         });
     };
+
+    this.putSubjectRule = function(subjectRule, callback) {
+        $http.put("/rest/settings/subjectRules", subjectRule).then(callback);
+    };
+
+    this.deleteSubjectRule = function(subjectRule, callback) {
+        $http.delete("/rest/settings/subjectRules/"+ subjectRule.id).then(callback);
+    };
 });

@@ -4,11 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.User;
@@ -66,7 +64,7 @@ public class IndexController {
         return documentBean.get();
     }
 
-    private Optional<DocumentBean> tryFindUserDocument(@PathVariable("userDocumentId") Long userDocumentId) {
+    private Optional<DocumentBean> tryFindUserDocument(Long userDocumentId) {
         Optional<UserDocument> userDocumentOptional = userDocumentService.find(userDocumentId);
 
         Optional<Document> document = userDocumentOptional.map(UserDocument::getDocument);
@@ -84,10 +82,4 @@ public class IndexController {
         return documentBeans;
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    private class NotFound404 extends RuntimeException {
-        public NotFound404(String message) {
-            super(message);
-        }
-    }
 }
