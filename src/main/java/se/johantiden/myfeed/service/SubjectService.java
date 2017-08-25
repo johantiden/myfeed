@@ -92,4 +92,8 @@ public class SubjectService {
         SubjectRule subjectRule = subjectRuleRepository.findOne(id);
         return Optional.ofNullable(subjectRule);
     }
+
+    public void deleteSubjectRule(long id) {
+        subjectRuleRepository.delete(id);
+    }
 }

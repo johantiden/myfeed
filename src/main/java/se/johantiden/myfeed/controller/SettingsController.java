@@ -16,6 +16,7 @@ import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.SubjectService;
 import se.johantiden.myfeed.service.UserDocumentService;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -57,13 +58,39 @@ public class SettingsController {
         if (!subjectRuleOptional.isPresent()) {
             throw new IllegalArgumentException("Could not find SubjectRule with id " + id);
         }
+        putSubjectRule(id, name, expression);
+    }
+@RequestMapping(value = "/rest/settings/subjectRules", method = RequestMethod.DELETE)
+    public void postSubjectRule(
+            @RequestParam("id") Long id) {
 
-        SubjectRule subjectRule = subjectRuleOptional.get();
+        Optional<SubjectRule> subjectRuleOptional = subjectService.findSubjectRule(id);
 
-        subjectRule.setName(name);
-        subjectRule.setExpression(expression);
+        if (!subjectRuleOptional.isPresent()) {
+            throw new IllegalArgumentException("Could not find SubjectRule with id " + id);
+        }
+        subjectService.deleteSubjectRule(id);
+    }
 
-        subjectService.put(subjectRule);
+    @RequestMapping(value = "/rest/settings/subjectRules", method = RequestMethod.PUT)
+    public void putSubjectRule(
+            @RequestParam(value = "id", required = false) @Nullable Long id,
+            @RequestParam("name") String name,
+            @RequestParam("expression") String expression) {
+
+        Optional<SubjectRule> subjectRuleOptional = Optional.ofNullable(id)
+                .flatMap(subjectService::findSubjectRule);
+
+        if (!subjectRuleOptional.isPresent()) {
+            log.info("New subject rule: {}, {}", name, expression);
+            SubjectRule subjectRule = new SubjectRule(name, expression);
+            subjectService.put(subjectRule);
+        } else {
+            SubjectRule subjectRule = subjectRuleOptional.get();
+            subjectRule.setName(name);
+            subjectRule.setExpression(expression);
+            subjectService.put(subjectRule);
+        }
     }
 
     private static SubjectRuleBean toBean(SubjectRule subjectRule) {
