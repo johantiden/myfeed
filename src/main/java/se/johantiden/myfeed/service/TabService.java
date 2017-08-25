@@ -79,4 +79,8 @@ public class TabService {
         TabRule subjectRule = tabRuleRepository.findOne(id);
         return Optional.ofNullable(subjectRule);
     }
+
+    public void deleteTabRule(long id) {
+        tabRuleRepository.delete(id);
+    }
 }

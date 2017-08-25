@@ -6,9 +6,9 @@ import java.util.Objects;
 @Entity
 public class TabRule extends Rule {
 
-    private final String name;
-    private final String expression;
-    private final boolean hideDocument;
+    private String name;
+    private String expression;
+    private boolean hideDocument;
 
     // JPA
     protected TabRule() {
@@ -34,6 +34,18 @@ public class TabRule extends Rule {
 
     public boolean isHideDocument() {
         return hideDocument;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
+    public void setHideDocument(boolean hideDocument) {
+        this.hideDocument = hideDocument;
     }
 
     @Override
