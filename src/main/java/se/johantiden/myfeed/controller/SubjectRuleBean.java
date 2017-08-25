@@ -7,22 +7,12 @@ public class SubjectRuleBean {
     public final long id;
     public final String name;
     public final String expression;
+    public final long created;
 
-    public SubjectRuleBean(long id, String name, String expression) {
+    public SubjectRuleBean(long id, String name, String expression, long created) {
         this.id = id;
         this.name = Objects.requireNonNull(name);
         this.expression = Objects.requireNonNull(expression);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getExpression() {
-        return expression;
+        this.created = Objects.requireNonNull(created);
     }
 }

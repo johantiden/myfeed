@@ -8,27 +8,13 @@ public class TabRuleBean {
     public final String name;
     public final String expression;
     public final boolean hideDocument;
+    public final long created;
 
-    public TabRuleBean(long id, String name, String expression, boolean hideDocument) {
+    public TabRuleBean(long id, String name, String expression, boolean hideDocument, long created) {
         this.id = id;
         this.name = Objects.requireNonNull(name);
         this.expression = Objects.requireNonNull(expression);
         this.hideDocument = hideDocument;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getExpression() {
-        return expression;
-    }
-
-    public boolean isHideDocument() {
-        return hideDocument;
+        this.created = Objects.requireNonNull(created);
     }
 }

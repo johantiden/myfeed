@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.TabRule;
 import se.johantiden.myfeed.service.TabService;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -48,7 +49,7 @@ public class TabRuleController {
     }
 
     @RequestMapping(value = "/rest/tabRules", method = RequestMethod.PUT)
-    public void putTabRule(@RequestBody TabRulePutBean tabRuleBean) {
+    public TabRuleBean putTabRule(@RequestBody TabRulePutBean tabRuleBean) {
 
 
         String name = tabRuleBean.getName();
@@ -56,6 +57,7 @@ public class TabRuleController {
         long id = tabRuleBean.getId();
         boolean hideDocument = tabRuleBean.isHideDocument();
 
+        TabRule tabRule;
         if (id > 0) {
             Optional<TabRule> tabRuleOptional = Optional.ofNullable(id)
                     .flatMap(tabService::findTabRule);
@@ -64,22 +66,23 @@ public class TabRuleController {
                 throw new NotFound404("Could not find TabRule with id " + id);
             }
 
-            TabRule tabRule = tabRuleOptional.get();
+            tabRule = tabRuleOptional.get();
             tabRule.setName(name);
             tabRule.setExpression(expression);
             tabRule.setHideDocument(hideDocument);
-            tabService.put(tabRule);
         } else {
             log.info("New tab rule: {}, {}", name, expression);
-            TabRule tabRule = new TabRule(name, expression, hideDocument);
-            tabService.put(tabRule);
+            tabRule = new TabRule(name, expression, hideDocument);
         }
+
+        tabService.put(tabRule);
+        return toBean(tabRule);
 
     }
 
     private static TabRuleBean toBean(TabRule tabRule) {
         Objects.requireNonNull(tabRule);
         Objects.requireNonNull(tabRule.getId());
-        return new TabRuleBean(tabRule.getId(), tabRule.getName(), tabRule.getExpression(), tabRule.isHideDocument());
+        return new TabRuleBean(tabRule.getId(), tabRule.getName(), tabRule.getExpression(), tabRule.isHideDocument(), tabRule.getCreated().toInstant().toEpochMilli());
     }
 }

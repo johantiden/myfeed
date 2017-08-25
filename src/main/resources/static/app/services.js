@@ -67,7 +67,9 @@ app.service('settingsService', function($http, $cacheFactory) {
     };
 
     this.putSubjectRule = function(subjectRule, callback) {
-        $http.put("/rest/subjectRules", subjectRule).then(callback);
+        $http.put("/rest/subjectRules", subjectRule).then(function(response) {
+            callback(response.data);
+        });
     };
 
     this.deleteSubjectRule = function(subjectRule, callback) {
@@ -87,7 +89,9 @@ app.service('settingsService', function($http, $cacheFactory) {
     };
 
     this.putTabRule = function(tabRule, callback) {
-        $http.put("/rest/tabRules", tabRule).then(callback);
+        $http.put("/rest/tabRules", tabRule).then(function(response) {
+            callback(response.data);
+        });
     };
 
     this.deleteTabRule = function(tabRule, callback) {
