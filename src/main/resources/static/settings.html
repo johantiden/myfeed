@@ -118,6 +118,9 @@
                     <td>
                         <button ng-click="deleteTabRule(tabRule)">Delete</button>
                     </td>
+                    <td style="color:WHITE;">
+                        add(s, "{{tabRule.name}}", "{{tabRule.expression}}, {{tabRule.hideDocument}}");
+                    </td>
                 </tr>
             </table>
         </details>
@@ -203,6 +206,9 @@
                     </td>
                     <td>
                         <button ng-click="deleteSubjectRule(subjectRule)">Delete</button>
+                    </td>
+                    <td style="color:WHITE;">
+                        add(s, "{{subjectRule.name}}", "{{subjectRule.expression}}");
                     </td>
                 </tr>
             </table>
