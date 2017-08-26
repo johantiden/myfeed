@@ -5,7 +5,6 @@ app.service('documentService', function($http, $cacheFactory) {
         $http.put("/rest/documents", item).then(callback);
     };
 
-
     this.getAllKeys = function (username, callback) {
         $http({
             method: 'GET',
