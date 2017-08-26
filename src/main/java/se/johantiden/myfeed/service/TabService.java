@@ -53,6 +53,7 @@ public class TabService {
         }
 
         tabRuleRepository.save(tabRule);
+        documentService.invalidateTabs();
     }
 
     public void parseTabsFor(Document document) {
