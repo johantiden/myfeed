@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.service;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.classification.DocumentMatcher;
 import se.johantiden.myfeed.persistence.Document;
@@ -88,6 +89,7 @@ public class SubjectService {
 
         if (new DocumentMatcher(document).has("Reddit")) {
             String cat = document.getSourceCategories().get(0);
+            cat = StringUtils.capitalize(cat);
             matchingSubjects.add(cat);
         }
 
@@ -104,5 +106,6 @@ public class SubjectService {
 
     public void deleteSubjectRule(long id) {
         subjectRuleRepository.delete(id);
+        documentService.invalidateSubjects();
     }
 }
