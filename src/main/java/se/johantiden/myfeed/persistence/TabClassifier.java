@@ -53,7 +53,7 @@ public class TabClassifier {
         add(s, TECH, "Slashdot", false);
         add(s, TECH, "HackerNews", false);
         add(s, TECH, "Engadget", false);
-        add(s, TECH, "science", false);
+        add(s, TECH, "Science", false);
         add(s, TECH, "ProgrammerHumor", false);
         add(s, TECH, "Ars Technica.*tech-policy", false);
         add(s, TECH, "Ars Technica.*gadgets", false);
@@ -151,6 +151,11 @@ public class TabClassifier {
         add(s, "Bad", "Week in pictures", hideBad);
         add(s, "Bad", "Minnesord", hideBad);
         add(s, "Bad", "Arkitektur", hideBad);
+        add(s, "Bad", "rarepuppers", hideBad);
+        add(s, "Bad", "Medan du sov", hideBad);
+        add(s, "Bad", "DN gratulerar", hideBad);
+        add(s, "Bad", "neoliberal", hideBad);
+        add(s, "Bad", "me_irl", hideBad);
 
         add(s, "No Subjects", "subjects:\\[\\]", false);
 
