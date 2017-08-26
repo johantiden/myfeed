@@ -83,6 +83,13 @@ public class SubjectClassifier {
         add(s, "Blockchain", "[Bb]lock.*chain");
         add(s, "Blockchain", "[Bb]lockkedja");
 
+        add(s, "Science", "[Ss]cience");
+
+        add(s, "Blog", "[Bb]log");
+
+        add(s, "Utveckling", "[Mm]emory leak");
+        add(s, "Utveckling", "Haskell");
+
         add(s, MUSEUM);
         add(s, "Musik", "[Mm]usik");
         add(s, "Musik", "[Hh]iphop");
@@ -108,6 +115,7 @@ public class SubjectClassifier {
         add(s, IT_SÄKERHET, "[Ii]nternet [Ss]ecurity");
         add(s, IT_SÄKERHET, "[Ee]ternalblue");
         add(s, IT_SÄKERHET, "[Bb]otnet");
+        add(s, IT_SÄKERHET, " [Hh]ack ");
 
         add(s, "Brexit", "Brexit");
 
