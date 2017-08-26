@@ -68,8 +68,15 @@ public class DocumentService {
 
     public void invalidateSubjects() {
         documentRepository.findAll().forEach(d -> {
-            d.setTabsParsed(false);
             d.setSubjectsParsed(false);
+            d.setTabsParsed(false);
+            this.put(d);
+        });
+    }
+
+    public void invalidateTabs() {
+        documentRepository.findAll().forEach(d -> {
+            d.setTabsParsed(false);
             this.put(d);
         });
     }
