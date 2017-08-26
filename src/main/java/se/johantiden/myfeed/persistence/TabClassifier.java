@@ -70,7 +70,7 @@ public class TabClassifier {
         add(s, TECH, FACEBOOK, false);
         add(s, TECH, IT_SÄKERHET, false);
         add(s, TECH, FORSKNING, false);
-        add(s, TECH, PROGRAMMING, false);
+        add(s, TECH, UTVECKLING, false);
         add(s, TECH, "LinkedIn", false);
 
         add(s, FUN, "AskReddit", false);
@@ -156,6 +156,7 @@ public class TabClassifier {
         add(s, "Bad", "DN gratulerar", hideBad);
         add(s, "Bad", "neoliberal", hideBad);
         add(s, "Bad", "me_irl", hideBad);
+        add(s, "Bad", "Mode/Kläder", hideBad);
 
         add(s, "No Subjects", "subjects:\\[\\]", false);
 

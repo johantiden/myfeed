@@ -6,6 +6,10 @@ import java.util.TreeSet;
 import static se.johantiden.myfeed.persistence.DocumentClassifier.*;
 
 public class SubjectClassifier {
+
+    public static final String GAMING = "Gaming";
+    public static final String UTVECKLING = "Utveckling";
+
     public static Set<SubjectRule> getDefaultSubjectRules() {
         TreeSet<SubjectRule> s = new TreeSet<>(SubjectRule.COMPARATOR);
         add(s, EKONOMI, "ekonomi");
@@ -64,8 +68,12 @@ public class SubjectClassifier {
         add(s, "Uber");
         add(s, "Samsung");
         add(s, "Apple");
+        add(s, "Apple", "iOS");
+        add(s, "Apple", "iPad");
+        add(s, "Apple", "iPhone");
         add(s, FACEBOOK);
         add(s, "Zuckerberg");
+        add(s, "HTC");
         add(s, FACEBOOK, "Zuckerberg");
         add(s, FINGERPRINT);
         add(s, "Klarna");
@@ -74,7 +82,7 @@ public class SubjectClassifier {
         add(s, "LinkedIn", "Linked[Ii]n");
         add(s, "Nintendo");
         add(s, "Amazon");
-        add(s, "Gaming", "Nintendo");
+        add(s, GAMING, "Nintendo");
         add(s, "Google");
         add(s, "H&M");
         add(s, "HP");
@@ -84,18 +92,32 @@ public class SubjectClassifier {
         add(s, "Blockchain", "[Bb]lockkedja");
 
         add(s, "Science", "[Ss]cience");
+        add(s, "Science", "[Ss]cientific");
+        add(s, "Science", "MIT");
+        add(s, "Science", "[Rr]esearch");
+        add(s, "Science", "arxiv\\.org");
+        add(s, "Science", "[Aa]stronom");
+
+        add(s, "Drone", "[Dd]rone");
 
         add(s, "Blog", "[Bb]log");
 
-        add(s, "Utveckling", "[Mm]emory leak");
-        add(s, "Utveckling", "Haskell");
+        add(s, DocumentClassifier.UTVECKLING, "[Mm]emory leak");
+        add(s, DocumentClassifier.UTVECKLING, "Haskell");
+        add(s, DocumentClassifier.UTVECKLING, "Pascal");
 
         add(s, MUSEUM);
         add(s, "Musik", "[Mm]usik");
         add(s, "Musik", "[Hh]iphop");
+        add(s, "Musik", "[Mm]usician");
+        add(s, "Musik", "[Mm]usiker");
         add(s, "Konst", "[Kk]onstnär");
+        add(s, "Konst", "[Gg]uitar");
         add(s, BÖCKER, "[Ff]författare");
         add(s, "Film/TV", "[Dd]ramaserie");
+        add(s, "Mode/Kläder", "[Yy]tterplagg");
+
+        add(s, "Naturen", "[Ff]orest");
 
         add(s, "Terror", "[Tt]error");
         add(s, "Ebola", "Ebola");
@@ -128,6 +150,9 @@ public class SubjectClassifier {
         add(s, KRISTDEMOKRATERNA);
         add(s, KRISTDEMOKRATERNA, "KD[ \\.]");
         add(s, MODERATERNA);
+        add(s, "Alliansen", "[Aa]lliansen");
+        add(s, "Regeringen", "[Rr]egeringen");
+        add(s, "Borgerlig", "[Bb]orgerlig");
         add(s, SVERIGEMOKRATERNA);
         add(s, SVERIGEMOKRATERNA, "SD[ \\.]");
 
@@ -164,8 +189,8 @@ public class SubjectClassifier {
 
         add(s, "Taliban", "Taliban");
 
-        add(s, "Gaming", "[Gg]aming");
-        add(s, "Gaming", "[Gg]ames");
+        add(s, GAMING, "[Gg]aming");
+        add(s, GAMING, "[Gg]ames");
         add(s, "Cars", "cars technica");
         add(s, NEWS_GRID);
         add(s, WEBB_TV);
@@ -202,7 +227,7 @@ public class SubjectClassifier {
         add(s, NUMBER_OF_PEOPLE, "-- number");
         add(s, NUMBER_OF_PEOPLE, "--number");
 
-        add(s, PROGRAMMING, "[Pp]rogramming");
+        add(s, DocumentClassifier.UTVECKLING, "[Pp]rogramming");
 
         add(s, "Solförmörkelse", "[Ee]clipse");
         add(s, "Solförmörkelse", "[Ss]olförmörkelse");
@@ -212,12 +237,18 @@ public class SubjectClassifier {
         add(s, "USA", "San Francisco");
         add(s, "San Francisco", "San Francisco");
         add(s, "London", "Buckingham Palace");
+        add(s, "London", "London");
         add(s, STORBRITANNIEN, "Buckingham Palace");
 
         add(s, "YouTube", "[Yy]ou[Tt]ube");
         add(s, "USA", "Massachusetts");
         add(s, "USA", "Cleveland");
         add(s, "USA", "Texas");
+        add(s, "Vanuatu");
+        add(s, "Örebro");
+        add(s, INRIKES, "Örebro");
+        add(s, "Nike");
+        add(s, GAMING, "Dungeons and Dragons");
 
         return s;
     }
@@ -522,6 +553,10 @@ public class SubjectClassifier {
         add(s, "Europa", "Europe");
 
         add(s, "Finland", "Finland");
+        add(s, "Finland", "Åbo");
+        add(s, "Finland", "Turku");
+        add(s, "Åbo", "Åbo");
+        add(s, "Åbo", "Turku");
 
         add(s, "Grekland", "Grekland");
         add(s, "Grekland", "Greek");

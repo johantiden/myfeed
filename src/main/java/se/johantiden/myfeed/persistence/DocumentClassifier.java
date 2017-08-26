@@ -64,7 +64,7 @@ public class DocumentClassifier {
     public static final String HÄR_ÄR = "Här är";
     public static final String MICROSOFT = "Microsoft";
     public static final String FACEBOOK = "Facebook";
-    public static final String PROGRAMMING = "Programming";
+    public static final String UTVECKLING = "Utveckling";
     public static final String FINGERPRINT = "Fingerprint";
     public static final String YOUR_BRIEFING = "Your Briefing";
 
