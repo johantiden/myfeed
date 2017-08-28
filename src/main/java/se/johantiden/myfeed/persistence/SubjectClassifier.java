@@ -7,9 +7,6 @@ import static se.johantiden.myfeed.persistence.DocumentClassifier.*;
 
 public class SubjectClassifier {
 
-    public static final String GAMING = "Gaming";
-    public static final String UTVECKLING = "Utveckling";
-
     public static Set<SubjectRule> getDefaultSubjectRules() {
         TreeSet<SubjectRule> s = new TreeSet<>(SubjectRule.COMPARATOR);
         add(s, EKONOMI, "ekonomi");
@@ -78,6 +75,7 @@ public class SubjectClassifier {
         add(s, "Apple", "iOS");
         add(s, "Apple", "iPad");
         add(s, "Apple", "iPhone");
+        add(s, "Apple", "macOS");
         add(s, FACEBOOK);
         add(s, "Zuckerberg");
         add(s, "HTC");
@@ -93,6 +91,9 @@ public class SubjectClassifier {
         add(s, "Google");
         add(s, "H&M");
         add(s, "HP");
+        add(s, "Norstedts");
+        add(s, "Ericsson");
+
 
         add(s, "Net Neutrality", "Net Neutrality");
         add(s, "Blockchain", "[Bb]lock.*chain");
@@ -111,9 +112,22 @@ public class SubjectClassifier {
 
         add(s, "Blog", "[Bb]log");
 
-        add(s, DocumentClassifier.UTVECKLING, "[Mm]emory leak");
-        add(s, DocumentClassifier.UTVECKLING, "Haskell");
-        add(s, DocumentClassifier.UTVECKLING, "Pascal");
+        add(s, UTVECKLING, "[Mm]emory leak");
+        add(s, UTVECKLING, "Haskell");
+        add(s, UTVECKLING, "Pascal");
+        add(s, UTVECKLING, "[Bb]ack [Ee]nd");
+        add(s, UTVECKLING, "Kubernetes");
+        add(s, UTVECKLING, "Redux");
+        add(s, UTVECKLING, "distro[ \\.]");
+        add(s, UTVECKLING, "OpenJDK");
+        add(s, UTVECKLING, "Linux");
+        add(s, UTVECKLING, "Java");
+        add(s, UTVECKLING, "[Oo]pen [Ss]ource");
+        add(s, UTVECKLING, "open-source");
+        add(s, UTVECKLING, "REPL");
+        add(s, UTVECKLING, "OpenCV");
+
+        add(s, "SAS");
 
         add(s, MUSEUM);
         add(s, "Musik", "[Mm]usik");
@@ -124,7 +138,10 @@ public class SubjectClassifier {
         add(s, "Konst", "[Gg]uitar");
         add(s, BÖCKER, "[Ff]författare");
         add(s, "Film/TV", "[Dd]ramaserie");
+        add(s, "Film/TV", "TV");
         add(s, "Mode/Kläder", "[Yy]tterplagg");
+
+        add(s, "Ekonomi", "[Ee]conom");
 
         add(s, "Naturen", "[Ff]orest");
 
@@ -134,6 +151,7 @@ public class SubjectClassifier {
         add(s, "Kolera", "Cholera");
 
         add(s, IT_SÄKERHET, "IT-attack");
+        add(s, IT_SÄKERHET, "[Ll]ösenord läckta");
         add(s, IT_SÄKERHET, "[Rr]ansomware");
         add(s, IT_SÄKERHET, "[Cc]yberattack");
         add(s, IT_SÄKERHET, "[Mm]alware");
@@ -216,11 +234,20 @@ public class SubjectClassifier {
         add(s, "Uutiset", UUTISET);
         add(s, "VIDEO", "^VIDEO");
 
-        add(s, "Naturkatastrof", "[Jj]ordbävning");
-        add(s, "Naturkatastrof", "[Ee]arthquake");
-        add(s, "Naturkatastrof", "[Ll]andslide");
-        add(s, "Naturkatastrof", "[Mm]udslide");
-        add(s, "Naturkatastrof", "[Oo]rkan");
+        add(s, "Rasism", "[Rr]asism");
+        add(s, "Rasism", "[Rr]asist");
+
+        add(s, "Religion", "[Rr]eligious");
+        add(s, "Religion", "[Rr]eligion");
+        add(s, "Religion", "[Rr]eligiös");
+
+        add(s, NATURKATASTROF, "[Jj]ordbävning");
+        add(s, NATURKATASTROF, "[Ee]arthquake");
+        add(s, NATURKATASTROF, "[Ll]andslide");
+        add(s, NATURKATASTROF, "[Mm]udslide");
+        add(s, NATURKATASTROF, "[Oo]rkan");
+        add(s, NATURKATASTROF, "[Tt]tropical [Ss]torm");
+        add(s, NATURKATASTROF, "[Cc]atastrophic [Ff]loods");
 
         add(s, "Talaq", "[Tt]alaq");
 
@@ -275,6 +302,8 @@ public class SubjectClassifier {
     }
 
     private static void addPeople(Set<SubjectRule> s) {
+
+        add(s, "Gurmeet Ram Rahim Singh");
 
         add(s, "Obama", "Obama");
         add(s, USA, "Obama");
@@ -466,6 +495,7 @@ public class SubjectClassifier {
         add(s, "Spanien", "Spanien");
         add(s, "Spanien", "Spain");
         add(s, "Spanien", "Spanish");
+        add(s, "Spanien", "[Ss]pansk");
         add(s, "Spanien", "Barcelona");
         add(s, "Katalonien", "Katalan");
         add(s, "Katalonien", "Katalon");
@@ -586,6 +616,8 @@ public class SubjectClassifier {
         add(s, "Nigeria", "Nigeria");
 
         add(s, "Norge", "Norge");
+        add(s, "Norge", "Oslo");
+        add(s, "Oslo", "Oslo");
         add(s, "Norge", "Norway");
         add(s, "Norge", "[Nn]orska");
 
@@ -654,6 +686,9 @@ public class SubjectClassifier {
 
         add(s, "Pakistan", "Pakistan");
 
+        add(s, "Rohingya", "Rohingya");
+        add(s, "Myanmar", "Rohingya");
+
         add(s, "Baloch", "Baloch");
         add(s, "Pakistan", "Baloch");
         add(s, "Afghanistan", "Baloch");
@@ -686,6 +721,7 @@ public class SubjectClassifier {
     private static void addSweden(Set<SubjectRule> s) {
 
         add(s, "Inrikes", "[Ss]vensk");
+        add(s, "Inrikes", "[Ii]nrikes");
 
         add(s, "Gröna Lund", "Gröna Lund");
         add(s, STOCKHOLM, "Gröna Lund");
