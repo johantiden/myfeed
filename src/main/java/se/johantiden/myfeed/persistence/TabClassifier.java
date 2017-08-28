@@ -49,6 +49,7 @@ public class TabClassifier {
         add(s, NEWS, "Reddit.*politics", false);
         add(s, NEWS, "Reddit.*news", false);
         add(s, NEWS, "Reddit.*worldnews", false);
+        add(s, NEWS, NATURKATASTROF, false);
 
         add(s, TECH, "Slashdot", false);
         add(s, TECH, "HackerNews", false);
@@ -95,6 +96,7 @@ public class TabClassifier {
         add(s, FUN, "Reddit.*space", false);
         add(s, FUN, "Reddit.*mildlyinfuriating", false);
         add(s, FUN, "Reddit.*TrumpCriticizesTrump", false);
+        add(s, FUN, "Reddit.*HumansBeingBros", false);
         add(s, FUN, "xkcd", false);
 
         add(s, BIZ, "näringsliv", false);
@@ -106,8 +108,14 @@ public class TabClassifier {
         add(s, BIZ, "New York Times - World.*business", false);
         add(s, BIZ, "Slashdot.*business", false);
         add(s, BIZ, "Breakit", false);
+        add(s, BIZ, "Norstedts", false);
+        add(s, BIZ, "[Oo]rdförande för", false);
+        add(s, BIZ, "Ericsson", false);
+        add(s, BIZ, "[Ff]inance", false);
+        add(s, BIZ, "[Ee]conomics", false);
         add(s, BIZ, EKONOMI, false);
         add(s, BIZ, FINGERPRINT, false);
+        add(s, BIZ, "SAS", false);
 
         boolean hideBad = true;
         add(s, BAD, YOUR_BRIEFING, hideBad);
@@ -157,6 +165,8 @@ public class TabClassifier {
         add(s, "Bad", "neoliberal", hideBad);
         add(s, "Bad", "me_irl", hideBad);
         add(s, "Bad", "Mode/Kläder", hideBad);
+        add(s, "Bad", "[Uu]pvote", hideBad);
+        add(s, "Bad", "UPVOTE", hideBad);
 
         add(s, "No Subjects", "subjects:\\[\\]", false);
 

@@ -67,6 +67,8 @@ public class DocumentClassifier {
     public static final String UTVECKLING = "Utveckling";
     public static final String FINGERPRINT = "Fingerprint";
     public static final String YOUR_BRIEFING = "Briefing";
+    public static final String GAMING = "Gaming";
+    public static final String NATURKATASTROF = "Naturkatastrof";
 
     private DocumentClassifier() {
     }
