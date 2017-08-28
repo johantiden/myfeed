@@ -25,7 +25,12 @@ public class SubjectClassifier {
         add(s, "Sport", "[Ff]otboll");
         add(s, "Sport", "[Ff]ootball");
         add(s, YOUR_BRIEFING, "[Yy]our.+[Bb]riefing");
+        add(s, YOUR_BRIEFING, "The Morning After:.*Edition");
+
+        add(s, "Harvey", "Harvey");
         add(s, "Tim Berners-Lee", "Tim Berners\\-Lee");
+
+        add(s, "Cryptocurrency", "[Cc]ryptocurrenc");
 
         add(s, "Arkitektur", "Architecht");
         add(s, "Arkitektur", "Arkitekt");
@@ -46,6 +51,8 @@ public class SubjectClassifier {
 
         addPlaces(s);
         addPeople(s);
+
+        add(s, "Science", "[Ss]tudie");
 
         add(s, "Turist", "[Tt]urist");
 
@@ -97,6 +104,8 @@ public class SubjectClassifier {
         add(s, "Science", "[Rr]esearch");
         add(s, "Science", "arxiv\\.org");
         add(s, "Science", "[Aa]stronom");
+
+        add(s, "Guatemala", "Guatemala");
 
         add(s, "Drone", "[Dd]rone");
 
@@ -674,62 +683,64 @@ public class SubjectClassifier {
         addSweden(s);
     }
 
-    private static void addSweden(Set<SubjectRule> l) {
+    private static void addSweden(Set<SubjectRule> s) {
 
-        add(l, "Gröna Lund", "Gröna Lund");
-        add(l, STOCKHOLM, "Gröna Lund");
-        add(l, INRIKES, "Gröna Lund");
+        add(s, "Inrikes", "[Ss]vensk");
 
-        add(l, "Eskilstuna", "Eskilstuna");
-        add(l, INRIKES, "Eskilstuna");
+        add(s, "Gröna Lund", "Gröna Lund");
+        add(s, STOCKHOLM, "Gröna Lund");
+        add(s, INRIKES, "Gröna Lund");
 
-        add(l, "Bromma flygplats", "Bromma flygplats");
-        add(l, INRIKES, "Bromma flygplats");
+        add(s, "Eskilstuna", "Eskilstuna");
+        add(s, INRIKES, "Eskilstuna");
 
-        add(l, "Kristianstad", "Kristianstad");
-        add(l, INRIKES, "Kristianstad");
+        add(s, "Bromma flygplats", "Bromma flygplats");
+        add(s, INRIKES, "Bromma flygplats");
 
-        add(l, "Arboga", "Arboga");
-        add(l, INRIKES, "Arboga");
+        add(s, "Kristianstad", "Kristianstad");
+        add(s, INRIKES, "Kristianstad");
 
-        add(l, STOCKHOLM, "Stockholm");
-        add(l, INRIKES, "Stockholm");
-        add(l, STOCKHOLM, "sthlm");
-        add(l, INRIKES, "sthlm");
+        add(s, "Arboga", "Arboga");
+        add(s, INRIKES, "Arboga");
 
-        add(l, INRIKES, "Sverige");
-        add(l, INRIKES, "Swedish");
-        add(l, INRIKES, "Swede");
+        add(s, STOCKHOLM, "Stockholm");
+        add(s, INRIKES, "Stockholm");
+        add(s, STOCKHOLM, "sthlm");
+        add(s, INRIKES, "sthlm");
 
-        add(l, "Umeå", "Umeå");
-        add(l, INRIKES, "Umeå");
+        add(s, INRIKES, "Sverige");
+        add(s, INRIKES, "Swedish");
+        add(s, INRIKES, "Swede");
 
-        add(l, "Liseberg", "Liseberg");
-        add(l, GÖTEBORG, "Liseberg");
-        add(l, INRIKES, "Liseberg");
+        add(s, "Umeå", "Umeå");
+        add(s, INRIKES, "Umeå");
 
-        add(l, GÖTEBORG, GÖTEBORG);
-        add(l, GÖTEBORG, "Gothenburg");
+        add(s, "Liseberg", "Liseberg");
+        add(s, GÖTEBORG, "Liseberg");
+        add(s, INRIKES, "Liseberg");
 
-        add(l, "Strömsund", "Strömsund");
-        add(l, INRIKES, "Strömsund");
+        add(s, GÖTEBORG, GÖTEBORG);
+        add(s, GÖTEBORG, "Gothenburg");
 
-        add(l, "Norrköping", "Norrköping");
-        add(l, INRIKES, "Norrköping");
+        add(s, "Strömsund", "Strömsund");
+        add(s, INRIKES, "Strömsund");
 
-        add(l, "Östersund", "Östersund");
-        add(l, INRIKES, "Östersund");
+        add(s, "Norrköping", "Norrköping");
+        add(s, INRIKES, "Norrköping");
 
-        add(l, "Västervik", "Västervik");
-        add(l, INRIKES, "Västervik");
+        add(s, "Östersund", "Östersund");
+        add(s, INRIKES, "Östersund");
 
-        add(l, "Katrineholm", "Katrineholm");
-        add(l, INRIKES, "Katrineholm");
+        add(s, "Västervik", "Västervik");
+        add(s, INRIKES, "Västervik");
 
-        add(l, "Uppsala", "Uppsala");
-        add(l, INRIKES, "Uppsala");
+        add(s, "Katrineholm", "Katrineholm");
+        add(s, INRIKES, "Katrineholm");
 
-        add(l, "Linköping", "Linköping");
-        add(l, INRIKES, "Linköping");
+        add(s, "Uppsala", "Uppsala");
+        add(s, INRIKES, "Uppsala");
+
+        add(s, "Linköping", "Linköping");
+        add(s, INRIKES, "Linköping");
     }
 }
