@@ -8,29 +8,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import se.johantiden.myfeed.service.UserDocumentService;
+import se.johantiden.myfeed.service.AccountDocumentService;
 
 
 @RestController
 @EnableAutoConfiguration
-public class UserDocumentController {
+public class AccountDocumentController {
 
-    private static final Logger log = LoggerFactory.getLogger(UserDocumentController.class);
+    private static final Logger log = LoggerFactory.getLogger(AccountDocumentController.class);
     @Autowired
-    private UserDocumentService userDocumentService;
+    private AccountDocumentService accountDocumentService;
 
     @RequestMapping(value = "/rest/documents", method = RequestMethod.PUT)
-    public void putDocument(@RequestBody UserDocumentPutBean userDocumentPutBean) {
+    public void putDocument(@RequestBody AccountDocumentPutBean accountDocumentPutBean) {
 
 
-        if (userDocumentPutBean.getUsername() == null) {
+        if (accountDocumentPutBean.getAccountName() == null) {
             log.warn("Not 'logged in'. Can't check documents as read.");
             return;
         }
 
-        log.info("Received PUT document: {}", userDocumentPutBean);
+        log.info("Received PUT document: {}", accountDocumentPutBean);
 
-        userDocumentService.setRead(userDocumentPutBean.userDocumentId, userDocumentPutBean.read);
+        accountDocumentService.setRead(accountDocumentPutBean.accountDocumentId, accountDocumentPutBean.read);
 
 
 

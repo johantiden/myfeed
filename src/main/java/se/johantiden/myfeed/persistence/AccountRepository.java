@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import javax.transaction.Transactional;
 
 @Transactional
-public interface UserRepository extends CrudRepository<User, Long> {
-    User findOneByUsername(String username);
+public interface AccountRepository extends CrudRepository<Account, Long> {
+    Account findOneByName(String accountname);
 }

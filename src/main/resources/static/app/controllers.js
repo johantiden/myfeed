@@ -8,21 +8,21 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     $scope.$sce = $sce;
     $scope.$location = $location;
 
-    var user = getParameterByName('user');
-    if (user) {
-        $cookies.put('user', user);
+    var account = getParameterByName('account');
+    if (account) {
+        $cookies.put('account', account);
     }
-    user = $cookies.get('user');
-    $scope.user = user;
+    account = $cookies.get('account');
+    $scope.account = account;
 
     $scope.setDocumentRead = function(document, read, callback) {
         document.read = read;
-        document.username = user;
+        document.accountname = account;
 
         documentService.putDocument(document, callback);
     };
 
-    documentService.getAllKeys(user, function(json) {
+    documentService.getAllKeys(account, function(json) {
         $scope.keys = json;
     });
 
@@ -151,12 +151,12 @@ app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $wind
     $scope.$sce = $sce;
     $scope.$location = $location;
 
-    var user = getParameterByName('user');
-    if (user) {
-        $cookies.put('user', user);
+    var account = getParameterByName('account');
+    if (account) {
+        $cookies.put('account', account);
     }
-    user = $cookies.get('user');
-    $scope.user = user;
+    account = $cookies.get('account');
+    $scope.account = account;
 
 
     $scope.subjectRules = [];

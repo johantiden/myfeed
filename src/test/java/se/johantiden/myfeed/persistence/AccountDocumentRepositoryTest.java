@@ -9,7 +9,7 @@ import java.time.Instant;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class UserDocumentRepositoryTest {
+public class AccountDocumentRepositoryTest {
 
 
     @Test

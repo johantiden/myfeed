@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.User;
-import se.johantiden.myfeed.persistence.UserDocument;
-import se.johantiden.myfeed.persistence.UserService;
+import se.johantiden.myfeed.persistence.Account;
+import se.johantiden.myfeed.persistence.AccountDocument;
+import se.johantiden.myfeed.persistence.AccountService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.InboxService;
-import se.johantiden.myfeed.service.UserDocumentService;
+import se.johantiden.myfeed.service.AccountDocumentService;
 import se.johantiden.myfeed.settings.GlobalSettings;
 
 import java.util.Optional;
@@ -24,9 +24,9 @@ public class DocumentFanoutJob {
     @Autowired
     private InboxService inboxService;
     @Autowired
-    private UserDocumentService userDocumentService;
+    private AccountDocumentService accountDocumentService;
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
     @Autowired
     private DocumentService documentService;
 
@@ -45,13 +45,13 @@ public class DocumentFanoutJob {
 
         hack();
 
-        userService.getAllUsers().stream()
-                .forEach(user -> {
-                    log.debug("  -> {}", user);
-                    userDocumentService.put(new UserDocument(user, document));
+        accountService.getAllAccounts().stream()
+                .forEach(account -> {
+                    log.debug("  -> {}", account);
+                    accountDocumentService.put(new AccountDocument(account, document));
                 });
 
     }
 
-    private User hack() {return userService.find("johan").orElseGet(() -> userService.create("johan"));}
+    private Account hack() {return accountService.find("johan").orElseGet(() -> accountService.create("johan"));}
 }
