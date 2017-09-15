@@ -5,10 +5,10 @@ app.service('documentService', function($http, $cacheFactory) {
         $http.put("/rest/documents", item).then(callback);
     };
 
-    this.getAllKeys = function (username, callback) {
+    this.getAllKeys = function (accountname, callback) {
         $http({
             method: 'GET',
-            url: '/rest/index/'+username,
+            url: '/rest/index/'+accountname,
             headers: {
                 'Cache-Control': 'no-cache, no-store'
             }
@@ -20,7 +20,7 @@ app.service('documentService', function($http, $cacheFactory) {
     this.getDocument = function (key, callback) {
         $http({
             method: 'GET',
-            url: '/rest/userdocument/'+key,
+            url: '/rest/accountdocument/'+key,
             headers: {
                 'Cache-Control': 'no-cache, no-store'
             }
@@ -32,7 +32,7 @@ app.service('documentService', function($http, $cacheFactory) {
     this.getDocuments = function (keys, callback) {
         $http({
             method: 'GET',
-            url: '/rest/userdocuments?' + param('keys', keys),
+            url: '/rest/accountdocuments?' + param('keys', keys),
             headers: {
                 'Cache-Control': 'no-cache, no-store'
             }

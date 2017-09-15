@@ -1,15 +1,15 @@
 package se.johantiden.myfeed.controller;
 
-public class UserDocumentPutBean {
+public class AccountDocumentPutBean {
 
     public String feedName;
     public String feedUrl;
     public String title;
     public String text;
     public String pageUrl;
-    public String username;
+    public String accountname;
     public boolean read;
-    public long userDocumentId;
+    public long accountDocumentId;
 
     public String getFeedName() {
         return feedName;
@@ -31,8 +31,8 @@ public class UserDocumentPutBean {
         return pageUrl;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAccountName() {
+        return accountname;
     }
 
     public boolean isRead() {
@@ -41,13 +41,13 @@ public class UserDocumentPutBean {
 
     @Override
     public String toString() {
-        return "UserDocumentPutBean{" +
+        return "AccountDocumentPutBean{" +
                 "feedName='" + feedName + '\'' +
                 ", feedUrl='" + feedUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
                 ", pageUrl='" + pageUrl + '\'' +
-                ", username='" + username + '\'' +
+                ", accountname='" + accountname + '\'' +
                 ", read=" + read +
                 '}';
     }

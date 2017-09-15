@@ -1,7 +1,7 @@
 package se.johantiden.myfeed.controller;
 
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.UserDocument;
+import se.johantiden.myfeed.persistence.AccountDocument;
 import se.johantiden.myfeed.persistence.Video;
 
 import java.time.Instant;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DocumentBean {
 
-    public final long userDocumentId;
+    public final long accountDocumentId;
     public final NameAndUrl feed;
     public final String title;
     public final List<String> tabs;
@@ -26,7 +26,7 @@ public class DocumentBean {
     public final List<Video> videos;
     public final List<String> subjects;
 
-    public DocumentBean(UserDocument userDocument, Document document) {
+    public DocumentBean(AccountDocument accountDocument, Document document) {
         verifyHtml(document.html, document.getFeedName());
 
         this.feed = new NameAndUrl(document.getFeedName(), document.getFeedUrl());
@@ -37,9 +37,9 @@ public class DocumentBean {
         this.imageUrl = document.imageUrl;
         this.publishedDate = document.publishedDate;
         this.html = document.html;
-        this.read = userDocument.isRead();
+        this.read = accountDocument.isRead();
         this.score = document.score;
-        this.userDocumentId = userDocument.getId();
+        this.accountDocumentId = accountDocument.getId();
         this.videos = new ArrayList<>(document.videos);
         this.tabs = document.getTabs();
         this.subjects = document.getSubjects();
@@ -111,8 +111,8 @@ public class DocumentBean {
         return score;
     }
 
-    public final long getUserDocumentId() {
-        return userDocumentId;
+    public final long getAccountDocumentId() {
+        return accountDocumentId;
     }
 
     public final List<Video> getVideos() {
@@ -157,7 +157,7 @@ public class DocumentBean {
     @Override
     public final String toString() {
         return "DocumentBean{" +
-                "userDocumentId='" + userDocumentId + '\'' +
+                "accountDocumentId='" + accountDocumentId + '\'' +
                 ", feed=" + feed +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +

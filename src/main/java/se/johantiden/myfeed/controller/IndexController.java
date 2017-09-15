@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.User;
-import se.johantiden.myfeed.persistence.UserDocument;
-import se.johantiden.myfeed.persistence.UserService;
+import se.johantiden.myfeed.persistence.Account;
+import se.johantiden.myfeed.persistence.AccountDocument;
+import se.johantiden.myfeed.persistence.AccountService;
 import se.johantiden.myfeed.service.DocumentService;
-import se.johantiden.myfeed.service.UserDocumentService;
+import se.johantiden.myfeed.service.AccountDocumentService;
 import se.johantiden.myfeed.util.JPredicates;
 
 import java.util.Collection;
@@ -30,32 +30,31 @@ public class IndexController {
     private static final boolean REMOVE_BAD = true;
     private static final boolean REMOVE_SPORT = true;
     @Autowired
-    private UserDocumentService userDocumentService;
+    private AccountDocumentService accountDocumentService;
     @Autowired
     private DocumentService documentService;
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
-    @RequestMapping("/rest/index/{username}")
+    @RequestMapping("/rest/index/{accountname}")
     public Collection<Long> index(
-            @PathVariable("username") String username) {
+            @PathVariable("accountname") String accountname) {
 
-//        log.info("User: " + username);
-        Optional<User> userOptional = userService.find(username);
+        Optional<Account> accountOptional = accountService.find(accountname);
 
-        User user = userOptional.orElseGet(() -> userService.create(username));
+        Account account = accountOptional.orElseGet(() -> accountService.create(accountname));
 
-        Set<Long> userDocumentIds = userDocumentService.getReadyUserDocumentIdsFor(user.getId());
+        Set<Long> accountDocumentIds = accountDocumentService.getReadyAccountDocumentIdsFor(account.getId());
 
-        log.info("index User:{}, keys:{}", username, userDocumentIds.size());
+        log.info("index Account:{}, keys:{}", accountname, accountDocumentIds.size());
 
-        return userDocumentIds;
+        return accountDocumentIds;
     }
 
-    @RequestMapping("/rest/userdocument/{userDocumentId}")
-    public DocumentBean userDocument(@PathVariable("userDocumentId") Long userDocumentId) {
+    @RequestMapping("/rest/accountdocument/{accountDocumentId}")
+    public DocumentBean accountDocument(@PathVariable("accountDocumentId") Long accountDocumentId) {
 
-        Optional<DocumentBean> documentBean = tryFindUserDocument(userDocumentId);
+        Optional<DocumentBean> documentBean = tryFindAccountDocument(accountDocumentId);
 
         if (!documentBean.isPresent()) {
             throw new NotFound404("Not found");
@@ -64,18 +63,18 @@ public class IndexController {
         return documentBean.get();
     }
 
-    private Optional<DocumentBean> tryFindUserDocument(Long userDocumentId) {
-        Optional<UserDocument> userDocumentOptional = userDocumentService.find(userDocumentId);
+    private Optional<DocumentBean> tryFindAccountDocument(Long accountDocumentId) {
+        Optional<AccountDocument> accountDocumentOptional = accountDocumentService.find(accountDocumentId);
 
-        Optional<Document> document = userDocumentOptional.map(UserDocument::getDocument);
+        Optional<Document> document = accountDocumentOptional.map(AccountDocument::getDocument);
 
-        return document.filter(JPredicates.not(Document::isHidden)).map(d -> new DocumentBean(userDocumentOptional.get(), d));
+        return document.filter(JPredicates.not(Document::isHidden)).map(d -> new DocumentBean(accountDocumentOptional.get(), d));
     }
 
-    @RequestMapping("/rest/userdocuments")
-    public List<DocumentBean> userDocumentsMulti(@RequestParam("keys") List<Long> userDocumentIds) {
-        List<DocumentBean> documentBeans = userDocumentIds.stream()
-                .map(this::tryFindUserDocument)
+    @RequestMapping("/rest/accountdocuments")
+    public List<DocumentBean> accountDocumentsMulti(@RequestParam("keys") List<Long> accountDocumentIds) {
+        List<DocumentBean> documentBeans = accountDocumentIds.stream()
+                .map(this::tryFindAccountDocument)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
