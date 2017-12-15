@@ -3,7 +3,6 @@
     <link rel="icon" type="image/png" href="fidn1.png"><!-- Major Browsers -->
     <!--[if IE]><link rel="SHORTCUT ICON" href="fidn1.ico"/><![endif]--><!-- Internet Explorer-->
     <link rel="stylesheet" href="css/app.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <script type="text/javascript" src="./bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.js"></script>
     <script type="text/javascript" src="./bower_components/angular-cookies/angular-cookies.js"></script>
@@ -11,50 +10,64 @@
     <script type="text/javascript" src="./app/app.js"></script>
     <script type="text/javascript" src="./app/controllers.js"></script>
     <script type="text/javascript" src="./app/services.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./node_modules/material-components-web/dist/material-components-web.css">
+    <script src="./node_modules/material-components-web/dist/material-components-web.js"></script>
     <title>fidn</title>
 </head>
 <body>
 <div ng-app="myApp" ng-controller="indexCtrl">
 
+    <nav id="basic-tab-bar" class="mdc-tab-bar">
+        <a href="javascript:void(0);" class="hej" ng-click="selectTab('All')"><img class="logo-img" src="fidn1.png"></a>
 
-    <div class="navbar">
-        <div class="nav-center">
-            <a href="" ng-click="selectTab('All')"><img class="logo-img" src="fidn1.png"></a><br />
-            <div ng-repeat="(tabName, _) in tabs" class="tab-button {{selectedTabName == tabName ? 'selected' : ''}} {{((documents | filter:withTab(tabName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="selectTab(tabName)">
-                {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName) | filter:{read:false}).length) > 0">({{(documents | filter:withTab(tabName) | filter:{read:false}).length}})</span>
-            </div>
-        </div>
-    </div>
+        <a href="javascript:void(0);" ng-repeat="(tabName, _) in tabs" class="mdc-tab {{selectedTabName == tabName ? 'mdc-tab--active' : ''}} {{((documents | filter:withTab(tabName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="selectTab(tabName)">
+            {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName) | filter:{read:false}).length) > 0">({{(documents | filter:withTab(tabName) | filter:{read:false}).length}})</span>
+        </a>
+        <span class="mdc-tab-bar__indicator"></span>
+    </nav>
 
     <div class="nav-left">
         <input type="text" ng-model="search" >
     </div>
     <div class="nav-right" >
-        <a href="settings.html?account={{account}}">Settings</a>
-        <button id="mark-all-as-read-button" ng-if="(documents | filter:tabOrSearchFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()">Mark {{(documents | filter:tabOrSearchFilter | filter:{read:false}).length}} as read</button>
+        <button ng-if="(documents | filter:tabOrSearchFilter | filter:{read:false}).length > 0" class="mdc-button" ng-click="markFilteredAsRead()" title="Mark {{(documents | filter:tabOrSearchFilter | filter:{read:false}).length}} as read">
+            <i class="material-icons">clear_all</i>
+        </button>
+        <button class="mdc-button" title="Settings" ng-click="$location.url('/settings.html?account={{account}}')">
+            <i class="material-icons">settings</i>
+        </button>
     </div>
-
-    <div class="document-box {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
+    <div class="mdc-card {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
         ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100"
-         ng-click="setDocumentRead(document, true)">
-        <!--<button class="read-button" ng-model="document.read" ng-click="setDocumentRead(document, true)" ng-if="!document.read" ></button>-->
+        >
 
-        <div class="content-box"  ng-click="$event.stopPropagation()">
+        <section class="mdc-card__primary">
+            <h1 class="mdc-card__title mdc-card__title--large">
+                <button class="mdc-button mdc-button--dense" ng-click="setDocumentRead(document, true)" title="Hide">
+                    <i class="material-icons">visibility</i>
+                </button>
+                {{document.title}}
+            </h1>
+            <h2 class="mdc-card__subtitle">
+                <span class="feedName" ng-if="document.feed.name" ng-click="setSearch(document.feed.name)"><a href="javascript:void(0);" >{{document.feed.name}}</a></span>
 
-            <div class="top-row">
-                <div class="feedName" ng-if="document.feed.name" ng-click="setSearch(document.feed.name)"><a href="javascript:void(0);" >{{document.feed.name}}</a></div>
-
-                <div class="subject" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
+                <span class="subject" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
                     | <a href="javascript:void(0);" >{{subject}}</a>
-                </div>
+                </span>
                 <!--<div class="score" ng-if="document.score"> | {{document.score}}</div>-->
                 <!--<div class="author" ng-if="document.author.name"> | <a href="{{document.author.url}}">{{document.author.name}}</a></div>-->
-                <div class="time-since" ng-if="document.publishedDateShort"> | {{document.publishedDateShort}}</div>
-            </div>
-
-
-
-            <div class="title" ng-if="document.title"><a class="link" href="{{document.pageUrl}}" >{{document.title}}</a></div>
+                <span class="time-since" ng-if="document.publishedDateShort"> | {{document.publishedDateShort}}</span>
+            </h2>
+        </section>
+        <section class="mdc-card__media" ng-if="document.videos.length > 0">
+            <a href="{{document.pageUrl}}">
+                <video class="image-box" preload="auto" autoplay="autoplay" loop="loop" muted="muted" webkit-playsinline>
+                    <source ng-repeat="v in document.videos" src="{{v.src}}" type="{{v.type}}">
+                </video>
+            </a>
+        </section>
+        <section class="mdc-card__supporting-text">
             <div class="text" ng-if="document.text && !document.html">{{document.text}}</div>
 
 
@@ -64,14 +77,7 @@
                     <img class="image-box-image" src="{{document.imageUrl}}" />
                 </a>
             </div>
-
-            <a  ng-if="document.videos.length > 0" href="{{document.pageUrl}}">
-                <video class="image-box" preload="auto" autoplay="autoplay" loop="loop" muted="muted" webkit-playsinline>
-                    <source ng-repeat="v in document.videos" src="{{v.src}}" type="{{v.type}}">
-                </video>
-            </a>
-
-        </div>
+        </section>
     </div>
 </div>
 </body>
