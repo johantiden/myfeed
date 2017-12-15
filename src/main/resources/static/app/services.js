@@ -1,7 +1,7 @@
 app.service('documentService', function($http, $cacheFactory) {
     "use strict";
 
-    var fakeData = true;
+    var fakeData = false;
     this.putDocument = function (item, callback) {
         $http.put("/rest/documents", item).then(callback);
     };
