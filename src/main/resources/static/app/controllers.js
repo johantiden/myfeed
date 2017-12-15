@@ -68,7 +68,7 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     $scope.tab = {};
 
     $scope.markFilteredAsRead = function() {
-        if (confirm("Are you sure?")) { // jshint ignore:line
+        if (confirm("Are you sure you want to mark all visible documents as read?")) { // jshint ignore:line
             $scope.documents.forEach(document => {
                 if ($scope.tabOrSearchFilter(document)) {
                     $scope.setDocumentRead(document, true);
@@ -143,6 +143,9 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
             return $scope.tabs[tabName](document);
         };
     };
+
+    // Material design components 'mdc' is on global scope.
+    mdc.autoInit();
 });
 
 app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $window, settingsService) { // jshint ignore:line
