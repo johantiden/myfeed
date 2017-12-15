@@ -88,9 +88,11 @@ public class SubjectService {
     private static void hackAddSubredditAsSubject(Set<String> matchingSubjects, Document document) {
 
         if (new DocumentMatcher(document).has("Reddit")) {
-            String cat = document.getSourceCategories().get(0);
-            cat = StringUtils.capitalize(cat);
-            matchingSubjects.add(cat);
+            if (!document.getSourceCategories().isEmpty()) {
+                String cat = document.getSourceCategories().get(0);
+                cat = StringUtils.capitalize(cat);
+                matchingSubjects.add(cat);
+            }
         }
 
     }
