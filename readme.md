@@ -1,3 +1,5 @@
+<img src="https://sonarcloud.io/api/project_badges/measure?project=se.johantiden.myfeed%3Amyfeed&metric=alert_status">
+
 
 *myfeed* aggregates your news flows into a single feed.
 There are many aggregators like this, but this one is mine. 
