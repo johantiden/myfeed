@@ -8,18 +8,21 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     $scope.$sce = $sce;
     $scope.$location = $location;
 
-    var account = getParameterByName('account');
+    let account = getParameterByName('account');
     if (account) {
         $cookies.put('account', account);
     }
     account = $cookies.get('account');
     $scope.account = account;
 
-    $scope.setDocumentRead = function(document, read, callback) {
-        document.read = read;
+    $scope.setDocumentSoftRead = function(document, softRead, callback) {
+        document.softRead = softRead;
         document.accountname = account;
 
-        documentService.putDocument(document, callback);
+        let putDoc =JSON.parse(JSON.stringify(document));
+        putDoc.read = softRead;
+
+        documentService.putDocument(putDoc, callback);
     };
 
     documentService.getAllKeys(account, function(json) {
@@ -71,7 +74,7 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
         if (confirm("Are you sure you want to mark all visible documents as read?")) { // jshint ignore:line
             $scope.documents.forEach(document => {
                 if ($scope.tabOrSearchFilter(document)) {
-                    $scope.setDocumentRead(document, true);
+                    $scope.setDocumentSoftRead(document, true);
                 }
             });
         }
@@ -154,7 +157,7 @@ app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $wind
     $scope.$sce = $sce;
     $scope.$location = $location;
 
-    var account = getParameterByName('account');
+    let account = getParameterByName('account');
     if (account) {
         $cookies.put('account', account);
     }
