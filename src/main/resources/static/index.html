@@ -38,15 +38,11 @@
             <i class="material-icons">settings</i>
         </button>
     </div>
-    <div class="mdc-card {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
-        ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100"
-        >
+    <div class="mdc-card {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}} {{document.softRead ? 'soft-read' : ''}}"
+        ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
 
         <section class="mdc-card__primary">
-            <h1 class="mdc-card__title mdc-card__title--large">
-                <button class="mdc-button mdc-button--dense" ng-click="setDocumentRead(document, true)" title="Hide">
-                    <i class="material-icons">visibility</i>
-                </button>
+            <h1 class="mdc-card__title mdc-card__title--large" ng-click="setDocumentSoftRead(document, true)">
                 {{document.title}}
             </h1>
             <h2 class="mdc-card__subtitle">
