@@ -11,10 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import se.johantiden.myfeed.persistence.FeedPopulator;
-import se.johantiden.myfeed.persistence.Inbox;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
-import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.SubjectService;
 import se.johantiden.myfeed.service.TabService;
 
@@ -51,16 +49,6 @@ public class Main implements SchedulingConfigurer {
     @Bean
     public TabService tabService() {
         return new TabService();
-    }
-
-    @Bean
-    public InboxService inboxService() {
-        return new InboxService();
-    }
-
-    @Bean
-    public Inbox inboxRepository() {
-        return new Inbox();
     }
 
     @Override

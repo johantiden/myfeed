@@ -56,7 +56,14 @@ public class RssFeedReader implements FeedReader {
     }
 
     private List<Document> tryReadAllAvailable() {
-        SyndFeed syndFeed = getFeed();
+
+        SyndFeed syndFeed = null;
+        try {
+            syndFeed = getFeed();
+        } catch (FeedReadException e) {
+            log.warn("Failed to read {}. Cause: {}", feedName, e.getMessage());
+            return new ArrayList<>();
+        }
 
         List<SyndEntry> entries = syndFeed.getEntries();
 
@@ -173,19 +180,19 @@ public class RssFeedReader implements FeedReader {
         return enclosures.get(0).getUrl();
     }
 
-    private SyndFeed getFeed() {
+    private SyndFeed getFeed() throws FeedReadException {
         SyndFeedInput input = new SyndFeedInput();
         return getFeed(input);
     }
 
-    private SyndFeed getFeed(SyndFeedInput input) {
+    private SyndFeed getFeed(SyndFeedInput input) throws FeedReadException {
         input.setAllowDoctypes(true);
         input.setXmlHealerOn(true);
 
         try (XmlReader reader = getXmlReader()) {
             return input.build(reader);
         } catch (FeedException | IOException e) {
-            throw new RuntimeException(e);
+            throw new FeedReadException(e);
         }
     }
 

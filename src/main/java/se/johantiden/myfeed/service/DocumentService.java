@@ -7,6 +7,7 @@ import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ public class DocumentService {
             Optional<Document> existing = find(document);
             if (existing.isPresent()) {
                 return merge(existing.get(), document);
+            } else {
+                log.info("Creating new document {}", document);
             }
         }
         return documentRepository.save(document);

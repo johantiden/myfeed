@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
-import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.settings.GlobalSettings;
 
 import java.util.Comparator;
@@ -25,7 +25,7 @@ public class FeedReaderJob {
     @Autowired
     private FeedService feedService;
     @Autowired
-    private InboxService inboxService;
+    private DocumentService documentService;
 
     @Scheduled(fixedRate = GlobalSettings.FEED_READER_INTERVAL)
     public void myRunnable() {
@@ -36,7 +36,7 @@ public class FeedReaderJob {
     }
 
     @Async
-    private void consume(Feed feed) {
+    protected void consume(Feed feed) {
 //        log.info("  ENTER FeedReaderJob.consume - {}", feed.getName());
 
         List<Document> documents = FeedReaderService.readAll(feed);
@@ -50,7 +50,7 @@ public class FeedReaderJob {
             log.debug("Done reading feed '{}'. Merging a total of {} documents. {} removed by filter. Oldest: {}",
                     feed.getName(), filtered.size(), documents.size()-filtered.size(), oldestInstantDebug(filtered));
         }
-        inboxService.putIfNew(filtered);
+        documentService.put(filtered);
 
 //        log.info("  EXIT  FeedReaderJob.consume");
 

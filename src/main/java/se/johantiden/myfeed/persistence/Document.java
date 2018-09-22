@@ -207,4 +207,11 @@ public class Document extends BaseEntity {
     public void setRead(boolean read) {
         this.read = read;
     }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "title='" + title + '\'' +
+                '}';
+    }
 }
