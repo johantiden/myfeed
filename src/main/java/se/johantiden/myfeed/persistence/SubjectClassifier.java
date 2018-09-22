@@ -7,6 +7,8 @@ import static se.johantiden.myfeed.persistence.DocumentClassifier.*;
 
 public class SubjectClassifier {
 
+    public static final String GADGETS = "Gadgets";
+
     public static Set<SubjectRule> getDefaultSubjectRules() {
         TreeSet<SubjectRule> s = new TreeSet<>(SubjectRule.COMPARATOR);
         add(s, EKONOMI, "ekonomi");
@@ -89,11 +91,14 @@ public class SubjectClassifier {
         add(s, "Amazon");
         add(s, GAMING, "Nintendo");
         add(s, "Google");
+        add(s, "T-Mobile");
+        add(s, "Instagram");
+        add(s, "Comcast");
         add(s, "H&M");
         add(s, "HP");
         add(s, "Norstedts");
         add(s, "Ericsson");
-
+        add(s, "PayPal");
 
         add(s, "Net Neutrality", "Net Neutrality");
         add(s, "Blockchain", "[Bb]lock.*chain");
@@ -126,6 +131,9 @@ public class SubjectClassifier {
         add(s, UTVECKLING, "open-source");
         add(s, UTVECKLING, "REPL");
         add(s, UTVECKLING, "OpenCV");
+
+        add(s, "Asyl", "[Aa]sylum");
+        add(s, "Asyl", "[Aa]sylsökande");
 
         add(s, "SAS");
 
@@ -215,6 +223,9 @@ public class SubjectClassifier {
         add(s, "Daesh", "([Tt]error.*IS)|(IS.*[Tt]error)");
 
         add(s, "Taliban", "Taliban");
+
+        add(s, GADGETS, "LCD");
+        add(s, GADGETS, "[Ss]mart lock");
 
         add(s, GAMING, "[Gg]aming");
         add(s, GAMING, "[Gg]ames");
@@ -310,6 +321,9 @@ public class SubjectClassifier {
 
         add(s, "Trump", "Trump");
         add(s, USA, "Trump");
+
+        add(s, "Brett Kavanaugh", "Brett Kavanaugh");
+        add(s, USA, "Brett Kavanaugh");
 
         add(s, "Ebba Busch Thor", "Busch Thor");
         add(s, KRISTDEMOKRATERNA, "Busch Thor");
