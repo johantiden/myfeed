@@ -1,33 +1,37 @@
 
 body {
-    background-color: #0F0F0F;
+    /*background-color: #0F0F0F;*/
 }
 
 body, .mdc-card__title, .mdc-tab, .mdc-card__supporting-text {
     /*margin: 0;*/
     /*font-size: large;*/
-    color: #DDDDDD !important;
+    /*color: #DDDDDD !important;*/
 }
 
 .mdc-card {
-    background-color: #000000;
+    /*background-color: #000000;*/
     margin-bottom: 15px;
 }
 
 div.nav-left > input {
     color: white;
-    background-color: #202020;
+    /*background-color: #202020;*/
 }
 
 .mdc-card.soft-read {
-    background-color: #202020;
+    /*background-color: #202020;*/
 }
 
 .mdc-card.bad {
-    background-color: #400000;
+    /*background-color: #400000;*/
 }
 
 .logo-img {
     height: 65px;
     /*vertical-align: bottom;*/
+}
+
+span.feedName > a, span.subject > a{
+    /*color: #DDDDDD;*/
 }

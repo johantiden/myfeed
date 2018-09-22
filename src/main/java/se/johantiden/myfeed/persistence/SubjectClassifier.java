@@ -49,7 +49,7 @@ public class SubjectClassifier {
         addPlaces(s);
         addPeople(s);
 
-        add(s, "Science", "[Ss]tudie");
+        add(s, "science", "[Ss]tudie");
 
         add(s, "Turist", "[Tt]urist");
 
