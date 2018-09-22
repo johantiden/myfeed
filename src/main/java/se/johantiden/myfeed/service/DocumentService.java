@@ -99,11 +99,4 @@ public class DocumentService {
         put(doc);
 
     }
-
-    public long purgeReadDocuments() {
-        Set<Document> allReadDocuments = documentRepository.findAllRead();
-        int size = allReadDocuments.size();
-        documentRepository.delete(allReadDocuments);
-        return size;
-    }
 }

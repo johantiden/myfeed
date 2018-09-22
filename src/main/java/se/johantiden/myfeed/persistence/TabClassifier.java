@@ -13,7 +13,7 @@ public class TabClassifier {
         boolean hideErrors = false;
         add(s, ERROR, "&#", hideErrors);
 
-        boolean hideWeather = true;
+        boolean hideWeather = false;
         add(s, VÄDER, VÄDER, hideWeather);
 
         boolean hideSports = true;
