@@ -8,6 +8,7 @@ import se.johantiden.myfeed.persistence.DocumentRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class DocumentService {
 
@@ -79,5 +80,27 @@ public class DocumentService {
             d.setTabsParsed(false);
             this.put(d);
         });
+    }
+
+    public Set<Long> getReadyDocuments() {
+        return documentRepository.getReadyDocumentIds();
+    }
+
+    public void setRead(long documentId, boolean read) {
+
+        Optional<Document> documentOptional = Optional.ofNullable(documentRepository.findOne(documentId));
+
+        Document doc = documentOptional.orElseThrow(() -> new IllegalStateException("Could not find document " + documentId));
+
+        doc.setRead(read);
+        put(doc);
+
+    }
+
+    public long purgeReadDocuments() {
+        Set<Document> allReadDocuments = documentRepository.findAllRead();
+        int size = allReadDocuments.size();
+        documentRepository.delete(allReadDocuments);
+        return size;
     }
 }

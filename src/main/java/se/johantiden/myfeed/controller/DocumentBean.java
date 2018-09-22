@@ -1,7 +1,6 @@
 package se.johantiden.myfeed.controller;
 
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.AccountDocument;
 import se.johantiden.myfeed.persistence.Video;
 
 import java.time.Instant;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class DocumentBean {
 
-    public final long accountDocumentId;
+    public final long documentId;
     public final NameAndUrl feed;
     public final String title;
     public final List<String> tabs;
@@ -26,7 +25,7 @@ public class DocumentBean {
     public final List<Video> videos;
     public final List<String> subjects;
 
-    public DocumentBean(AccountDocument accountDocument, Document document) {
+    public DocumentBean(Document document) {
         verifyHtml(document.html, document.getFeedName());
 
         this.feed = new NameAndUrl(document.getFeedName(), document.getFeedUrl());
@@ -37,9 +36,9 @@ public class DocumentBean {
         this.imageUrl = document.imageUrl;
         this.publishedDate = document.publishedDate;
         this.html = document.html;
-        this.read = accountDocument.isRead();
+        this.read = document.isRead();
         this.score = document.score;
-        this.accountDocumentId = accountDocument.getId();
+        this.documentId = document.getId();
         this.videos = new ArrayList<>(document.videos);
         this.tabs = document.getTabs();
         this.subjects = document.getSubjects();
@@ -111,8 +110,8 @@ public class DocumentBean {
         return score;
     }
 
-    public final long getAccountDocumentId() {
-        return accountDocumentId;
+    public long getDocumentId() {
+        return documentId;
     }
 
     public final List<Video> getVideos() {
@@ -157,7 +156,7 @@ public class DocumentBean {
     @Override
     public final String toString() {
         return "DocumentBean{" +
-                "accountDocumentId='" + accountDocumentId + '\'' +
+                "documentId='" + documentId + '\'' +
                 ", feed=" + feed +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +

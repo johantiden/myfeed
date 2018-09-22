@@ -8,16 +8,8 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     $scope.$sce = $sce;
     $scope.$location = $location;
 
-    let account = getParameterByName('account');
-    if (account) {
-        $cookies.put('account', account);
-    }
-    account = $cookies.get('account');
-    $scope.account = account;
-
     $scope.setDocumentSoftRead = function(document, softRead, callback) {
         document.softRead = softRead;
-        document.accountname = account;
 
         let putDoc =JSON.parse(JSON.stringify(document));
         putDoc.read = softRead;
@@ -25,7 +17,7 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
         documentService.putDocument(putDoc, callback);
     };
 
-    documentService.getAllKeys(account, function(json) {
+    documentService.getAllKeys(function(json) {
         $scope.keys = json;
     });
 
@@ -156,14 +148,6 @@ app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $wind
 
     $scope.$sce = $sce;
     $scope.$location = $location;
-
-    let account = getParameterByName('account');
-    if (account) {
-        $cookies.put('account', account);
-    }
-    account = $cookies.get('account');
-    $scope.account = account;
-
 
     $scope.subjectRules = [];
     settingsService.getAllSubjectRules(function(json) {
