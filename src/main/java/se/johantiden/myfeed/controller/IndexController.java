@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.Account;
-import se.johantiden.myfeed.persistence.AccountDocument;
-import se.johantiden.myfeed.persistence.AccountService;
 import se.johantiden.myfeed.service.DocumentService;
-import se.johantiden.myfeed.service.AccountDocumentService;
 import se.johantiden.myfeed.util.JPredicates;
 
 import java.util.Collection;
@@ -21,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @EnableAutoConfiguration
@@ -30,31 +28,22 @@ public class IndexController {
     private static final boolean REMOVE_BAD = true;
     private static final boolean REMOVE_SPORT = true;
     @Autowired
-    private AccountDocumentService accountDocumentService;
-    @Autowired
     private DocumentService documentService;
-    @Autowired
-    private AccountService accountService;
 
-    @RequestMapping("/rest/index/{accountname}")
-    public Collection<Long> index(
-            @PathVariable("accountname") String accountname) {
+    @RequestMapping(value = "/rest/index", method = GET)
+    public Collection<Long> index() {
 
-        Optional<Account> accountOptional = accountService.find(accountname);
+        Set<Long> documentIds = documentService.getReadyDocuments();
 
-        Account account = accountOptional.orElseGet(() -> accountService.create(accountname));
+        log.info("index keys:{}", documentIds.size());
 
-        Set<Long> accountDocumentIds = accountDocumentService.getReadyAccountDocumentIdsFor(account.getId());
-
-        log.info("index Account:{}, keys:{}", accountname, accountDocumentIds.size());
-
-        return accountDocumentIds;
+        return documentIds;
     }
 
-    @RequestMapping("/rest/accountdocument/{accountDocumentId}")
-    public DocumentBean accountDocument(@PathVariable("accountDocumentId") Long accountDocumentId) {
+    @RequestMapping(value = "/rest/document/{documentId}", method = GET)
+    public DocumentBean document(@PathVariable("documentId") Long documentId) {
 
-        Optional<DocumentBean> documentBean = tryFindAccountDocument(accountDocumentId);
+        Optional<DocumentBean> documentBean = tryFindDocument(documentId);
 
         if (!documentBean.isPresent()) {
             throw new NotFound404("Not found");
@@ -63,18 +52,16 @@ public class IndexController {
         return documentBean.get();
     }
 
-    private Optional<DocumentBean> tryFindAccountDocument(Long accountDocumentId) {
-        Optional<AccountDocument> accountDocumentOptional = accountDocumentService.find(accountDocumentId);
+    private Optional<DocumentBean> tryFindDocument(Long documentId) {
+        Optional<Document> documentOptional = documentService.find(documentId);
 
-        Optional<Document> document = accountDocumentOptional.map(AccountDocument::getDocument);
-
-        return document.filter(JPredicates.not(Document::isHidden)).map(d -> new DocumentBean(accountDocumentOptional.get(), d));
+        return documentOptional.filter(JPredicates.not(Document::isHidden)).map(DocumentBean::new);
     }
 
-    @RequestMapping("/rest/accountdocuments")
-    public List<DocumentBean> accountDocumentsMulti(@RequestParam("keys") List<Long> accountDocumentIds) {
-        List<DocumentBean> documentBeans = accountDocumentIds.stream()
-                .map(this::tryFindAccountDocument)
+    @RequestMapping(value = "/rest/documents", method = GET)
+    public List<DocumentBean> documentsMulti(@RequestParam("keys") List<Long> documentIds) {
+        List<DocumentBean> documentBeans = documentIds.stream()
+                .map(this::tryFindDocument)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

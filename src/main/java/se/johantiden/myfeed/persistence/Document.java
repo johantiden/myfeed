@@ -18,7 +18,14 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "Document.findDocumentsNotParsedSubjects", query = "SELECT d FROM Document d WHERE d.subjectsParsed = false"),
         @NamedQuery(name = "Document.findDocumentsNotParsedTabs", query = "SELECT d FROM Document d WHERE d.tabsParsed = false"),
-
+        @NamedQuery(name = "Document.getReadyDocumentIds",
+                query = "SELECT d.id FROM Document d WHERE" +
+                    " d.read = false AND" +
+                    " d.subjectsParsed = true AND" +
+                    " d.tabsParsed = true"),
+        @NamedQuery(name = "Document.findAllRead",
+                query = "SELECT d FROM Document d WHERE" +
+                    " d.read = true")
 })
 public class Document extends BaseEntity {
     @Column(length = 2000)
@@ -59,6 +66,8 @@ public class Document extends BaseEntity {
     private final ArrayList<String> sourceCategories;
 
     private boolean hidden;
+
+    private boolean read;
 
     // JPA
     protected Document() {
@@ -189,5 +198,13 @@ public class Document extends BaseEntity {
 
     public boolean isHidden() {
         return hidden;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

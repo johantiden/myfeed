@@ -12,13 +12,11 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import se.johantiden.myfeed.persistence.FeedPopulator;
 import se.johantiden.myfeed.persistence.Inbox;
-import se.johantiden.myfeed.persistence.AccountService;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.InboxService;
 import se.johantiden.myfeed.service.SubjectService;
 import se.johantiden.myfeed.service.TabService;
-import se.johantiden.myfeed.service.AccountDocumentService;
 
 import javax.sql.DataSource;
 import java.util.concurrent.Executor;
@@ -46,11 +44,6 @@ public class Main implements SchedulingConfigurer {
     }
 
     @Bean
-    public AccountDocumentService accountDocumentService() {
-        return new AccountDocumentService();
-    }
-
-    @Bean
     public SubjectService subjectService() {
         return new SubjectService();
     }
@@ -68,12 +61,6 @@ public class Main implements SchedulingConfigurer {
     @Bean
     public Inbox inboxRepository() {
         return new Inbox();
-    }
-
-    @Bean
-    public AccountService accountService() {
-        AccountService accountService = new AccountService();
-        return accountService;
     }
 
     @Override

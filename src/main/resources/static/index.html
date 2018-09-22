@@ -34,7 +34,7 @@
         <button ng-if="(documents | filter:tabOrSearchFilter | filter:{read:false}).length > 0" class="mdc-button" ng-click="markFilteredAsRead()" title="Mark {{(documents | filter:tabOrSearchFilter | filter:{read:false}).length}} as read">
             <i class="material-icons">clear_all</i>
         </button>
-        <button class="mdc-button" title="Settings" ng-click="$location.url('/settings.html?account={{account}}')">
+        <button class="mdc-button" title="Settings" ng-click="$location.url('/settings.html')">
             <i class="material-icons">settings</i>
         </button>
     </div>
@@ -42,7 +42,10 @@
         ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
 
         <section class="mdc-card__primary">
-            <h1 class="mdc-card__title mdc-card__title--large" ng-click="setDocumentSoftRead(document, true)">
+            <h1 class="mdc-card__title mdc-card__title--large">
+                <button class="mdc-button mdc-button--dense" ng-click="setDocumentRead(document, true)" title="Hide">
+                    <i class="material-icons">visibility</i>
+                </button>
                 {{document.title}}
             </h1>
             <h2 class="mdc-card__subtitle">
