@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DocumentBean {
 
@@ -33,7 +32,7 @@ public class DocumentBean {
     public DocumentBean(Document document) {
         verifyHtml(document.html, document.getFeedName());
 
-        this.feed = new NameAndUrl(toHashTag(document.getFeedName()), document.getFeedUrl());
+        this.feed = new NameAndUrl(document.getFeedName(), document.getFeedUrl());
         this.title = document.title;
         this.text = document.text;
         this.author = document.author;
@@ -46,41 +45,10 @@ public class DocumentBean {
         this.documentId = document.getId();
         this.videos = new ArrayList<>(document.videos);
         this.tabs = document.getTabs();
-        this.subjects = asHashTags(document.getSubjects());
-        verifySubjects(subjects);
-
-    }
-
-    private List<String> asHashTags(List<String> subjects) {
-        return subjects.stream()
-                .map(s -> toHashTag(s))
-                .collect(Collectors.toList());
-    }
-
-    private String toHashTag(String string) {
-        return "#" + string.toLowerCase();
-    }
-
-    private static void verifySubjects(List<String> subjects) {
-
-        subjects.stream()
-                .filter(DocumentBean::isSubjectInvalid)
-                .forEach(s -> {
-                    log.warn("Invalid subject: {}", s);
-                });
-
-    }
-
-    private static boolean isSubjectInvalid(String subject) {
-        if (!subject.startsWith("#")) {
-            return true;
+        if (tabs.isEmpty()) {
+            tabs.add("Unclassified");
         }
-
-        if (!subject.toLowerCase().equals(subject)) {
-            return true;
-        }
-
-        return false;
+        this.subjects = document.getSubjects();
     }
 
     private void verifyHtml(String html, String feedName) {

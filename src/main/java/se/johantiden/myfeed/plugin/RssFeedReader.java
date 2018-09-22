@@ -61,7 +61,8 @@ public class RssFeedReader implements FeedReader {
         try {
             syndFeed = getFeed();
         } catch (FeedReadException e) {
-            log.warn("Failed to read {}. Cause: {}", feedName, e.getMessage());
+            log.error("Failed to read feed {}", feedName);
+            log.debug("Exception:", e);
             return new ArrayList<>();
         }
 
