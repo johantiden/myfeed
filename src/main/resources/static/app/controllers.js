@@ -143,58 +143,6 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     mdc.autoInit();
 });
 
-app.controller('settingsCtrl', function($scope, $location, $sce, $cookies, $window, settingsService) { // jshint ignore:line
-    "use strict";
-
-    $scope.$sce = $sce;
-    $scope.$location = $location;
-
-    $scope.subjectRules = [];
-    settingsService.getAllSubjectRules(function(json) {
-        $scope.subjectRules = json;
-    });
-    $scope.subjectSortType = 'created';
-    $scope.subjectSortReverse = true;
-
-    $scope.putSubjectRule = function(subjectRule) {
-        settingsService.putSubjectRule(subjectRule);
-    };
-
-    $scope.createSubjectRule = function(subjectRule) {
-        settingsService.putSubjectRule(subjectRule, function(response) {
-            $scope.subjectRules.push(response);
-        });
-    };
-
-    $scope.deleteSubjectRule = function(subjectRule) {
-        settingsService.deleteSubjectRule(subjectRule);
-    };
-
-
-    $scope.tabRules = [];
-    settingsService.getAllTabRules(function(json) {
-        $scope.tabRules = json;
-    });
-
-    $scope.putTabRule = function(tabRule) {
-        settingsService.putTabRule(tabRule);
-    };
-
-    $scope.createTabRule = function(tabRule) {
-        settingsService.putTabRule(tabRule, function(response) {
-            $scope.tabRules.push(response);
-        });
-    };
-
-    $scope.deleteTabRule = function(tabRule) {
-        settingsService.deleteTabRule(tabRule);
-    };
-    $scope.tabSortType = 'created';
-    $scope.tabSortReverse = true;
-});
-
-
-
 /**
  * Gets a query parameter.
  * johan:
