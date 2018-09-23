@@ -20,7 +20,7 @@ public class DagensNyheterFeed extends Feed {
     private static final Logger log = LoggerFactory.getLogger(DagensNyheterFeed.class);
     private static final String NAME = "Dagens Nyheter";
     public static final String URL = "https://www.dn.se";
-    public static final String RSS_URL = "http://www.dn.se/nyheter/rss/";
+    public static final String RSS_URL = "https://www.dn.se/nyheter/rss/";
 
     public DagensNyheterFeed() {
         super(NAME, URL, createFeedReader());

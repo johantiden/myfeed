@@ -79,6 +79,7 @@ public class SubjectService {
 
         hackAddSubredditAsSubject(matchingSubjects, document);
 
+//        matchingSubjects.addAll(document.getSourceCategories());
 
         document.getSubjects().clear();
         document.getSubjects().addAll(matchingSubjects);

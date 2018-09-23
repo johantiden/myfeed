@@ -19,7 +19,7 @@ public class AlJazeeraFeed extends Feed {
     private static final Logger log = LoggerFactory.getLogger(AlJazeeraFeed.class);
     public static final String URL = "http://www.aljazeera.com";
     public static final String NAME = "Al Jazeera";
-    public static final String URL_RSS = "http://www.aljazeera.com/xml/rss/all.xml";
+    public static final String URL_RSS = "https://www.aljazeera.com/xml/rss/all.xml";
 
     public AlJazeeraFeed() {
         super(NAME, URL, createFeedReader());

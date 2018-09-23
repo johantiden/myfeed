@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 public class FeedPopulator {
 
     public static final int REDDIT_MIN_SCORE = 20000;
-    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(1);
+    public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(10);
 
     private FeedService feedService;
 
@@ -58,7 +58,7 @@ public class FeedPopulator {
 
         feeds.add(new SVTNyheterFeed());
         feeds.add(new NewYorkTimesWorldFeed());
-        feeds.add(new LosAngelesTimesWorldFeed());
+//        feeds.add(new LosAngelesTimesWorldFeed()); GDPR :(
 
         feeds.add(new WashingtonPostFeed(
                 INVALIDATION_PERIOD

@@ -189,7 +189,6 @@ public class RssFeedReader implements FeedReader {
     private SyndFeed getFeed(SyndFeedInput input) throws FeedReadException {
         input.setAllowDoctypes(true);
         input.setXmlHealerOn(true);
-
         try (XmlReader reader = getXmlReader()) {
             return input.build(reader);
         } catch (FeedException | IOException e) {

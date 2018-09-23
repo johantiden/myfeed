@@ -2,17 +2,18 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     "use strict";
     $scope.documents = [];
     $scope.tabs = {
-        'All': s => true
+        'All': () => true,
+        'Nyheter': () => true,
+        'Biz': () => true
     };
 
     $scope.$sce = $sce;
     $scope.$location = $location;
 
-    $scope.setDocumentSoftRead = function(document, softRead, callback) {
-        document.softRead = softRead;
+    $scope.setDocumentRead = function(document, read, callback) {
+        document.read = true;
 
-        let putDoc =JSON.parse(JSON.stringify(document));
-        putDoc.read = softRead;
+        let putDoc = JSON.parse(JSON.stringify(document));
 
         documentService.putDocument(putDoc, callback);
     };
@@ -50,6 +51,10 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
         });
     }
 
+    $scope.documents.push({title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "20m"});
+    $scope.documents.push({title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "2d", videos: [], imageUrl: "https://www.svtstatic.se/image-cms/svtse/1537731483/svts/article19410212.svt/alternates/large/ferm-malm-1920-jpg"});
+    $scope.documents.push({tabs:["Nyheter", "Biz"], title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "3d"});
+
 
     function batcheroo(list, size) {
         let lists = [];
@@ -66,13 +71,13 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
         if (confirm("Are you sure you want to mark all visible documents as read?")) { // jshint ignore:line
             $scope.documents.forEach(document => {
                 if ($scope.tabOrSearchFilter(document)) {
-                    $scope.setDocumentSoftRead(document, true);
+                    $scope.setDocumentRead(document, true);
                 }
             });
         }
     };
 
-    var documentTabPredicate = function (tab) {
+    let documentTabPredicate = function (tab) {
         return doc => doc.tabs.some(t => t === tab);
     };
 
@@ -97,17 +102,15 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     }
 
     $scope.search = $cookies.get('search');
-
-
     if ($scope.search === undefined) {
         $scope.search = '';
     }
-    var q = getParameterByName('q');
+
+    let q = getParameterByName('q');
     if (q !== undefined && q !== null && q.length > 0) {
         $scope.search = q;
     } else {
-        let cookieTabName = $cookies.get('selectedTabName');
-        $scope.selectedTabName = cookieTabName;
+        $scope.selectedTabName = $cookies.get('selectedTabName');
         if ($scope.selectedTabName === undefined && $scope.search === undefined) {
             $scope.selectedTabName = 'All';
         }
@@ -138,9 +141,6 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
             return $scope.tabs[tabName](document);
         };
     };
-
-    // Material design components 'mdc' is on global scope.
-    mdc.autoInit();
 });
 
 /**
@@ -150,9 +150,9 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
  * - Can't get ngRoute to work...
  */
 function getParameterByName(name) {
-    var url = window.location.href; // jshint ignore:line
+    let url = window.location.href; // jshint ignore:line
     name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
     if (!results) {
         return null;
