@@ -103,6 +103,8 @@ public class SubjectClassifier {
         add(s, "Net Neutrality", "Net Neutrality");
         add(s, "Blockchain", "[Bb]lock.*chain");
         add(s, "Blockchain", "[Bb]lockkedja");
+        add(s, "Blockchain", "Ethereum");
+        add(s, "Blockchain", "Bit[Cc]oin");
 
         add(s, "Science", "[Ss]cience");
         add(s, "Science", "[Ss]cientific");
@@ -112,6 +114,8 @@ public class SubjectClassifier {
         add(s, "Science", "[Aa]stronom");
 
         add(s, "Guatemala", "Guatemala");
+
+        add(s, "Comics", "xkcd");
 
         add(s, "Drone", "[Dd]rone");
 
@@ -242,6 +246,11 @@ public class SubjectClassifier {
         add(s, HÄR_ÄR, "- här är");
         add(s, HÄR_ÄR, HÄR_ÄR);
 
+        add(s, "Medicin", "Global Health");
+        add(s, "Medicin", "Tuber[ck]ulos");
+
+        add(s, "Hawaii", "Hawaii");
+
         add(s, "Uutiset", UUTISET);
         add(s, "VIDEO", "^VIDEO");
 
@@ -251,6 +260,8 @@ public class SubjectClassifier {
         add(s, "Religion", "[Rr]eligious");
         add(s, "Religion", "[Rr]eligion");
         add(s, "Religion", "[Rr]eligiös");
+
+        add(s, "Ask HN", "Ask HN");
 
         add(s, NATURKATASTROF, "[Jj]ordbävning");
         add(s, NATURKATASTROF, "[Ee]arthquake");
@@ -286,6 +297,10 @@ public class SubjectClassifier {
         add(s, "London", "Buckingham Palace");
         add(s, "London", "London");
         add(s, STORBRITANNIEN, "Buckingham Palace");
+
+        add(s, "Vietnam", "Vietnam");
+        add(s, "Tran Dai Quang", "Tran Dai Quang"); // president, dog 2018
+        add(s, "Vietnam", "Tran Dai Quang");
 
         add(s, "YouTube", "[Yy]ou[Tt]ube");
         add(s, "USA", "Massachusetts");
