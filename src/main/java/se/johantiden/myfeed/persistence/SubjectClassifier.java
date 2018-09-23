@@ -375,6 +375,12 @@ public class SubjectClassifier {
         add(s, "Kinberg Batra");
         add(s, MODERATERNA, "Kinberg Batra");
 
+        add(s, "Zlatan");
+        add(s, "Zlatan", "Ibrahimovic");
+        add(s, SPORT, "Ibrahimovic");
+        add(s, SPORT, "Zlatan");
+
+
         add(s, "Leo Varadkar", "Varadkar");
         add(s, IRLAND, "Varadkar");
 
@@ -567,6 +573,8 @@ public class SubjectClassifier {
         add(s, "Bangladesh", "Bangladesh");
 
         add(s, "Malaysia", "Malaysia");
+
+        add(s, "Maldiverna", "Maldive");
 
         add(s, "Frankrike", "Frankrike");
         add(s, "Frankrike", "France");

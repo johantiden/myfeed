@@ -163,6 +163,7 @@ public class TabClassifier {
         add(s, "Bad", "Medan du sov", hideBad);
         add(s, "Bad", "DN gratulerar", hideBad);
         add(s, "Bad", "neoliberal", hideBad);
+        add(s, "Bad", "r/aww", hideBad);
         add(s, "Bad", "me_irl", hideBad);
         add(s, "Bad", "Mode/Kläder", hideBad);
         add(s, "Bad", "[Uu]pvote", hideBad);

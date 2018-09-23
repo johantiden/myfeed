@@ -1,37 +1,91 @@
 
 body {
-    /*background-color: #0F0F0F;*/
+    font-family: 'Roboto', serif;
+    background-color: #F8F8F8;
 }
 
-body, .mdc-card__title, .mdc-tab, .mdc-card__supporting-text {
-    /*margin: 0;*/
-    /*font-size: large;*/
-    /*color: #DDDDDD !important;*/
-}
-
-.mdc-card {
+.card {
     /*background-color: #000000;*/
     margin-bottom: 15px;
+    margin-top: 15px;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0.5px 1px 3px #888888;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+a {
+    color: black;
+    text-decoration: none;
 }
 
 div.nav-left > input {
-    color: white;
-    /*background-color: #202020;*/
 }
 
-.mdc-card.soft-read {
-    /*background-color: #202020;*/
+.tab {
+    margin-left: 1vw;
+}
+.tab-active > div {
+    /*background-color: blue;*/
+    border-bottom: 1px solid black;
 }
 
-.mdc-card.bad {
+.card.bad {
     /*background-color: #400000;*/
 }
 
-.logo-img {
+.logo-img, nav, nav > a {
     height: 65px;
-    /*vertical-align: bottom;*/
+    font-size: large;
+    vertical-align: top;
 }
 
-span.subtitle > a{
-    /*color: #DDDDDD;*/
+nav > a > div {
+    vertical-align: top;
+    display: inline-block;
+    padding-top: 27px;
+}
+
+.tab-bar {
+}
+
+.title-row {
+    margin-bottom: 2px;
+}
+
+.title {
+    font-weight: bold;
+}
+
+div.subtitle {
+    margin-bottom: 2px;
+}
+
+.button {
+    width: 15vw;
+    margin-top: 0;
+    cursor: pointer;
+    background-color: aliceblue;
+    box-shadow: 0.5px 1px 3px #888888;
+    display: inline-block;
+    text-align: center;
+    min-height: 30px;
+}
+
+.float-right {
+    float: right;
+}
+
+.image-box {
+    width: calc(100% - 9px);
+}
+.image-box > a > img {
+    max-width:100%;
+    width: 100%;
+    max-height:100%;
+    height: auto;
+}
+.margin-left-right {
+    margin-left: 5px;
+    margin-right: 5px;
 }

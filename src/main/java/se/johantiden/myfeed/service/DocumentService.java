@@ -7,7 +7,6 @@ import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,6 +42,10 @@ public class DocumentService {
         return find(document).isPresent();
     }
 
+    public boolean hasDocumentWithUrl(String pageUrl) {
+        return findOneByPageUrl(pageUrl).isPresent();
+    }
+
     private Optional<Document> find(Document document) {
 
         Optional<Document> existing = Optional.empty();
@@ -52,10 +55,14 @@ public class DocumentService {
         }
 
         if (!existing.isPresent()) {
-            existing = documentRepository.findOneByPageUrl(document.getPageUrl());
+            existing = findOneByPageUrl(document.getPageUrl());
         }
 
         return existing;
+    }
+
+    private Optional<Document> findOneByPageUrl(String pageUrl) {
+        return documentRepository.findOneByPageUrl(pageUrl);
     }
 
     public Optional<Document> find(long documentId) {

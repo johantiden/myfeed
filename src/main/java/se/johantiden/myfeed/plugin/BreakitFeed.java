@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 
 public class BreakitFeed extends Feed {
 
-    public static final String URL = "http://www.breakit.se";
+    public static final String URL = "https://www.breakit.se";
     public static final String NAME = "Breakit";
-    public static final String RSS_URL = "http://www.breakit.se/feed/artiklar";
+    public static final String RSS_URL = "https://www.breakit.se/feed/artiklar";
 
     public BreakitFeed() {
         super(NAME, URL, createFeedReader());
