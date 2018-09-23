@@ -3,8 +3,8 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     $scope.documents = [];
     $scope.tabs = {
         'All': () => true,
-        'Nyheter': () => true,
-        'Biz': () => true
+        // 'Nyheter': () => true,
+        // 'Biz': () => true
     };
 
     $scope.$sce = $sce;
@@ -51,9 +51,9 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
         });
     }
 
-    $scope.documents.push({title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "20m"});
-    $scope.documents.push({title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "2d", videos: [], imageUrl: "https://www.svtstatic.se/image-cms/svtse/1537731483/svts/article19410212.svt/alternates/large/ferm-malm-1920-jpg"});
-    $scope.documents.push({tabs:["Nyheter", "Biz"], title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "3d"});
+    // $scope.documents.push({title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "20m"});
+    // $scope.documents.push({title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "2d", videos: [], imageUrl: "https://www.svtstatic.se/image-cms/svtse/1537731483/svts/article19410212.svt/alternates/large/ferm-malm-1920-jpg"});
+    // $scope.documents.push({tabs:["Nyheter", "Biz"], title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "3d"});
 
 
     function batcheroo(list, size) {
