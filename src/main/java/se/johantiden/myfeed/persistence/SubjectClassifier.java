@@ -18,7 +18,7 @@ public class SubjectClassifier {
     public static Set<Subject> getSubjects() {
         subjects.add(ROOT);
 
-        Subject fun = addWithoutExpression("Fun", ROOT);
+        Subject fun = addWithoutExpression("#Fun", ROOT);
         add("xkcd", "xkcd", fun);
 
         Subject reddit = add("Reddit", "reddit\\.com", fun);
@@ -37,7 +37,7 @@ public class SubjectClassifier {
 
         Subject singapore = add("Singapore", "Singapore", news);
 
-        Subject usa = add("USA", "USA|U\\.S\\.", news);
+        Subject usa = add("#USA", "USA|U\\.S\\.", news);
         Subject florida = add("Florida", "Florida", usa);
         Subject arizona = add("Arizona", "Arizona", usa);
         Subject texas = add("Texas", "Texas", usa);
@@ -71,7 +71,10 @@ public class SubjectClassifier {
         Subject talmannen = add("Talmannen", "[Tt]almannen", inrikespolitik);
         add("Andreas Norlén", "Andreas Norlén", talmannen, inrikespolitik);
 
-        add("CSN", "CSN|[Ss]tudiemedel|[Ss]tudielån", sverige);
+        Subject danmark = add("Danmark", "[Dd]anmark|[Dd]ansk|[Dd]enmark|[Dd]anish", news);
+        Subject copenhagen = add("Köpenhamn", "Köpenhamn|Copenhagen", danmark);
+
+        add("Studiemedel", "CSN|[Ss]tudiemedel|[Ss]tudielån", sverige);
 
         Subject tech = addWithoutExpression("Tech", ROOT);
 
@@ -172,9 +175,9 @@ public class SubjectClassifier {
         add("Tsunami", "[Tt]sunami", weather);
         add("Tyfon", "[Tt]yfon|[Tt]yphoon", weather);
 
-        Subject eu = add("EU", "EU|European Union", news);
+        Subject eu = add("#EU", "European Union", news);
 
-        Subject biz = addWithoutExpression("Biz", ROOT);
+        Subject biz = addWithoutExpression("Business", ROOT);
         add("Elon Musk", "Elon Musk", tech, biz);
         add("Tesla", "Tesla", tech, biz);
 
@@ -213,8 +216,9 @@ public class SubjectClassifier {
         addInvisible("klassisk rock", music);
 
 
-        Subject bad = addWithoutExpression("Bad", HIDE_BAD, ROOT);
+        Subject bad = addWithoutExpression("#Bad", HIDE_BAD, ROOT);
         add("SVT::Snabbkollen", "svt.*snabbkollen", bad);
+        add("TheLocal::WordOfTheDay", "thelocal.*word-of-the-day", bad);
 
         Subject celebrities = addWithoutExpression("Kändisar", kultur);
         add("Bono", "U2.*Bono", celebrities);

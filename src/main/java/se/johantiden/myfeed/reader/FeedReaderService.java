@@ -33,14 +33,7 @@ public final class FeedReaderService {
     private static List<Document> getDocuments(Feed feed) {
         FeedReader reader = feed.getFeedReader();
         try {
-            List<Document> documents = reader.readAllAvailable();
-            for (Document document : documents) {
-                if(DocumentPredicates.hasEscapeCharacters().test(document)) {
-                    throw new RuntimeException("Escape characters in document! " + document);
-                }
-            }
-
-            return documents;
+            return reader.readAllAvailable();
         } catch (RuntimeException e) {
             log.error("Failed to read feed {}", feed.getName());
             log.debug("Exception:", e);
