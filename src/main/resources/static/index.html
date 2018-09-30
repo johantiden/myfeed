@@ -19,7 +19,7 @@
         <a href="javascript:void(0);" ng-click="setSearch(undefined)"><img class="logo-img" src="fidn1.png"></a>
 
         <div ng-repeat="subjectLevel in subjectLevels" class="tab-row">
-            <a href="javascript:void(0);" ng-repeat="subject in subjectLevel | filter:{showAsTab:true}" class="tab {{search == subject.name ? 'tab-active' : ''}} {{((documents | filter:withSearch(subject.name) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-if="((documents | filter:withSearch(subject.name) | filter:{read:false}).length) > 2" ng-click="setSearch(subject.name)">
+            <a href="javascript:void(0);" ng-repeat="subject in subjectLevel | filter:{showAsTab:true}" class="tab {{search == subject.name ? 'tab-active' : ''}} {{((documents | filter:withSearch(subject.name) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-if="((documents | filter:withSearch(subject.name) | filter:{read:false}).length) > 3" ng-click="setSearch(subject.name)">
                 <div>
                     {{subject.name}} <span class="number-badge {{((documents | filter:withSearch(subject.name) | filter:{read:false}).length) > 6 ? 'big' : ''}}" ng-if="((documents | filter:withSearch(subject.name) | filter:{read:false}).length) > 0">({{(documents | filter:withSearch(subject.name) | filter:{read:false}).length}})</span>
                 </div>

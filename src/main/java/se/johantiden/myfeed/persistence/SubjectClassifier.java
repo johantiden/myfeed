@@ -19,7 +19,9 @@ public class SubjectClassifier {
         subjects.add(ROOT);
 
         Subject fun = addWithoutExpression("#Fun", ROOT);
-        add("xkcd", "xkcd", fun);
+        Subject comics = addWithoutExpression("Comics", fun);
+        add("xkcd", "xkcd", comics);
+        add("Ernie", "serier/ernie", comics);
 
         Subject reddit = add("Reddit", "reddit\\.com", fun);
         Subject rFunny = add("r/funny", "reddit\\.com/r/funny", reddit);
@@ -27,6 +29,7 @@ public class SubjectClassifier {
 
 
         Subject news = addWithoutExpression("Nyheter", ROOT);
+        Subject meToo = add("#metoo", "#metoo", news);
 
 
         Subject nordkorea = add("Nordkorea", "Nordkorea", news);
@@ -40,6 +43,7 @@ public class SubjectClassifier {
         Subject usa = add("#USA", "USA|U\\.S\\.", news);
         Subject florida = add("Florida", "Florida", usa);
         Subject arizona = add("Arizona", "Arizona", usa);
+        Subject ohio = add("Ohio", "Ohio|Cincinnati", usa);
         Subject texas = add("Texas", "Texas", usa);
 
         Subject mexiko = add("Mexiko", "Mexico|Mexiko", news);
@@ -49,7 +53,7 @@ public class SubjectClassifier {
 
         Subject usaPolitik = add("USA-politik", "USA-politik", news, usa);
         add("Jeff Flake", "Jeff Flake", usaPolitik, arizona);
-        add("Brett Kavanaugh", "Kavanaugh", usaPolitik);
+        add("Brett Kavanaugh", "Kavanaugh", usaPolitik,meToo);
         add("Paul Ryan", "Paul Ryan", usaPolitik);
 
         Subject trump = add("Trump", "Trump", usa);
@@ -64,12 +68,22 @@ public class SubjectClassifier {
         addInvisible("TheLocal", sverige);
         Subject inrikespolitik = add("Inrikespolitik", "Inrikespolitik", sverige);
         addInvisible("[Ss]vensk politik", inrikespolitik);
-        Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik);
+        Subject alliansen = add("Alliansen", "Alliansparti", inrikespolitik);
+        Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik,alliansen);
+        Subject moderaterna = add("Moderatena", "Moderaterna", inrikespolitik, alliansen);
+        add("Ulf Kristersson", "Ulf Kristersson", moderaterna);
         add("Annie Lööf", "Annie Lööf", centerpartiet);
-        Subject sverigedemokraterna = add("Sveriegemokraterna", "Sveriegemokraterna", inrikespolitik);
+        Subject sverigedemokraterna = add("Sverigedemokraterna", "Sverigedemokraterna", inrikespolitik);
         add("Jimmie Åkesson", "Jimmie Åkesson", sverigedemokraterna);
         Subject talmannen = add("Talmannen", "[Tt]almannen", inrikespolitik);
         add("Andreas Norlén", "Andreas Norlén", talmannen, inrikespolitik);
+        addInvisible("[Ll]andsting", inrikespolitik);
+        addInvisible("[Kk]ommuner", inrikespolitik);
+        Subject inrikes = add("Inrikes", "[Ii]nrikes", sverige);
+        addInvisible("[Tt]ågtrafik", inrikes);
+
+
+
 
         Subject danmark = add("Danmark", "[Dd]anmark|[Dd]ansk|[Dd]enmark|[Dd]anish", news);
         Subject copenhagen = add("Köpenhamn", "Köpenhamn|Copenhagen", danmark);
@@ -87,18 +101,26 @@ public class SubjectClassifier {
         addInvisible("[Ff]orskare", science);
         addInvisible("[Ff]orskning", science);
 
-        Subject internet = add("Internet", "Internet", tech);
+        Subject internet = add("Internet", "[Ii]nternet", tech);
         Subject linux = add("Linux", "[Ll]inux", tech);
         addInvisible("Ubuntu", linux);
         Subject ai = add("Artificial Intelligence", "[Aa]rtificial[ \\-][Ii]ntelligence", tech);
         addInvisible("[Rr]obot", ai);
-        addInvisible("[Mm]achine [Ll]earning", ai);
+        Subject machineLearning = add("Machine Learning", "[Mm]achine [Ll]earning", ai);
+        add("Neural Networks", "[Nn]eural [Nn]et", machineLearning);
+        add("Cellular Automata", "[Cc]ellular [Aa]utomata", machineLearning);
+
+        add("Niklas Zennström", "Zennström", tech);
 
         Subject software = add("Software", "[Ss]oftware", tech);
         addInvisible("[Pp]rogramming", software);
         addInvisible("[Pp]rogrammer", software);
-        add("Open Source", "Open Source", software);
+        addInvisible("[Ww]eb [Ff]ramework", software);
+        add("Open Source", "[Oo]pen [Ss]ource", software);
         add("Javascript", "[Jj]avascript|\\.js", software);
+
+        Subject klimat = add("Klimat", "[Kk]limat|[Cc]limate", news);
+
 
         addInvisible("World Wide Web", internet);
         addInvisible("Engadget", tech);
@@ -118,12 +140,23 @@ public class SubjectClassifier {
         add("Mikronesien", "Mikronesien|[Mm]icronesia", news);
 
         add("Bolivia", "Bolivia", news);
+        add("Senegal", "Senegal", news);
+        add("Chile", "Chile", news);
+        add("Italien", "Italien|Italian|Italy", news);
+        add("Kanada", "Canada|Kanada|Kanadens|Canadian", news);
+        add("Nederländerna", "Nederländerna|Netherlands|Dutch|Holland|Holländ", news);
+        add("Tyskland", "German|Tysk", news);
 
-        Subject africa = add("Africa", "Africa", news);
-        Subject egypt = add("Egypt", "Egypt", africa);
-        Subject kenya = add("Kenya", "Kenya", africa);
+
+        add("Pope Francis", "[Pp]ope.*Francis", news);
+
+        Subject afrika = add("Afrika", "Afrika|Africa", news);
+        Subject egypt = add("Egypt", "Egypt", afrika);
+        add("Botswana", "Botswana", news, afrika);
+        Subject kenya = add("Kenya", "Kenya", afrika);
         add("Nairobi", "Nairobi", kenya);
         Subject turkiet = add("Turkiet", "Turkiet", news);
+        add("Erdogan", "Erdogan", turkiet);
         Subject maldives = add("Maldives", "Maldives", news);
         addInvisible("Turkey", turkiet);
         Subject grekland = add("Grekland", "Grekland", news);
@@ -140,7 +173,7 @@ public class SubjectClassifier {
 
         add("Malta", "Malta|Maltese", news);
 
-        Subject afganistan = add("Afghanistan", "Afghanistan|Afganistan", news);
+        Subject afganistan = add("Afghanistan", "Afghan|Afgan", news);
 
         Subject ryssland = add("Ryssland", "Russia|Ryssland|[Rr]ysk", news);
         add("Vladimir Putin", "Putin", ryssland);
@@ -148,9 +181,13 @@ public class SubjectClassifier {
 
         add("Amnesty", "Amnesty", news);
         add("Influenza", "Influenza", science);
+        add("Leukemi", "[Ll]eukemi", science);
+        add("Ultraljud", "[Uu]ltrasound", science);
 
-        Subject nobelpriset = add("Nobelpriset", "[Nn]obelpriset", news);
+        Subject nobelpriset = add("Nobelpriset", "[Nn]obelpriset", sverige);
         addInvisible("[Nn]obel pri", nobelpriset);
+        Subject svenskaAkademien = add("Svenska Akademien", "Svenska Akademien", nobelpriset, sverige);
+        add("Jean-Claude Arnault", "Jean-Claude Arnault", svenskaAkademien, meToo);
 
         Subject ukraina = add("Ukraina", "Ukrain", news);
         Subject qatar = add("Qatar", "Qatar", news);
@@ -176,6 +213,7 @@ public class SubjectClassifier {
         add("Tyfon", "[Tt]yfon|[Tt]yphoon", weather);
 
         Subject eu = add("#EU", "European Union", news);
+        Subject europa = add("Europa", "[Ee]urope", news);
 
         Subject biz = addWithoutExpression("Business", ROOT);
         add("Elon Musk", "Elon Musk", tech, biz);
@@ -205,6 +243,8 @@ public class SubjectClassifier {
         Subject sport = addWithoutExpression("Sport", HIDE_SPORT, ROOT);
         Subject hockey = add("Hockey", "[Hh]ockey", sport);
         Subject fotboll = add("Fotboll", "[Ff]otboll", sport);
+        Subject golf = add("Golf", "[Gg]olftävling|Ryder Cup|Henrik Stenson", sport);
+        add("Tiger Woods", "Tiger Woods", golf);
         add("Grand slam", "[Gg]rand slam", sport);
         add("OS-guld", "OS\\-guld", sport);
         addInvisible("VM\\-titel", sport);
@@ -219,6 +259,7 @@ public class SubjectClassifier {
         Subject bad = addWithoutExpression("#Bad", HIDE_BAD, ROOT);
         add("SVT::Snabbkollen", "svt.*snabbkollen", bad);
         add("TheLocal::WordOfTheDay", "thelocal.*word-of-the-day", bad);
+        add("Show HN", "Show HN", bad);
 
         Subject celebrities = addWithoutExpression("Kändisar", kultur);
         add("Bono", "U2.*Bono", celebrities);
