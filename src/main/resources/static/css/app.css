@@ -29,6 +29,10 @@ div.nav-left > input {
     /*background-color: blue;*/
     border-bottom: 1px solid black;
 }
+.tab.big > div {
+    /*background-color: blue;*/
+    border-bottom: 1px solid black;
+}
 
 .card.bad {
     /*background-color: #400000;*/
@@ -37,6 +41,11 @@ div.nav-left > input {
 .logo-img {
     height: 65px;
     vertical-align: top;
+}
+
+.number-badge.big {
+    background-color: #DDDDDD;
+    font-weight: bold;
 }
 
 .logo-img, nav, nav > div > a {
@@ -79,7 +88,7 @@ div.subtitle {
 }
 
 .image-box {
-    width: calc(100% - 9px);
+    width: 500px;
 }
 .image-box > a > img {
     max-width:100%;

@@ -18,16 +18,11 @@ public class DocumentPredicates {
         return d -> d.text != null && d.text.toLowerCase().contains(string2) ||
                     d.title != null && d.title.toLowerCase().contains(string2) ||
                     d.getPageUrl() != null && d.getPageUrl().toLowerCase().contains(string2) ||
-                    d.getSubjects().stream().anyMatch(s -> s.getName().toLowerCase().contains(string2)) ||
-                    d.getSourceCategories().stream().anyMatch(s -> s.toLowerCase().contains(string2));
+                    d.getSubjects().stream().anyMatch(s -> s.getName().toLowerCase().contains(string2));
     }
 
     public static Predicate<Document> anyCategoryEquals(String... strings) {
         return d -> Arrays.stream(strings).anyMatch(s -> anyCategoryEquals(s).test(d));
-    }
-
-    public static Predicate<Document> anyCategoryEquals(String string) {
-        return d -> d.getSourceCategories().stream().anyMatch(s -> s.equalsIgnoreCase(string));
     }
 
     public static Predicate<Document> isFromFeed(String feedName) {
@@ -46,10 +41,8 @@ public class DocumentPredicates {
             String megaConcat =
                     ifPresent(d.getFeedName()) +
                     "subjects:" + d.getSubjects() + " " +
-                    "sourceCategories:" + d.getSourceCategories() + " " +
                     ifPresent(d.title) +
                     ifPresent(d.text) +
-                    ifPresent(d.html) +
                     ifPresent(d.getPageUrl()) +
                     ifPresent(d.getFeedUrl());
 

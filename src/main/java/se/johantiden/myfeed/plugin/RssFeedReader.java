@@ -70,12 +70,11 @@ public class RssFeedReader implements FeedReader {
 
         return Lists.transform(entries, e -> {
             String title = unescape(e.getTitle());
-            String link = e.getLink();
+            String pageUrl = e.getLink();
             String imageUrl = getImageUrl(e);
             String authorName = e.getAuthor();
             String authorUrl = getAuthorUrl(e);
             Instant publishedDate = getDate(e);
-            Set<String> categories = getCategories(e);
             String descriptionHtml = getDescription(e);
             String contentHtml = getContentHtml(e);
             String text = descriptionHtml == null ? null : html2text(descriptionHtml);
@@ -89,7 +88,7 @@ public class RssFeedReader implements FeedReader {
 
             NameAndUrl author = new NameAndUrl(authorName, authorUrl);
 
-            Document document = new Document(title, text, author, link, imageUrl, publishedDate, html, categories, feedName, feedUrl);
+            Document document = createDocument(title, pageUrl, imageUrl, publishedDate, text, html, author, feedName, feedUrl);
 
             if(DocumentPredicates.hasEscapeCharacters().test(document)) {
                 throw new RuntimeException("Escape characters!");
@@ -98,11 +97,10 @@ public class RssFeedReader implements FeedReader {
         });
     }
 
-    private static Set<String> getCategories(SyndEntry e) {
-        return e.getCategories().stream()
-               .map(c -> unescape(c.getName()))
-               .collect(Collectors.toSet());
+    protected Document createDocument(String title, String pageUrl, String imageUrl, Instant publishedDate, String text, String html, NameAndUrl author, String feedName, String feedUrl) {
+        return new Document(title, text, author, pageUrl, imageUrl, publishedDate, feedName, feedUrl);
     }
+
 
     private static String unescape(String string) {
         String unescaped = string.replaceAll("&#38;", "&");

@@ -19,9 +19,9 @@
         <a href="javascript:void(0);" ng-click="setSearch(undefined)"><img class="logo-img" src="fidn1.png"></a>
 
         <div ng-repeat="subjectLevel in subjectLevels" class="tab-row">
-            <a href="javascript:void(0);" ng-repeat="(subjectName,_) in subjectLevel" class="tab {{search == subjectName ? 'tab-active' : ''}} {{((documents | filter:withSearch(subjectName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="setSearch(subjectName)">
+            <a href="javascript:void(0);" ng-repeat="subject in subjectLevel | filter:{showAsTab:true}" class="tab {{search == subject.name ? 'tab-active' : ''}} {{((documents | filter:withSearch(subject.name) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-if="((documents | filter:withSearch(subject.name) | filter:{read:false}).length) > 2" ng-click="setSearch(subject.name)">
                 <div>
-                    {{subjectName}} <span class="number-badge" ng-if="((documents | filter:withSearch(subjectName) | filter:{read:false}).length) > 0">({{(documents | filter:withSearch(subjectName) | filter:{read:false}).length}})</span>
+                    {{subject.name}} <span class="number-badge {{((documents | filter:withSearch(subject.name) | filter:{read:false}).length) > 6 ? 'big' : ''}}" ng-if="((documents | filter:withSearch(subject.name) | filter:{read:false}).length) > 0">({{(documents | filter:withSearch(subject.name) | filter:{read:false}).length}})</span>
                 </div>
             </a>
         </div>
@@ -72,10 +72,8 @@
             </video>
         </a>
 
-        <div class="text margin-left-right" ng-if="document.text && !document.html">{{document.text}}</div>
+        <div class="text margin-left-right" ng-if="document.text">{{document.text}}</div>
 
-
-        <span class="htmlContent margin-left-right" ng-if="document.html" ng-bind-html="$sce.trustAsHtml(document.html)"></span>
         <div class="image-box margin-left-right" ng-if="document.imageUrl && document.videos.length == 0">
             <a href="{{document.pageUrl}}">
                 <img class="image-box-image" src="{{document.imageUrl}}" />

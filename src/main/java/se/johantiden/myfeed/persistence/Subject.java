@@ -21,6 +21,7 @@ public class Subject extends BaseEntity<Subject> {
     private final String expression;
     private boolean hideDocument;
     private final boolean isHashTag;
+    private final boolean showAsTab;
 
     // only root!
     private Subject(String all) {
@@ -28,9 +29,11 @@ public class Subject extends BaseEntity<Subject> {
         this.name = all;
         this.expression = null;
         isHashTag = false;
+        showAsTab = true;
     }
 
-    public Subject(List<Subject> parents, String name, @Nullable String expression, boolean hideDocument, boolean isHashTag) {
+    public Subject(List<Subject> parents, String name, @Nullable String expression, boolean hideDocument, boolean isHashTag, boolean showAsTab) {
+        this.showAsTab = showAsTab;
         Objects.requireNonNull(parents);
         this.parents = ImmutableList.copyOf(parents);
         if (parents.isEmpty()) {
@@ -107,6 +110,9 @@ public class Subject extends BaseEntity<Subject> {
     }
 
     public int getMinDepth() {
+        if (parents.isEmpty()) {
+            return 0;
+        }
         return 1 + parents.stream()
                 .mapToInt(Subject::getMinDepth)
                 .min()
@@ -119,5 +125,9 @@ public class Subject extends BaseEntity<Subject> {
 
     public boolean isHashTag() {
         return isHashTag;
+    }
+
+    public boolean isShowAsTab() {
+        return showAsTab;
     }
 }

@@ -5,8 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import se.johantiden.myfeed.classification.DocumentMatcher;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.SubjectService;
@@ -15,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
 
 @Component
 public class SubjectClassifierJob {
@@ -27,27 +24,6 @@ public class SubjectClassifierJob {
     public SubjectClassifierJob(DocumentService documentService, SubjectService subjectService) {
         this.documentService = Objects.requireNonNull(documentService);
         this.subjectService = Objects.requireNonNull(subjectService);
-    }
-
-    public static void appendUrlFoldersAsCategories(Document document) {
-
-        DocumentMatcher m = new DocumentMatcher(document);
-
-        if (!m.isFromFeed("HackerNews")) {
-            List<String> folders = parseUrlFolders(document.getPageUrl()).stream()
-                                   .filter(SubjectClassifierJob::urlFilter)
-                                   .collect(Collectors.toList());
-
-            folders.stream()
-                .filter(f -> !m.anyCategoryEquals(f))
-                .filter(f -> !f.equals("artikel"))
-                .filter(f -> !f.equals("comments"))
-                .filter(f -> !f.equals("worldNews"))
-                .filter(f -> !f.equals("Reuters"))
-                .filter(f -> !f.equals("story"))
-                .map(StringUtils::capitalize)
-                .forEach(document.getSourceCategories()::add);
-        }
     }
 
     private static List<String> parseUrlFolders(String pageUrl) {
@@ -77,10 +53,6 @@ public class SubjectClassifierJob {
 
     private void tryPop() {
         Set<Document> documents = documentService.findDocumentsNotParsedSubjects();
-
-        documents.forEach(d -> {
-            appendUrlFoldersAsCategories(d);
-            subjectService.parseSubjectsFor(d);
-        });
+        documents.forEach(subjectService::parseSubjectsFor);
     }
 }

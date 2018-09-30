@@ -27,13 +27,7 @@ public class SlashdotFeed extends Feed {
 
 
     private static Function<Document, Document> createEntryMapper() {
-        return entry -> {
-            entry.html = prune(entry.html);
-            if(entry.html.toLowerCase().contains("google-analytics")) {
-                throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
-            }
-            return entry;
-        };
+        return entry -> entry;
     }
 
     public static String prune(String html) {

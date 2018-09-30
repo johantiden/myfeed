@@ -1,7 +1,9 @@
 app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window, documentService) { // jshint ignore:line
     "use strict";
     $scope.documents = [];
-    $scope.subjectLevels = [];
+    $scope.subjectLevels = [
+       /* [{name: 'All', showAsTab: true}]*/
+    ];
 
     $scope.$sce = $sce;
     $scope.$location = $location;
@@ -23,7 +25,7 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
             return;
         }
 
-        let keyBatches = batcheroo(keys, 1000);
+        let keyBatches = batcheroo(keys, 10);
 
         function getDocumentsSlowly() {
             if (keyBatches.length > 0) {
@@ -43,13 +45,20 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
             documents.forEach(document => {
                 document.subjects.forEach(subject => {
                     if ($scope.subjectLevels[subject.depth] === undefined) {
-                        $scope.subjectLevels[subject.depth] = {};
+                        $scope.subjectLevels[subject.depth] = [];
                     }
-                    $scope.subjectLevels[subject.depth][subject.name] = subject;
+                    addIfNew($scope.subjectLevels[subject.depth], subject, s => s.name === subject.name);
                 });
                 $scope.documents.push(document);
             });
         });
+    }
+
+    function addIfNew(list, item, predicate) {
+        let contains = list.some(predicate);
+        if (!contains) {
+            list.push(item);
+        }
     }
 
     // $scope.documents.push({title: "title", text:"lorem ipsum dolor", subjects:['asd'], read:false, publishedDateShort: "20m"});
@@ -101,6 +110,9 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     }
 
     $scope.$watch('search', function(newValue) {
+        if (newValue === 'All') {
+            $scope.search = undefined;
+        }
         $cookies.put('search', newValue);
     });
 
