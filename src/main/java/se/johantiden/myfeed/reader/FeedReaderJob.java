@@ -2,7 +2,6 @@ package se.johantiden.myfeed.reader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,6 +13,7 @@ import se.johantiden.myfeed.settings.GlobalSettings;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,10 +22,13 @@ public class FeedReaderJob {
 
     private static final Logger log = LoggerFactory.getLogger(FeedReaderJob.class);
 
-    @Autowired
-    private FeedService feedService;
-    @Autowired
-    private DocumentService documentService;
+    private final FeedService feedService;
+    private final DocumentService documentService;
+
+    public FeedReaderJob(FeedService feedService, DocumentService documentService) {
+        this.feedService = Objects.requireNonNull(feedService);
+        this.documentService = Objects.requireNonNull(documentService);
+    }
 
     @Scheduled(fixedRate = GlobalSettings.FEED_READER_INTERVAL)
     public void myRunnable() {

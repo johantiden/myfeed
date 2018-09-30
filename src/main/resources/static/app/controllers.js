@@ -1,11 +1,7 @@
 app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window, documentService) { // jshint ignore:line
     "use strict";
     $scope.documents = [];
-    $scope.tabs = {
-        'All': () => true,
-        // 'Nyheter': () => true,
-        // 'Biz': () => true
-    };
+    $scope.subjectLevels = [];
 
     $scope.$sce = $sce;
     $scope.$location = $location;
@@ -30,10 +26,12 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
         let keyBatches = batcheroo(keys, 1000);
 
         function getDocumentsSlowly() {
-            getDocumentz(keyBatches[0]);
             if (keyBatches.length > 0) {
+                getDocumentz(keyBatches[0]);
                 keyBatches = keyBatches.splice(1);
-                setTimeout(getDocumentsSlowly, 100);
+                if (keyBatches.length > 0) {
+                    setTimeout(getDocumentsSlowly, 100);
+                }
             }
         }
         getDocumentsSlowly();
@@ -43,8 +41,11 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     function getDocumentz(keys) {
         documentService.getDocuments(keys, documents => {
             documents.forEach(document => {
-                document.tabs.forEach(tab => {
-                    $scope.tabs[tab] = documentTabPredicate(tab);
+                document.subjects.forEach(subject => {
+                    if ($scope.subjectLevels[subject.depth] === undefined) {
+                        $scope.subjectLevels[subject.depth] = {};
+                    }
+                    $scope.subjectLevels[subject.depth][subject.name] = subject;
                 });
                 $scope.documents.push(document);
             });
@@ -64,37 +65,25 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
         return lists;
     }
 
-
-    $scope.tab = {};
-
     $scope.markFilteredAsRead = function() {
         if (confirm("Are you sure you want to mark all visible documents as read?")) { // jshint ignore:line
             $scope.documents.forEach(document => {
-                if ($scope.tabOrSearchFilter(document)) {
+                if ($scope.searchFilter(document)) {
                     $scope.setDocumentRead(document, true);
                 }
             });
         }
     };
 
-    let documentTabPredicate = function (tab) {
-        return doc => doc.tabs.some(t => t === tab);
-    };
-
-    $scope.selectTab = function(tabName) {
-        $scope.selectedTabName = tabName;
-    };
-
     $scope.setSearch = function(query) {
         $scope.search = query;
     };
 
-    $scope.tabOrSearchFilter = function(document) {
+    $scope.searchFilter = function(document) {
         if ($scope.search) {
             return match($scope.search, document);
         }
-
-        return $scope.tabs[$scope.selectedTabName](document);
+        return true;
     };
 
     function match(query, document) {
@@ -109,37 +98,14 @@ app.controller('indexCtrl', function($scope, $location, $sce, $cookies, $window,
     let q = getParameterByName('q');
     if (q !== undefined && q !== null && q.length > 0) {
         $scope.search = q;
-    } else {
-        $scope.selectedTabName = $cookies.get('selectedTabName');
-        if ($scope.selectedTabName === undefined && $scope.search === undefined) {
-            $scope.selectedTabName = 'All';
-        }
     }
 
-    $scope.$watch('selectedTabName', function(newValue) {
-        if (newValue) {
-            $scope.search = undefined;
-        }
-        $cookies.put('selectedTabName', newValue);
-    });
-
     $scope.$watch('search', function(newValue) {
-        if (newValue) {
-            if (newValue.length > 0) {
-                $scope.selectedTabName = undefined;
-            } else {
-                $scope.selectedTabName = 'All';
-            }
-        } else if (newValue !== undefined && newValue.length === 0) {
-            $scope.selectedTabName = 'All';
-        }
         $cookies.put('search', newValue);
     });
 
-    $scope.withTab = function(tabName) {
-        return function(document) {
-            return $scope.tabs[tabName](document);
-        };
+    $scope.withSearch = function(query) {
+        return document => match(query, document);
     };
 });
 

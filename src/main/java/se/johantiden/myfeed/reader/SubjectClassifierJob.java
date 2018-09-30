@@ -1,18 +1,19 @@
 package se.johantiden.myfeed.reader;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import se.johantiden.myfeed.classification.DocumentMatcher;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.SubjectService;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
@@ -20,10 +21,13 @@ import java.util.stream.Collectors;
 public class SubjectClassifierJob {
 
     private static final Logger log = LoggerFactory.getLogger(SubjectClassifierJob.class);
-    @Autowired
-    private DocumentService documentService;
-    @Autowired
-    private SubjectService subjectService;
+    private final DocumentService documentService;
+    private final SubjectService subjectService;
+
+    public SubjectClassifierJob(DocumentService documentService, SubjectService subjectService) {
+        this.documentService = Objects.requireNonNull(documentService);
+        this.subjectService = Objects.requireNonNull(subjectService);
+    }
 
     public static void appendUrlFoldersAsCategories(Document document) {
 
@@ -72,7 +76,7 @@ public class SubjectClassifierJob {
     }
 
     private void tryPop() {
-        List<Document> documents = documentService.findDocumentsNotParsedSubjects();
+        Set<Document> documents = documentService.findDocumentsNotParsedSubjects();
 
         documents.forEach(d -> {
             appendUrlFoldersAsCategories(d);

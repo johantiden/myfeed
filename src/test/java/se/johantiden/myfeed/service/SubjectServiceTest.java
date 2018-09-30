@@ -1,8 +1,9 @@
 package se.johantiden.myfeed.service;
 
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import se.johantiden.myfeed.persistence.Document;
-import se.johantiden.myfeed.persistence.SubjectRule;
+import se.johantiden.myfeed.persistence.Subject;
 
 import java.util.HashSet;
 
@@ -15,7 +16,7 @@ public class SubjectServiceTest {
     @Test
     public void testName() throws Exception {
 
-        SubjectRule s = new SubjectRule("A", "A");
+        Subject s = new Subject(Lists.newArrayList(Subject.ROOT), "A", "A", false, false);
 
 
         Document d = new Document("A", "", null, "foo", null, null, null, new HashSet<>(), null, null);

@@ -2,10 +2,9 @@ package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.plugin.AlJazeeraFeed;
 import se.johantiden.myfeed.plugin.BreakitFeed;
-import se.johantiden.myfeed.plugin.DagensIndustriFeed;
 import se.johantiden.myfeed.plugin.EngadgetFeed;
-import se.johantiden.myfeed.plugin.LosAngelesTimesWorldFeed;
 import se.johantiden.myfeed.plugin.NewYorkTimesWorldFeed;
+import se.johantiden.myfeed.plugin.OmniFeed;
 import se.johantiden.myfeed.plugin.ReutersFeed;
 import se.johantiden.myfeed.plugin.DagensNyheterFeed;
 import se.johantiden.myfeed.plugin.HackerNewsFeed;
@@ -15,6 +14,7 @@ import se.johantiden.myfeed.plugin.SlashdotFeed;
 import se.johantiden.myfeed.plugin.SvenskaDagbladetFeed;
 import se.johantiden.myfeed.plugin.SVTNyheterFeed;
 import se.johantiden.myfeed.plugin.WashingtonPostFeed;
+import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 
 import java.time.Duration;
@@ -29,10 +29,12 @@ public class FeedPopulator {
     public static final int REDDIT_MIN_SCORE = 20000;
     public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(10);
 
-    private FeedService feedService;
+    private final FeedService feedService;
+    private final DocumentService documentService;
 
-    public FeedPopulator(FeedService feedService) {
+    public FeedPopulator(FeedService feedService, DocumentService documentService) {
         this.feedService = Objects.requireNonNull(feedService);
+        this.documentService = Objects.requireNonNull(documentService);
         allFeedsHack();
     }
 
@@ -49,6 +51,7 @@ public class FeedPopulator {
         feeds.add(new BreakitFeed());
         feeds.add(new AlJazeeraFeed());
         feeds.add(new EngadgetFeed());
+        feeds.add(new OmniFeed(documentService));
 //        feeds.add(new DagensIndustriFeed());
 
         feeds.add(createRss(

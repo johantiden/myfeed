@@ -2,40 +2,32 @@ package se.johantiden.myfeed.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
 public class DocumentService {
 
     private static final Logger log = LoggerFactory.getLogger(DocumentService.class);
-    @Autowired
-    private DocumentRepository documentRepository;
+
+    private final DocumentRepository documentRepository;
+
+    public DocumentService(DocumentRepository documentRepository) {
+        this.documentRepository = Objects.requireNonNull(documentRepository);
+    }
 
     public void put(Iterable<Document> documents) {
         documents.forEach(this::put);
     }
 
     public Document put(Document document) {
-        if (document.getId() == null) {
-            Optional<Document> existing = find(document);
-            if (existing.isPresent()) {
-                return merge(existing.get(), document);
-            } else {
-                log.info("Creating new document {}", document);
-            }
+        if (!document.hasId()) {
+            log.info("Creating new document {}", document);
         }
         return documentRepository.save(document);
-    }
-
-    private Document merge(Document existing, Document newDocument) {
-        existing.setScore(newDocument.getScore());
-        Document saved = documentRepository.save(existing);
-        return saved;
     }
 
     public boolean hasDocument(Document document) {
@@ -50,7 +42,7 @@ public class DocumentService {
 
         Optional<Document> existing = Optional.empty();
 
-        if (document.getId() != null) {
+        if (!document.hasId()) {
             existing = Optional.ofNullable(documentRepository.findOne(document.getId()));
         }
 
@@ -69,25 +61,13 @@ public class DocumentService {
         return Optional.ofNullable(documentRepository.findOne(documentId));
     }
 
-    public List<Document> findDocumentsNotParsedSubjects() {
+    public Set<Document> findDocumentsNotParsedSubjects() {
         return documentRepository.findDocumentsNotParsedSubjects();
-    }
-
-    public List<Document> findDocumentsNotParsedTabs() {
-        return documentRepository.findDocumentsNotParsedTabs();
     }
 
     public void invalidateSubjects() {
         documentRepository.findAll().forEach(d -> {
             d.setSubjectsParsed(false);
-            d.setTabsParsed(false);
-            this.put(d);
-        });
-    }
-
-    public void invalidateTabs() {
-        documentRepository.findAll().forEach(d -> {
-            d.setTabsParsed(false);
             this.put(d);
         });
     }

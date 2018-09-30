@@ -2,7 +2,6 @@ package se.johantiden.myfeed.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,7 @@ import se.johantiden.myfeed.util.JPredicates;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,10 +25,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class IndexController {
 
     private static final Logger log = LoggerFactory.getLogger(IndexController.class);
-    private static final boolean REMOVE_BAD = true;
-    private static final boolean REMOVE_SPORT = true;
-    @Autowired
-    private DocumentService documentService;
+
+    private final DocumentService documentService;
+
+    public IndexController(DocumentService documentService) {this.documentService = Objects.requireNonNull(documentService);}
 
     @RequestMapping(value = "/rest/index", method = GET)
     public Collection<Long> index() {
@@ -55,7 +55,7 @@ public class IndexController {
     private Optional<DocumentBean> tryFindDocument(Long documentId) {
         Optional<Document> documentOptional = documentService.find(documentId);
 
-        return documentOptional.filter(JPredicates.not(Document::isHidden)).map(DocumentBean::new);
+        return documentOptional.filter(JPredicates.not(Document::isHidden)).map(document -> new DocumentBean(document));
     }
 
     @RequestMapping(value = "/rest/documents", method = GET)

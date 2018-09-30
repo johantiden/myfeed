@@ -1,19 +1,27 @@
 package se.johantiden.myfeed.persistence;
 
-import org.springframework.data.repository.CrudRepository;
 
-import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
-@Transactional
-public interface DocumentRepository extends CrudRepository<Document, Long> {
-    List<Document> findDocumentsNotParsedSubjects();
-    List<Document> findDocumentsNotParsedTabs();
-    Optional<Document> findOneByPageUrl(String pageUrl);
+public class DocumentRepository extends BaseRepository<Document> {
 
-    Set<Long> getReadyDocumentIds();
-    Set<Document> findAllRead();
+    public Set<Document> findDocumentsNotParsedSubjects() {
+        return find((Predicate<Document>)  d -> !d.isSubjectsParsed());
+    }
 
+    public Optional<Document> findOneByPageUrl(String pageUrl) {
+        return tryFindOne(d -> d.getPageUrl().equals(pageUrl));
+    }
+
+    public Set<Long> getReadyDocumentIds() {
+        return find(Document::getId, d -> !d.isRead(),
+                Document::isSubjectsParsed
+        );
+    }
+
+    public Set<Document> findAllRead() {
+        return find((Predicate<Document>) Document::isRead);
+    }
 }
