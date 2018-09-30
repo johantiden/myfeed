@@ -18,6 +18,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.jsoup.parser.TokenQueue.unescape;
+
 public class OmniFeed extends Feed {
 
     public static final String HTTPS_WWW_OMNI_SE = "https://www.omni.se";
@@ -75,6 +77,7 @@ public class OmniFeed extends Feed {
             Elements textDoms = parse.select(".resource.resource--text");
             Element textDom = textDoms.get(0);
             String textHtml = textDom.html();
+            String text = html2text(textHtml);
 
             Elements imageDoms = parse.select("img.resource-img");
             Element imageDom = imageDoms.get(0);
@@ -84,13 +87,11 @@ public class OmniFeed extends Feed {
 
             Document document = new Document(
                     title,
-                    null,
+                    text,
                     null,
                     pageUrl,
                     imageUrl,
                     published,
-                    textHtml,
-                    new HashSet<>(),
                     "Omni",
                     HTTPS_WWW_OMNI_SE
             );
@@ -99,5 +100,9 @@ public class OmniFeed extends Feed {
             log.error("Could not parse omni article", e);
             return null;
         }
+    }
+
+    public static String html2text(String html) {
+        return unescape(Jsoup.parse(html).text());
     }
 }

@@ -48,7 +48,7 @@ public class RedditFeed extends Feed {
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
             org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(document.getPageUrl());
-            parseStuffz(document);
+            parseStuffz(jsoupDocument, document);
             if (!isNSFW(jsoupDocument)) {
                 document.score = findVotes(jsoupDocument);
             }
@@ -57,17 +57,15 @@ public class RedditFeed extends Feed {
         };
     }
 
-    private static void parseStuffz(Document document) {
-        org.jsoup.nodes.Document rssDocument = Jsoup.parse(document.html);
-        document.html = null;
-        Elements imgs = rssDocument.select("img");
+    private static void parseStuffz(org.jsoup.nodes.Document webDocument, Document document) {
+        Elements imgs = webDocument.select("img");
         if(!imgs.isEmpty()) {
             Element img = imgs.get(0);
             String imgSrc = img.attr("src");
             document.imageUrl = imgSrc;
         }
 
-        Elements linkLinks = rssDocument.select("td > span > a");
+        Elements linkLinks = webDocument.select("td > span > a");
 
         if(linkLinks.size() == 2) {
             Element link = linkLinks.get(0);
@@ -94,9 +92,10 @@ public class RedditFeed extends Feed {
                 document.imageUrl = "https://i.giphy.com/" + id + ".gif";
             }
             if(linkHref.contains("https://youtu.be/")) {
-                String id = linkHref.split("/")[3]; //yECd_Sz_zJ8
-                document.imageUrl = null;
-                document.html = "<iframe class=\"image-box\" src=\"https://www.youtube.com/embed/" + id + "?ecver=1?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>";
+                throw new RuntimeException("Not supported");
+//                String id = linkHref.split("/")[3]; //yECd_Sz_zJ8
+//                document.imageUrl = null;
+//                document.html = "<iframe class=\"image-box\" src=\"https://www.youtube.com/embed/" + id + "?ecver=1?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>";
             }
             if(linkHref.contains("i.redd.it") || linkHref.contains("imgur")) {
                 if(linkHref.endsWith("jpg") || linkHref.endsWith("png")) {

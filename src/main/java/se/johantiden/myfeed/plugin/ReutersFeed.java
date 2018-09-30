@@ -34,11 +34,6 @@ public class ReutersFeed extends Feed {
 
     private static Function<Document, Document> createEntryMapper() {
         return document -> {
-            document.html = prune(document.html);
-            if(document.html.toLowerCase().contains("google-analytics")) {
-                throw new IllegalArgumentException("Google? Maybe there is a google analytics link?");
-            }
-
             document.imageUrl = findImage(document);
             return document;
         };

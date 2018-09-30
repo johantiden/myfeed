@@ -18,7 +18,6 @@ public class Document extends BaseEntity<Document> {
     private final String pageUrl;
     public String imageUrl;
     public final Instant publishedDate;
-    public String html;
     public Double score;
     public boolean isPaywalled;
     public ArrayList<Video> videos = new ArrayList<>();
@@ -26,7 +25,6 @@ public class Document extends BaseEntity<Document> {
     private final ArrayList<Subject> subjects;
     private final String feedName;
     private final String feedUrl;
-    private final ArrayList<String> sourceCategories;
     private boolean hidden;
     private boolean read;
 
@@ -37,8 +35,6 @@ public class Document extends BaseEntity<Document> {
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
-            String html,
-            Set<String> sourceCategories,
             String feedName,
             String feedUrl) {
 
@@ -48,11 +44,9 @@ public class Document extends BaseEntity<Document> {
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
-        this.html = html;
         this.subjects = new ArrayList<>();
         this.feedName = feedName;
         this.feedUrl = feedUrl;
-        this.sourceCategories = Lists.newArrayList(sourceCategories);
     }
 
     public static String dateToShortString(Instant instant) {
@@ -88,10 +82,6 @@ public class Document extends BaseEntity<Document> {
 
     public void setSubjectsParsed(boolean subjectsParsed) {
         this.subjectsParsed = subjectsParsed;
-    }
-
-    public List<String> getSourceCategories() {
-        return sourceCategories;
     }
 
     public String getPublishedShortString() {

@@ -25,14 +25,11 @@ public class DocumentBean {
     public final String pageUrl;
     public final String imageUrl;
     public final Instant publishedDate;
-    public final String html;
     public final boolean read;
     public final List<Video> videos;
     public final List<SubjectBean> subjects;
 
     public DocumentBean(Document document) {
-        verifyHtml(document.html, document.getFeedName());
-
         this.feed = new NameAndUrl(document.getFeedName(), document.getFeedUrl());
         this.title = document.title;
         this.text = document.text;
@@ -40,7 +37,6 @@ public class DocumentBean {
         this.pageUrl = document.getPageUrl();
         this.imageUrl = document.imageUrl;
         this.publishedDate = document.publishedDate;
-        this.html = document.html;
         this.read = document.isRead();
         this.score = document.score;
         this.documentId = document.getId();
@@ -58,29 +54,8 @@ public class DocumentBean {
         return new SubjectBean(
                 subject.getName(),
                 subject.isHashTag(),
+                subject.isShowAsTab(),
                 subject.getMinDepth());
-    }
-
-    private void verifyHtml(String html, String feedName) {
-        if (html == null) {
-            return;
-        }
-
-        if (feedName.contains("xkcd")) {
-            return;
-        }
-
-        if (html.contains("<img") || html.contains("< img")) {
-            throw new RuntimeException("No images allowed!");
-        }
-        if (html.contains("<script") || html.contains("< script")) {
-            throw new RuntimeException("No script allowed!");
-        }
-
-        if (html.contains("twitter_icon_large.png") || html.contains("facebook_icon_large.png") || html.contains("plus.google.com")) {
-            throw new RuntimeException("Ping images detected!");
-        }
-
     }
 
     public final String getTitle() {
@@ -89,10 +64,6 @@ public class DocumentBean {
 
     public final String getText() {
         return text;
-    }
-
-    public final String getHtml() {
-        return html;
     }
 
     public final String getPageUrl() {
@@ -178,7 +149,6 @@ public class DocumentBean {
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +
-                ", html='" + html + '\'' +
                 ", read=" + read +
                 ", videos=" + videos +
                 '}';
@@ -186,12 +156,14 @@ public class DocumentBean {
 
     private class SubjectBean {
         final boolean hashTag;
+        final boolean showAsTab;
         final String name;
         final int depth;
 
-        private SubjectBean(String name, boolean hashTag, int depth) {
+        private SubjectBean(String name, boolean hashTag, boolean showAsTab, int depth) {
             this.name = name;
             this.hashTag = hashTag;
+            this.showAsTab = showAsTab;
             this.depth = depth;
         }
 
@@ -201,6 +173,10 @@ public class DocumentBean {
 
         public boolean isHashTag() {
             return hashTag;
+        }
+
+        public boolean isShowAsTab() {
+            return showAsTab;
         }
 
         public int getDepth() {

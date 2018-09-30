@@ -1,7 +1,6 @@
 package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.plugin.AlJazeeraFeed;
-import se.johantiden.myfeed.plugin.BreakitFeed;
 import se.johantiden.myfeed.plugin.EngadgetFeed;
 import se.johantiden.myfeed.plugin.NewYorkTimesWorldFeed;
 import se.johantiden.myfeed.plugin.OmniFeed;
@@ -14,6 +13,7 @@ import se.johantiden.myfeed.plugin.SlashdotFeed;
 import se.johantiden.myfeed.plugin.SvenskaDagbladetFeed;
 import se.johantiden.myfeed.plugin.SVTNyheterFeed;
 import se.johantiden.myfeed.plugin.WashingtonPostFeed;
+import se.johantiden.myfeed.plugin.XkcdFeed;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 
@@ -48,26 +48,19 @@ public class FeedPopulator {
         feeds.add(new SvenskaDagbladetFeed());
         feeds.add(new DagensNyheterFeed());
         feeds.add(new ReutersFeed());
-        feeds.add(new BreakitFeed());
         feeds.add(new AlJazeeraFeed());
         feeds.add(new EngadgetFeed());
         feeds.add(new OmniFeed(documentService));
-//        feeds.add(new DagensIndustriFeed());
 
-        feeds.add(createRss(
-                "xkcd",
-                "https://xkcd.com",
-                "https://xkcd.com/atom.xml"));
+        feeds.add(new XkcdFeed());
 
         feeds.add(new SVTNyheterFeed());
         feeds.add(new NewYorkTimesWorldFeed());
-//        feeds.add(new LosAngelesTimesWorldFeed()); GDPR :(
 
         feeds.add(new WashingtonPostFeed(
-                INVALIDATION_PERIOD
         ));
 
-        feeds.add(new WashingtonPostFeed(INVALIDATION_PERIOD));
+        feeds.add(new WashingtonPostFeed());
 
         feeds.add(createReddit("r/worldnews", 1000));
         feeds.add(createReddit("r/AskReddit", 1000));

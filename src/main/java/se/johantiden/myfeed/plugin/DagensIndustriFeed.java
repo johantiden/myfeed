@@ -53,10 +53,6 @@ public class DagensIndustriFeed extends Feed {
 
             String[] splitText = pattern.split(document.text);
             document.text = splitText[1];
-
-            String[] splitHtml = pattern.split(document.html);
-            document.html = splitHtml[1];
-
         }
     }
 

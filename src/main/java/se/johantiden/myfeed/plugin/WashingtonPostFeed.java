@@ -11,7 +11,6 @@ import se.johantiden.myfeed.persistence.Feed;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -27,8 +26,8 @@ public class WashingtonPostFeed extends Feed {
 //    private final String webUrl;
 //    private final String rssUrl;
 
-    public WashingtonPostFeed(Duration ttl) {
-        super(NAME, URL, createFeedReader(ttl));
+    public WashingtonPostFeed() {
+        super(NAME, URL, createFeedReader());
     }
 
 
@@ -39,7 +38,7 @@ public class WashingtonPostFeed extends Feed {
 //        this.rssUrl = rssUrl;
 //    }
 
-    private static FeedReader createFeedReader(Duration ttl) {
+    private static FeedReader createFeedReader() {
         return () -> {
             List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
             return documents.stream()
@@ -53,8 +52,6 @@ public class WashingtonPostFeed extends Feed {
 
         return document -> {
             document.imageUrl = findImage(document);
-            document.imageUrl = parseImgFromHtml(document.html);
-            document.html = null;
             return document;
         };
 
