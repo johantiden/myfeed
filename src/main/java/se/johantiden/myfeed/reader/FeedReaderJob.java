@@ -3,34 +3,41 @@ package se.johantiden.myfeed.reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.settings.GlobalSettings;
 
+import javax.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@Component
 public class FeedReaderJob {
 
     private static final Logger log = LoggerFactory.getLogger(FeedReaderJob.class);
 
     private final FeedService feedService;
     private final DocumentService documentService;
+    private final ScheduledExecutorService executor;
 
-    public FeedReaderJob(FeedService feedService, DocumentService documentService) {
+    public FeedReaderJob(FeedService feedService, DocumentService documentService, ScheduledExecutorService executor) {
         this.feedService = Objects.requireNonNull(feedService);
         this.documentService = Objects.requireNonNull(documentService);
+        this.executor = Objects.requireNonNull(executor);
     }
 
-    @Scheduled(fixedRate = GlobalSettings.FEED_READER_INTERVAL)
+    @PostConstruct
+    public void start() {
+        executor.scheduleWithFixedDelay(this::myRunnable, 0, 1, TimeUnit.SECONDS);
+        log.info("Started FeedReaderJob");
+    }
+
     public void myRunnable() {
 //        log.info("ENTER FeedReaderJob");
         Optional<Feed> feed = feedService.popOldestInvalidatedFeed();

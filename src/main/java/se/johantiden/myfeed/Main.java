@@ -9,12 +9,14 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import se.johantiden.myfeed.persistence.DocumentRepository;
 import se.johantiden.myfeed.persistence.FeedPopulator;
+import se.johantiden.myfeed.reader.FeedReaderJob;
+import se.johantiden.myfeed.reader.SubjectClassifierJob;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
 import se.johantiden.myfeed.service.SubjectService;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @SpringBootApplication
 @EnableScheduling
@@ -53,8 +55,18 @@ public class Main implements SchedulingConfigurer {
     }
 
     @Bean(destroyMethod="shutdown")
-    public Executor executor() {
+    public ScheduledExecutorService executor() {
         return Executors.newScheduledThreadPool(5);
+    }
+
+    @Bean
+    public FeedReaderJob feedReaderJob() {
+        return new FeedReaderJob(feedService(), documentService(), executor());
+    }
+
+    @Bean
+    SubjectClassifierJob subjectClassifierJob() {
+        return new SubjectClassifierJob(documentService(), subjectService(), executor());
     }
 
     public static void main(String[] args) {

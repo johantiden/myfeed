@@ -24,9 +24,9 @@ public class Subject extends BaseEntity<Subject> {
     private final boolean showAsTab;
 
     // only root!
-    private Subject(String all) {
+    private Subject(String name) {
         this.parents = ImmutableList.of();
-        this.name = all;
+        this.name = name;
         this.expression = null;
         isHashTag = false;
         showAsTab = true;
@@ -41,6 +41,9 @@ public class Subject extends BaseEntity<Subject> {
         }
         parents.forEach(p -> p.children.add(this));
 
+        if (name.length() < 4 && !name.startsWith("#")) {
+            throw new RuntimeException("Name '"+name+"' is too short. It will probably cause search problems. Add a '#' if you want it to be this short");
+        }
         this.name = Objects.requireNonNull(name);
         this.expression = expression;
         this.isHashTag = isHashTag;
