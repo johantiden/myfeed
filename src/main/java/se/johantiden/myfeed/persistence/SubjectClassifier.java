@@ -1,819 +1,152 @@
 package se.johantiden.myfeed.persistence;
 
-import java.util.Set;
-import java.util.TreeSet;
 
-import static se.johantiden.myfeed.persistence.DocumentClassifier.*;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import static se.johantiden.myfeed.persistence.Subject.ROOT;
 
 public class SubjectClassifier {
 
-    public static final String GADGETS = "Gadgets";
+    private static Set<Subject> subjects = new HashSet<>();
 
-    public static Set<SubjectRule> getDefaultSubjectRules() {
-        TreeSet<SubjectRule> s = new TreeSet<>(SubjectRule.COMPARATOR);
-        add(s, EKONOMI, "ekonomi");
-        add(s, EKONOMI, "näringsliv");
-        add(s, EKONOMI, "[Oo]ljepris");
-        add(s, EKONOMI, "[Oo]ljelager");
-        add(s, EKONOMI, "[Bb]örs");
-        add(s, EKONOMI, "[Aa]ktie");
+    public static Set<Subject> getSubjects() {
+        subjects.add(ROOT);
 
-        add(s, "Ledare", "[Ll]edare");
-        add(s, "Ledare", "LEDARE");
-        add(s, "Sport", "[Ss]port");
-        add(s, "Sport", "[Ff]otboll");
-        add(s, "Sport", "[Ff]ootball");
-        add(s, YOUR_BRIEFING, "[Yy]our.+[Bb]riefing");
-        add(s, YOUR_BRIEFING, "The Morning After:.*Edition");
-
-        add(s, "Harvey", "Harvey");
-        add(s, "Tim Berners-Lee", "Tim Berners\\-Lee");
-
-        add(s, "Cryptocurrency", "[Cc]ryptocurrenc");
-
-        add(s, "Arkitektur", "Architecht");
-        add(s, "Arkitektur", "Arkitekt");
-
-        add(s, TYSKLAND, "[Gg]erman");
-        add(s, TYSKLAND, "[Tt]ysk");
-        add(s, TYSKLAND, "Brandenburg");
-        add(s, TYSKLAND, "merkel");
-        add(s, "Angela Merkel", "merkel");
-
-        add(s, "Nazism", "Hitler");
-        add(s, "Nazism", "Nazi");
-
-        add(s, "Twitter", "[Tt]witter");
-        add(s, "Twitter", "[Tt]weet");
-
-        add(s, "Macron", "Macron");
-
-        addPlaces(s);
-        addPeople(s);
-
-        add(s, "science", "[Ss]tudie");
-
-        add(s, "Turist", "[Tt]urist");
-
-        add(s, "Netflix", "Netflix");
-        add(s, "Boko Haram", "Boko Haram");
-
-        add(s, "Klimat", "[Kk]limat");
-        add(s, "Klimat", "[Cc]limate");
-
-        add(s, "Väder", " [Vv]äder");
-        add(s, "Väder", " [Vv]ädret");
-
-        add(s, EUROVISION, EUROVISION);
+        Subject fun = addWithoutExpression("Fun", ROOT);
+        add("xkcd", "xkcd", fun);
 
 
-        add(s, "FBI");
-        add(s, SPOTIFY);
-        add(s, MICROSOFT);
-        add(s, "Verizon");
-        add(s, "Uber");
-        add(s, "Samsung");
-        add(s, "Apple");
-        add(s, "Apple", "iOS");
-        add(s, "Apple", "iPad");
-        add(s, "Apple", "iPhone");
-        add(s, "Apple", "macOS");
-        add(s, FACEBOOK);
-        add(s, "Zuckerberg");
-        add(s, "HTC");
-        add(s, FACEBOOK, "Zuckerberg");
-        add(s, FINGERPRINT);
-        add(s, "Klarna");
-        add(s, "Tesla");
-        add(s, "Scania");
-        add(s, "LinkedIn", "Linked[Ii]n");
-        add(s, "Nintendo");
-        add(s, "Amazon");
-        add(s, GAMING, "Nintendo");
-        add(s, "Google");
-        add(s, "T-Mobile");
-        add(s, "Instagram");
-        add(s, "Comcast");
-        add(s, "H&M");
-        add(s, "HP");
-        add(s, "Norstedts");
-        add(s, "Ericsson");
-        add(s, "PayPal");
 
-        add(s, "Net Neutrality", "Net Neutrality");
-        add(s, "Blockchain", "[Bb]lock.*chain");
-        add(s, "Blockchain", "[Bb]lockkedja");
-        add(s, "Blockchain", "Ethereum");
-        add(s, "Blockchain", "Bit[Cc]oin");
+        Subject news = addWithoutExpression("Nyheter", ROOT);
 
-        add(s, "Science", "[Ss]cience");
-        add(s, "Science", "[Ss]cientific");
-        add(s, "Science", "MIT");
-        add(s, "Science", "[Rr]esearch");
-        add(s, "Science", "arxiv\\.org");
-        add(s, "Science", "[Aa]stronom");
 
-        add(s, "Guatemala", "Guatemala");
+        Subject nordkorea = add("Nordkorea", "Nordkorea", news);
+        Subject kim = add("Kim Jong-Un", "Kim Jong-Un", nordkorea);
 
-        add(s, "Comics", "xkcd");
+        Subject singapore = add("Singapore", "Singapore", news);
 
-        add(s, "Drone", "[Dd]rone");
+        Subject usa = add("USA", "USA", news);
+        Subject florida = add("Florida", "Florida", usa);
+        Subject arizona = add("Arizona", "Arizona", usa);
 
-        add(s, "Blog", "[Bb]log");
+        Subject usaPolitik = add("USA-politik", "USA-politik", news, usa);
+        add("Jeff Flake", "Jeff Flake", usaPolitik, arizona);
+        add("Brett Kavanaugh", "Brett Kavanaugh", usaPolitik);
 
-        add(s, UTVECKLING, "[Mm]emory leak");
-        add(s, UTVECKLING, "Haskell");
-        add(s, UTVECKLING, "Pascal");
-        add(s, UTVECKLING, "[Bb]ack [Ee]nd");
-        add(s, UTVECKLING, "Kubernetes");
-        add(s, UTVECKLING, "Redux");
-        add(s, UTVECKLING, "distro[ \\.]");
-        add(s, UTVECKLING, "OpenJDK");
-        add(s, UTVECKLING, "Linux");
-        add(s, UTVECKLING, "Java");
-        add(s, UTVECKLING, "[Oo]pen [Ss]ource");
-        add(s, UTVECKLING, "open-source");
-        add(s, UTVECKLING, "REPL");
-        add(s, UTVECKLING, "OpenCV");
+        Subject trump = add("Trump", "Trump", news, usa);
 
-        add(s, "Asyl", "[Aa]sylum");
-        add(s, "Asyl", "[Aa]sylsökande");
 
-        add(s, "SAS");
+        Subject sverige = add("Sverige", "Sverige", news);
+        Subject inrikespolitik = add("Inrikespolitik", "Inrikespolitik", sverige);
+        addInvisible("[Ss]vensk politik", inrikespolitik);
+        Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik);
+        add("Annie Lööf", "Annie Lööf", centerpartiet);
 
-        add(s, MUSEUM);
-        add(s, "Musik", "[Mm]usik");
-        add(s, "Musik", "[Hh]iphop");
-        add(s, "Musik", "[Mm]usician");
-        add(s, "Musik", "[Mm]usiker");
-        add(s, "Konst", "[Kk]onstnär");
-        add(s, "Konst", "[Gg]uitar");
-        add(s, BÖCKER, "[Ff]författare");
-        add(s, "Film/TV", "[Dd]ramaserie");
-        add(s, "Film/TV", "TV");
-        add(s, "Mode/Kläder", "[Yy]tterplagg");
+        Subject tech = addWithoutExpression("Tech", ROOT);
+        Subject science = addWithoutExpression("Science", tech);
+        addInvisible("[Pp]hys\\.org", science);
+        Subject internet = add("Internet", "Internet", tech);
+        Subject software = add("Software", "[Ss]oftware", tech);
+        Subject ai = add("Artificial Intelligence", "[Aa]rtificial[ \\-][Ii]ntelligence", tech);
+        addInvisible("[Rr]obot", ai);
+        addInvisible("[Mm]achine [Ll]earning", ai);
 
-        add(s, "Ekonomi", "[Ee]conom");
+        addInvisible("[Pp]rogramming", software);
+        addInvisible("[Pp]rogrammer", software);
+        add("Open Source", "Open Source", software);
+        addInvisible("World Wide Web", internet);
+        addInvisible("Engadget", tech);
+        Subject facebook = add("Facebook", "Facebook", tech);
+        add("Cambridge Analytica", "Cambridge Analytica", facebook, tech);
+        addInvisible("[Pp]olymer", science);
+        add("Tim Berners-Lee", "Tim Berners-Lee", internet);
 
-        add(s, "Naturen", "[Ff]orest");
+        Subject greatBritain = add("Great Britain", "Great Britain", news);
+        addInvisible("U\\.K\\.", greatBritain);
+        Subject brexit = add("Brexit", "Brexit", news, greatBritain);
 
-        add(s, "Terror", "[Tt]error");
-        add(s, "Ebola", "Ebola");
-        add(s, "Kolera", "Kolera");
-        add(s, "Kolera", "Cholera");
+        Subject apple = add("Apple", "Apple", tech);
+        add("Steve Jobs", "Steve Jobs", apple);
+        Subject amazon = add("Amazon", "Amazon", tech);
+        add("Alexa", "Alexa", tech, amazon, ai);
 
-        add(s, IT_SÄKERHET, "IT-attack");
-        add(s, IT_SÄKERHET, "[Ll]ösenord läckta");
-        add(s, IT_SÄKERHET, "[Rr]ansomware");
-        add(s, IT_SÄKERHET, "[Cc]yberattack");
-        add(s, IT_SÄKERHET, "[Mm]alware");
-        add(s, IT_SÄKERHET, "[Ww]ana[Cc]ry");
-        add(s, IT_SÄKERHET, "[Ww]anna[Cc]ry");
-        add(s, IT_SÄKERHET, "[Hh]acker[^N]");
-        add(s, IT_SÄKERHET, "[Hh]acking");
-        add(s, IT_SÄKERHET, "IT-utpressning");
-        add(s, IT_SÄKERHET, "IT-angrepp");
-        add(s, IT_SÄKERHET, "[Ii]nternet [Ss]ecurity");
-        add(s, IT_SÄKERHET, "[Ee]ternalblue");
-        add(s, IT_SÄKERHET, "[Bb]otnet");
-        add(s, IT_SÄKERHET, " [Hh]ack ");
+        Subject google = add("Google", "Goole", tech);
 
-        add(s, "Brexit", "Brexit");
 
-        add(s, "Feministiskt Initiativ", "Feministiskt [Ii]nitiativ");
-        add(s, VÄNSTERPARTIET);
-        add(s, MILJÖPARTIET);
-        add(s, SOCIALDEMOKRATERNA);
-        add(s, CENTERPARTIET);
-        add(s, LIBERALERNA);
-        add(s, KRISTDEMOKRATERNA);
-        add(s, KRISTDEMOKRATERNA, "KD[ \\.]");
-        add(s, MODERATERNA);
-        add(s, "Alliansen", "[Aa]lliansen");
-        add(s, "Regeringen", "[Rr]egeringen");
-        add(s, "Borgerlig", "[Bb]orgerlig");
-        add(s, SVERIGEMOKRATERNA);
-        add(s, SVERIGEMOKRATERNA, "SD[ \\.]");
+        Subject africa = add("Africa", "Africa", news);
+        Subject egypt = add("Egypt", "Egypt", africa);
+        Subject turkiet = add("Turkiet", "Turkiet", news);
+        addInvisible("Turkey", turkiet);
+        Subject grekland = add("Grekland", "Grekland", news);
+        addInvisible("Greece", grekland);
 
-        add(s, "Pope Francis");
-        add(s, "Debatt", "[Dd]ebatt");
+        add("Amnesty", "Amnesty", news);
+        add("Influenza", "Influenza", science);
 
-        add(s, "Mecca", "Mecca");
-        add(s, "Mecca", "Hajj");
-        add(s, "Mecca", "[Aa]l-[Aa]qsa");
+        Subject nobelpriset = add("Nobelpriset", "[Nn]obelpriset", news);
+        addInvisible("[Nn]obel pri", nobelpriset);
 
-        add(s, "Foliehatt", "CCTV");
+        Subject ukraina = add("Ukraina", "Ukrain", news);
+        Subject qatar = add("Qatar", "Qatar", news);
+        Subject saudi = add("Saudi Arabia", "Saudi Arabi", news);
+        Subject uae = add("Förenade Arabemiraten", "Förenade Arabemiraten", news);
+        addInvisible("UAE", uae);
+        Subject indien = add("Indien", "Indien", news);
+        addInvisible("India", indien);
 
-        add(s, "Kvinnor", REGEX_KVINNOR_MÄN);
-        add(s, "Män", REGEX_KVINNOR_MÄN);
+        Subject indonesien = add("Indonesien", "Indonesien", news);
+        addInvisible("Indonesia", indonesien);
 
-        add(s, HIRING, "[Hh]iring.*HackerNews");
-        add(s, IDAGSIDAN);
+        Subject weather = addWithoutExpression("Weather", ROOT);
+        add("Tsunami", "[Tt]sunami", weather);
 
-        add(s, HISTORIA, "historian");
-        add(s, HISTORIA, "1500");
-        add(s, HISTORIA, "1600");
-        add(s, HISTORIA, "1700");
-        add(s, HISTORIA, "1800");
 
-        add(s, MAT, "[Rr]ecipe:.*TheLocal");
-        add(s, MAT, "mat-dryck");
-        add(s, MAT, "Restaurants");
+        Subject biz = addWithoutExpression("Biz", ROOT);
+        add("Elon Musk", "Elon Musk", tech, biz);
+        add("Tesla", "Tesla", tech, biz);
 
-        add(s, "Daesh", "Daesh");
-        add(s, "Daesh", "Islamic State");
-        add(s, "Daesh", "ISIL");
-        add(s, "Daesh", "ISIS");
-        add(s, "Daesh", "([Tt]error.*IS)|(IS.*[Tt]error)");
 
-        add(s, "Taliban", "Taliban");
 
-        add(s, GADGETS, "LCD");
-        add(s, GADGETS, "[Ss]mart lock");
 
-        add(s, GAMING, "[Gg]aming");
-        add(s, GAMING, "[Gg]ames");
-        add(s, "Cars", "cars technica");
-        add(s, NEWS_GRID);
-        add(s, WEBB_TV);
-        add(s, LEAGUEOFLEGENDS);
-        add(s, DEALMASTER);
-        add(s, "Dödsfälla", "[Dd]ödsfälla");
-        add(s, "Motor", "[Mm]otor");
-        add(s, "Serier", "[Ss]erier");
 
-        add(s, HÄR_ÄR, "– här är");
-        add(s, HÄR_ÄR, "- här är");
-        add(s, HÄR_ÄR, HÄR_ÄR);
+        Subject sport = addWithoutExpression("Sport", ROOT);
+        Subject hockey = add("Hockey", "[Hh]ockey", sport);
 
-        add(s, "Medicin", "Global Health");
-        add(s, "Medicin", "Tuber[ck]ulos");
+        boolean hideCulture = false;
+        Subject kultur = addWithoutExpression("Kultur", hideCulture, ROOT);
+        addInvisible("kultur\\-noje", kultur);
+        Subject music = addWithoutExpression("Musik", kultur);
+        addInvisible("klassisk rock", music);
 
-        add(s, "Hawaii", "Hawaii");
-
-        add(s, "Uutiset", UUTISET);
-        add(s, "VIDEO", "^VIDEO");
-
-        add(s, "Rasism", "[Rr]asism");
-        add(s, "Rasism", "[Rr]asist");
-
-        add(s, "Religion", "[Rr]eligious");
-        add(s, "Religion", "[Rr]eligion");
-        add(s, "Religion", "[Rr]eligiös");
-
-        add(s, "Ask HN", "Ask HN");
-
-        add(s, NATURKATASTROF, "[Jj]ordbävning");
-        add(s, NATURKATASTROF, "[Ee]arthquake");
-        add(s, NATURKATASTROF, "[Ll]andslide");
-        add(s, NATURKATASTROF, "[Mm]udslide");
-        add(s, NATURKATASTROF, "[Oo]rkan");
-        add(s, NATURKATASTROF, "[Tt]tropical [Ss]torm");
-        add(s, NATURKATASTROF, "[Cc]atastrophic [Ff]loods");
-
-        add(s, "Talaq", "[Tt]alaq");
-
-        add(s, FRÅGESPORT, "fragesport");
-        add(s, JUNIOR);
-        add(s, NUTIDSTESTET);
-        add(s, PERFECT_GUIDE);
-        add(s, RESOR);
-        add(s, I_AM_A, "IAmA");
-        add(s, BLACK_PEOPLE_TWITTER);
-        add(s, THE_DENNIS);
-
-        add(s, NUMBER_OF_PEOPLE, "-- number");
-        add(s, NUMBER_OF_PEOPLE, "--number");
-
-        add(s, DocumentClassifier.UTVECKLING, "[Pp]rogramming");
-
-        add(s, "Solförmörkelse", "[Ee]clipse");
-        add(s, "Solförmörkelse", "[Ss]olförmörkelse");
-
-        add(s, "Big Ben", "Big Ben");
-        add(s, "Så...", "Så.* du");
-        add(s, "USA", "San Francisco");
-        add(s, "San Francisco", "San Francisco");
-        add(s, "London", "Buckingham Palace");
-        add(s, "London", "London");
-        add(s, STORBRITANNIEN, "Buckingham Palace");
-
-        add(s, "Vietnam", "Vietnam");
-        add(s, "Tran Dai Quang", "Tran Dai Quang"); // president, dog 2018
-        add(s, "Vietnam", "Tran Dai Quang");
-
-        add(s, "YouTube", "[Yy]ou[Tt]ube");
-        add(s, "USA", "Massachusetts");
-        add(s, "USA", "Cleveland");
-        add(s, "USA", "Texas");
-        add(s, "Vanuatu");
-        add(s, "Örebro");
-        add(s, INRIKES, "Örebro");
-        add(s, "Nike");
-        add(s, GAMING, "Dungeons and Dragons");
-
-        return s;
+        return subjects;
     }
 
-    public static void add(Set<SubjectRule> set, String name, String expression) {
-        int size = set.size();
-        set.add(new SubjectRule(name, expression));
-        if (size == set.size()) {
+    private static Subject addWithoutExpression(String name, boolean hide, Subject... parents) {
+        return add(name, null, hide, true, parents);
+    }
+
+    private static Subject addInvisible(String expression, Subject... parents) {
+        return add("invisible:"+expression, expression, false, false, parents);
+    }
+
+    public static Subject addWithoutExpression(String name, Subject... parents) {
+        return add(name, null, false, true, parents);
+    }
+
+    public static Subject add(String name, @Nullable String expression, Subject... parents) {
+        return add(name, expression, false, true, parents);
+    }
+
+    private static Subject add(String name, @Nullable String expression, boolean hide, boolean isHashTag, Subject... parents) {
+        int size = subjects.size();
+        Subject subject = new Subject(Arrays.asList(parents), name, expression, hide, isHashTag);
+        subjects.add(subject);
+        if (size == subjects.size()) {
             throw new IllegalStateException("Duplicate detected! " + name + ", " + expression);
         }
-    }
-
-    public static void add(Set<SubjectRule> set, String name) {
-        add(set, name, name);
-    }
-
-    private static void addPeople(Set<SubjectRule> s) {
-
-        add(s, "Gurmeet Ram Rahim Singh");
-
-        add(s, "Obama", "Obama");
-        add(s, USA, "Obama");
-
-        add(s, "Trump", "Trump");
-        add(s, USA, "Trump");
-
-        add(s, "Brett Kavanaugh", "Brett Kavanaugh");
-        add(s, USA, "Brett Kavanaugh");
-
-        add(s, "Ebba Busch Thor", "Busch Thor");
-        add(s, KRISTDEMOKRATERNA, "Busch Thor");
-        add(s, INRIKES, "Busch Thor");
-
-        add(s, "Alice Bah Kuhnke", "Alice Bah Kuhnke");
-        add(s, MILJÖPARTIET, "Alice Bah Kuhnke");
-        add(s, INRIKES, "Alice Bah Kuhnke");
-
-        add(s, "Mugabe", "Mugabe");
-        add(s, SYDAFRIKA, "Mugabe");
-        add(s, AFRIKA, "Mugabe");
-
-        add(s, "Jonas Sjöstedt", "Jonas Sjöstedt");
-        add(s, VÄNSTERPARTIET, "Jonas Sjöstedt");
-        add(s, INRIKES, "Jonas Sjöstedt");
-
-        add(s, "Annie Lööf", "Annie Lööf");
-        add(s, CENTERPARTIET, "Annie Lööf");
-        add(s, INRIKES, "Annie Lööf");
-
-        add(s, "Stefan Löfven", "Löfven");
-        add(s, SOCIALDEMOKRATERNA, "Löfven");
-        add(s, INRIKES, "Löfven");
-
-        add(s, "Jimmie Åkesson", "Jimmie Åkesson");
-        add(s, SOCIALDEMOKRATERNA, "Jimmie Åkesson");
-        add(s, INRIKES, "Jimmie Åkesson");
-
-        add(s, "Jan Björklund", "Björklund");
-        add(s, LIBERALERNA, "Björklund");
-        add(s, INRIKES, "Björklund");
-
-        add(s, "Kinberg Batra");
-        add(s, MODERATERNA, "Kinberg Batra");
-
-        add(s, "Zlatan");
-        add(s, "Zlatan", "Ibrahimovic");
-        add(s, SPORT, "Ibrahimovic");
-        add(s, SPORT, "Zlatan");
-
-
-        add(s, "Leo Varadkar", "Varadkar");
-        add(s, IRLAND, "Varadkar");
-
-        add(s, "Rodrigo Duterte", "Duterte");
-        add(s, FILIPPINERNA, "Duterte");
-
-        add(s, "Vladimir Putin", "Putin");
-        add(s, RYSSLAND, "Putin");
-
-        add(s, "Malala Yousafzai", "Malala");
-
-        add(s, "Kim Wall", "Kim Wall");
-
-        add(s, "Theresa May", "Theresa May");
-        add(s, STORBRITANNIEN, "Theresa May");
-
-        add(s, "Hassan Rouhani", "Rouhani");
-        add(s, "Hassan Rouhani", "Rohani");
-        add(s, "Iran", "Rouhani");
-        add(s, "Iran", "Rohani");
-
-        add(s, "Marcellus Williams");
-        add(s, USA, "Marcellus Williams");
-
-        add(s, "Therese Johaug", "Johaug");
-    }
-
-    private static void addPlaces(Set<SubjectRule> s) {
-
-        add(s, "Libyen", "Libyen");
-        add(s, "Libyen", "Libya");
-        add(s, AFRIKA, "Libyen");
-        add(s, AFRIKA, "Libya");
-
-        add(s, AFRIKA, "Afrika");
-        add(s, AFRIKA, "Africa");
-
-        add(s, "Lesotho", "Lesotho");
-        add(s, AFRIKA, "Lesotho");
-
-        add(s, "Marocko", "Marocko");
-        add(s, AFRIKA, "Marocko");
-        add(s, "Marocko", "Morocc");
-        add(s, AFRIKA, "Morocc");
-
-        add(s, "Tunisien", "Tunis");
-        add(s, AFRIKA, "Tunis");
-
-        add(s, "Angola", "Angola");
-        add(s, AFRIKA, "Angola");
-
-        add(s, "Kongo-Kinshasa", "Kongo-Kinshasa");
-        add(s, AFRIKA, "Kongo-Kinshasa");
-
-        add(s, "Elfenbenskusten", "Elfenbenskusten");
-        add(s, AFRIKA, "Elfenbenskusten");
-        add(s, "Elfenbenskusten", "Ivory Coast");
-        add(s, AFRIKA, "Ivory Coast");
-        add(s, "Elfenbenskusten", "Ivorian");
-        add(s, AFRIKA, "Ivorian");
-
-        add(s, "Uganda", "Uganda");
-        add(s, AFRIKA, "Uganda");
-
-        add(s, "Kamerun", "Kamerun");
-        add(s, AFRIKA, "Kamerun");
-        add(s, "Kamerun", "Cameroon");
-        add(s, AFRIKA, "Cameroon");
-
-        add(s, "Albanien", "Albanien");
-        add(s, "Albanien", "Albania");
-
-        add(s, "Barcelona", "Barcelona");
-
-        add(s, "Bosnien", "Bosnien");
-        add(s, "Bosnien", "Bosnia");
-
-        add(s, "Belgien", "Belgien");
-        add(s, "Belgien", "Belgium");
-        add(s, "Bryssel", "Bryssel");
-        add(s, "Belgien", "Bryssel");
-        add(s, "Bryssel", "Brussels");
-        add(s, "Belgien", "Brussels");
-
-
-        add(s, "Brasilien", "Brasilien");
-        add(s, "Brasilien", "Brazil");
-
-        add(s, "Chile", "Chile");
-
-        add(s, "Egypten", "Egypt");
-
-
-        add(s, "Irak", "Iraq");
-        add(s, "Irak", "Irak");
-        add(s, "Irak", "Mosul");
-
-        add(s, "Indien", "Indien");
-        add(s, "Indien", "India");
-
-        add(s, "Oman", "Oman");
-
-        add(s, "Nepal", "Nepal");
-
-        add(s, "Syrien", "Syrien");
-        add(s, "Syrien", "Syria");
-        add(s, "Syrien", "[Ss]yrisk");
-        add(s, "Syrien", "Syrier");
-        add(s, "Syrien", "Damascus");
-        add(s, "Syrien", "Damaskus");
-        add(s, "Raqqa", "Raqqa");
-        add(s, "Syrien", "Raqqa");
-
-        add(s, "Venezuela", "Venezuela");
-        add(s, "Venezuela", "Maduro");
-        add(s, "Nicolás Maduro", "Maduro");
-
-        add(s, "Nordkorea", "Nordkorea");
-        add(s, "Nordkorea", "North Korea");
-        add(s, "Nordkorea", "N Korea");
-        add(s, "Nordkorea", "Kim Jong-un");
-        add(s, "Kim Jong-un", "Kim Jong-un");
-
-        add(s, "Sydkorea", "Sydkorea");
-        add(s, "Sydkorea", "South Korea");
-        add(s, "Sydkorea", "Seoul");
-        add(s, "Seoul", "Seoul");
-        add(s, "Sydkorea", "Moon Jae-in");
-        add(s, "Moon Jae-in", "Moon Jae-in");
-
-        add(s, "Myanmar", "Myanmar");
-        add(s, "Myanmar", "Burma");
-        add(s, "Myanmar", "Aung San Suu Kyi");
-        add(s, "Aung San Suu Kyi", "Aung San Suu Kyi");
-
-        add(s, "Iran", "Iran");
-
-        add(s, "Kina", "Kina");
-        add(s, "Kina", "China");
-        add(s, "Kina", "Xi Jinping");
-        add(s, "Kina", "[Kk]ines");
-        add(s, "Xi Jinping", "Xi Jinping");
-
-        add(s, "Kuba", "Cuba");
-        add(s, "Kuba", "Kuba");
-
-        add(s, "Spanien", "Spanien");
-        add(s, "Spanien", "Spain");
-        add(s, "Spanien", "Spanish");
-        add(s, "Spanien", "[Ss]pansk");
-        add(s, "Spanien", "Barcelona");
-        add(s, "Katalonien", "Katalan");
-        add(s, "Katalonien", "Katalon");
-        add(s, "Spanien", "Katalan");
-        add(s, "Spanien", "Katalon");
-
-        add(s, "Italien", "Italien");
-        add(s, "Italien", "Itali");
-        add(s, "Italien", "Italy");
-
-        add(s, "Sierra Leone", "Sierra Leone");
-        add(s, AFRIKA, "Sierra Leone");
-        add(s, "Sierra Leone", "Freetown");
-        add(s, AFRIKA, "Freetown");
-
-        add(s, "Singapore", "Singapore");
-
-        add(s, "Somalien", "Somali");
-
-        add(s, "Yingluck Shinawatra", "Yingluck");
-        add(s, "Thailand", "Yingluck");
-        add(s, "Thailand", "Thailand");
-
-        add(s, "Hong Kong", "Hong Kong");
-
-        add(s, "Jemen", "Jemen");
-        add(s, "Jemen", "Yemen");
-
-        add(s, "Kenya", "Kenya");
-
-        add(s, "Kuwait", "Kuwait");
-
-        add(s, "Danmark", "Danmark");
-        add(s, "Danmark", "Denmark");
-        add(s, "Danmark", "Köpenhamn");
-        add(s, "Danmark", "Copenhagen");
-        add(s, "Köpenhamn", "Köpenhamn");
-        add(s, "Köpenhamn", "Copenhagen");
-
-        add(s, "Bangladesh", "Bangladesh");
-
-        add(s, "Malaysia", "Malaysia");
-
-        add(s, "Maldiverna", "Maldive");
-
-        add(s, "Frankrike", "Frankrike");
-        add(s, "Frankrike", "France");
-        add(s, "Frankrike", "[Ff]ransk");
-        add(s, "Frankrike", "French");
-        add(s, "Frankrike", "Paris");
-        add(s, "Paris", "Paris");
-
-        add(s, "Australien", "Australien");
-        add(s, "Australien", "Australia");
-        add(s, "Australien", "Sydney");
-
-        add(s, "Nya Zeeland", "Nya Zeeland");
-        add(s, "Nya Zeeland", "New Zealand");
-
-        add(s, "Nederländerna", "Nederländerna");
-        add(s, "Nederländerna", "Netherlands");
-        add(s, "Nederländerna", "Dutch");
-
-        add(s, "Tjeckien", "Tjeckien");
-        add(s, "Tjeckien", "Tjeckisk");
-        add(s, "Tjeckien", "Czech");
-
-        add(s, "USA", "USA");
-        add(s, "USA", "US");
-        add(s, "USA", "FBI");
-        add(s, "USA", "U\\.S\\.");
-        add(s, "USA", "Orlando");
-        add(s, "USA", "California");
-        add(s, "Charlottesville", "Charlottesville");
-        add(s, "USA", "Charlottesville");
-        add(s, "Washington", "Washington");
-        add(s, "Washington", "[Vv]ita huset");
-        add(s, "USA", "[Vv]ita huset");
-        add(s, "USA", "Washington");
-
-        add(s, "Libanon", "Libanon");
-        add(s, "Libanon", "Libanes");
-        add(s, "Libanon", "Lebanon");
-        add(s, "Libanon", "Lebanese");
-
-        add(s, "EU", "EU");
-        add(s, "EU", "E\\.U\\.");
-        add(s, "EU", "European Union");
-
-        add(s, "United Nations", "United Nations");
-        add(s, "United Nations", "U\\.N\\.");
-
-        add(s, "Uruguay");
-
-        add(s, "Europa", "Europa");
-        add(s, "Europa", "Europe");
-
-        add(s, "Finland", "Finland");
-        add(s, "Finland", "Åbo");
-        add(s, "Finland", "Turku");
-        add(s, "Åbo", "Åbo");
-        add(s, "Åbo", "Turku");
-
-        add(s, "Grekland", "Grekland");
-        add(s, "Grekland", "Greek");
-        add(s, "Grekland", "Greece");
-        add(s, "Grekland", "Grek");
-
-        add(s, "Israel", "Israel");
-        add(s, "Israel", "West Bank");
-
-        add(s, "Malmö", "Malmö");
-
-        add(s, "Mexiko", "Mexico");
-        add(s, "Mexiko", "Mexiko");
-        add(s, "Mexiko", "Mexican");
-        add(s, "Tijuana", "Tijuana");
-        add(s, "Mexiko", "Tijuana");
-
-        add(s, "Nigeria", "Nigeria");
-
-        add(s, "Norge", "Norge");
-        add(s, "Norge", "Oslo");
-        add(s, "Oslo", "Oslo");
-        add(s, "Norge", "Norway");
-        add(s, "Norge", "[Nn]orska");
-
-        add(s, "Qatar", "Qatar");
-
-        add(s, "Dubai", "Dubai");
-        add(s, "United Arab Emirates", "Dubai");
-        add(s, "United Arab Emirates", "United Arab Emirates");
-        add(s, "United Arab Emirates", "UAE");
-
-        add(s, "Saudiarabien", "Saudiarabien");
-        add(s, "Saudiarabien", "Saudi Arabia");
-
-        add(s, SYDAFRIKA, SYDAFRIKA);
-        add(s, SYDAFRIKA, "South Africa");
-        add(s, AFRIKA, "South Africa");
-        add(s, AFRIKA, SYDAFRIKA);
-
-        add(s, "Tanzania", "Tanzania");
-        add(s, AFRIKA, "Tanzania");
-
-        add(s, "Sydsudan", "Sydsudan");
-        add(s, "Sydsudan", "South Sudan");
-
-        add(s, "Taiwan", "Taiwan");
-
-        add(s, "Turkiet", "Turkiet");
-        add(s, "Turkiet", "Turkey");
-        add(s, "Turkiet", "Turkish");
-        add(s, "Turkiet", "Recep Tayyip Erdogan");
-        add(s, "Turkiet", "Istanbul");
-
-        add(s, "Ukraina", "Ukrain");
-        add(s, "Ukraina", "Kiev");
-
-        add(s, "Österrike", "Österrike");
-        add(s, "Österrike", "Austria");
-
-        add(s, "Schweiz", "Schweiz");
-
-        add(s, "Ungern", "Ungern");
-        add(s, "Ungern", "Hungary");
-
-        add(s, "Portugal", "Portugal");
-
-        add(s, "Japan", "Japan");
-
-        add(s, "Argentina", "Argentin");
-
-        add(s, RYSSLAND, RYSSLAND);
-        add(s, RYSSLAND, "Russia");
-        add(s, RYSSLAND, "[Rr]ysk");
-        add(s, RYSSLAND, "Moskva");
-        add(s, RYSSLAND, "Kreml");
-
-        add(s, "Kanada", "Kanada");
-        add(s, "Kanada", "Canada");
-        add(s, "Kanada", "Canadian");
-        add(s, "Kanada", "Kanaden");
-
-        add(s, "Palestina", "Palestin");
-
-        add(s, "Afghanistan", "Afghan");
-        add(s, "Afghanistan", "Afganistan");
-        add(s, "Afghanistan", "Kabul");
-
-        add(s, "Pakistan", "Pakistan");
-
-        add(s, "Rohingya", "Rohingya");
-        add(s, "Myanmar", "Rohingya");
-
-        add(s, "Baloch", "Baloch");
-        add(s, "Pakistan", "Baloch");
-        add(s, "Afghanistan", "Baloch");
-
-
-        add(s, FILIPPINERNA, FILIPPINERNA);
-        add(s, FILIPPINERNA, "Manila");
-        add(s, FILIPPINERNA, "Philippines");
-
-        add(s, IRLAND, IRLAND);
-        add(s, IRLAND, "Irish");
-        add(s, IRLAND, "Ireland");
-
-        add(s, "Tibet", "Tibet");
-
-        add(s, "Montenegro", "Montenegro");
-
-        add(s, STORBRITANNIEN, STORBRITANNIEN);
-        add(s, STORBRITANNIEN, "Manchester");
-        add(s, "Manchester", "Manchester");
-        add(s, STORBRITANNIEN, "London");
-        add(s, STORBRITANNIEN, "England");
-        add(s, STORBRITANNIEN, "Britain");
-        add(s, STORBRITANNIEN, "Scotland");
-        add(s, STORBRITANNIEN, "British");
-
-        addSweden(s);
-    }
-
-    private static void addSweden(Set<SubjectRule> s) {
-
-        add(s, "Inrikes", "[Ss]vensk");
-        add(s, "Inrikes", "[Ii]nrikes");
-
-        add(s, "Gröna Lund", "Gröna Lund");
-        add(s, STOCKHOLM, "Gröna Lund");
-        add(s, INRIKES, "Gröna Lund");
-
-        add(s, "Eskilstuna", "Eskilstuna");
-        add(s, INRIKES, "Eskilstuna");
-
-        add(s, "Bromma flygplats", "Bromma flygplats");
-        add(s, INRIKES, "Bromma flygplats");
-
-        add(s, "Kristianstad", "Kristianstad");
-        add(s, INRIKES, "Kristianstad");
-
-        add(s, "Arboga", "Arboga");
-        add(s, INRIKES, "Arboga");
-
-        add(s, STOCKHOLM, "Stockholm");
-        add(s, INRIKES, "Stockholm");
-        add(s, STOCKHOLM, "sthlm");
-        add(s, INRIKES, "sthlm");
-
-        add(s, INRIKES, "Sverige");
-        add(s, INRIKES, "Swedish");
-        add(s, INRIKES, "Swede");
-
-        add(s, "Umeå", "Umeå");
-        add(s, INRIKES, "Umeå");
-
-        add(s, "Liseberg", "Liseberg");
-        add(s, GÖTEBORG, "Liseberg");
-        add(s, INRIKES, "Liseberg");
-
-        add(s, GÖTEBORG, GÖTEBORG);
-        add(s, GÖTEBORG, "Gothenburg");
-
-        add(s, "Strömsund", "Strömsund");
-        add(s, INRIKES, "Strömsund");
-
-        add(s, "Norrköping", "Norrköping");
-        add(s, INRIKES, "Norrköping");
-
-        add(s, "Östersund", "Östersund");
-        add(s, INRIKES, "Östersund");
-
-        add(s, "Västervik", "Västervik");
-        add(s, INRIKES, "Västervik");
-
-        add(s, "Katrineholm", "Katrineholm");
-        add(s, INRIKES, "Katrineholm");
-
-        add(s, "Uppsala", "Uppsala");
-        add(s, INRIKES, "Uppsala");
-
-        add(s, "Linköping", "Linköping");
-        add(s, INRIKES, "Linköping");
+        return subject;
     }
 }

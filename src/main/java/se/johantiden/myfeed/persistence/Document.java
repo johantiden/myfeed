@@ -4,83 +4,31 @@ package se.johantiden.myfeed.persistence;
 import com.google.common.collect.Lists;
 import se.johantiden.myfeed.controller.NameAndUrl;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-@NamedQueries({
-        @NamedQuery(name = "Document.findDocumentsNotParsedSubjects", query = "SELECT d FROM Document d WHERE d.subjectsParsed = false"),
-        @NamedQuery(name = "Document.findDocumentsNotParsedTabs", query = "SELECT d FROM Document d WHERE d.tabsParsed = false"),
-        @NamedQuery(name = "Document.getReadyDocumentIds",
-                query = "SELECT d.id FROM Document d WHERE" +
-                    " d.read = false AND" +
-                    " d.subjectsParsed = true AND" +
-                    " d.tabsParsed = true"),
-        @NamedQuery(name = "Document.findAllRead",
-                query = "SELECT d FROM Document d WHERE" +
-                    " d.read = true")
-})
-public class Document extends BaseEntity {
-    @Column(length = 2000)
+
+public class Document extends BaseEntity<Document> {
     public String title;
-
-    @Column(length = 8000)
     public String text;
-
     public NameAndUrl author;
-
-    @Column(length = 2000)
     private final String pageUrl;
-
-    @Column(length = 2000)
     public String imageUrl;
-
     public final Instant publishedDate;
-
-    @Column(length = 8000)
     public String html;
-
     public Double score;
     public boolean isPaywalled;
-
-    @Column(length = 2000)
     public ArrayList<Video> videos = new ArrayList<>();
-
     private boolean subjectsParsed = false;
-    private final ArrayList<String> subjects;
-
-    private boolean tabsParsed = false;
-    private final ArrayList<String> tabs;
-
+    private final ArrayList<Subject> subjects;
     private final String feedName;
     private final String feedUrl;
-
-    @Column(length = 2000)
     private final ArrayList<String> sourceCategories;
-
     private boolean hidden;
-
     private boolean read;
-
-    // JPA
-    protected Document() {
-
-        text = null;
-        pageUrl = null;
-        publishedDate = null;
-        subjects = new ArrayList<>();
-        tabs = new ArrayList<>();
-        feedName = null;
-        feedUrl = null;
-        sourceCategories = new ArrayList<>();
-    }
 
     public Document(
             String title,
@@ -101,7 +49,6 @@ public class Document extends BaseEntity {
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.html = html;
-        this.tabs = new ArrayList<>();
         this.subjects = new ArrayList<>();
         this.feedName = feedName;
         this.feedUrl = feedUrl;
@@ -143,24 +90,12 @@ public class Document extends BaseEntity {
         this.subjectsParsed = subjectsParsed;
     }
 
-    public boolean isTabsParsed() {
-        return tabsParsed;
-    }
-
-    public void setTabsParsed(boolean tabsParsed) {
-        this.tabsParsed = tabsParsed;
-    }
-
     public List<String> getSourceCategories() {
         return sourceCategories;
     }
 
     public String getPublishedShortString() {
         return dateToShortString(publishedDate);
-    }
-
-    public ArrayList<String> getTabs() {
-        return tabs;
     }
 
     public final Instant getPublishDate() {
@@ -171,7 +106,7 @@ public class Document extends BaseEntity {
         return score;
     }
 
-    public List<String> getSubjects() {
+    public List<Subject> getSubjects() {
         return subjects;
     }
 

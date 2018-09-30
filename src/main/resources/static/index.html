@@ -16,26 +16,29 @@
 <div ng-app="myApp" ng-controller="indexCtrl">
 
     <nav id="basic-tab-bar" class="tab-bar">
-        <a href="javascript:void(0);" ng-click="selectTab('All')"><img class="logo-img" src="fidn1.png"></a>
+        <a href="javascript:void(0);" ng-click="setSearch(undefined)"><img class="logo-img" src="fidn1.png"></a>
 
-        <a href="javascript:void(0);" ng-repeat="(tabName, _) in tabs" class="tab {{selectedTabName == tabName ? 'tab-active' : ''}} {{((documents | filter:withTab(tabName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="selectTab(tabName)">
-            <div>
-                {{tabName}} <span class="number-badge" ng-if="((documents | filter:withTab(tabName) | filter:{read:false}).length) > 0">({{(documents | filter:withTab(tabName) | filter:{read:false}).length}})</span>
-            </div>
-        </a>
+        <div ng-repeat="subjectLevel in subjectLevels" class="tab-row">
+            <a href="javascript:void(0);" ng-repeat="(subjectName,_) in subjectLevel" class="tab {{search == subjectName ? 'tab-active' : ''}} {{((documents | filter:withSearch(subjectName) | filter:{read:false}).length) == 0 ? 'empty' : ''}}" ng-click="setSearch(subjectName)">
+                <div>
+                    {{subjectName}} <span class="number-badge" ng-if="((documents | filter:withSearch(subjectName) | filter:{read:false}).length) > 0">({{(documents | filter:withSearch(subjectName) | filter:{read:false}).length}})</span>
+                </div>
+            </a>
+        </div>
+
     </nav>
 
     <div class="nav-left">
         <input type="text" ng-model="search" >
     </div>
     <div class="nav-right" >
-        <div class="button" ng-if="(documents | filter:tabOrSearchFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()" title="Mark {{(documents | filter:tabOrSearchFilter | filter:{read:false}).length}} as read">
+        <div class="button" ng-if="(documents | filter:searchFilter | filter:{read:false}).length > 0" ng-click="markFilteredAsRead()" title="Mark {{(documents | filter:searchFilter | filter:{read:false}).length}} as read">
             All
         </div>
     </div>
 
     <div class="card {{document.read ? 'read' : ''}} {{document.isFlagged ? 'flagged' : ''}} {{document.isBad ? 'bad' : ''}}"
-        ng-repeat="document in documents | filter:tabOrSearchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
+        ng-repeat="document in documents | filter:searchFilter | filter:{read:false} | orderBy:'-publishedDate.epochSecond' | limitTo:100">
 
         <div class="margin-left-right">
             <div class="button" ng-click="setDocumentRead(document, true)" title="Hide">
@@ -57,8 +60,8 @@
 
             <span class="subtitle" ng-if="document.feed.name" ng-click="setSearch(document.feed.name)"><a href="javascript:void(0);" >{{document.feed.name}}</a></span>
 
-            <span class="subtitle" ng-repeat="subject in document.subjects" ng-click="setSearch(subject)">
-                | <a href="javascript:void(0);" >{{subject}}</a>
+            <span class="subtitle" ng-repeat="subject in document.subjects | filter:{hashTag:true}" ng-click="setSearch(subject.name)">
+                | <a href="javascript:void(0);" >{{subject.name}}</a>
             </span>
 
             <span class="time-since" ng-if="document.publishedDateShort"> | {{document.publishedDateShort}}</span>

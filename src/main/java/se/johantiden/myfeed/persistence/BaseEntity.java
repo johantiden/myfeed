@@ -1,30 +1,39 @@
 package se.johantiden.myfeed.persistence;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import java.sql.Timestamp;
 import java.time.Instant;
 
-@MappedSuperclass
-public class BaseEntity {
+public abstract class BaseEntity<T extends BaseEntity<T>> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private final Long id;
+    private Long id;
 
-    private final Timestamp created = Timestamp.from(Instant.now());
+    private Instant created;
 
     public BaseEntity() {
         this.id = null;
     }
 
-    public Long getId() {
+    public long getId() {
+        if (!hasId()) {
+            throw new IllegalStateException("Don't get the id until the value has been persisted!");
+        }
         return id;
     }
 
-    public Timestamp getCreated() {
+    public Instant getCreated() {
         return created;
     }
+
+    public boolean hasId() {
+        return id != null;
+    }
+
+    protected final void setId(long id) {
+        this.id = id;
+    }
+
+    public final void setCreated(Instant instant) {
+        this.created = instant;
+    }
+
+
 }

@@ -3,12 +3,14 @@ package se.johantiden.myfeed.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.persistence.Subject;
 import se.johantiden.myfeed.persistence.Video;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DocumentBean {
 
@@ -17,7 +19,6 @@ public class DocumentBean {
     public final long documentId;
     public final NameAndUrl feed;
     public final String title;
-    public final List<String> tabs;
     public final String text;
     public final Double score;
     public final NameAndUrl author;
@@ -27,7 +28,7 @@ public class DocumentBean {
     public final String html;
     public final boolean read;
     public final List<Video> videos;
-    public final List<String> subjects;
+    public final List<SubjectBean> subjects;
 
     public DocumentBean(Document document) {
         verifyHtml(document.html, document.getFeedName());
@@ -44,11 +45,20 @@ public class DocumentBean {
         this.score = document.score;
         this.documentId = document.getId();
         this.videos = new ArrayList<>(document.videos);
-        this.tabs = document.getTabs();
-        if (tabs.isEmpty()) {
-            tabs.add("Unclassified");
-        }
-        this.subjects = document.getSubjects();
+        this.subjects = toSubjectBeans(document.getSubjects());
+    }
+
+    private List<SubjectBean> toSubjectBeans(List<Subject> subjects) {
+        return subjects.stream()
+                .map(this::toSubjectBean)
+                .collect(Collectors.toList());
+    }
+
+    private SubjectBean toSubjectBean(Subject subject) {
+        return new SubjectBean(
+                subject.getName(),
+                subject.isHashTag(),
+                subject.getMinDepth());
     }
 
     private void verifyHtml(String html, String feedName) {
@@ -125,11 +135,7 @@ public class DocumentBean {
         return videos;
     }
 
-    public List<String> getTabs() {
-        return tabs;
-    }
-
-    public List<String> getSubjects() {
+    public List<SubjectBean> getSubjects() {
         return subjects;
     }
 
@@ -176,5 +182,29 @@ public class DocumentBean {
                 ", read=" + read +
                 ", videos=" + videos +
                 '}';
+    }
+
+    private class SubjectBean {
+        final boolean hashTag;
+        final String name;
+        final int depth;
+
+        private SubjectBean(String name, boolean hashTag, int depth) {
+            this.name = name;
+            this.hashTag = hashTag;
+            this.depth = depth;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public boolean isHashTag() {
+            return hashTag;
+        }
+
+        public int getDepth() {
+            return depth;
+        }
     }
 }

@@ -34,19 +34,21 @@ div.nav-left > input {
     /*background-color: #400000;*/
 }
 
-.logo-img, nav, nav > a {
+.logo-img {
     height: 65px;
+    vertical-align: top;
+}
+
+.logo-img, nav, nav > div > a {
+    /*height: 65px;*/
     font-size: large;
     vertical-align: top;
 }
 
-nav > a > div {
+nav > div > a > div {
     vertical-align: top;
     display: inline-block;
     padding-top: 27px;
-}
-
-.tab-bar {
 }
 
 .title-row {
