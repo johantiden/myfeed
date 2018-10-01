@@ -25,7 +25,12 @@ public class DocumentService {
 
     public Document put(Document document) {
         if (!document.hasId()) {
-            log.info("Creating new document {}", document);
+            Optional<Document> existing = find(document);
+            if (existing.isPresent()) {
+                return documentRepository.merge(document, existing.get());
+            } else {
+                log.info("Creating new document {}", document);
+            }
         }
         return documentRepository.save(document);
     }
@@ -42,7 +47,7 @@ public class DocumentService {
 
         Optional<Document> existing = Optional.empty();
 
-        if (!document.hasId()) {
+        if (document.hasId()) {
             existing = Optional.ofNullable(documentRepository.findOne(document.getId()));
         }
 

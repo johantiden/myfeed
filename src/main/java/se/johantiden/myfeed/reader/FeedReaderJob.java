@@ -2,7 +2,6 @@ package se.johantiden.myfeed.reader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.service.DocumentService;
@@ -34,20 +33,25 @@ public class FeedReaderJob {
 
     @PostConstruct
     public void start() {
-        executor.scheduleWithFixedDelay(this::myRunnable, 0, 1, TimeUnit.SECONDS);
+        executor.scheduleWithFixedDelay(this::myRunnable, 5, 1, TimeUnit.SECONDS);
         log.info("Started FeedReaderJob");
     }
 
     public void myRunnable() {
 //        log.info("ENTER FeedReaderJob");
         Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
-        feed.ifPresent(this::consume);
+
+        try {
+
+            feed.ifPresent(this::consume);
+        } catch (RuntimeException e) {
+            log.error("Failed to read feed {}", feed.map(Feed::getName).orElse(""), e);
+        }
 //        log.info("EXIT  FeedReaderJob");
     }
 
-    @Async
     protected void consume(Feed feed) {
-//        log.info("  ENTER FeedReaderJob.consume - {}", feed.getName());
+        log.info("  ENTER FeedReaderJob.consume - {}", feed.getName());
 
         List<Document> documents = FeedReaderService.readAll(feed);
 

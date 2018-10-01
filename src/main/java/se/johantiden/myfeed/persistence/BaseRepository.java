@@ -24,7 +24,8 @@ public class BaseRepository<T extends BaseEntity<T>> {
     @Nonnull
     public T save(T t) {
         if (t.hasId()) {
-            return merge(t);
+            T existing = findOne(t.getId());
+            return merge(t, existing);
         } else {
             return add(t);
         }
@@ -40,10 +41,9 @@ public class BaseRepository<T extends BaseEntity<T>> {
     }
 
     @Nonnull
-    private T merge(T t) {
-        T existing = findOne(t.getId());
-        verifyMergingHack(existing, t);
-        return existing;
+    public T merge(T newItem, T oldItem) {
+        verifyMergingHack(newItem, oldItem);
+        return oldItem;
     }
 
     public void verifyMergingHack(T fromRepo, T other) {
