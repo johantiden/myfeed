@@ -11,5 +11,6 @@ buildNumber.properties
 .mvn/timing.properties
 *.iml
 
+src/main/elm/elm-stuff
 dump.rdb
 db.bin

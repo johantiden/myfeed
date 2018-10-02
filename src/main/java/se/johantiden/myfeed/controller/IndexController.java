@@ -3,6 +3,7 @@ package se.johantiden.myfeed.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+@CrossOrigin
 @RestController
 @EnableAutoConfiguration
 public class IndexController {
@@ -30,14 +32,24 @@ public class IndexController {
 
     public IndexController(DocumentService documentService) {this.documentService = Objects.requireNonNull(documentService);}
 
-    @RequestMapping(value = "/rest/index", method = GET)
-    public Collection<Long> index() {
+    @RequestMapping(value = "/rest/index/keys", method = GET)
+    public Collection<Long> indexKeys() {
 
         Set<Long> documentIds = documentService.getReadyDocuments();
 
         log.info("index keys:{}", documentIds.size());
 
         return documentIds;
+    }
+
+    @RequestMapping(value = "/rest/index/documents", method = GET)
+    public List<DocumentBean> indexDocuments() {
+
+        Set<Long> documentIds = documentService.getReadyDocuments();
+
+        log.info("index keys:{}", documentIds.size());
+
+        return documentsMulti(documentIds);
     }
 
     @RequestMapping(value = "/rest/document/{documentId}", method = GET)
@@ -59,7 +71,7 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/rest/documents", method = GET)
-    public List<DocumentBean> documentsMulti(@RequestParam("keys") List<Long> documentIds) {
+    public List<DocumentBean> documentsMulti(@RequestParam("keys") Collection<Long> documentIds) {
         List<DocumentBean> documentBeans = documentIds.stream()
                 .map(this::tryFindDocument)
                 .filter(Optional::isPresent)
