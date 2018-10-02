@@ -138,8 +138,8 @@ viewError error =
     case error of
         Nothing ->
             text ""
-        Just err ->
-            text err
+        Just error1 ->
+            text error1
 
 
 viewDocuments : List Document -> Html Msg
@@ -158,9 +158,9 @@ viewDocument document =
         ]
     ] [
 
-        div [css [marginBottom (px 2)]] [
+        div [css [marginBottom (px 2), displayFlex ]] [
             button [ onClick (HideDocument document), css stylesButton] [],
-            button [ onClick (HideDocument document), css ((float right)::stylesButton)] []
+            button [ onClick (HideDocument document), css ((marginLeft auto)::stylesButton)] []
         ],
         div [css [fontWeight bold, marginBottom (px 2)]] [
             text document.title
