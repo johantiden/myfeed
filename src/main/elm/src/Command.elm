@@ -7,7 +7,7 @@ import Settings exposing (..)
 
 type Msg
       = GetDocuments
-      | GotDocuments (Result Http.Error Documents)
+      | GotDocuments (Result Http.Error (List Document))
       | HideDocument Document
       | SetSearch String
 

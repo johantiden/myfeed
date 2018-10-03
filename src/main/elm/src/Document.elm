@@ -1,10 +1,7 @@
 module Document exposing (..)
 
 import Json.Decode as D exposing (..)
-import Set
-
-type alias Documents =
-    List Document
+import List.Extra exposing (uniqueBy)
 
 type alias Document =
     { title: String
@@ -46,11 +43,33 @@ decodeSubject =
         (field "showAsTab" bool)
         (field "depth" int)
 
-extractSubjectNames : Documents -> List String
+extractSubjectNames : List Document -> List String
 extractSubjectNames documents =
+    documents
+        |> extractSubjects
+        |> List.map (\s -> s.name)
+
+extractSubjects : List Document -> List Subject
+extractSubjects documents =
     documents
         |> List.map (\d -> d.subjects)
         |> List.concat
-        |> List.map (\s -> s.name)
-        |> Set.fromList
-        |> Set.toList
+        |> uniqueBy (\s -> s.name)
+
+groupSubjectsByDepth : List Subject -> List (Int, List Subject)
+groupSubjectsByDepth subjects =
+    subjects
+        |> List.sortBy (\s -> s.depth)
+        |> List.Extra.groupWhile (\a b -> a.depth == b.depth)
+        |> List.map (\(prototype, list) -> (prototype.depth, list))
+
+countMatching : String -> List Document -> Int
+countMatching search documents =
+    documents
+        |> filterDocuments search
+        |> List.length
+
+filterDocuments : String -> List Document -> List Document
+filterDocuments search documents=
+    documents
+        |> List.filter (\d -> String.contains search (Debug.toString d))

@@ -1,4 +1,4 @@
-module View exposing (view)
+module View exposing (..)
 import Command exposing (..)
 import Model exposing (..)
 import Document exposing (..)
@@ -10,7 +10,8 @@ import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css, href, src, placeholder, value)
 import Html.Styled.Events exposing (onClick)
 import Css exposing (..)
-
+import List.Extra exposing (group)
+import List
 percent = pct
 
 view : Model -> Browser.Document Msg
@@ -22,7 +23,7 @@ view model =
                 padding (px 5)
             ]]
             [viewNav
-            , viewTabs model.documents
+            , viewTabs model.search model.documents
             , viewSearchBox model.search
             , viewDocuments model.search model.documents
             , viewError model.error
@@ -33,21 +34,69 @@ view model =
 
 viewNav : Html Msg
 viewNav =
-    nav [css [backgroundColor (hex "ffffff")]]
-        [text "Fidn!"]
+    nav
+        [css
+            [backgroundColor (hex "ffffff")
+            , displayFlex
+            ]
+        ]
+        [ div [onClick (SetSearch ""), css [cursor pointer]] [text "Fidn!"]
+        ]
 
-viewTabs : Documents -> Html Msg
-viewTabs documents =
+viewTabs : String -> List Document -> Html Msg
+viewTabs search documents =
     div []
         (documents
-            |> extractSubjectNames
-            |> List.map viewTab
-            |> viewDelimitedList " "
+            |> extractSubjects
+            |> List.filter (\s -> s.showAsTab)
+            |> groupSubjectsByDepth
+            |> List.map (viewTabRow search documents)
         )
 
-viewTab : String -> Html Msg
-viewTab name =
-    span [onClick (SetSearch name), css [cursor pointer]] [text name]
+
+viewTabRow : String -> List Document -> (Int, List Subject) -> Html Msg
+viewTabRow search documents (depth, subjects) =
+    div [css []]
+        (subjects
+            |> List.map (\s -> ((countMatching s.name documents), s))
+            |> List.filter (\(hitCount, _) -> hitCount > 1)
+            |> List.map (viewTab search documents)
+        )
+
+
+viewTab : String -> List Document -> (Int, Subject)-> Html Msg
+viewTab search documents (hitCount, subject) =
+    let
+        css_ =
+            css (
+                [cursor pointer, margin (px 10), paddingTop (px 27), display inlineBlock] ++
+                (case search == subject.name of
+                    True -> [borderBottom3 (px 1) solid (hex "000000") ]
+                    False -> []
+                ) ++
+                   [color (colorFromHitCount hitCount)]
+                )
+        cssHitCount =
+            css []
+    in
+        div
+            [onClick (SetSearch subject.name), css_]
+            [text subject.name
+            , span [cssHitCount] [text ("(" ++ (Debug.toString hitCount) ++ ")")]
+            ]
+
+percentageFromHitCount : Int -> Float
+percentageFromHitCount hitCount =
+    toFloat (Basics.min 20 hitCount) / 20
+
+colorFromHitCount : Int -> Color
+colorFromHitCount hitCount =
+    let
+        p = percentageFromHitCount hitCount
+    in
+        hsl (120-p*120) 1 (0.9-p*0.4)
+
+
 
 viewSearchBox : String -> Html Msg
 viewSearchBox currentQuery =
@@ -109,7 +158,9 @@ viewSubtitleElements document =
 
 viewSubjectsSubtitle : List Subject -> List (Html Msg)
 viewSubjectsSubtitle subjects =
-    List.map viewSubjectSubtitle subjects
+    subjects
+        |> List.filter (\s -> s.hashTag)
+        |> List.map viewSubjectSubtitle
 
 viewSubjectSubtitle : Subject -> Html Msg
 viewSubjectSubtitle subject =
