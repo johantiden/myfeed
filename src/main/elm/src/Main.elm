@@ -5,7 +5,7 @@ import Command exposing (..)
 
 import Browser
 import Http
-import Document exposing (Document, Documents, Subject)
+import Document exposing (Document, Subject)
 import Document as D
 import Debug
 

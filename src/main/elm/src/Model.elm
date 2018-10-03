@@ -9,7 +9,7 @@ fakeData = False
 
 
 type alias Model =
-    { documents : Documents
+    { documents : List Document
     , search: String
     , error: Maybe String
     }
