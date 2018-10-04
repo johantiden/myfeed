@@ -8,7 +8,7 @@ app.service('documentService', function($http) {
     this.getAllKeys = function (callback) {
         $http({
             method: 'GET',
-            url: '/rest/index',
+            url: '/rest/index/keys',
             headers: {
                 'Cache-Control': 'no-cache, no-store'
             }
