@@ -61,6 +61,7 @@ viewTabRow search documents (depth, subjects) =
             |> List.map (\s -> ((countMatching s.name documents), s))
             |> List.filter (\(hitCount, _) -> hitCount > 1)
             |> Common.sortDescendingBy (\(hitCount, s) -> hitCount)
+            |> List.take 5
             |> List.map (viewTab search documents)
         )
 
