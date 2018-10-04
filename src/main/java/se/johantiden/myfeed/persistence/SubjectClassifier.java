@@ -75,18 +75,35 @@ public class SubjectClassifier {
         Subject moderaterna = add("Moderatena", "Moderaterna", inrikespolitik, alliansen);
         add("Ulf Kristersson", "Ulf Kristersson", moderaterna);
         add("Annie Lööf", "Annie Lööf", centerpartiet);
+        Subject socialdemokraterna = add("Socialdemokraterna", "[Ss]ocialdemokraterna", inrikespolitik);
+        add("Stefan Löfven", "Stefan Löfven", socialdemokraterna);
         Subject sverigedemokraterna = add("Sverigedemokraterna", "Sverigedemokraterna", inrikespolitik);
         add("Jimmie Åkesson", "Jimmie Åkesson", sverigedemokraterna);
         Subject talmannen = add("Talmannen", "[Tt]almannen", inrikespolitik);
         add("Andreas Norlén", "Andreas Norlén", talmannen, inrikespolitik);
         addInvisible("[Ll]andsting", inrikespolitik);
         addInvisible("[Kk]ommuner", inrikespolitik);
-        Subject inrikes = add("Inrikes", "[Ii]nrikes", sverige);
-        addInvisible("[Tt]ågtrafik", inrikes);
+        addInvisible("[Jj]ustitieombudsman", inrikespolitik);
+        addInvisible("Försäkringskassan", inrikespolitik);
 
+        addInvisible("[Ii]nrikes", sverige);
+        addInvisible("[Tt]ågtrafik", sverige);
 
+        Subject stockholm = add("Stockholm", "Stockholm", sverige);
+        add("Skövde", "Skövde", sverige);
 
+        Subject opinion = addWithoutExpression("Opinion", inrikespolitik);
+        addInvisible("[Rr]iktlinje", opinion);
+        addInvisible("DEBATT", opinion);
 
+        Subject equality = add("Jämställdhet", "[Jj]ämställdhet", news);
+        Subject hbtq = add("HBTQ", "hbtq", equality);
+        addInvisible("[Hh]omosexu", hbtq);
+
+        Subject ungern = add("Ungern", "Ungern|Hungary", news);
+        add("Budapest", "Budapest", ungern);
+        Subject bosnien = add("Bosnien", "Bosnien|Bosnia", news);
+        Subject romania = add("Rumänien", "Rumänien|Romania", news);
         Subject danmark = add("Danmark", "[Dd]anmark|[Dd]ansk|[Dd]enmark|[Dd]anish", news);
         Subject copenhagen = add("Köpenhamn", "Köpenhamn|Copenhagen", danmark);
 
@@ -160,6 +177,7 @@ public class SubjectClassifier {
         Subject turkiet = add("Turkiet", "Turkiet", news);
         add("Erdogan", "Erdogan", turkiet);
         Subject maldives = add("Maldives", "Maldives", news);
+        Subject burkinaFaso = add("Burkina Faso", "Burkina Faso", news);
         addInvisible("Turkey", turkiet);
         Subject grekland = add("Grekland", "Grekland", news);
         addInvisible("Greece", grekland);
@@ -167,11 +185,13 @@ public class SubjectClassifier {
         Subject israel = add("Israel", "Israel", news);
         Subject palestina = add("Palestina", "Palestin", news);
         add("Gaza", "Gaza", israel, palestina);
+        Subject libanon = add("Libanon", "[Ll][ei]banon", news);
 
         add("Slovakien", "Slovak", news);
 
         Subject japan = add("Japan", "Japan", news);
         add("Okinawa", "Okinawa", japan);
+        add("Tokyo", "Tokyo", japan);
 
         add("Malta", "Malta|Maltese", news);
 
@@ -186,7 +206,7 @@ public class SubjectClassifier {
         add("Leukemi", "[Ll]eukemi", science);
         add("Ultraljud", "[Uu]ltrasound", science);
 
-        Subject nobelpriset = add("Nobelpriset", "[Nn]obelpriset", sverige);
+        Subject nobelpriset = add("Nobelpriset", "[Nn]obel", sverige);
         addInvisible("[Nn]obel pri", nobelpriset);
         Subject svenskaAkademien = add("Svenska Akademien", "Svenska Akademien", nobelpriset, sverige);
         add("Jean-Claude Arnault", "Jean-Claude Arnault", svenskaAkademien, meToo);
@@ -250,6 +270,8 @@ public class SubjectClassifier {
         add("Grand slam", "[Gg]rand slam", sport);
         add("OS-guld", "OS\\-guld", sport);
         addInvisible("VM\\-titel", sport);
+        addInvisible("[Vv]ärldscup", sport);
+        addInvisible("50 meter fritt", sport);
         add("Rallycross", "[Rr]allycross", sport);
 
         Subject kultur = addWithoutExpression("Kultur", HIDE_CULTURE, ROOT);
