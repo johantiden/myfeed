@@ -1,13 +1,12 @@
 module Main exposing (..)
 import Model exposing (..)
 import View exposing (..)
-import Command exposing (..)
+import Update exposing (..)
 
 import Browser
 import Http
 import Document exposing (Document, Subject)
 import Document as D
-import Debug
 
 -- MAIN
 main =

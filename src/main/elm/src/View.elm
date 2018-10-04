@@ -1,5 +1,5 @@
 module View exposing (..)
-import Command exposing (..)
+import Update exposing (..)
 import Model exposing (..)
 import Document exposing (..)
 import Common exposing (..)
@@ -8,7 +8,7 @@ import Browser
 import Html
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css, href, src, placeholder, value)
-import Html.Styled.Events exposing (onClick)
+import Html.Styled.Events exposing (onClick, onInput)
 import Css exposing (..)
 import List.Extra exposing (group)
 import List
@@ -48,7 +48,7 @@ viewTabs search documents =
     div []
         (documents
             |> extractSubjects
-            |> List.filter (\s -> s.showAsTab)
+            |> List.filter .showAsTab
             |> groupSubjectsByDepth
             |> List.map (viewTabRow search documents)
         )
@@ -60,29 +60,28 @@ viewTabRow search documents (depth, subjects) =
         (subjects
             |> List.map (\s -> ((countMatching s.name documents), s))
             |> List.filter (\(hitCount, _) -> hitCount > 1)
+            |> Common.sortDescendingBy (\(hitCount, s) -> hitCount)
             |> List.map (viewTab search documents)
         )
-
 
 viewTab : String -> List Document -> (Int, Subject)-> Html Msg
 viewTab search documents (hitCount, subject) =
     let
         css_ =
             css (
-                [cursor pointer, margin (px 10), paddingTop (px 27), display inlineBlock] ++
+                [cursor pointer, margin (px 10), padding2 (px 10) (px 0), display inlineBlock] ++
                 (case search == subject.name of
                     True -> [borderBottom3 (px 1) solid (hex "000000") ]
                     False -> []
                 ) ++
-                   [color (colorFromHitCount hitCount)]
+                   [color (colorFromHitCount hitCount), styleShadow]
+                   ++ (stylesButton (hex "FFFFFF"))
                 )
-        cssHitCount =
-            css []
     in
-        div
+        button
             [onClick (SetSearch subject.name), css_]
             [text subject.name
-            , span [cssHitCount] [text ("(" ++ (Debug.toString hitCount) ++ ")")]
+            , span [] [text ("(" ++ (String.fromInt hitCount) ++ ")")]
             ]
 
 percentageFromHitCount : Int -> Float
@@ -94,13 +93,13 @@ colorFromHitCount hitCount =
     let
         p = percentageFromHitCount hitCount
     in
-        hsl (120-p*120) 1 (0.9-p*0.4)
+        hsl (120-p*120) 1 (0.7-p*0.3)
 
 
 
 viewSearchBox : String -> Html Msg
 viewSearchBox currentQuery =
-    input [placeholder "Search", value currentQuery] []
+    input [placeholder "Search", value currentQuery, onInput SetSearch] []
 
 
 viewError : Maybe String -> Html Msg
@@ -116,7 +115,8 @@ viewDocuments : String -> List Document -> Html Msg
 viewDocuments search documents  =
     div []
         (documents
-            |> List.filter (\d -> String.contains search (Debug.toString d))
+            |> Document.filterDocuments search
+            |> List.take 20
             |> List.map viewDocument
         )
 
@@ -131,8 +131,8 @@ viewDocument document =
         ]
         [ div
             [css [marginBottom (px 2), displayFlex ]]
-            [button [ onClick (HideDocument document), css stylesButton] []
-            , button [ onClick (HideDocument document), css ((marginLeft auto)::stylesButton)] []
+            [button [ onClick (HideDocument document), css (stylesButton (hex "FBFBFB"))] [text "X"]
+            , button [ onClick (HideDocument document), css ((marginLeft auto) :: (stylesButton (hex "FBFBFB")))] [text "X"]
             ]
         , div
             [css [fontWeight bold, marginBottom (px 2)]]
@@ -154,12 +154,18 @@ viewSubtitleElements document =
     ([a [href document.pageUrl, css (stylesLink)] [text "link"]
             , a [onClick (SetSearch document.feedName), css stylesSubtitleLink] [text document.feedName]
             ] ++ (viewSubjectsSubtitle document.subjects))
+            ++ [viewPublishedDate document.publishedDateShort]
+
+viewPublishedDate : String -> Html Msg
+viewPublishedDate publishedDateShort =
+    span [css stylesSubtitle] [text publishedDateShort]
 
 
 viewSubjectsSubtitle : List Subject -> List (Html Msg)
 viewSubjectsSubtitle subjects =
     subjects
-        |> List.filter (\s -> s.hashTag)
+        |> List.filter .hashTag
+        |> List.sortBy .name
         |> List.map viewSubjectSubtitle
 
 viewSubjectSubtitle : Subject -> Html Msg
@@ -181,12 +187,12 @@ styleShadow : Style
 styleShadow = boxShadow4 (px 0.5) (px 1) (px 3) (hex "888888")
 
 
-stylesButton : List Style
-stylesButton =
+stylesButton : Color -> List Style
+stylesButton color =
     [ width (vw 15)
     , marginTop zero
     , cursor pointer
-    , backgroundColor (hex "EEEEFF")
+    , backgroundColor color
     , styleShadow
     , display inlineBlock
     , minHeight (px 40)

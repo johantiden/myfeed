@@ -28,8 +28,10 @@ initModelFake =
 
 initFakeDocument : String -> String -> Document
 initFakeDocument id extraSubject =
-    {title = id ++ " Title lorem ipsum"
+    { documentId = 0
+    , title = id ++ " Title lorem ipsum"
     , text = "Text lorem ispum dolor sin amet."
+    , publishedDateShort  = "30m"
     , pageUrl = "google.com"
     , feedName = "FakeNews"
     , subjects =
