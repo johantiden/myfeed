@@ -42,6 +42,8 @@ public class SubjectClassifier {
 
         Subject usa = add("#USA", "USA|U\\.S\\.", news);
         Subject florida = add("Florida", "Florida", usa);
+        Subject california = add("Kalifornien", "[KkCc]aliforni", usa);
+        Subject hawaii = add("Hawaii", "[Hh]awaii", usa);
         Subject arizona = add("Arizona", "Arizona", usa);
         Subject ohio = add("Ohio", "Ohio|Cincinnati", usa);
         Subject texas = add("Texas", "Texas", usa);

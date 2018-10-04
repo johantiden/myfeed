@@ -1,11 +1,14 @@
 module Document exposing (..)
 
-import Json.Decode as D exposing (..)
+import Json.Decode as D
 import List.Extra exposing (uniqueBy)
+import Common exposing (..)
 
 type alias Document =
-    { title: String
+    { documentId: Int
+    , title: String
     ,  text: String
+    ,  publishedDateShort: String
     ,  pageUrl: String
     ,  feedName: String
     ,  subjects : List Subject
@@ -19,29 +22,30 @@ type alias Subject =
    , depth: Int
    }
 
-decodeDocuments: Decoder (List Document)
-decodeDocuments = list decodeDocument
+documentToString : Document -> String
+documentToString d =
+    [d.title, d.text, d.pageUrl, d.feedName, subjectsToString d.subjects, boolToString d.read]
+        |> delimit ","
+        |> List.foldr (++) ""
 
-decodeDocument: Decoder Document
-decodeDocument =
-    map6 Document
-        (field "title" string)
-        (field "text" string)
-        (field "pageUrl" string)
-        (field "feed" (field "name" string))
-        (field "subjects" decodeSubjects)
-        (field "read" bool)
+subjectsToString : List Subject -> String
+subjectsToString ss =
+    ss
+        |> List.map subjectToString
+        |> delimit ","
+        |> List.foldr (++) ""
 
-decodeSubjects: Decoder (List Subject)
-decodeSubjects = list decodeSubject
+subjectToString : Subject -> String
+subjectToString s =
+    [s.name, String.fromInt s.depth]
+        |> delimit ","
+        |> List.foldr (++) ""
 
-decodeSubject: Decoder Subject
-decodeSubject =
-    map4 Subject
-        (field "name" string)
-        (field "hashTag" bool)
-        (field "showAsTab" bool)
-        (field "depth" int)
+boolToString : Bool -> String
+boolToString b =
+    case b of
+        False -> "False"
+        True -> "True"
 
 extractSubjectNames : List Document -> List String
 extractSubjectNames documents =
@@ -70,6 +74,14 @@ countMatching search documents =
         |> List.length
 
 filterDocuments : String -> List Document -> List Document
-filterDocuments search documents=
+filterDocuments search documents =
     documents
-        |> List.filter (\d -> String.contains search (Debug.toString d))
+        |> List.filter (\d -> String.contains search (documentToString d))
+
+equals : Document -> Document -> Bool
+equals a b =
+    a.documentId == b.documentId
+
+notEquals : Document -> Document -> Bool
+notEquals a b =
+    a.documentId /= b.documentId

@@ -3,6 +3,7 @@ package se.johantiden.myfeed.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.service.DocumentService;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+@CrossOrigin
 @RestController
 @EnableAutoConfiguration
 public class ErrorController {
