@@ -6,7 +6,8 @@ import Document exposing (Document)
 import Json.Decode
 
 baseUrl : String
-baseUrl = "http://localhost:8080"
+baseUrl = "" -- Real service should have URL without scheme and authority
+--baseUrl = "http://localhost:8080" -- Use this fake base for local testing (e.g. using reactor)
 
 
 
