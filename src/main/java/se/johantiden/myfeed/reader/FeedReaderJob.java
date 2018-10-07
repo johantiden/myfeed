@@ -33,21 +33,30 @@ public class FeedReaderJob {
 
     @PostConstruct
     public void start() {
-        executor.scheduleWithFixedDelay(this::myRunnable, 5, 1, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(this::myRunnable, 5, 1, TimeUnit.SECONDS);
         log.info("Started FeedReaderJob");
     }
 
     public void myRunnable() {
 //        log.info("ENTER FeedReaderJob");
-        Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
-
         try {
+            Optional<Feed> feed = feedService.popOldestInvalidatedFeed();
 
-            feed.ifPresent(this::consume);
-        } catch (RuntimeException e) {
-            log.error("Failed to read feed {}", feed.map(Feed::getName).orElse(""), e);
+            feed.ifPresent(this::tryConsume);
+
+        } catch (RuntimeException r) {
+            log.error("Failed to get invalidated feed", r);
+
         }
 //        log.info("EXIT  FeedReaderJob");
+    }
+
+    private void tryConsume(Feed feed) {
+        try {
+            consume(feed);
+        } catch (RuntimeException e) {
+            log.error("Failed to read feed {}", feed.getName(), e);
+        }
     }
 
     protected void consume(Feed feed) {
