@@ -120,6 +120,7 @@ public class SubjectClassifier {
                 add("Libyen", "[Ll]ibya|[Ll]ibyen", afrika);
                 add("Kamerun", "[Kk]amerun|[Cc]ameroon", afrika);
                 add("Gabon", "Gabon", afrika);
+                add("Demokratiska Republiken Kongo", "Democratic Republic of Congo|Demokratiska Republiken Kongo", afrika);
             }
 
 
@@ -187,13 +188,20 @@ public class SubjectClassifier {
                     addInvisible("TheLocal", sverige);
                     Subject inrikespolitik = add("Inrikespolitik", "Inrikespolitik", sverige);
                     addInvisible("[Ss]vensk politik", inrikespolitik);
+
+                    add("Vänsterpartiet", "Vänsterpartiet", inrikespolitik);
+
                     Subject alliansen = add("Alliansen", "Alliansparti", inrikespolitik);
-                    Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik, alliansen);
+
                     Subject moderaterna = add("Moderatena", "Moderaterna", inrikespolitik, alliansen);
                     add("Ulf Kristersson", "Ulf Kristersson", moderaterna);
+
+                    Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik, alliansen);
                     add("Annie Lööf", "Annie Lööf", centerpartiet);
+
                     Subject socialdemokraterna = add("Socialdemokraterna", "[Ss]ocialdemokraterna", inrikespolitik);
                     add("Stefan Löfven", "Stefan Löfven", socialdemokraterna);
+
                     Subject sverigedemokraterna = add("Sverigedemokraterna", "Sverigedemokraterna", inrikespolitik);
                     add("Jimmie Åkesson", "Jimmie Åkesson", sverigedemokraterna);
                     Subject talmannen = add("Talmannen", "[Tt]almannen", inrikespolitik);
@@ -290,6 +298,7 @@ public class SubjectClassifier {
                 Subject oceanien = addWithoutExpression("Oceanien", news);
                 add("Mikronesien", "Mikronesien|[Mm]icronesia", oceanien);
                 add("Nauru", "Nauru", oceanien);
+                add("Australien", "[Aa]ustralia|[Aa]ustralien", oceanien);
 
             }
 
@@ -319,6 +328,7 @@ public class SubjectClassifier {
                 }
 
                 add("Kanada", "Canada|Kanada|Kanadens|Canadian", nordAmerika);
+                add("Haiti", "[Hh]aiti", nordAmerika);
 
             }
         }
@@ -328,7 +338,7 @@ public class SubjectClassifier {
             addInvisible("[Tt]emperatur", weather);
             add("Tsunami", "[Tt]sunami", weather);
             add("Tyfon", "[Tt]yfon|[Tt]yphoon", weather);
-            add("Jordbävning", "[Jj]ordbävning|[Ee]arth [Qq]uake", weather);
+            add("Jordbävning", "[Jj]ordbävning|[Ee]arth [Qq]uake|[Ee]arthquake", weather);
             add("Skogsbrand", "[Ss]kogsbrand", weather);
         }
         {
@@ -354,8 +364,9 @@ public class SubjectClassifier {
             addInvisible("Sportbladet", sport);
             add("Hockey", "[Hh]ockey", sport);
             Subject fotboll = add("Fotboll", "[Ff]otboll", sport);
-            add("#AIK", "AIK", sport);
             addInvisible("Brommapojkarna", fotboll);
+            add("Zlatan", "[Zz]latan", fotboll);
+            add("#AIK", "AIK", sport);
             Subject golf = add("Golf", "[Gg]olftävling|Ryder Cup|Henrik Stenson", sport);
             add("Tiger Woods", "Tiger Woods", golf);
             add("Grand slam", "[Gg]rand slam", sport);
