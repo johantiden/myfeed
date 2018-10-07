@@ -304,7 +304,6 @@ public class SubjectClassifier {
                     Subject arizona = add("Arizona", "Arizona", usa);
                     add("Ohio", "Ohio|Cincinnati", usa);
                     add("Texas", "Texas", usa);
-                    add("New York", "New York", usa);
 
                     Subject usaPolitik = add("USA-politik", "USA-politik", usa);
                     add("Jeff Flake", "Jeff Flake", usaPolitik, arizona);
