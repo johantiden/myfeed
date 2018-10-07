@@ -28,11 +28,11 @@ public class SubjectClassifier {
 
 
 
-        Subject news2 = addWithoutExpression("Nyheter", ROOT);
-        Subject meToo = add("#metoo", "[Mm]e[Tt]oo", news2);
+        Subject news = addWithoutExpression("Nyheter", ROOT);
+        Subject meToo = add("#metoo", "[Mm]e[Tt]oo", news);
 
         {
-            Subject sverige = add("Sverige", "[Ss]verige|[Ss]wedish|[Ss]weden", news2);
+            Subject sverige = add("Sverige", "[Ss]verige|[Ss]wedish|[Ss]weden", news);
             addInvisible("[Ss]vensk", sverige);
             addInvisible("TheLocal", sverige);
             Subject inrikespolitik = add("Inrikespolitik", "Inrikespolitik", sverige);
@@ -73,7 +73,7 @@ public class SubjectClassifier {
             }
         }
 
-        Subject opinion = addWithoutExpression("Opinion", news2);
+        Subject opinion = addWithoutExpression("Opinion", news);
         addInvisible("[Rr]iktlinje", opinion);
         addInvisible("DEBATT", opinion);
 
@@ -132,7 +132,7 @@ public class SubjectClassifier {
 
 
             {
-                Subject sydAmerika = addWithoutExpression("Sydamerika", news2);
+                Subject sydAmerika = addWithoutExpression("Sydamerika", news);
 
                 Subject argentina = add("Argentina", "[Aa]rgentin", sydAmerika);
                 add("Buenos Aires", "Buenos Aires", argentina);
@@ -149,7 +149,7 @@ public class SubjectClassifier {
             }
 
             {
-                Subject afrika = add("Afrika", "Afrika|Africa", news2);
+                Subject afrika = add("Afrika", "Afrika|Africa", news);
                 add("Senegal", "Senegal", afrika);
 
                 add("Egypt", "Egypt", afrika);
@@ -166,7 +166,7 @@ public class SubjectClassifier {
 
 
             {
-                Subject europe = add("Europa", "[Ee]urope", news2);
+                Subject europe = add("Europa", "[Ee]urope", news);
                 add("#EU", "European Union", europe);
 
                 {
@@ -191,7 +191,7 @@ public class SubjectClassifier {
                     add("Tories", "Tories", greatBritain);
                     addInvisible("U\\.K\\.", greatBritain);
 
-                    add("Brexit", "Brexit", news2, greatBritain);
+                    add("Brexit", "Brexit", news, greatBritain);
                     add("Theresa May", "Theresa May", greatBritain);
                     add("London", "London", greatBritain);
                     add("Birmingham", "Birmingham", greatBritain);
@@ -225,7 +225,7 @@ public class SubjectClassifier {
 
 
             {
-                Subject asien = add("Asien", "[Aa]sien|[Aa]sia");
+                Subject asien = add("Asien", "[Aa]sien|[Aa]sia", news);
 
                 add("Maldives", "Maldives", asien);
                 add("Thailand", "[Tt]hail[aä]nd", asien);
@@ -257,7 +257,7 @@ public class SubjectClassifier {
 
 
             {
-                Subject middleEast = addWithoutExpression("Mellanöstern", news2);
+                Subject middleEast = addWithoutExpression("Mellanöstern", news);
                 Subject israel = add("Israel", "Israel", middleEast);
                 Subject palestina = add("Palestina", "Palestin", middleEast);
                 add("Gaza", "Gaza", israel, palestina);
@@ -285,7 +285,7 @@ public class SubjectClassifier {
             }
 
             {
-                Subject oceanien = addWithoutExpression("Oceanien", news2);
+                Subject oceanien = addWithoutExpression("Oceanien", news);
                 add("Mikronesien", "Mikronesien|[Mm]icronesia", oceanien);
                 add("Nauru", "Nauru", oceanien);
 
@@ -293,7 +293,7 @@ public class SubjectClassifier {
 
 
             {
-                Subject nordAmerika = addWithoutExpression("Nordamerika", news2);
+                Subject nordAmerika = addWithoutExpression("Nordamerika", news);
                 {
                     Subject usa = add("#USA", "USA|U\\.S\\.", nordAmerika);
                     add("Florida", "Florida", usa);
@@ -388,26 +388,26 @@ public class SubjectClassifier {
         }
 
         {
-            Subject equality = add("Jämställdhet", "[Jj]ämställdhet", news2);
+            Subject equality = add("Jämställdhet", "[Jj]ämställdhet", news);
             Subject hbtq = add("HBTQ", "hbtq", equality);
             addInvisible("[Hh]omosexu", hbtq);
         }
 
-        add("Interpol", "Interpol", news2);
-        add("Flyktingar", "flykting", news2);
+        add("Interpol", "Interpol", news);
+        add("Flyktingar", "flykting", news);
 
-        add("Klimat", "[Kk]limat|[Cc]limate", news2);
+        add("Klimat", "[Kk]limat|[Cc]limate", news);
 
 
         {
-            Subject terrorism = add("Terrorism", "[T]error", news2);
+            Subject terrorism = add("Terrorism", "[T]error", news);
             add("Boko Haram", "[Bb]oko [Hh]aram", terrorism);
             add("ISIL", "ISIL|ISIS|[Ii]slamic [Ss]state", terrorism);
         }
 
-        add("Påven", "[Pp]ope|Påve", news2);
-        add("Journalist", "[Jj]ournalist", news2);
-        add("Amnesty", "Amnesty", news2);
+        add("Påven", "[Pp]ope|Påve", news);
+        add("Journalist", "[Jj]ournalist", news);
+        add("Amnesty", "Amnesty", news);
 
 
 
