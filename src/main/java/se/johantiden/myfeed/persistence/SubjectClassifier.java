@@ -31,48 +31,6 @@ public class SubjectClassifier {
         Subject news = addWithoutExpression("Nyheter", ROOT);
         Subject meToo = add("#metoo", "[Mm]e[Tt]oo", news);
 
-        {
-            Subject sverige = add("Sverige", "[Ss]verige|[Ss]wedish|[Ss]weden", news);
-            addInvisible("[Ss]vensk", sverige);
-            addInvisible("TheLocal", sverige);
-            Subject inrikespolitik = add("Inrikespolitik", "Inrikespolitik", sverige);
-            addInvisible("[Ss]vensk politik", inrikespolitik);
-            Subject alliansen = add("Alliansen", "Alliansparti", inrikespolitik);
-            Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik, alliansen);
-            Subject moderaterna = add("Moderatena", "Moderaterna", inrikespolitik, alliansen);
-            add("Ulf Kristersson", "Ulf Kristersson", moderaterna);
-            add("Annie Lööf", "Annie Lööf", centerpartiet);
-            Subject socialdemokraterna = add("Socialdemokraterna", "[Ss]ocialdemokraterna", inrikespolitik);
-            add("Stefan Löfven", "Stefan Löfven", socialdemokraterna);
-            Subject sverigedemokraterna = add("Sverigedemokraterna", "Sverigedemokraterna", inrikespolitik);
-            add("Jimmie Åkesson", "Jimmie Åkesson", sverigedemokraterna);
-            Subject talmannen = add("Talmannen", "[Tt]almannen", inrikespolitik);
-            add("Andreas Norlén", "Andreas Norlén", talmannen, inrikespolitik);
-            addInvisible("[Ll]andsting", inrikespolitik);
-            addInvisible("[Kk]ommuner", inrikespolitik);
-            addInvisible("[Jj]ustitieombudsman", inrikespolitik);
-            addInvisible("Försäkringskassan", inrikespolitik);
-
-            addInvisible("[Ii]nrikes", sverige);
-            addInvisible("[Tt]ågtrafik", sverige);
-            addInvisible("[Kk]olmården", sverige);
-
-            add("Stockholm", "Stockholm", sverige);
-            add("Skövde", "Skövde", sverige);
-            add("Malmö", "Malmö", sverige);
-            add("Göteborg", "Göteborg|Gothenburg", sverige);
-
-            add("Studiemedel", "CSN|[Ss]tudiemedel|[Ss]tudielån", sverige);
-
-
-            {
-                Subject nobelpriset = add("Nobelpriset", "[Nn]obel", sverige);
-                addInvisible("[Nn]obel pri", nobelpriset);
-                Subject svenskaAkademien = add("Svenska Akademien", "Svenska Akademien|Swedish Academy", sverige);
-                add("Jean-Claude Arnault", "Jean-Claude Arnault", svenskaAkademien, meToo);
-            }
-        }
-
         Subject opinion = addWithoutExpression("Opinion", news);
         addInvisible("[Rr]iktlinje", opinion);
         addInvisible("DEBATT", opinion);
@@ -221,6 +179,50 @@ public class SubjectClassifier {
                 Subject danmark = add("Danmark", "[Dd]anmark|[Dd]ansk|[Dd]enmark|[Dd]anish", europe);
                 add("Budapest", "Budapest", ungern);
                 add("Köpenhamn", "Köpenhamn|Copenhagen", danmark);
+
+
+                {
+                    Subject sverige = add("Sverige", "[Ss]verige|[Ss]wedish|[Ss]weden", news);
+                    addInvisible("[Ss]vensk", sverige);
+                    addInvisible("TheLocal", sverige);
+                    Subject inrikespolitik = add("Inrikespolitik", "Inrikespolitik", sverige);
+                    addInvisible("[Ss]vensk politik", inrikespolitik);
+                    Subject alliansen = add("Alliansen", "Alliansparti", inrikespolitik);
+                    Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik, alliansen);
+                    Subject moderaterna = add("Moderatena", "Moderaterna", inrikespolitik, alliansen);
+                    add("Ulf Kristersson", "Ulf Kristersson", moderaterna);
+                    add("Annie Lööf", "Annie Lööf", centerpartiet);
+                    Subject socialdemokraterna = add("Socialdemokraterna", "[Ss]ocialdemokraterna", inrikespolitik);
+                    add("Stefan Löfven", "Stefan Löfven", socialdemokraterna);
+                    Subject sverigedemokraterna = add("Sverigedemokraterna", "Sverigedemokraterna", inrikespolitik);
+                    add("Jimmie Åkesson", "Jimmie Åkesson", sverigedemokraterna);
+                    Subject talmannen = add("Talmannen", "[Tt]almannen", inrikespolitik);
+                    add("Andreas Norlén", "Andreas Norlén", talmannen, inrikespolitik);
+                    addInvisible("[Ll]andsting", inrikespolitik);
+                    addInvisible("[Kk]ommuner", inrikespolitik);
+                    addInvisible("[Jj]ustitieombudsman", inrikespolitik);
+                    addInvisible("Försäkringskassan", inrikespolitik);
+
+                    addInvisible("[Ii]nrikes", sverige);
+                    addInvisible("[Tt]ågtrafik", sverige);
+                    addInvisible("[Kk]olmården", sverige);
+
+                    add("Stockholm", "Stockholm", sverige);
+                    add("Skövde", "Skövde", sverige);
+                    add("Malmö", "Malmö", sverige);
+                    add("Göteborg", "Göteborg|Gothenburg", sverige);
+
+                    add("Studiemedel", "CSN|[Ss]tudiemedel|[Ss]tudielån", sverige);
+
+
+                    {
+                        Subject nobelpriset = add("Nobelpriset", "[Nn]obel", sverige);
+                        addInvisible("[Nn]obel pri", nobelpriset);
+                        Subject svenskaAkademien = add("Svenska Akademien", "Svenska Akademien|Swedish Academy", sverige);
+                        add("Jean-Claude Arnault", "Jean-Claude Arnault", svenskaAkademien, meToo);
+                    }
+                }
+
             }
 
 
