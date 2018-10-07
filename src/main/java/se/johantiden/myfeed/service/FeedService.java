@@ -7,10 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class FeedService {
 
+    private static final AtomicLong SEQUENCE = new AtomicLong(0);
     private final Set<Feed> feeds = new HashSet<>();
 
     public Optional<Feed> popOldestInvalidatedFeed() {
@@ -21,18 +23,9 @@ public class FeedService {
             return Optional.empty();
         }
 
-        Feed feed;
-        if (feeds.stream().anyMatch(f -> f.getLastRead() == null)) {
-            feed = feeds.stream()
-                    .filter(f -> f.getLastRead() == null)
-                    .findAny()
-                    .get();
-        } else {
-            feed = feeds.stream()
-                    .sorted(Feed.COMPARATOR_OLDEST_INVALIDATED)
-                    .findFirst()
-                    .get();
-        }
+        Feed feed = feeds.stream()
+                .min(Feed.COMPARATOR_OLDEST_INVALIDATED)
+                .get();
 
         feed.setLastRead(Instant.now());
         return Optional.of(feed);
@@ -46,6 +39,7 @@ public class FeedService {
     }
 
     public void put(Feed feed) {
+        feed.setId(SEQUENCE.incrementAndGet());
         feeds.add(feed);
     }
 }

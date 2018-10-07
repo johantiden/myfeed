@@ -24,7 +24,8 @@ public class DocumentBean {
     public final NameAndUrl author;
     public final String pageUrl;
     public final String imageUrl;
-    public final Instant publishedDate;
+    public final long publishedDate;
+    public final String publishedDateShortString;
     public final boolean read;
     public final List<Video> videos;
     public final List<SubjectBean> subjects;
@@ -36,7 +37,8 @@ public class DocumentBean {
         this.author = document.author;
         this.pageUrl = document.getPageUrl();
         this.imageUrl = document.imageUrl;
-        this.publishedDate = document.publishedDate;
+        this.publishedDate = document.publishedDate.toEpochMilli();
+        this.publishedDateShortString = dateToShortString(document.publishedDate);
         this.read = document.isRead();
         this.score = document.score;
         this.documentId = document.getId();
@@ -74,12 +76,12 @@ public class DocumentBean {
         return imageUrl;
     }
 
-    public final Instant getPublishedDate() {
+    public final long getPublishedDate() {
         return publishedDate;
     }
 
     public final String getPublishedDateShort() {
-        return dateToShortString(publishedDate);
+        return publishedDateShortString;
     }
 
     public final NameAndUrl getFeed() {

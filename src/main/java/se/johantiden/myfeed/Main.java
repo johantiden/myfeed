@@ -56,7 +56,7 @@ public class Main implements SchedulingConfigurer {
 
     @Bean(destroyMethod="shutdown")
     public ScheduledExecutorService executor() {
-        return Executors.newScheduledThreadPool(5);
+        return Executors.newScheduledThreadPool(8);
     }
 
     @Bean
