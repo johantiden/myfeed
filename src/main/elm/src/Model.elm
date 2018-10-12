@@ -18,18 +18,18 @@ type alias Model =
 initModelFake : Model
 initModelFake =
      { documents =
-        [initFakeDocument "1" "Gabba"
-        , initFakeDocument "2" "Hey"
-        , initFakeDocument "3" "Foo"
+        [initFakeDocument 1 "1" "Gabba"
+        , initFakeDocument 2 "2" "Hey"
+        , initFakeDocument 3 "3" "Foo"
         ]
         , search = ""
         , error = Nothing
     }
 
-initFakeDocument : String -> String -> Document
-initFakeDocument id extraSubject =
-    { documentId = 0
-    , title = id ++ " Title lorem ipsum"
+initFakeDocument : Int -> String -> String -> Document
+initFakeDocument id idStr extraSubject =
+    { documentId = id
+    , title = idStr ++ " Title lorem ipsum"
     , text = "Text lorem ispum dolor sin amet."
     , publishedDateShort  = "30m"
     , pageUrl = "google.com"

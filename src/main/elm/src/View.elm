@@ -2,6 +2,7 @@ module View exposing (..)
 import Update exposing (..)
 import Model exposing (..)
 import Document exposing (..)
+import Subject exposing (..)
 import Common exposing (..)
 
 import Browser
@@ -22,9 +23,7 @@ view model =
                 fontFamilies [ "Roboto", "serif" ],
                 padding (px 5)
             ]]
-            [viewNav
-            , viewTabs model.search model.documents
-            , viewSearchBox model.search
+            [ viewTop model
             , viewDocuments model.search model.documents
             , viewError model.error
             ]
@@ -32,12 +31,20 @@ view model =
         { body = [ Html.Styled.toUnstyled body ]
         , title = "fidn!"}
 
-viewNav : Html Msg
-viewNav =
+viewTop : Model -> Html Msg
+viewTop model =
+    div [css [height (px  400)]]
+    [ viewLogo
+    , viewSearchBox model.search
+    , viewTabs model.search model.documents
+    ]
+
+viewLogo : Html Msg
+viewLogo =
     nav
         [css
-            [backgroundColor (hex "ffffff")
-            , displayFlex
+            [ backgroundColor (hex "ffffff")
+            , marginBottom (px 10)
             ]
         ]
         [ div [onClick (SetSearch ""), css [cursor pointer]] [text "Fidn!"]
@@ -94,13 +101,20 @@ colorFromHitCount hitCount =
     let
         p = percentageFromHitCount hitCount
     in
-        hsl (120-p*120) 1 (0.7-p*0.3)
+        rgb
+            (Basics.floor (p*255))
+            (Basics.floor (50-(p*50)))
+            0
 
 
 
 viewSearchBox : String -> Html Msg
 viewSearchBox currentQuery =
-    input [placeholder "Search", value currentQuery, onInput SetSearch] []
+    input [ placeholder "Search"
+          , value currentQuery
+          , onInput SetSearch
+          , css [marginBottom (px 10)]]
+          []
 
 
 viewError : Maybe String -> Html Msg

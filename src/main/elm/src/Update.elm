@@ -52,7 +52,7 @@ update msg model =
 
 replaceDoc : Document -> List Document -> List Document
 replaceDoc doc documents =
-        List.Extra.setIf (Document.equals doc) doc documents
+        List.Extra.setIf (Document.equalId doc) doc documents
 
 removeDoc : Document -> List Document -> List Document
 removeDoc doc documents =
