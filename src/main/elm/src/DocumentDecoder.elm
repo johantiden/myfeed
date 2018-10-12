@@ -3,6 +3,7 @@ module DocumentDecoder exposing (..)
 import Json.Decode as D
 import Json.Encode as E
 import Document exposing (..)
+import Subject exposing (..)
 
 decodeDocuments: D.Decoder (List Document)
 decodeDocuments = D.list decodeDocument

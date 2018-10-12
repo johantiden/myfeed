@@ -5,7 +5,6 @@ import Update exposing (..)
 
 import Browser
 import Http
-import Document exposing (Document, Subject)
 import Document as D
 
 -- MAIN

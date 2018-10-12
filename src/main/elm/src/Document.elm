@@ -3,6 +3,7 @@ module Document exposing (..)
 import Json.Decode as D
 import List.Extra exposing (uniqueBy)
 import Common exposing (..)
+import Subject exposing (..)
 
 type alias Document =
     { documentId: Int
@@ -15,29 +16,9 @@ type alias Document =
     ,  read: Bool
     }
 
-type alias Subject =
-   { name: String
-   , hashTag: Bool
-   , showAsTab: Bool
-   , depth: Int
-   }
-
 documentToString : Document -> String
 documentToString d =
     [d.title, d.text, d.pageUrl, d.feedName, subjectsToString d.subjects, boolToString d.read]
-        |> delimit ","
-        |> List.foldr (++) ""
-
-subjectsToString : List Subject -> String
-subjectsToString ss =
-    ss
-        |> List.map subjectToString
-        |> delimit ","
-        |> List.foldr (++) ""
-
-subjectToString : Subject -> String
-subjectToString s =
-    [s.name, String.fromInt s.depth]
         |> delimit ","
         |> List.foldr (++) ""
 
@@ -60,13 +41,6 @@ extractSubjects documents =
         |> List.concat
         |> uniqueBy (\s -> s.name)
 
-groupSubjectsByDepth : List Subject -> List (Int, List Subject)
-groupSubjectsByDepth subjects =
-    subjects
-        |> List.sortBy (\s -> s.depth)
-        |> List.Extra.groupWhile (\a b -> a.depth == b.depth)
-        |> List.map (\(prototype, list) -> (prototype.depth, list))
-
 countMatching : String -> List Document -> Int
 countMatching search documents =
     documents
@@ -76,10 +50,14 @@ countMatching search documents =
 filterDocuments : String -> List Document -> List Document
 filterDocuments search documents =
     documents
-        |> List.filter (\d -> String.contains search (documentToString d))
+        |> List.filter (documentMatches search)
 
-equals : Document -> Document -> Bool
-equals a b =
+documentMatches : String -> Document -> Bool
+documentMatches search d =
+    String.contains (String.toLower search) (String.toLower (documentToString d))
+
+equalId : Document -> Document -> Bool
+equalId a b =
     a.documentId == b.documentId
 
 notEquals : Document -> Document -> Bool
