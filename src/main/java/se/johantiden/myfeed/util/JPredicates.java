@@ -1,7 +1,6 @@
 package se.johantiden.myfeed.util;
 
-import se.johantiden.myfeed.persistence.Document;
-
+import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 
@@ -16,7 +15,16 @@ public class JPredicates {
         return Predicate::and;
     }
 
+    public static <T> Predicate<T> and(List<Predicate<T>> predicates) {
+        return t -> predicates.stream().allMatch(p -> p.test(t));
+    }
+
     public static <T> Predicate<T> not(Predicate<T> a) {
         return t -> !a.test(t);
     }
+
+    public static <T> Predicate<T> or(List<Predicate<T>> predicates) {
+        return t -> predicates.stream().anyMatch(p -> p.test(t));
+    }
+
 }

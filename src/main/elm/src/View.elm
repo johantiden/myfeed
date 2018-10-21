@@ -34,21 +34,13 @@ view model =
 viewTop : Model -> Html Msg
 viewTop model =
     div [css [height (px  430)]]
-    [ viewLogo
-    , viewSearchRow model
+    [ viewTopRow model
     , viewTabs model
     ]
 
 viewLogo : Html Msg
 viewLogo =
-    nav
-        [css
-            [ backgroundColor (hex "ffffff")
-            , marginBottom (px 10)
-            ]
-        ]
-        [ div [onClick (SetSearch ""), css [cursor pointer]] [text "Fidn!"]
-        ]
+    span [onClick (SetSearch ""), css [cursor pointer]] [text "Fidn!"]
 
 viewTabs : Model -> Html Msg
 viewTabs model =
@@ -67,7 +59,7 @@ viewTabRow model (depth, subjects) =
         (subjects
             |> List.map (\s -> ((countMatching s.name model.documents), s))
             |> List.filter (\(hitCount, _) -> hitCount > 1)
-            |> Common.sortDescendingBy (\(hitCount, s) -> hitCount)
+            |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
             |> List.take 5
             |> List.map (viewTab model.search)
         )
@@ -79,7 +71,7 @@ viewTab search (hitCount, subject) =
             css (
                 [cursor pointer, margin (px 10), padding2 (px 10) (px 0), display inlineBlock] ++
                 (case search == subject.name of
-                    True -> [borderBottom3 (px 1) solid (hex "000000") ]
+                    True -> [fontWeight bold]
                     False -> []
                 ) ++
                    [color (colorFromHitCount hitCount), styleShadow]
@@ -106,16 +98,18 @@ colorFromHitCount hitCount =
             (Basics.floor (50-(p*50)))
             0
 
-viewSearchRow : Model -> Html Msg
-viewSearchRow model =
+viewTopRow : Model -> Html Msg
+viewTopRow model =
     div [css [marginBottom (px 30)]]
-    [ viewSearchBox model.search
+    [ viewLogo
+    , viewSearchBox model.search
+    , text (String.fromInt (List.length model.filteredDocuments))
     , viewHideAllButton model.filteredDocuments
     ]
 
 viewHideAllButton : List Document -> Html Msg
 viewHideAllButton filteredDocuments =
-        button [onClick (HideDocuments filteredDocuments), css (stylesButton (hex "FBFBFB"))] [text "ALL"]
+        button [onClick (HideDocuments filteredDocuments), css (stylesButton (hex "FBFBFB") ++ [margin (px 10)])] [text "ALL"]
 
 
 viewSearchBox : String -> Html Msg

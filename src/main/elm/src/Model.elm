@@ -2,7 +2,6 @@ module Model exposing (..)
 
 import Document exposing (..)
 
-import Http
 
 fakeData : Bool
 fakeData = False
