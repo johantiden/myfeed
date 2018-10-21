@@ -10,6 +10,7 @@ fakeData = False
 
 type alias Model =
     { documents : List Document
+    , filteredDocuments: List Document
     , search: String
     , error: Maybe String
     }
@@ -17,14 +18,18 @@ type alias Model =
 
 initModelFake : Model
 initModelFake =
-     { documents =
-        [initFakeDocument 1 "1" "Gabba"
-        , initFakeDocument 2 "2" "Hey"
-        , initFakeDocument 3 "3" "Foo"
-        ]
-        , search = ""
-        , error = Nothing
+     { documents = initFakeDocuments
+     , filteredDocuments = initFakeDocuments
+     , search = ""
+     , error = Nothing
     }
+
+initFakeDocuments : List Document
+initFakeDocuments =
+    [initFakeDocument 1 "1" "Gabba"
+    , initFakeDocument 2 "2" "Hey"
+    , initFakeDocument 3 "3" "Foo"
+    ]
 
 initFakeDocument : Int -> String -> String -> Document
 initFakeDocument id idStr extraSubject =
@@ -40,11 +45,12 @@ initFakeDocument id idStr extraSubject =
         , {name = "Fun", hashTag = True, showAsTab = True, depth = 0}
         , {name = extraSubject, hashTag = True, showAsTab = True, depth = 2}
         ]
-    , read = False}
+    }
 
 initModel : Model
 initModel =
-  { documents = [],
-    search = "",
-    error = Nothing
+  { documents = []
+  , filteredDocuments = []
+  ,  search = ""
+  ,  error = Nothing
   }
