@@ -69,11 +69,11 @@ viewTabRow model (depth, subjects) =
             |> List.filter (\(hitCount, _) -> hitCount > 1)
             |> Common.sortDescendingBy (\(hitCount, s) -> hitCount)
             |> List.take 5
-            |> List.map (viewTab (List.length subjects) model.search)
+            |> List.map (viewTab model.search)
         )
 
-viewTab : Int -> String -> (Int, Subject)-> Html Msg
-viewTab debug search (hitCount, subject) =
+viewTab : String -> (Int, Subject)-> Html Msg
+viewTab search (hitCount, subject) =
     let
         css_ =
             css (
@@ -88,7 +88,7 @@ viewTab debug search (hitCount, subject) =
     in
         button
             [onClick (SetSearch subject.name), css_]
-            [text ((String.fromInt debug) ++ subject.name)
+            [text subject.name
             , span [] [text ("(" ++ (String.fromInt hitCount) ++ ")")]
             ]
 
