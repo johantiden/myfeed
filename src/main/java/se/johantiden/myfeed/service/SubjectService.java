@@ -30,10 +30,15 @@ public class SubjectService {
             matchingRules.add(Subject.UNCLASSIFIED);
         }
 
-        document.setHidden(matchingRules.stream().anyMatch(Subject::isHideDocument));
+        boolean hidden = matchingRules.stream().anyMatch(Subject::isHideDocument);
+        document.setHidden(hidden);
+        if (hidden) {
+            documentService.setRead(document.getId());
+        }
 
         document.getSubjects().clear();
         document.getSubjects().addAll(matchingRules);
+
         documentService.put(document);
     }
 }

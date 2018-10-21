@@ -24,7 +24,7 @@ view model =
                 padding (px 5)
             ]]
             [ viewTop model
-            , viewDocuments model.search model.documents
+            , viewDocuments model.filteredDocuments
             , viewError model.error
             ]
     in
@@ -33,10 +33,10 @@ view model =
 
 viewTop : Model -> Html Msg
 viewTop model =
-    div [css [height (px  400)]]
+    div [css [height (px  430)]]
     [ viewLogo
-    , viewSearchRow model.search model.documents
-    , viewTabs model.search model.documents
+    , viewSearchRow model
+    , viewTabs model
     ]
 
 viewLogo : Html Msg
@@ -50,30 +50,30 @@ viewLogo =
         [ div [onClick (SetSearch ""), css [cursor pointer]] [text "Fidn!"]
         ]
 
-viewTabs : String -> List Document -> Html Msg
-viewTabs search documents =
+viewTabs : Model -> Html Msg
+viewTabs model =
     div []
-        (documents
+        (model.documents
             |> extractSubjects
             |> List.filter .showAsTab
             |> groupSubjectsByDepth
-            |> List.map (viewTabRow search documents)
+            |> List.map (viewTabRow model)
         )
 
 
-viewTabRow : String -> List Document -> (Int, List Subject) -> Html Msg
-viewTabRow search documents (depth, subjects) =
+viewTabRow : Model -> (Int, List Subject) -> Html Msg
+viewTabRow model (depth, subjects) =
     div [css []]
         (subjects
-            |> List.map (\s -> ((countMatching s.name documents), s))
+            |> List.map (\s -> ((countMatching s.name model.documents), s))
             |> List.filter (\(hitCount, _) -> hitCount > 1)
             |> Common.sortDescendingBy (\(hitCount, s) -> hitCount)
             |> List.take 5
-            |> List.map (viewTab search documents)
+            |> List.map (viewTab (List.length subjects) model.search)
         )
 
-viewTab : String -> List Document -> (Int, Subject)-> Html Msg
-viewTab search documents (hitCount, subject) =
+viewTab : Int -> String -> (Int, Subject)-> Html Msg
+viewTab debug search (hitCount, subject) =
     let
         css_ =
             css (
@@ -88,7 +88,7 @@ viewTab search documents (hitCount, subject) =
     in
         button
             [onClick (SetSearch subject.name), css_]
-            [text subject.name
+            [text ((String.fromInt debug) ++ subject.name)
             , span [] [text ("(" ++ (String.fromInt hitCount) ++ ")")]
             ]
 
@@ -106,21 +106,16 @@ colorFromHitCount hitCount =
             (Basics.floor (50-(p*50)))
             0
 
-viewSearchRow : String -> List Document -> Html Msg
-viewSearchRow query documents =
-    span []
-    [ viewSearchBox query
-    , viewHideAllButton query documents
+viewSearchRow : Model -> Html Msg
+viewSearchRow model =
+    div [css [marginBottom (px 30)]]
+    [ viewSearchBox model.search
+    , viewHideAllButton model.filteredDocuments
     ]
 
-viewHideAllButton : String -> List Document -> Html Msg
-viewHideAllButton query documents =
-    let
-        filteredDocuments =
-            documents
-                |> Document.filterDocuments query
-    in
-        button [onClick (HideDocuments filteredDocuments), css (stylesButton (hex "FBFBFB"))] [text "X"]
+viewHideAllButton : List Document -> Html Msg
+viewHideAllButton filteredDocuments =
+        button [onClick (HideDocuments filteredDocuments), css (stylesButton (hex "FBFBFB"))] [text "ALL"]
 
 
 viewSearchBox : String -> Html Msg
@@ -128,7 +123,7 @@ viewSearchBox currentQuery =
     input [ placeholder "Search"
           , value currentQuery
           , onInput SetSearch
-          , css [marginBottom (px 10)]]
+          , css [margin (px 10)]]
           []
 
 
@@ -141,11 +136,10 @@ viewError error =
             text error1
 
 
-viewDocuments : String -> List Document -> Html Msg
-viewDocuments search documents  =
+viewDocuments : List Document -> Html Msg
+viewDocuments filteredDocuments =
     div []
-        (documents
-            |> Document.filterDocuments search
+        (filteredDocuments
             |> List.take 20
             |> List.map viewDocument
         )

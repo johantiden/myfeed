@@ -11,9 +11,9 @@ import static se.johantiden.myfeed.persistence.Subject.ROOT;
 public class SubjectClassifier {
 
     private static final Set<Subject> SUBJECTS = new HashSet<>();
-    public static final boolean HIDE_SPORT = false;
-    public static final boolean HIDE_CULTURE = false;
-    public static final boolean HIDE_BAD = false;
+    public static final boolean HIDE_SPORT = true;
+    public static final boolean HIDE_CULTURE = true;
+    public static final boolean HIDE_BAD = true;
 
     public static Set<Subject> getSubjects() {
         SUBJECTS.add(ROOT);
@@ -61,7 +61,7 @@ public class SubjectClassifier {
                 add("Ultraljud", "[Uu]ltrasound", science);
             }
 
-
+            add("Show HN", "Show HN", tech);
 
             Subject internet = add("Internet", "[Ii]nternet", tech);
             Subject linux = add("Linux", "[Ll]inux", tech);
@@ -307,7 +307,8 @@ public class SubjectClassifier {
 
                 add("Jordanien", "[Jj]ordan", middleEast);
 
-                add("Saudiarabien", "[Ss]audi", middleEast);
+                Subject saudiarabien = add("Saudiarabien", "[Ss]audi", middleEast);
+                add("Jamal Khashoggi", "[Kk]hashoggi", saudiarabien);
 
                 add("Qatar", "Qatar", middleEast);
 
@@ -484,7 +485,6 @@ public class SubjectClassifier {
             Subject bad = addWithoutExpression("#Bad", HIDE_BAD, ROOT);
             add("SVT::Snabbkollen", "svt.*snabbkollen", bad);
             add("TheLocal::WordOfTheDay", "thelocal.*word-of-the-day", bad);
-            add("HackerNews::Show HN", "Show HN", bad);
             add("NYT::Your Briefing", "Your.*Briefing", bad);
             add("DN::webb-tv", "webb-tv", bad);
             add("DN::Gratulerar", "DN gratulerar", bad);

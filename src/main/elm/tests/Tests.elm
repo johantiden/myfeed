@@ -6,7 +6,7 @@ import Expect exposing (Expectation)
 import Test exposing (..)
 
 import Document exposing (..)
-import Model exposing (initFakeDocument)
+import Model exposing (initFakeDocument, initFakeDocuments)
 
 suite : Test
 suite =
@@ -36,5 +36,11 @@ suite =
                 (initFakeDocument 1 "1" "Gabba")
                     |> Document.documentMatches "gabba"
                     |> Expect.equal True
+
+        , test "Document.extractSubjects asd" <|
+            \() ->
+                (initFakeDocuments)
+                    |> Document.extractSubjects
+                    |> Expect.equal []
 
         ]

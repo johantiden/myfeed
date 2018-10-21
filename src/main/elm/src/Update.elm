@@ -6,6 +6,7 @@ import Document exposing (..)
 import Model exposing (..)
 import Service
 import List.Extra exposing (..)
+
 type Msg
       = GetDocuments
       | GotDocuments (Result Http.Error (List Document))
@@ -23,7 +24,7 @@ update msg model =
         GotDocuments result ->
             case result of
                 Ok documents ->
-                    ( { model | documents = documents, error = Nothing }
+                    ( { model | documents = documents, filteredDocuments = filterDocuments model.search documents, error = Nothing }
                     , Cmd.none
                     )
 
@@ -31,26 +32,25 @@ update msg model =
                     ( { model | error = Just "Network error, could not fetch documents. See console." }
                     , Cmd.none
                     )
-        HideDocuments documents ->
+        HideDocuments documentsToHide ->
             let
-                docs =
-                    documents
-                        |> List.map (\d -> {d | read = True})
+                newDocs =
+                    removeDocs documentsToHide model.documents
             in
-                ({model | documents = removeDocs docs model.documents}, hideDocuments docs)
+                ({model | documents = newDocs, filteredDocuments = Document.filterDocuments model.search newDocs}, hideDocuments documentsToHide)
 
         DocumentHidden result ->
             case result of
                 Ok str ->
                     (model, Cmd.none)
                 Err err ->
-                    ( { model | error = Just ("Network error, could not hide document. See console." ++ (Debug.toString err)) }
+                    ( { model | error = Just ("Network error, could not hide document. See console.") }
                     , Cmd.none
                     )
 
 
         SetSearch query ->
-            ({model | search = query}, Cmd.none)
+            ({model | search = query, filteredDocuments = Document.filterDocuments query model.documents}, Cmd.none)
 
 replaceDoc : Document -> List Document -> List Document
 replaceDoc doc documents =

@@ -13,12 +13,11 @@ type alias Document =
     ,  pageUrl: String
     ,  feedName: String
     ,  subjects : List Subject
-    ,  read: Bool
     }
 
 documentToString : Document -> String
 documentToString d =
-    [d.title, d.text, d.pageUrl, d.feedName, subjectsToString d.subjects, boolToString d.read]
+    [d.title, d.text, d.pageUrl, d.feedName, subjectsToString d.subjects]
         |> delimit ","
         |> List.foldr (++) ""
 
