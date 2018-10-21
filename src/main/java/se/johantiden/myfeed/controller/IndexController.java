@@ -50,7 +50,6 @@ public class IndexController {
         log.info("index keys:{}", documentIds.size());
 
         documentIds.addAll(documentIds);
-        documentIds.addAll(documentIds);
         return documentsMulti(documentIds);
     }
 
