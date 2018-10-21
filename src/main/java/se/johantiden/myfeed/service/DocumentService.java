@@ -35,10 +35,6 @@ public class DocumentService {
         return documentRepository.save(document);
     }
 
-    public boolean hasDocument(Document document) {
-        return find(document).isPresent();
-    }
-
     public boolean hasDocumentWithUrl(String pageUrl) {
         return findOneByPageUrl(pageUrl).isPresent();
     }
@@ -48,7 +44,7 @@ public class DocumentService {
         Optional<Document> existing = Optional.empty();
 
         if (document.hasId()) {
-            existing = Optional.ofNullable(documentRepository.findOne(document.getId()));
+            existing = Optional.of(documentRepository.findOne(document.getId()));
         }
 
         if (!existing.isPresent()) {
@@ -63,27 +59,24 @@ public class DocumentService {
     }
 
     public Optional<Document> find(long documentId) {
-        return Optional.ofNullable(documentRepository.findOne(documentId));
+        return Optional.of(documentRepository.findOne(documentId));
     }
 
     public Set<Document> findDocumentsNotParsedSubjects() {
         return documentRepository.findDocumentsNotParsedSubjects();
     }
 
-    public void invalidateSubjects() {
-        documentRepository.findAll().forEach(d -> {
-            d.setSubjectsParsed(false);
-            this.put(d);
-        });
-    }
-
     public Set<Long> getReadyDocuments() {
         return documentRepository.getReadyDocumentIds();
     }
 
+    public void setRead(long documentId) {
+        setRead(documentId, true);
+    }
+
     public void setRead(long documentId, boolean read) {
 
-        Optional<Document> documentOptional = Optional.ofNullable(documentRepository.findOne(documentId));
+        Optional<Document> documentOptional = Optional.of(documentRepository.findOne(documentId));
 
         Document doc = documentOptional.orElseThrow(() -> new IllegalStateException("Could not find document " + documentId));
 

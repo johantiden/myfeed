@@ -35,7 +35,7 @@ viewTop : Model -> Html Msg
 viewTop model =
     div [css [height (px  400)]]
     [ viewLogo
-    , viewSearchBox model.search
+    , viewSearchRow model.search model.documents
     , viewTabs model.search model.documents
     ]
 
@@ -106,6 +106,21 @@ colorFromHitCount hitCount =
             (Basics.floor (50-(p*50)))
             0
 
+viewSearchRow : String -> List Document -> Html Msg
+viewSearchRow query documents =
+    span []
+    [ viewSearchBox query
+    , viewHideAllButton query documents
+    ]
+
+viewHideAllButton : String -> List Document -> Html Msg
+viewHideAllButton query documents =
+    let
+        filteredDocuments =
+            documents
+                |> Document.filterDocuments query
+    in
+        button [onClick (HideDocuments filteredDocuments), css (stylesButton (hex "FBFBFB"))] [text "X"]
 
 
 viewSearchBox : String -> Html Msg
@@ -146,8 +161,8 @@ viewDocument document =
         ]
         [ div
             [css [marginBottom (px 2), displayFlex ]]
-            [button [ onClick (HideDocument document), css (stylesButton (hex "FBFBFB"))] [text "X"]
-            , button [ onClick (HideDocument document), css ((marginLeft auto) :: (stylesButton (hex "FBFBFB")))] [text "X"]
+            [button [ onClick (HideDocuments [document]), css (stylesButton (hex "FBFBFB"))] [text "X"]
+            , button [ onClick (HideDocuments [document]), css ((marginLeft auto) :: (stylesButton (hex "FBFBFB")))] [text "X"]
             ]
         , div
             [css [fontWeight bold, marginBottom (px 2)]]

@@ -20,3 +20,12 @@ descending a b =
 sortDescendingBy : (a -> comparable) -> List a -> List a
 sortDescendingBy mapper =
     List.sortWith (\a b -> descending (mapper a) (mapper b))
+
+
+notContains : (a -> a -> Bool) -> a -> List a -> Bool
+notContains predicate a list =
+    not (contains predicate a list)
+
+contains : (a -> a -> Bool) -> a -> List a -> Bool
+contains predicate a =
+    List.any (\e -> predicate e a)

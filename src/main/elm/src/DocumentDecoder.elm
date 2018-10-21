@@ -5,10 +5,10 @@ import Json.Encode as E
 import Document exposing (..)
 import Subject exposing (..)
 
-decodeDocuments: D.Decoder (List Document)
+decodeDocuments : D.Decoder (List Document)
 decodeDocuments = D.list decodeDocument
 
-decodeDocument: D.Decoder Document
+decodeDocument : D.Decoder Document
 decodeDocument =
     D.map8 Document
         (D.field "documentId" D.int)
@@ -20,7 +20,7 @@ decodeDocument =
         (D.field "subjects" decodeSubjects)
         (D.field "read" D.bool)
 
-encodeDocument: Document -> E.Value
+encodeDocument : Document -> E.Value
 encodeDocument d =
     E.object
         [ ("documentId", E.int d.documentId)
@@ -30,10 +30,10 @@ encodeDocument d =
         , ("read", E.bool d.read)
         ]
 
-decodeSubjects: D.Decoder (List Subject)
+decodeSubjects : D.Decoder (List Subject)
 decodeSubjects = D.list decodeSubject
 
-decodeSubject: D.Decoder Subject
+decodeSubject : D.Decoder Subject
 decodeSubject =
     D.map4 Subject
         (D.field "name" D.string)

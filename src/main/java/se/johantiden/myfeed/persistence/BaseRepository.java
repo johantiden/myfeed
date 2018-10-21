@@ -16,10 +16,10 @@ import java.util.stream.Stream;
 
 public class BaseRepository<T extends BaseEntity<T>> {
 
-    private static final Comparator<BaseEntity> COMPARATOR = Comparator.comparing(BaseEntity::getId);
+    private static final Comparator<BaseEntity<?>> COMPARATOR = Comparator.comparing(BaseEntity::getId);
 
     private final TreeSet<T> data = new TreeSet<>(COMPARATOR);
-    private final AtomicLong sequence = new AtomicLong(0);
+    private final AtomicLong sequence = new AtomicLong(0L);
 
     @Nonnull
     public T save(T t) {
@@ -109,7 +109,7 @@ public class BaseRepository<T extends BaseEntity<T>> {
     }
 
     public void delete(long id) {
-        T one = findOne(id);
-        data.remove(one);
+        T t = findOne(id);
+        data.remove(t);
     }
 }
