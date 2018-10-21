@@ -4,12 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.service.DocumentService;
 
+import java.util.List;
 import java.util.Objects;
 
 @CrossOrigin
@@ -23,14 +23,15 @@ public class DocumentController {
 
     public DocumentController(DocumentService documentService) {this.documentService = Objects.requireNonNull(documentService);}
 
-    @RequestMapping(value = "/rest/documents", method = RequestMethod.PUT)
-    public void putDocument(@RequestBody DocumentPutBean documentPutBean) {
+    @PostMapping("/rest/documents/hide")
+    public String putDocument(@RequestParam("id") List<Long> ids) {
 
-        log.info("Received PUT document: {}", documentPutBean);
+        log.info("Received hide request: {}", ids);
 
-        documentService.setRead(documentPutBean.documentId, documentPutBean.read);
+        ids.forEach(documentService::setRead);
 
 
+        return "{\"status:\":\"OK\"}";
 
     }
 }

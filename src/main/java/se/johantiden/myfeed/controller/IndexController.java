@@ -49,12 +49,13 @@ public class IndexController {
 
         log.info("index keys:{}", documentIds.size());
 
+        documentIds.addAll(documentIds);
+        documentIds.addAll(documentIds);
         return documentsMulti(documentIds);
     }
 
     @RequestMapping(value = "/rest/document/{documentId}", method = GET)
-    public DocumentBean document(@PathVariable("documentId") Long documentId) {
-
+    public DocumentBean document(@PathVariable("documentId") long documentId) {
         Optional<DocumentBean> documentBean = tryFindDocument(documentId);
 
         if (!documentBean.isPresent()) {
@@ -64,20 +65,19 @@ public class IndexController {
         return documentBean.get();
     }
 
-    private Optional<DocumentBean> tryFindDocument(Long documentId) {
+    private Optional<DocumentBean> tryFindDocument(long documentId) {
         Optional<Document> documentOptional = documentService.find(documentId);
 
-        return documentOptional.filter(JPredicates.not(Document::isHidden)).map(document -> new DocumentBean(document));
+        return documentOptional.filter(JPredicates.not(Document::isHidden)).map(DocumentBean::new);
     }
 
     @RequestMapping(value = "/rest/documents", method = GET)
     public List<DocumentBean> documentsMulti(@RequestParam("keys") Collection<Long> documentIds) {
-        List<DocumentBean> documentBeans = documentIds.stream()
+        return documentIds.stream()
                 .map(this::tryFindDocument)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
-        return documentBeans;
     }
 
 }
