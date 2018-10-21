@@ -1,38 +1,45 @@
 package se.johantiden.myfeed.persistence;
 
 import com.google.common.collect.ImmutableList;
-import se.johantiden.myfeed.classification.DocumentMatcher;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.function.Predicate;
+
+import static com.google.common.base.Objects.equal;
 
 public class Subject extends BaseEntity<Subject> {
 
     public static final Subject ROOT = new Subject("All");
-    public static final Subject UNCLASSIFIED = new Subject("Unclassified");
+    public static final Subject UNCLASSIFIED = new Subject("Unclassified", ROOT);
 
     private final ImmutableList<Subject> parents;
     private final List<Subject> children = new ArrayList<>();
     private final String name;
-    @Nullable
-    private final String expression;
+    private final Predicate<Document> documentPredicate;
     private boolean hideDocument;
     private final boolean isHashTag;
     private final boolean showAsTab;
 
-    // only root!
     private Subject(String name) {
         this.parents = ImmutableList.of();
         this.name = name;
-        this.expression = null;
+        this.documentPredicate = d -> false;
         isHashTag = false;
         showAsTab = true;
     }
 
-    public Subject(List<Subject> parents, String name, @Nullable String expression, boolean hideDocument, boolean isHashTag, boolean showAsTab) {
+    private Subject(String name, Subject parent) {
+        this.parents = ImmutableList.of(parent);
+        this.name = name;
+        this.documentPredicate = d -> false;
+        isHashTag = false;
+        showAsTab = true;
+    }
+
+    public Subject(List<Subject> parents, String name, @Nonnull Predicate<Document> documentPredicate, boolean hideDocument, boolean isHashTag, boolean showAsTab) {
         this.showAsTab = showAsTab;
         Objects.requireNonNull(parents);
         this.parents = ImmutableList.copyOf(parents);
@@ -45,17 +52,13 @@ public class Subject extends BaseEntity<Subject> {
             throw new RuntimeException("Name '"+name+"' is too short. It will probably cause search problems. Add a '#' if you want it to be this short");
         }
         this.name = Objects.requireNonNull(name);
-        this.expression = expression;
+        this.documentPredicate = Objects.requireNonNull(documentPredicate);
         this.isHashTag = isHashTag;
         this.hideDocument = hideDocument;
     }
 
     public String getName() {
         return name;
-    }
-
-    public String getExpression() {
-        return expression;
     }
 
     public boolean isHideDocument() {
@@ -66,32 +69,17 @@ public class Subject extends BaseEntity<Subject> {
                         .orElse(false);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
-        Subject subject = (Subject) o;
-        return hideDocument == subject.hideDocument &&
-                isHashTag == subject.isHashTag &&
-                Objects.equals(parents, subject.parents) &&
-                Objects.equals(name, subject.name) &&
-                Objects.equals(expression, subject.expression);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(parents, name, expression, hideDocument, isHashTag);
-    }
 
     @Override
     public String toString() {
         return "Subject{" +
                 "parents=" + parents +
+                ", children=" + children +
                 ", name='" + name + '\'' +
-                ", expression='" + expression + '\'' +
+                ", documentPredicate=" + documentPredicate +
                 ", hideDocument=" + hideDocument +
                 ", isHashTag=" + isHashTag +
+                ", showAsTab=" + showAsTab +
                 '}';
     }
 
@@ -103,13 +91,7 @@ public class Subject extends BaseEntity<Subject> {
     }
 
     private boolean isMatchSelf(Document document) {
-        if (expression == null) {
-            return false;
-        }
-        Pattern pattern = Pattern.compile(getExpression());
-
-        boolean match = new DocumentMatcher(document).matches(pattern);
-        return match;
+        return documentPredicate.test(document);
     }
 
     public int getMinDepth() {
@@ -132,5 +114,23 @@ public class Subject extends BaseEntity<Subject> {
 
     public boolean isShowAsTab() {
         return showAsTab;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Subject that = (Subject) o;
+
+        return  equal(this.name, that.name) &&
+                equal(this.hideDocument, that.hideDocument) &&
+                equal(this.isHashTag, that.isHashTag) &&
+                equal(this.showAsTab, that.showAsTab);
+    }
+
+    @Override
+    public int hashCode() {
+        return com.google.common.base.Objects.hashCode(name, hideDocument, isHashTag, showAsTab);
     }
 }

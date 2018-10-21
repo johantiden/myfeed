@@ -14,7 +14,7 @@ type alias Subject =
 groupSubjectsByDepth : List Subject -> List (Int, List Subject)
 groupSubjectsByDepth subjects =
     subjects
-        |> List.sortBy (\s -> s.depth)
+        |> List.sortBy .depth
         |> List.Extra.groupWhile (\a b -> a.depth == b.depth)
         |> List.map (\(prototype, list) -> (prototype.depth, list))
 

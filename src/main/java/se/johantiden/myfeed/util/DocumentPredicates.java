@@ -1,5 +1,6 @@
 package se.johantiden.myfeed.util;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import se.johantiden.myfeed.persistence.Document;
 
@@ -14,6 +15,13 @@ public class DocumentPredicates {
     }
 
     public static Predicate<Document> has(String string) {
+        Preconditions.checkArgument(!string.contains("["), "This should not be a regex! Use the regex predicate instead!");
+        Preconditions.checkArgument(!string.contains("]"), "This should not be a regex! Use the regex predicate instead!");
+        Preconditions.checkArgument(!string.contains("|"), "This should not be a regex! Use the regex predicate instead!");
+        Preconditions.checkArgument(!string.contains("*"), "This should not be a regex! Use the regex predicate instead!");
+        Preconditions.checkArgument(!string.contains("\\"), "This should not be a regex! Use the regex predicate instead!");
+
+
         String string2 = string.toLowerCase();
         return d -> d.text != null && d.text.toLowerCase().contains(string2) ||
                     d.title != null && d.title.toLowerCase().contains(string2) ||
@@ -59,5 +67,9 @@ public class DocumentPredicates {
             return text + " ";
         }
 
+    }
+
+    public static Predicate<Document> matches(String regex) {
+        return matches(Pattern.compile(regex));
     }
 }
