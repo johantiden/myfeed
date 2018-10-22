@@ -28,8 +28,8 @@ update msg model =
                     , Cmd.none
                     )
 
-                Err error ->
-                    ( { model | error = Just "Network error, could not fetch documents. See console." }
+                Err err ->
+                    ( { model | error = Just ("Network error, could not fetch documents." ++ (errorToString err)) }
                     , Cmd.none
                     )
         HideDocuments documentsToHide ->
@@ -44,13 +44,26 @@ update msg model =
                 Ok str ->
                     (model, Cmd.none)
                 Err err ->
-                    ( { model | error = Just ("Network error, could not hide document. See console.") }
+                    ( { model | error = Just ("Network error, could not hide document." ++ (errorToString err)) }
                     , Cmd.none
                     )
 
 
         SetSearch query ->
             ({model | search = query, filteredDocuments = Document.filterDocuments query model.documents}, Cmd.none)
+
+errorToString : Http.Error -> String
+errorToString error =
+    let _ = Debug.log "hej"
+    in
+    case error of
+        Http.BadUrl s -> "BadUrl " ++ s
+        Http.Timeout -> "Timeout"
+        Http.NetworkError -> "NetworkError"
+        Http.BadStatus response -> "BadStatus " ++ (String.fromInt response.status.code)
+        Http.BadPayload str response -> "BadPayload" ++ str ++ response.body
+
+
 
 replaceDoc : Document -> List Document -> List Document
 replaceDoc doc documents =

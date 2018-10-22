@@ -147,7 +147,7 @@ viewDocument document =
              , styleShadow
              ]
         ]
-        [ div
+        ([ div
             [css [marginBottom (px 2), displayFlex ]]
             [button [ onClick (HideDocuments [document]), css (stylesButton (hex "FBFBFB"))] [text "X"]
             , button [ onClick (HideDocuments [document]), css ((marginLeft auto) :: (stylesButton (hex "FBFBFB")))] [text "X"]
@@ -161,6 +161,15 @@ viewDocument document =
             text document.text
           ]
         ]
+        ++ maybeViewImage document.imageUrl
+        )
+
+
+maybeViewImage : Maybe String -> List (Html Msg)
+maybeViewImage url =
+    case url of
+        Just imgUrl -> [img [src imgUrl, css [width (pct 100)]] []]
+        Nothing -> []
 
 viewSubtitleRow : Document -> List (Html Msg)
 viewSubtitleRow document =

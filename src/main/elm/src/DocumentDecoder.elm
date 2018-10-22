@@ -10,7 +10,7 @@ decodeDocuments = D.list decodeDocument
 
 decodeDocument : D.Decoder Document
 decodeDocument =
-    D.map7 Document
+    D.map8 Document
         (D.field "documentId" D.int)
         (D.field "title" D.string)
         (D.field "text" D.string)
@@ -18,6 +18,7 @@ decodeDocument =
         (D.field "pageUrl" D.string)
         (D.field "feed" (D.field "name" D.string))
         (D.field "subjects" decodeSubjects)
+        (D.field "imageUrl" (D.maybe D.string))
 
 encodeDocument : Document -> E.Value
 encodeDocument d =
