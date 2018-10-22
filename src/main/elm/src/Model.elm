@@ -44,6 +44,7 @@ initFakeDocument id idStr extraSubject =
         , {name = "Fun", hashTag = True, showAsTab = True, depth = 0}
         , {name = extraSubject, hashTag = True, showAsTab = True, depth = 2}
         ]
+    , imageUrl = Just "https://www.google.se/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
     }
 
 initModel : Model

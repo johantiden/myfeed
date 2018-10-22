@@ -8,11 +8,12 @@ import Subject exposing (..)
 type alias Document =
     { documentId: Int
     , title: String
-    ,  text: String
-    ,  publishedDateShort: String
-    ,  pageUrl: String
-    ,  feedName: String
-    ,  subjects : List Subject
+    , text: String
+    , publishedDateShort: String
+    , pageUrl: String
+    , feedName: String
+    , subjects : List Subject
+    , imageUrl : Maybe String
     }
 
 documentToString : Document -> String
