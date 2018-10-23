@@ -1,41 +1,31 @@
 module DocumentDecoder exposing (..)
 
-import Json.Decode as D
-import Json.Encode as E
+import Json.Decode exposing (..)
 import Document exposing (..)
 import Subject exposing (..)
 
-decodeDocuments : D.Decoder (List Document)
-decodeDocuments = D.list decodeDocument
+decodeDocuments : Decoder (List Document)
+decodeDocuments = list decodeDocument
 
-decodeDocument : D.Decoder Document
+decodeDocument : Decoder Document
 decodeDocument =
-    D.map8 Document
-        (D.field "documentId" D.int)
-        (D.field "title" D.string)
-        (D.field "text" D.string)
-        (D.field "publishedDateShort" D.string)
-        (D.field "pageUrl" D.string)
-        (D.field "feed" (D.field "name" D.string))
-        (D.field "subjects" decodeSubjects)
-        (D.field "imageUrl" (D.maybe D.string))
+    map8 Document
+        (field "documentId" int)
+        (field "title" string)
+        (field "text" (maybe string))
+        (field "publishedDateShort" string)
+        (field "pageUrl" string)
+        (field "feed" (field "name" string))
+        (field "subjects" decodeSubjects)
+        (field "imageUrl" (maybe string))
 
-encodeDocument : Document -> E.Value
-encodeDocument d =
-    E.object
-        [ ("documentId", E.int d.documentId)
-        , ("title", E.string d.title)
-        , ("text", E.string d.text)
-        , ("pageUrl", E.string d.pageUrl)
-        ]
+decodeSubjects : Decoder (List Subject)
+decodeSubjects = list decodeSubject
 
-decodeSubjects : D.Decoder (List Subject)
-decodeSubjects = D.list decodeSubject
-
-decodeSubject : D.Decoder Subject
+decodeSubject : Decoder Subject
 decodeSubject =
-    D.map4 Subject
-        (D.field "name" D.string)
-        (D.field "hashTag" D.bool)
-        (D.field "showAsTab" D.bool)
-        (D.field "depth" D.int)
+    map4 Subject
+        (field "name" string)
+        (field "hashTag" bool)
+        (field "showAsTab" bool)
+        (field "depth" int)

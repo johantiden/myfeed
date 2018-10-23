@@ -8,7 +8,7 @@ import se.johantiden.myfeed.plugin.ReutersFeed;
 import se.johantiden.myfeed.plugin.DagensNyheterFeed;
 import se.johantiden.myfeed.plugin.HackerNewsFeed;
 import se.johantiden.myfeed.plugin.RedditFeed;
-import se.johantiden.myfeed.plugin.RssFeed;
+import se.johantiden.myfeed.plugin.GenericRssFeed;
 import se.johantiden.myfeed.plugin.SlashdotFeed;
 import se.johantiden.myfeed.plugin.SvenskaDagbladetFeed;
 import se.johantiden.myfeed.plugin.SVTNyheterFeed;
@@ -62,13 +62,13 @@ public class FeedPopulator {
 
         feeds.add(new WashingtonPostFeed());
 
-//        feeds.add(createReddit("r/worldnews", 1000));
-//        feeds.add(createReddit("r/AskReddit", 1000));
-//        feeds.add(createReddit("r/ProgrammerHumor", 600));
-//        feeds.add(createReddit("r/science", 1000));
-//        feeds.add(createReddit("top", 1000));
-//        feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
-//        feeds.add(createReddit("r/announcements", 10000));
+        feeds.add(createReddit("r/worldnews", 1000));
+        feeds.add(createReddit("r/AskReddit", 1000));
+        feeds.add(createReddit("r/ProgrammerHumor", 600));
+        feeds.add(createReddit("r/science", 1000));
+        feeds.add(createReddit("top", 1000));
+        feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/announcements", 10000));
 
         feeds.add(createRss(
                 "TheLocal",
@@ -79,7 +79,7 @@ public class FeedPopulator {
     }
 
     private static Feed createRss(String feedName, String webUrl, String rssUrl) {
-        return new RssFeed(feedName, webUrl, rssUrl);
+        return new GenericRssFeed(feedName, webUrl, rssUrl);
     }
 
     private static Feed createReddit(String subreddit, double minScore) {

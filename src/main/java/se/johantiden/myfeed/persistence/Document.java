@@ -1,20 +1,13 @@
 package se.johantiden.myfeed.persistence;
 
-
-import com.google.common.collect.Lists;
-import se.johantiden.myfeed.controller.NameAndUrl;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 
 public class Document extends BaseEntity<Document> {
     public String title;
     public String text;
-    public NameAndUrl author;
     private final String pageUrl;
     public String imageUrl;
     public final Instant publishedDate;
@@ -31,7 +24,6 @@ public class Document extends BaseEntity<Document> {
     public Document(
             String title,
             String text,
-            NameAndUrl author,
             String pageUrl,
             String imageUrl,
             Instant publishedDate,
@@ -40,7 +32,6 @@ public class Document extends BaseEntity<Document> {
 
         this.title = title;
         this.text = text;
-        this.author = author;
         this.pageUrl = pageUrl;
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;

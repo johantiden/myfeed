@@ -22,7 +22,7 @@ public final class JCollections {
                 .collect(Collectors.toList());
     }
 
-    public static <T, R> List<R> map(Collection<T> list, Function<T, R> mapper) {
+    public static <T, R> List<R> map(Function<T, R> mapper, Collection<T> list) {
         return list.stream()
                 .map(mapper)
                 .collect(Collectors.toList());

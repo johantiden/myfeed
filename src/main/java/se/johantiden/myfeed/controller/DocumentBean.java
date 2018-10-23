@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DocumentBean {
@@ -20,8 +21,6 @@ public class DocumentBean {
     public final NameAndUrl feed;
     public final String title;
     public final String text;
-    public final Double score;
-    public final NameAndUrl author;
     public final String pageUrl;
     public final String imageUrl;
     public final long publishedDate;
@@ -34,13 +33,14 @@ public class DocumentBean {
         this.feed = new NameAndUrl(document.getFeedName(), document.getFeedUrl());
         this.title = document.title;
         this.text = document.text;
-        this.author = document.author;
         this.pageUrl = document.getPageUrl();
         this.imageUrl = document.imageUrl;
+        if (this.imageUrl == null) {
+            log.debug("No image!");
+        }
         this.publishedDate = document.publishedDate.toEpochMilli();
         this.publishedDateShortString = dateToShortString(document.publishedDate);
         this.read = document.isRead();
-        this.score = document.score;
         this.documentId = document.getId();
         this.videos = new ArrayList<>(document.videos);
         this.subjects = toSubjectBeans(document.getSubjects());
@@ -88,16 +88,8 @@ public class DocumentBean {
         return feed;
     }
 
-    public final NameAndUrl getAuthor() {
-        return author;
-    }
-
     public final boolean isRead() {
         return read;
-    }
-
-    public final Double getScore() {
-        return score;
     }
 
     public long getDocumentId() {
@@ -146,8 +138,6 @@ public class DocumentBean {
                 ", feed=" + feed +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
-                ", score=" + score +
-                ", author=" + author +
                 ", pageUrl='" + pageUrl + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publishedDate=" + publishedDate +

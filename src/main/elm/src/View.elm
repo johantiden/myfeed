@@ -40,7 +40,7 @@ viewTop model =
 
 viewLogo : Html Msg
 viewLogo =
-    span [onClick (SetSearch ""), css [cursor pointer]] [text "Fidn!"]
+    span [onClick (SetSearch ""), css [cursor pointer]] [img [src "./fidn1.png", css [width (px 80)]] []]
 
 viewTabs : Model -> Html Msg
 viewTabs model =
@@ -158,7 +158,10 @@ viewDocument document =
         , div []
             (viewSubtitleRow document)
         , div [] [
-            text document.text
+            text (case document.text of
+                    Just text -> text
+                    Nothing -> ""
+                 )
           ]
         ]
         ++ maybeViewImage document.imageUrl

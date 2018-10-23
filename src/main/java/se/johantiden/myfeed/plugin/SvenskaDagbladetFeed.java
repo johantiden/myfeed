@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.plugin.rss.Item;
+import se.johantiden.myfeed.plugin.rss.Rss2Doc;
+import se.johantiden.myfeed.plugin.rss.RssFeedReader;
+import se.johantiden.myfeed.util.Pair;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +32,7 @@ public class SvenskaDagbladetFeed extends Feed {
 
     public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeedReader(NAME, "https://www.svd.se/?service=rss", URL).readAllAvailable();
+            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, URL, "https://www.svd.se/?service=rss", Rss2Doc.class).readAllAvailable();
             return documents.stream()
                     .map(createEntryMapper())
                     .filter(FILTER)
@@ -37,13 +41,14 @@ public class SvenskaDagbladetFeed extends Feed {
     }
 
 
-    private static Function<Document, Document> createEntryMapper() {
-        return document -> {
+    private static Function<Pair<Item, Document>, Document> createEntryMapper() {
+        return pair -> {
+            Document document = pair.right;
             document.isPaywalled = isPaywalled(document);
             if(!document.isPaywalled) {
                 document.imageUrl = findImage(document);
             }
-            return document;
+            return pair.right;
         };
     }
 

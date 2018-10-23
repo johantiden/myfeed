@@ -10,7 +10,7 @@ import se.johantiden.myfeed.util.DocumentPredicates;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FeedReaderService {
+public class FeedReaderService {
 
     private static final Logger log = LoggerFactory.getLogger(FeedReaderService.class);
 
@@ -35,7 +35,7 @@ public final class FeedReaderService {
         try {
             return reader.readAllAvailable();
         } catch (RuntimeException e) {
-            log.error("Failed to read feed {}", feed.getName());
+            log.error("Failed to read feed {}", feed.getName(), e);
             log.debug("Exception:", e);
             return new ArrayList<>();
         }

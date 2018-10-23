@@ -4,6 +4,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.plugin.rss.Item;
+import se.johantiden.myfeed.plugin.rss.Rss2Doc;
+import se.johantiden.myfeed.plugin.rss.RssFeedReader;
+import se.johantiden.myfeed.util.Pair;
 
 import java.util.List;
 import java.util.function.Function;
@@ -22,13 +26,13 @@ public class EngadgetFeed extends Feed {
 
     public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
+            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, URL, URL_RSS, Rss2Doc.class).readAllAvailable();
             return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
         };
     }
 
-    private static Function<Document, Document> createEntryMapper() {
-        return document -> document;
+    private static Function<Pair<Item, Document>, Document> createEntryMapper() {
+        return pair -> pair.right;
     }
 
     private static String getImageUrl(String html) {

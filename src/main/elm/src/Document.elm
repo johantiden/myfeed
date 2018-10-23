@@ -8,7 +8,7 @@ import Subject exposing (..)
 type alias Document =
     { documentId: Int
     , title: String
-    , text: String
+    , text: Maybe String
     , publishedDateShort: String
     , pageUrl: String
     , feedName: String
@@ -18,7 +18,11 @@ type alias Document =
 
 documentToString : Document -> String
 documentToString d =
-    [d.title, d.text, d.pageUrl, d.feedName, subjectsToString d.subjects]
+    [d.title,
+        (case d.text of
+            Just text -> text
+            Nothing -> ""
+        ), d.pageUrl, d.feedName, subjectsToString d.subjects]
         |> delimit ","
         |> List.foldr (++) ""
 

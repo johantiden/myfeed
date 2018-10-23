@@ -34,7 +34,7 @@ initFakeDocument : Int -> String -> String -> Document
 initFakeDocument id idStr extraSubject =
     { documentId = id
     , title = idStr ++ " Title lorem ipsum"
-    , text = "Text lorem ispum dolor sin amet."
+    , text = Just "Text lorem ispum dolor sin amet."
     , publishedDateShort  = "30m"
     , pageUrl = "google.com"
     , feedName = "FakeNews"
