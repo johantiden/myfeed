@@ -66,6 +66,11 @@ public class Rss1Doc implements Doc{
             return Instant.parse(updated);
         }
 
+        @Override
+        public Enclosure getEnclosure() {
+            return null;
+        }
+
         public static class Summary {
             @JacksonXmlProperty(isAttribute = true)
             public String type;

@@ -15,6 +15,8 @@ public interface Item {
 
     Instant getDate();
 
+    Enclosure getEnclosure();
+
     interface Content {
 
         String getDescription();
@@ -24,5 +26,10 @@ public interface Item {
         String getUrl();
 
         String getMedium();
+    }
+
+    interface Enclosure {
+        String getUrl();
+        String getType();
     }
 }

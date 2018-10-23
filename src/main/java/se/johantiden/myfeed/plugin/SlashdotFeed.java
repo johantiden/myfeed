@@ -100,6 +100,11 @@ public class SlashdotFeed extends Feed {
                 return instantFromUpdated(updated);
             }
 
+            @Override
+            public Enclosure getEnclosure() {
+                return null;
+            }
+
             public static String PUB_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
             public static Instant instantFromUpdated(String updated) {
                 Instant instant = null;

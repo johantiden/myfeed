@@ -101,6 +101,11 @@ public class HackerNewsFeed extends Feed {
                     return Rss2Doc.instantFromPubDate(pubDate);
                 }
 
+                @Override
+                public Enclosure getEnclosure() {
+                    return null;
+                }
+
                 static class Content implements se.johantiden.myfeed.plugin.rss.Item.Content {
                     public String type;
                     public String url;
