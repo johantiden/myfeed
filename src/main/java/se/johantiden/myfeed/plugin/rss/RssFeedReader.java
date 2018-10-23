@@ -142,13 +142,24 @@ public class RssFeedReader {
             return null;
         }
 
-        return e.getContent().stream()
+        if (e.getEnclosure() != null && e.getEnclosure().getType() != null && e.getEnclosure().getType().startsWith("image")) {
+            String url = e.getEnclosure().getUrl();
+            if (url != null) {
+                return url;
+            }
+        }
+
+        String imgUrlFromContent = e.getContent().stream()
                 .filter(Objects::nonNull)
                 .filter(c -> c.getType() != null && c.getType().startsWith("image") || c.getMedium() != null && c.getMedium().startsWith("image"))
                 .map(Content::getUrl)
                 .findAny()
                 .orElse(null);
+        if (imgUrlFromContent != null) {
+            return imgUrlFromContent;
+        }
 
+        return null;
     }
 
     private URL getUrl() {

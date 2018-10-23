@@ -75,6 +75,7 @@ public class Rss2Doc implements Doc {
             public String creator;
             public String category;
             public String comments;
+            public Enclosure enclosure;
 
             @JacksonXmlProperty(namespace = "feedburner", localName = "origLink")
             public String feedBurnerOrigLink;
@@ -131,6 +132,11 @@ public class Rss2Doc implements Doc {
                 return null;
             }
 
+            @Override
+            public se.johantiden.myfeed.plugin.rss.Item.Enclosure getEnclosure() {
+                return enclosure;
+            }
+
             static class Content implements se.johantiden.myfeed.plugin.rss.Item.Content {
                 public String type;
                 public String url;
@@ -167,6 +173,22 @@ public class Rss2Doc implements Doc {
                 public boolean isPermaLink;
                 @JacksonXmlText
                 public String body;
+            }
+
+            public static class Enclosure implements se.johantiden.myfeed.plugin.rss.Item.Enclosure {
+                String url;
+                String length;
+                String type;
+
+                @Override
+                public String getUrl() {
+                    return url;
+                }
+
+                @Override
+                public String getType() {
+                    return type;
+                }
             }
         }
 
