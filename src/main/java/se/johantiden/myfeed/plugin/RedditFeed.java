@@ -9,6 +9,10 @@ import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.persistence.Video;
+import se.johantiden.myfeed.plugin.rss.Item;
+import se.johantiden.myfeed.plugin.rss.Rss2Doc;
+import se.johantiden.myfeed.plugin.rss.RssFeedReader;
+import se.johantiden.myfeed.util.Pair;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +32,7 @@ public class RedditFeed extends Feed {
 
     public static FeedReader createFeedReader(String subreddit, Predicate<Document> filter) {
         return () -> {
-            List<Document> documents = new RssFeedReader(getFeedName(subreddit), getWebUrl(subreddit), getRssUrl(subreddit)).readAllAvailable();
+            List<Pair<Item, Document>> documents = new RssFeedReader(getFeedName(subreddit), getWebUrl(subreddit), getRssUrl(subreddit), Rss2Doc.class).readAllAvailable();
             return documents.stream().map(createEntryMapper()).filter(filter).collect(Collectors.toList());
         };
     }
@@ -45,15 +49,14 @@ public class RedditFeed extends Feed {
         return "Reddit - " + subreddit;
     }
 
-    private static Function<Document, Document> createEntryMapper() {
-        return document -> {
-            org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(document.getPageUrl());
-            parseStuffz(jsoupDocument, document);
+    private static Function<Pair<Item, Document>, Document> createEntryMapper() {
+        return pair -> {
+            org.jsoup.nodes.Document jsoupDocument = getJsoupDocument(pair.right.getPageUrl());
+            parseStuffz(jsoupDocument, pair.right);
             if (!isNSFW(jsoupDocument)) {
-                document.score = findVotes(jsoupDocument);
+                pair.right.score = findVotes(jsoupDocument);
             }
-            document.author = null;
-            return document;
+            return pair.right;
         };
     }
 

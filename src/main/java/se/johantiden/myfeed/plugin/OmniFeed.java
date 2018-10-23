@@ -88,7 +88,6 @@ public class OmniFeed extends Feed {
             Document document = new Document(
                     title,
                     text,
-                    null,
                     pageUrl,
                     imageUrl,
                     published,

@@ -2,14 +2,17 @@ package se.johantiden.myfeed.plugin;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
-import se.johantiden.myfeed.controller.NameAndUrl;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.plugin.rss.Item;
+import se.johantiden.myfeed.plugin.rss.Rss1Doc;
+import se.johantiden.myfeed.plugin.rss.RssFeedReader;
+import se.johantiden.myfeed.util.Pair;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static se.johantiden.myfeed.util.JCollections.map;
 
 
 public class XkcdFeed extends Feed {
@@ -24,24 +27,21 @@ public class XkcdFeed extends Feed {
 
     public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS){
+            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, URL, URL_RSS, Rss1Doc.class) {
                 @Override
-                protected Document createDocument(String title, String pageUrl, String imageUrl, Instant publishedDate, String text, String html, NameAndUrl author, String feedName, String feedUrl) {
+                protected Document createDocument(String title, String pageUrl, String imageUrl, Instant publishedDate, String text, String html, String feedName, String feedUrl) {
 
                     imageUrl = XkcdFeed.getImageUrl(html);
-                    return new Document(title, text, author, pageUrl, imageUrl, publishedDate, feedName, feedUrl);
+                    return new Document(title, text, pageUrl, imageUrl, publishedDate, feedName, feedUrl);
 
                 }
             }.readAllAvailable();
-            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
+            return map(Pair::getRight, documents);
         };
     }
 
-    private static Function<Document, Document> createEntryMapper() {
-        return document -> document;
-    }
 
-    private static String getImageUrl(String html) {
+    static String getImageUrl(String html) {
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
         Elements img = doc.select("img");
         if(!img.isEmpty()) {

@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.plugin.rss.Item;
+import se.johantiden.myfeed.plugin.rss.Rss2Doc;
+import se.johantiden.myfeed.plugin.rss.RssFeedReader;
+import se.johantiden.myfeed.util.Pair;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +31,7 @@ public class DagensIndustriFeed extends Feed {
 
     public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeedReader(NAME, "https://www.svd.se/?service=rss", URL).readAllAvailable();
+            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, "https://www.svd.se/?service=rss", URL, Rss2Doc.class).readAllAvailable();
             return documents.stream()
                     .map(createEntryMapper())
                     .collect(Collectors.toList());
@@ -35,29 +39,30 @@ public class DagensIndustriFeed extends Feed {
     }
 
 
-    private static Function<Document, Document> createEntryMapper() {
-        return document -> {
+    private static Function<Pair<Item, Document>, Document> createEntryMapper() {
+        return pair -> {
 
-            document.imageUrl = findImage(document);
+            pair.right.imageUrl = findImage(pair);
 
-            handleCapitalizedSubject(document);
+            handleCapitalizedSubject(pair);
 
-            return document;
+            return pair.right;
         };
     }
 
-    private static void handleCapitalizedSubject(Document document) {
+    private static void handleCapitalizedSubject(Pair<Item, Document> document) {
 
         Pattern pattern = Pattern.compile("^[A-ZÅÄÖ]+\\. ");
-        if (pattern.matcher(document.text).find()) {
+        String text = document.right.text;
+        if (pattern.matcher(text).find()) {
 
-            String[] splitText = pattern.split(document.text);
-            document.text = splitText[1];
+            String[] splitText = pattern.split(text);
+            document.right.text = splitText[1];
         }
     }
 
-    private static String findImage(Document document) {
-        org.jsoup.nodes.Document doc = getJsoupDocument(document.getPageUrl());
+    private static String findImage(Pair<Item, Document> document) {
+        org.jsoup.nodes.Document doc = getJsoupDocument(document.right.getPageUrl());
 
         Elements figureImg = doc.select(".di_article-figure__picture > img");
         if(!figureImg.isEmpty()) {

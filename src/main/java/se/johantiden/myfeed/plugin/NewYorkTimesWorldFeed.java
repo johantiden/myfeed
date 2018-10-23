@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.plugin.rss.Item;
+import se.johantiden.myfeed.plugin.rss.Rss2Doc;
+import se.johantiden.myfeed.plugin.rss.RssFeedReader;
+import se.johantiden.myfeed.util.Pair;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -27,30 +31,29 @@ public class NewYorkTimesWorldFeed extends Feed {
 
     public static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
+            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, URL, URL_RSS, Rss2Doc.class).readAllAvailable();
             return documents.stream()
                    .map(docMapper())
                    .collect(Collectors.toList());
         };
     }
 
-    private static Function<Document, Document> docMapper() {
+    private static Function<Pair<Item, Document>, Document> docMapper() {
 
-        return document -> {
-            document.imageUrl = findImage(document);
-            return document;
+        return pair -> {
+            pair.right.imageUrl = findImage(pair);
+            return pair.right;
         };
 
     }
 
-    private static String findImage(Document document) {
-        URL url = getUrl(document.getPageUrl());
+    private static String findImage(Pair<Item, Document> document) {
+        URL url = getUrl(document.right.getPageUrl());
         org.jsoup.nodes.Document doc = getJsoupDocument(url);
 
         Elements img = doc.select("img.media-viewer-candidate");
         if(!img.isEmpty()) {
-            String src = img.attr("src");
-            return src;
+            return img.attr("src");
         }
 
         return null;

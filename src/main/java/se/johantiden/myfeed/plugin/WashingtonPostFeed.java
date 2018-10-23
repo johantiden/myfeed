@@ -7,6 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
+import se.johantiden.myfeed.plugin.rss.Item;
+import se.johantiden.myfeed.plugin.rss.Rss2Doc;
+import se.johantiden.myfeed.plugin.rss.RssFeedReader;
+import se.johantiden.myfeed.util.Pair;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -21,40 +25,26 @@ public class WashingtonPostFeed extends Feed {
     public static final String NAME = "Washington Post - The Fact Checker";
     public static final String URL = "https://www.washingtonpost.com/news/fact-checker/";
     public static final String URL_RSS = "http://feeds.washingtonpost.com/rss/rss_fact-checker";
-//    private final Duration invalidationPeriod;
-//    private final String feedName;
-//    private final String webUrl;
-//    private final String rssUrl;
 
     public WashingtonPostFeed() {
         super(NAME, URL, createFeedReader());
     }
 
 
-//    public WashingtonPostFeed(String feedName, String webUrl, String rssUrl, Duration invalidationPeriod) {
-//        this.invalidationPeriod = invalidationPeriod;
-//        this.feedName = feedName;
-//        this.webUrl = webUrl;
-//        this.rssUrl = rssUrl;
-//    }
-
     private static FeedReader createFeedReader() {
         return () -> {
-            List<Document> documents = new RssFeedReader(NAME, URL, URL_RSS).readAllAvailable();
+            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, URL, URL_RSS, Rss2Doc.class).readAllAvailable();
             return documents.stream()
                    .map(docMapper())
                    .collect(Collectors.toList());
         };
     }
 
-    private static Function<Document, Document> docMapper() {
-
-
-        return document -> {
-            document.imageUrl = findImage(document);
-            return document;
+    private static Function<Pair<Item, Document>, Document> docMapper() {
+        return pair -> {
+            pair.right.imageUrl = findImage(pair);
+            return pair.right;
         };
-
     }
 
     private static String parseImgFromHtml(String html) {
@@ -69,8 +59,8 @@ public class WashingtonPostFeed extends Feed {
         return null;
     }
 
-    private static String findImage(Document document) {
-        URL url = getUrl(document.getPageUrl());
+    private static String findImage(Pair<Item, Document> document) {
+        URL url = getUrl(document.right.getPageUrl());
         org.jsoup.nodes.Document doc = getJsoupDocument(url);
 
         Elements img = doc.select(".article-main-img");
