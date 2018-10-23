@@ -54,8 +54,6 @@ update msg model =
 
 errorToString : Http.Error -> String
 errorToString error =
-    let _ = Debug.log "hej"
-    in
     case error of
         Http.BadUrl s -> "BadUrl " ++ s
         Http.Timeout -> "Timeout"
