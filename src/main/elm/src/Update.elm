@@ -24,9 +24,11 @@ update msg model =
         GotDocuments result ->
             case result of
                 Ok documents ->
-                    ( { model | documents = documents, filteredDocuments = filterDocuments model.search documents, error = Nothing }
-                    , Cmd.none
-                    )
+                    let sorted = Document.sortByDate documents
+                    in
+                        ( { model | documents = sorted, filteredDocuments = filterDocuments model.search sorted, error = Nothing }
+                        , Cmd.none
+                        )
 
                 Err err ->
                     ( { model | error = Just ("Network error, could not fetch documents." ++ (errorToString err)) }

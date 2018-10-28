@@ -10,6 +10,7 @@ type alias Document =
     , title: String
     , text: Maybe String
     , publishedDateShort: String
+    , publishedDate: Int
     , pageUrl: String
     , feedName: String
     , subjects : List Subject
@@ -67,3 +68,8 @@ equalId a b =
 notEquals : Document -> Document -> Bool
 notEquals a b =
     a.documentId /= b.documentId
+
+sortByDate : List Document -> List Document
+sortByDate documents =
+    documents
+        |> Common.sortDescendingBy .publishedDate
