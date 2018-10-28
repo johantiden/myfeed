@@ -71,9 +71,16 @@ public class SubjectClassifier {
 
             add("Show HN", "Show HN", tech);
 
+
+            Subject miljo = add("Mijlö", l("klimat", "climate"), news);
+            addInvisible("environment", miljo);
+            add("Återvinning", "återvinning", miljo);
+
+
             Subject internet = add("Internet", "internet", tech);
             Subject linux = add("Linux", "linux", tech);
             addInvisible("Ubuntu", linux);
+            addInvisible("Linus Torvalds", linux);
             addInvisible("KDE", linux);
             Subject ai = add("Artificial Intelligence", l("artificial intelligence","artificial-intelligence"), tech);
             addInvisible("robot", ai);
@@ -82,13 +89,14 @@ public class SubjectClassifier {
             add("Cellular Automata", "cellular automata", machineLearning);
 
             add("Niklas Zennström", "Zennström", tech);
-            addInvisible("HackerNews", tech);
+            addInvisible("ycombinator", tech);
 
             Subject software = add("Software", "software", tech);
             addInvisible("programming", software);
             addInvisible("programmer", software);
             addInvisible("web framework", software);
             addInvisible("database", software);
+            addInvisible("computation", software);
             addInvisible("clojure", software);
             addInvisible("haskell", software);
             addInvisible("open source", software);
@@ -132,6 +140,8 @@ public class SubjectClassifier {
             {
                 Subject afrika = add("Afrika", l("Afrika","Africa"), news);
 
+                add("Algeriet", l("algeria", "algeriet"), afrika);
+                add("Sudan", "Sudan", afrika);
                 add("Botswana", "Botswana", afrika);
                 add("Burkina Faso", "Burkina Faso", afrika);
                 add("Demokratiska Republiken Kongo", l("Democratic Republic of Congo","Demokratiska Republiken Kongo"), afrika);
@@ -155,6 +165,7 @@ public class SubjectClassifier {
                 Subject europe = add("Europa", l("europe", "europa"), news);
                 add("#EU", "European Union", europe);
 
+                add("Georgien", l("Georgia", "Georgien"), europe);
                 {
                     Subject turkiet = add("Turkiet", "Turkiet", europe);
                     add("Erdogan", "Erdogan", turkiet);
@@ -166,6 +177,7 @@ public class SubjectClassifier {
                 add("Frankrike", l("Frankrike","France","french","fransk"), europe);
 
                 add("Slovakien", "Slovak", europe);
+                add("Norge", l("norsk", "norge", "norway", "norwegian"), europe);
 
                 add("Malta", l("Malta","Maltese"), europe);
 
@@ -174,10 +186,12 @@ public class SubjectClassifier {
                 add("Serbien", l("serbisk","serbien","serbia"), europe);
                 {
                     Subject greatBritain = add("Storbritannien", l("Great Britain","Storbritannien","British"), europe);
-                    add("Tories", "Tories", greatBritain);
+                    addRegex("Tories", "Tories", greatBritain);
+                    add("Prince Harry", "Prince Harry", greatBritain);
                     addInvisible("U.K.", greatBritain);
 
-                    add("Brexit", "Brexit", news, greatBritain);
+                    add("Brexit", "Brexit", greatBritain);
+                    add("Leicester", "Leicester", greatBritain);
                     add("Theresa May", "Theresa May", greatBritain);
                     add("London", "London", greatBritain);
                     add("Birmingham", "Birmingham", greatBritain);
@@ -220,6 +234,9 @@ public class SubjectClassifier {
                     Subject inrikespolitik = add("Inrikespolitik", "Inrikespolitik", sverige);
                     addInvisible("svensk politik", inrikespolitik);
 
+                    Subject fi = add("Feministiskt initiativ", "Feministiskt initiativ", inrikespolitik);
+                    add("Gudrun Schyman", "Gudrun Schyman", fi);
+
                     add("Vänsterpartiet", "Vänsterpartiet", inrikespolitik);
                     Subject miljopartiet = add("Miljöpartiet", "miljöpartiet", inrikespolitik);
                     add("Gustav Fridolin", "Fridolin", miljopartiet);
@@ -257,6 +274,8 @@ public class SubjectClassifier {
                     add("Arvidsjaur", "Arvidsjaur", sverige);
                     add("Göteborg", l("Göteborg", "Gothenburg"), sverige);
 
+                    addRegex("SF-Bio", "SF.*[Bb]io", sverige);
+
                     add("Studiemedel", l("CSN", "studiemedel", "studielån"), sverige);
 
 
@@ -276,6 +295,8 @@ public class SubjectClassifier {
 
                 add("Maldives", "Maldives", asien);
                 add("Thailand", l("thailand", "thailänd"), asien);
+                add("Sri Lanka", "sri lank", asien);
+                add("Kashmir", "Kashmir", asien);
 
                 Subject myanmar = add("Myanmar", "Myanmar", asien);
                 add("Aung San Suu Kyi", "Aung San Suu Kyi", myanmar);
@@ -344,6 +365,7 @@ public class SubjectClassifier {
                 add("Mikronesien", l("Mikronesien", "micronesia"), oceanien);
                 add("Nauru", "Nauru", oceanien);
                 add("Australien", l("australia", "australien"), oceanien);
+                add("Nya Zealand", l("New Zealand", "Nya Zeeland"), oceanien);
 
             }
 
@@ -351,8 +373,10 @@ public class SubjectClassifier {
             {
                 Subject nordAmerika = addWithoutExpression("Nordamerika", news);
                 {
-                    Subject usa = add("#USA", l("USA", "U.S."), nordAmerika);
+                    Subject usa = add("#USA", l("USA", "U.S.", "US election"), nordAmerika);
                     add("Florida", "Florida", usa);
+                    Subject pittsburgh = add("Pittsburgh", "Pittsburgh", usa);
+                    add("Robert Bowers", "Robert Bowers", pittsburgh);
                     add("Kalifornien", l("kaliforni", "californi"), usa);
                     add("Hawaii", "hawaii", usa);
                     Subject arizona = add("Arizona", "Arizona", usa);
@@ -386,6 +410,16 @@ public class SubjectClassifier {
         {
             Subject weather = addWithoutExpression("Weather & Disasters", ROOT);
             addInvisible("temperatur", weather);
+            addInvisible("varmare väder", weather);
+            addInvisible("kallare väder", weather);
+            addInvisible("snöfall", weather);
+            addInvisible("blötsnö", weather);
+            addInvisible("snömängd", weather);
+            addInvisible("meteorolog", weather);
+            addInvisible("väderinstitut", weather);
+            addInvisible("smhi", weather);
+            addInvisible("grader varmt", weather);
+            addInvisible("vinterdäck", weather);
             add("Tsunami", "tsunami", weather);
             add("Tyfon", l("tyfon", "typhoon"), weather);
             add("Jordbävning", l("jordbävning", "earth quake", "earthquake"), weather);
@@ -393,14 +427,41 @@ public class SubjectClassifier {
             add("Flooding", "floodwater", weather);
             add("Jordskred", l("jordskred", "landslide"), weather);
         }
+
+
+        Subject violence = add("Våldsbrott", l("violence", "Våldsbrott"), news);
+        add("Mord", l("mord", "murder"), violence);
+        addInvisible("Död person", violence);
+        addInvisible("våldtäkt", violence);
+        Subject hateCrime = add("Hatbrott", l("hatbrott", "hate crime"), violence);
+        addInvisible("racism", hateCrime);
+        addInvisible("judehat", hateCrime);
+        addInvisible("antisemitism", hateCrime);
+        addInvisible("anti-semitic", hateCrime);
+        Subject terrorism = add("Terrorism", "terror", violence);
+        add("Boko Haram", "boko haram", terrorism);
+        Subject isil = add("ISIL", l("islamic state"), terrorism);
+        addInvisibleRegex("ISIL", isil);
+        addInvisibleRegex("ISIS", isil);
+
+        Subject un = add("United Nations", "UN peacekeeper", news);
+        addInvisibleRegex("the UN", un);
+
         {
             Subject biz = addWithoutExpression("Business", ROOT);
             add("Elon Musk", "Elon Musk", tech, biz);
             add("Tesla", "Tesla", tech, biz);
+            add("e-handel", "e-handel", tech, biz);
+            add("aktie", "aktie", biz);
+            add("tillväxt", "tillväxt", biz);
             add("#BMW", "BMW", tech, biz);
+            add("Hubble", "Hubble", tech);
+            add("Nordnet", "Nordnet", biz);
             add("Ekonomi", "dn.se/ekonomi", biz);
 
             add("Google", "Google", biz, tech);
+            addRegex("#IBM", "IBM", biz, tech);
+            add("Warner", "warner", biz);
             add("Microsoft", "Microsoft", biz, tech);
             add("Snapchat", "Snapchat", biz, tech);
 
@@ -427,15 +488,24 @@ public class SubjectClassifier {
                 addInvisible("SM-guld", sport);
                 addInvisible("VM-guld", sport);
                 addInvisible("OS-guld", sport);
+                addInvisible("avgörande mål", sport);
+                addInvisible("straffområde", sport);
                 addInvisible("olympic games", sport);
                 add("Rallycross", "rallycross", sport);
+                add("Gymnastik", l("gymnastics", "gymnastik"), sport);
             }
 
 
 
             {
                 Subject fotboll = add("Fotboll", "fotboll", sport);
+                addInvisible("Manchester United", fotboll);
+                addInvisible("soccer", fotboll);
+                addInvisible("mittback", fotboll);
                 addInvisible("Brommapojkarna", fotboll);
+                addInvisible("Paul Pogba", fotboll);
+                addInvisible("första halvlek", fotboll);
+                addInvisible("andra halvlek", fotboll);
                 add("Zlatan", "zlatan", fotboll);
                 addInvisible("Nations League", fotboll);
 
@@ -479,19 +549,9 @@ public class SubjectClassifier {
         add("Interpol", "Interpol", news);
         add("Flyktingar", "flykting", news);
 
-        add("Klimat", l("klimat", "climate"), news);
-
-
-        {
-            Subject terrorism = add("Terrorism", "terror", news);
-            add("Boko Haram", "boko haram", terrorism);
-            add("ISIL", l("ISIL", "ISIS", "islamic state"), terrorism);
-        }
-
         add("Påven", l("pope", "Påve"), news);
         add("Journalist", "journalist", news);
         add("Amnesty", "Amnesty", news);
-
 
         Subject fakeNews = add("Fake news", "fake news", news);
         add("Fact Checker", "Fact Checker", fakeNews);
@@ -506,6 +566,7 @@ public class SubjectClassifier {
             add("DN::mat-dryck", "mat-dryck", bad);
             add("DN::Gratulerar", "DN gratulerar", bad);
             add("DN::Minnesord", "minnesord:", bad);
+            add("DN::livsstil", "www.dn.se/livsstil", bad);
             add("DN::nutidstestet", "nutidstestet", bad);
             add("DN::motor", l("se/ekonomi/motor", "se/motor"), bad);
             addRegex("Engadget::Wirecutter", "engadget.*Wirecutter", bad);
@@ -514,7 +575,6 @@ public class SubjectClassifier {
 
         return Collections.unmodifiableSet(SUBJECTS);
     }
-
 
     private static Subject addRegex(String name, String regex, Subject... parents) {
         return add(name, DocumentPredicates.matches(regex), false, true, true, parents);
