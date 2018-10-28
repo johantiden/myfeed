@@ -1,6 +1,8 @@
 package se.johantiden.myfeed.persistence;
 
+import com.google.common.util.concurrent.RateLimiter;
 import se.johantiden.myfeed.plugin.AlJazeeraFeed;
+import se.johantiden.myfeed.plugin.DagensIndustriFeed;
 import se.johantiden.myfeed.plugin.EngadgetFeed;
 import se.johantiden.myfeed.plugin.NewYorkTimesWorldFeed;
 import se.johantiden.myfeed.plugin.OmniFeed;
@@ -12,6 +14,7 @@ import se.johantiden.myfeed.plugin.GenericRssFeed;
 import se.johantiden.myfeed.plugin.SlashdotFeed;
 import se.johantiden.myfeed.plugin.SvenskaDagbladetFeed;
 import se.johantiden.myfeed.plugin.SVTNyheterFeed;
+import se.johantiden.myfeed.plugin.TheLocalFeed;
 import se.johantiden.myfeed.plugin.WashingtonPostFeed;
 import se.johantiden.myfeed.plugin.XkcdFeed;
 import se.johantiden.myfeed.service.DocumentService;
@@ -46,6 +49,7 @@ public class FeedPopulator {
         feeds.add(new HackerNewsFeed());
         feeds.add(new SlashdotFeed());
         feeds.add(new SvenskaDagbladetFeed());
+        feeds.add(new DagensIndustriFeed());
         feeds.add(new DagensNyheterFeed());
         feeds.add(new ReutersFeed());
         feeds.add(new AlJazeeraFeed());
@@ -62,18 +66,15 @@ public class FeedPopulator {
 
         feeds.add(new WashingtonPostFeed());
 
-        feeds.add(createReddit("r/worldnews", 1000));
-        feeds.add(createReddit("r/AskReddit", 1000));
-        feeds.add(createReddit("r/ProgrammerHumor", 600));
-        feeds.add(createReddit("r/science", 1000));
-        feeds.add(createReddit("top", 1000));
-        feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("r/announcements", 10000));
+//        feeds.add(createReddit(redditRateLimiter, "r/worldnews", 1000));
+//        feeds.add(createReddit(redditRateLimiter, "r/AskReddit", 1000));
+//        feeds.add(createReddit(redditRateLimiter, "r/ProgrammerHumor", 600));
+//        feeds.add(createReddit(redditRateLimiter, "r/science", 1000));
+//        feeds.add(createReddit(redditRateLimiter, "top", 1000));
+//        feeds.add(createReddit(redditRateLimiter, "r/all", REDDIT_MIN_SCORE));
+//        feeds.add(createReddit(redditRateLimiter, "r/announcements", 10000));
 
-        feeds.add(createRss(
-                "TheLocal",
-                "https://www.thelocal.se/",
-                "https://www.thelocal.se/feeds/rss.php"));
+        feeds.add(new TheLocalFeed());
 
         feeds.forEach(feedService::put);
     }
@@ -82,8 +83,8 @@ public class FeedPopulator {
         return new GenericRssFeed(feedName, webUrl, rssUrl);
     }
 
-    private static Feed createReddit(String subreddit, double minScore) {
-        return new RedditFeed(subreddit, scoreMoreThan(minScore));
+    private static Feed createReddit(RateLimiter rateLimiter, String subreddit, double minScore) {
+        return new RedditFeed(rateLimiter, subreddit, scoreMoreThan(minScore));
     }
 
     private static Predicate<Document> scoreMoreThan(double score) {

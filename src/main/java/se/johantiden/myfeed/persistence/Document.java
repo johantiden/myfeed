@@ -1,18 +1,22 @@
 package se.johantiden.myfeed.persistence;
 
+import javax.annotation.Nonnull;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Document extends BaseEntity<Document> {
     public String title;
     public String text;
+    private final String html;
     private final String pageUrl;
     public String imageUrl;
     public final Instant publishedDate;
     public Double score;
     public boolean isPaywalled;
+    public String extra;
     public ArrayList<Video> videos = new ArrayList<>();
     private boolean subjectsParsed = false;
     private final ArrayList<Subject> subjects;
@@ -24,20 +28,32 @@ public class Document extends BaseEntity<Document> {
     public Document(
             String title,
             String text,
-            String pageUrl,
+            String html,
+            @Nonnull String pageUrl,
             String imageUrl,
             Instant publishedDate,
             String feedName,
             String feedUrl) {
 
         this.title = title;
+        verifyNoHtml(text);
         this.text = text;
-        this.pageUrl = pageUrl;
+        this.html = html;
+        this.pageUrl = Objects.requireNonNull(pageUrl);
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
         this.subjects = new ArrayList<>();
         this.feedName = feedName;
         this.feedUrl = feedUrl;
+    }
+
+    private static void verifyNoHtml(String text) {
+        if (text == null) {
+            return;
+        }
+        if (text.contains("<") || text.contains(">")) {
+            throw new RuntimeException("Text cannot contain html objects! Text: " + text);
+        }
     }
 
     public static String dateToShortString(Instant instant) {
@@ -104,6 +120,10 @@ public class Document extends BaseEntity<Document> {
         return pageUrl;
     }
 
+    public String getHtml() {
+        return html;
+    }
+
     public void setScore(Double score) {
         this.score = score;
     }
@@ -129,5 +149,9 @@ public class Document extends BaseEntity<Document> {
         return "Document{" +
                 "title='" + title + '\'' +
                 '}';
+    }
+
+    public boolean isNotHidden() {
+        return !hidden;
     }
 }

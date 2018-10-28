@@ -24,7 +24,7 @@ public class FeedReaderService {
                 .filter(DocumentPredicates.hasEscapeCharacters())
                 .findAny()
                 .ifPresent(d -> {
-                    throw new RuntimeException("Escape characters must be handled! Document: " + d);
+                    throw new RuntimeException("Escape characters must be handled! "+feed.getName()+" Document: " + d);
                 });
 
         return documents;

@@ -66,8 +66,8 @@ public class DocumentService {
         return documentRepository.findDocumentsNotParsedSubjects();
     }
 
-    public Set<Long> getReadyDocuments() {
-        return documentRepository.getReadyDocumentIds();
+    public Set<Document> getReadyDocuments() {
+        return documentRepository.getReadyDocuments();
     }
 
     public void setRead(long documentId) {

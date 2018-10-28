@@ -17,8 +17,7 @@ public class SubjectServiceTest {
 
         Subject s = new Subject(Lists.newArrayList(Subject.ROOT), "#A", DocumentPredicates.has("A"), false, false, false);
 
-
-        Document d = new Document("A", "", "foo", null, null, null, null);
+        Document d = new Document("A", "", null, "foo", null, null, null, null);
 
         boolean match = s.isMatch(d);
         assertThat(match, is(true));

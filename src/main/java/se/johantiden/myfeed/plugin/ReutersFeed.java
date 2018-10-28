@@ -6,21 +6,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.plugin.rss.Item;
-import se.johantiden.myfeed.plugin.rss.Rss2Doc;
-import se.johantiden.myfeed.plugin.rss.RssFeedReader;
-import se.johantiden.myfeed.util.Pair;
+import se.johantiden.myfeed.plugin.rss.Rss;
+import se.johantiden.myfeed.plugin.rss.Rss2FeedReader;
+import se.johantiden.myfeed.plugin.rss.v2.Rss2Doc.Item;
+import se.johantiden.myfeed.util.Chrono;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 public class ReutersFeed extends Feed {
 
-    private static final Logger log = LoggerFactory.getLogger(ReutersFeed.class);
+    static final Logger log = LoggerFactory.getLogger(ReutersFeed.class);
     public static final String URL = "http://www.reuters.com/news/world";
     public static final String NAME = "Reuters - World";
     public static final String URL_RSS = "http://feeds.reuters.com/Reuters/worldNews";
@@ -31,52 +30,51 @@ public class ReutersFeed extends Feed {
 
     public static FeedReader createFeedReader() {
         return () -> {
-            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, URL, URL_RSS, Rss2Doc.class).readAllAvailable();
-            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
-        };
-    }
-
-    private static Function<Pair<Item, Document>, Document> createEntryMapper() {
-        return pair -> {
-            pair.right.imageUrl = findImage(pair);
-            return pair.right;
+            List<Document> documents = new MyRss2FeedReader().readAllAvailable();
+            return documents;
         };
     }
 
 
-    private static String findImage(Pair<Item, Document> document) {
-        org.jsoup.nodes.Document doc = getJsoupDocument(document.right.getPageUrl());
+    private static class MyRss2FeedReader extends Rss2FeedReader {
+        MyRss2FeedReader() {super(URL_RSS);}
 
-        Elements relatedImg = doc.select(".related-photo-container > img");
-        if(!relatedImg.isEmpty()) {
-            String src = relatedImg.get(0).attr("src");
-            return src;
-        }
+        static String findImage(String pageUrl) {
+            org.jsoup.nodes.Document doc = getJsoupDocument(pageUrl);
 
-        Elements slideImgs = doc.select(".module-slide-media > img");
-        if(!slideImgs.isEmpty()) {
-            String src = slideImgs.get(0).attr("data-lazy");
-            return src;
-        }
+            Elements relatedImg = doc.select(".related-photo-container > img");
+            if(!relatedImg.isEmpty()) {
+                String src = relatedImg.get(0).attr("src");
+                return src;
+            }
 
-        return null;
-    }
+            Elements slideImgs = doc.select(".module-slide-media > img");
+            if(!slideImgs.isEmpty()) {
+                String src = slideImgs.get(0).attr("data-lazy");
+                return src;
+            }
 
-
-    private static org.jsoup.nodes.Document getJsoupDocument(String pageUrl) {
-        try {
-            return Jsoup.parse(new URL(pageUrl), 10_000);
-        } catch (IOException e) {
-            log.error("Could not jsoup-parse " + pageUrl, e);
             return null;
         }
-    }
 
-    public static String prune(String html) {
-        org.jsoup.nodes.Document doc = Jsoup.parse(html);
-        doc.select(".feedflare").remove();
-        doc.select("img").remove();
-        String pruned = doc.body().html();
-        return pruned;
+        static org.jsoup.nodes.Document getJsoupDocument(String pageUrl) {
+            try {
+                return Jsoup.parse(new URL(pageUrl), 10_000);
+            } catch (IOException e) {
+                log.error("Could not jsoup-parse {}", pageUrl, e);
+                return null;
+            }
+        }
+
+        @Override
+        public Document toDocument(Item item) {
+            String title = item.title;
+            String text = FeedReader.pruneUntrustedHtml(item.description);
+            String pageUrl = item.feedBurnerOrigLink;
+            String imageUrl = findImage(pageUrl);
+            Instant publishedDate = Chrono.parse(item.pubDate, Rss.PUB_DATE_FORMAT);
+            String html = null;
+            return new Document(title, text, html, pageUrl, imageUrl, publishedDate, NAME, URL);
+        }
     }
 }

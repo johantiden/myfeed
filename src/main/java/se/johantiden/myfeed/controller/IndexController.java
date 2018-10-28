@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.johantiden.myfeed.persistence.Document;
+import se.johantiden.myfeed.plugin.HackerNewsFeed;
 import se.johantiden.myfeed.service.DocumentService;
+import se.johantiden.myfeed.util.JCollections;
 import se.johantiden.myfeed.util.JPredicates;
 
 import java.util.Collection;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -35,22 +38,38 @@ public class IndexController {
     @RequestMapping(value = "/rest/index/keys", method = GET)
     public Collection<Long> indexKeys() {
 
-        Set<Long> documentIds = documentService.getReadyDocuments();
+        Set<Document> documents = documentService.getReadyDocuments();
 
-        log.info("index keys:{}", documentIds.size());
+        List<Long> ids = documents.stream()
+                .filter(lastFilter())
+                .map(Document::getId)
+                .collect(Collectors.toList());
 
-        return documentIds;
+        log.info("index size:{}", ids.size());
+
+        return ids;
     }
 
     @RequestMapping(value = "/rest/index/documents", method = GET)
     public List<DocumentBean> indexDocuments() {
 
-        Set<Long> documentIds = documentService.getReadyDocuments();
+        Set<Document> documents = documentService.getReadyDocuments();
 
-        log.info("index keys:{}", documentIds.size());
 
-        documentIds.addAll(documentIds);
-        return documentsMulti(documentIds);
+        List<DocumentBean> beans = documents.stream()
+                .filter(lastFilter())
+                .map(DocumentBean::new)
+                .collect(Collectors.toList());
+
+        log.info("index size:{}", beans.size());
+
+        return beans;
+    }
+
+    private Predicate<Document> lastFilter() {
+        return document -> true;
+//        return document ->
+//                !(Objects.equals(document.getFeedName(), HackerNewsFeed.NAME) && document.getSubjects().isEmpty());
     }
 
     @RequestMapping(value = "/rest/document/{documentId}", method = GET)
