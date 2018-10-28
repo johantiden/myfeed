@@ -28,6 +28,26 @@ public final class JCollections {
                 .collect(Collectors.toList());
     }
 
+    public static <T, R> List<R> mapFilter(Function<T, R> mapper, Predicate<R> filter, Collection<T> list) {
+        return list.stream()
+                .map(mapper)
+                .filter(filter)
+                .collect(Collectors.toList());
+    }
+
+    public static <T> List<T> filter(Predicate<T> filter, Collection<T> list) {
+        return list.stream()
+                .filter(filter)
+                .collect(Collectors.toList());
+    }
+
+    public static <T, R> List<R> filterMap(Predicate<T> filter, Function<T, R> mapper, Collection<T> list) {
+        return list.stream()
+                .filter(filter)
+                .map(mapper)
+                .collect(Collectors.toList());
+    }
+
     public static <E> E reduce(Collection<E> collection, BinaryOperator<E> reducer, E valueIfEmpty) {
         return collection.stream()
                 .reduce(reducer)

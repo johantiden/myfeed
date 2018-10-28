@@ -4,15 +4,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.plugin.rss.Item;
-import se.johantiden.myfeed.plugin.rss.Rss1Doc;
-import se.johantiden.myfeed.plugin.rss.RssFeedReader;
-import se.johantiden.myfeed.util.Pair;
+import se.johantiden.myfeed.plugin.rss.Rss1AtomFeedReader;
+import se.johantiden.myfeed.plugin.rss.v1.atom.RssV1AtomDoc.Entry;
+import se.johantiden.myfeed.util.Chrono;
 
 import java.time.Instant;
 import java.util.List;
-
-import static se.johantiden.myfeed.util.JCollections.map;
 
 
 public class XkcdFeed extends Feed {
@@ -20,6 +17,7 @@ public class XkcdFeed extends Feed {
     public static final String URL = "https://xkcd.com";
     public static final String URL_RSS = "https://xkcd.com/atom.xml";
     public static final String NAME = "xkcd";
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
     public XkcdFeed() {
         super(NAME, URL, createFeedReader());
@@ -27,26 +25,44 @@ public class XkcdFeed extends Feed {
 
     public static FeedReader createFeedReader() {
         return () -> {
-            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, URL, URL_RSS, Rss1Doc.class) {
-                @Override
-                protected Document createDocument(String title, String pageUrl, String imageUrl, Instant publishedDate, String text, String html, String feedName, String feedUrl) {
-
-                    imageUrl = XkcdFeed.getImageUrl(html);
-                    return new Document(title, text, pageUrl, imageUrl, publishedDate, feedName, feedUrl);
-
-                }
-            }.readAllAvailable();
-            return map(Pair::getRight, documents);
+            List<Document> documents = new MyRss1AtomFeedReader().readAllAvailable();
+            return documents;
         };
     }
 
+    private static class MyRss1AtomFeedReader extends Rss1AtomFeedReader {
+        MyRss1AtomFeedReader() {super(URL_RSS);}
 
-    static String getImageUrl(String html) {
-        org.jsoup.nodes.Document doc = Jsoup.parse(html);
-        Elements img = doc.select("img");
-        if(!img.isEmpty()) {
-            return img.get(0).attr("src");
+        static String getText(String html) {
+            org.jsoup.nodes.Document doc = Jsoup.parse(html);
+            Elements img = doc.select("img");
+            if(!img.isEmpty()) {
+                return img.get(0).attr("title");
+            }
+            return null;
         }
-        return null;
+
+        static String getImageUrl(String html) {
+            org.jsoup.nodes.Document doc = Jsoup.parse(html);
+            Elements img = doc.select("img");
+            if(!img.isEmpty()) {
+                return img.get(0).attr("src");
+            }
+            return null;
+        }
+
+        @Override
+        public Document toDocument(Entry item) {
+
+            String title = item.title;
+            String bodyRaw = item.summary.body;
+            String text = getText(bodyRaw);
+            String imageUrl = getImageUrl(bodyRaw);
+            String pageUrl = item.id;
+            Instant publishedDate = Chrono.parse(item.updated, DATE_FORMAT);
+            String html = null;
+            return new Document(title, text, html, pageUrl, imageUrl, publishedDate, NAME, URL);
+        }
+
     }
 }

@@ -16,9 +16,10 @@ public class DocumentRepository extends BaseRepository<Document> {
         return tryFindOne(d -> d.getPageUrl().equals(pageUrl));
     }
 
-    public Set<Long> getReadyDocumentIds() {
-        return find(Document::getId, d -> !d.isRead(),
-                Document::isSubjectsParsed
+    public Set<Document> getReadyDocuments() {
+        return find((Predicate<Document>) d -> !d.isRead(),
+                Document::isSubjectsParsed,
+                Document::isNotHidden
         );
     }
 

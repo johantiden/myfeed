@@ -4,14 +4,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
-import se.johantiden.myfeed.plugin.rss.Item;
-import se.johantiden.myfeed.plugin.rss.Rss2Doc;
-import se.johantiden.myfeed.plugin.rss.RssFeedReader;
-import se.johantiden.myfeed.util.Pair;
+import se.johantiden.myfeed.plugin.rss.Rss;
+import se.johantiden.myfeed.plugin.rss.Rss2FeedReader;
+import se.johantiden.myfeed.plugin.rss.v2.Rss2Doc.Item;
+import se.johantiden.myfeed.util.Chrono;
 
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.time.Instant;
 
 
 public class EngadgetFeed extends Feed {
@@ -25,22 +23,28 @@ public class EngadgetFeed extends Feed {
     }
 
     public static FeedReader createFeedReader() {
-        return () -> {
-            List<Pair<Item, Document>> documents = new RssFeedReader(NAME, URL, URL_RSS, Rss2Doc.class).readAllAvailable();
-            return documents.stream().map(createEntryMapper()).collect(Collectors.toList());
-        };
+        return () -> new MyRss2FeedReader().readAllAvailable();
     }
 
-    private static Function<Pair<Item, Document>, Document> createEntryMapper() {
-        return pair -> pair.right;
-    }
+    private static class MyRss2FeedReader extends Rss2FeedReader {
+        MyRss2FeedReader() {super(URL_RSS);}
 
-    private static String getImageUrl(String html) {
-        org.jsoup.nodes.Document doc = Jsoup.parse(html);
-        Elements img = doc.select("img");
-        if(!img.isEmpty()) {
-            return img.get(0).attr("src");
+        @Override
+        public Document toDocument(Item item) {
+            String title = item.title;
+            String text = FeedReader.html2text(item.description);
+            String pageUrl = item.link;
+            String imageUrl = findImage(item.description);
+            Instant publishedDate = Chrono.parse(item.pubDate, Rss.PUB_DATE_FORMAT);
+            String html = null;
+            return new Document(title, text, html, pageUrl, imageUrl, publishedDate, NAME, URL);
         }
-        return null;
+
+        private String findImage(String description) {
+            org.jsoup.nodes.Document parse = Jsoup.parse(description);
+            Elements imgs = parse.select("img");
+            String src = imgs.attr("src");
+            return src;
+        }
     }
 }

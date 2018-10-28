@@ -83,7 +83,6 @@ public class SubjectClassifier {
 
             add("Niklas Zennström", "Zennström", tech);
             addInvisible("HackerNews", tech);
-            addInvisible("Slashdot", tech);
 
             Subject software = add("Software", "software", tech);
             addInvisible("programming", software);
@@ -101,7 +100,12 @@ public class SubjectClassifier {
             add("Cambridge Analytica", "Cambridge Analytica", facebook, tech);
 
             add("Tim Berners-Lee", "Tim Berners-Lee", internet);
+
+            addInvisible("science.slashdot", tech);
+            addInvisible("news.slashdot", news);
+            addInvisible("developers.slashdot", software);
         }
+
 
 
         {
@@ -148,7 +152,7 @@ public class SubjectClassifier {
 
 
             {
-                Subject europe = add("Europa", "europe", news);
+                Subject europe = add("Europa", l("europe", "europa"), news);
                 add("#EU", "European Union", europe);
 
                 {
@@ -219,6 +223,8 @@ public class SubjectClassifier {
                     add("Vänsterpartiet", "Vänsterpartiet", inrikespolitik);
                     Subject miljopartiet = add("Miljöpartiet", "miljöpartiet", inrikespolitik);
                     add("Gustav Fridolin", "Fridolin", miljopartiet);
+
+                    add("Bildt", "bildt", inrikespolitik);
 
                     Subject alliansen = add("Alliansen", "Alliansparti", inrikespolitik);
 
@@ -499,7 +505,7 @@ public class SubjectClassifier {
             add("DN::webb-tv", "webb-tv", bad);
             add("DN::mat-dryck", "mat-dryck", bad);
             add("DN::Gratulerar", "DN gratulerar", bad);
-//            add("DN::Minnesord", "dn.se.*monnesord", bad);
+            add("DN::Minnesord", "minnesord:", bad);
             add("DN::nutidstestet", "nutidstestet", bad);
             add("DN::motor", l("se/ekonomi/motor", "se/motor"), bad);
             addRegex("Engadget::Wirecutter", "engadget.*Wirecutter", bad);

@@ -25,6 +25,7 @@ public class DocumentPredicates {
         String string2 = string.toLowerCase();
         return d -> d.text != null && d.text.toLowerCase().contains(string2) ||
                     d.title != null && d.title.toLowerCase().contains(string2) ||
+                    d.extra != null && d.extra.toLowerCase().contains(string2) ||
                     d.getPageUrl() != null && d.getPageUrl().toLowerCase().contains(string2) ||
                     d.getSubjects().stream().anyMatch(s -> s.getName().toLowerCase().contains(string2));
     }
@@ -52,7 +53,8 @@ public class DocumentPredicates {
                     ifPresent(d.title) +
                     ifPresent(d.text) +
                     ifPresent(d.getPageUrl()) +
-                    ifPresent(d.getFeedUrl());
+                    ifPresent(d.getFeedUrl()) +
+                    ifPresent(d.extra);
 
             return pattern.matcher(megaConcat).find();
         };

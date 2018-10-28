@@ -1,10 +1,12 @@
 package se.johantiden.myfeed.controller;
 
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Subject;
 import se.johantiden.myfeed.persistence.Video;
+import se.johantiden.myfeed.plugin.HackerNewsFeed;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -35,7 +37,7 @@ public class DocumentBean {
         this.text = document.text;
         this.pageUrl = document.getPageUrl();
         this.imageUrl = document.imageUrl;
-        if (this.imageUrl == null) {
+        if (this.imageUrl == null && !document.getFeedName().equals(HackerNewsFeed.NAME)) {
             log.debug("No image!");
         }
         this.publishedDate = document.publishedDate.toEpochMilli();
@@ -47,6 +49,9 @@ public class DocumentBean {
     }
 
     private List<SubjectBean> toSubjectBeans(List<Subject> subjects) {
+        if (subjects.isEmpty()) {
+            subjects = Lists.newArrayList(Subject.UNCLASSIFIED);
+        }
         return subjects.stream()
                 .map(this::toSubjectBean)
                 .collect(Collectors.toList());

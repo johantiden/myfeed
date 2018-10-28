@@ -26,10 +26,6 @@ public class SubjectService {
                 .filter(r -> r.isMatch(document))
                 .collect(Collectors.toSet());
 
-        if (matchingRules.isEmpty()) {
-            matchingRules.add(Subject.UNCLASSIFIED);
-        }
-
         boolean hidden = matchingRules.stream().anyMatch(Subject::isHideDocument);
         document.setHidden(hidden);
         if (hidden) {

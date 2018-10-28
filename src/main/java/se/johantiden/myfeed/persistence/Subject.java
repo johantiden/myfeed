@@ -74,7 +74,6 @@ public class Subject extends BaseEntity<Subject> {
     public String toString() {
         return "Subject{" +
                 "parents=" + parents +
-                ", children=" + children +
                 ", name='" + name + '\'' +
                 ", documentPredicate=" + documentPredicate +
                 ", hideDocument=" + hideDocument +
