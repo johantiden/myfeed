@@ -39,7 +39,7 @@ public class DocumentPredicates {
     }
 
     public static Predicate<Document> hasEscapeCharacters() {
-        return has("&quot;").or(has("&#")).or(has("&amp;")).or(has("â€™"));
+        return has("&quot;").or(has("&#")).or(has("&amp;")).or(has("â€™")).or(has("&nbsp;"));
     }
 
     public static Predicate<Document> matches(Pattern pattern) {
