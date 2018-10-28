@@ -58,7 +58,7 @@ viewTabRow model (depth, subjects) =
     div [css []]
         (subjects
             |> List.map (\s -> ((countMatching s.name model.documents), s))
-            |> List.filter (\(hitCount, _) -> hitCount > 1)
+            |> List.filter (\(hitCount, _) -> hitCount > 2)
             |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
             |> List.take 5
             |> List.map (viewTab model.search)
@@ -171,7 +171,7 @@ viewDocument document =
 maybeViewImage : Maybe String -> List (Html Msg)
 maybeViewImage url =
     case url of
-        Just imgUrl -> [img [src imgUrl, css [width (pct 100)]] []]
+        Just imgUrl -> [img [src imgUrl, css [width (px 300)]] []]
         Nothing -> []
 
 viewSubtitleRow : Document -> List (Html Msg)
