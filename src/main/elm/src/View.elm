@@ -33,15 +33,29 @@ view model =
 
 viewTop : Model -> Html Msg
 viewTop model =
-    div [css [height (px  430)]]
+    div [{-css [height (px  430)]-}]
     [ viewTopRow model
-    , viewTabs model
+--    , viewTabs model
+--    , hr [] []
+    , viewTabs2 model
     ]
 
 viewLogo : Html Msg
 viewLogo =
     span [onClick (SetSearch ""), css [cursor pointer]] [img [src "./fidn1.png", css [width (px 80)]] []]
 
+viewTabs2 : Model -> Html Msg
+viewTabs2 model =
+    div []
+        (model.documents
+            |> extractSubjects
+            |> List.filter .showAsTab
+            |> List.map (\s -> ((countMatching s.name model.documents), s))
+            |> List.filter (\(hitCount, _) -> hitCount > 2)
+            |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
+            |> List.take 20
+            |> List.map (viewTab model.search)
+        )
 viewTabs : Model -> Html Msg
 viewTabs model =
     div []

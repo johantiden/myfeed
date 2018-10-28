@@ -269,7 +269,8 @@ public class SubjectClassifier {
                     addInvisible("kolmården", sverige);
 
                     Subject stockholm = add("Stockholm", "Stockholm", sverige);
-                    addInvisible("Arlanda", stockholm);
+                    add("Arlanda", "Arlanda", stockholm);
+                    add("Kalix", "Kalix", sverige);
                     add("Skövde", "Skövde", sverige);
                     add("Malmö", "Malmö", sverige);
                     add("Arvidsjaur", "Arvidsjaur", sverige);
