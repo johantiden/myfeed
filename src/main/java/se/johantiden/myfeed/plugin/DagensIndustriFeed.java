@@ -23,8 +23,8 @@ public class DagensIndustriFeed extends Feed {
 
     static final Logger log = LoggerFactory.getLogger(DagensIndustriFeed.class);
     public static final String NAME = "Dagens Industri";
-    public static final String URL = "https://www.di.se/rss";
-    public static final String RSS_URL = "https://www.svd.se/?service=rss";
+    public static final String RSS_URL = "https://www.di.se/rss";
+    public static final String URL = "https://www.di.se";
 
     public DagensIndustriFeed() {
         super(NAME, URL, createFeedReader());
@@ -61,7 +61,7 @@ public class DagensIndustriFeed extends Feed {
     private static class ItemRssFeedReader extends Rss2FeedReader {
         ItemRssFeedReader() {super(RSS_URL);}
 
-        static String handleCapitalizedSubject(String text) {
+        static String pruneCapitalizedSubject(String text) {
 
             Pattern pattern = Pattern.compile("^[A-ZÅÄÖ]+\\. ");
             if (pattern.matcher(text).find()) {
@@ -99,16 +99,26 @@ public class DagensIndustriFeed extends Feed {
 
         @Override
         public Document toDocument(Item item) {
-            String title = item.title;
+            String title = FeedReader.unescape(item.title);
             String pageUrl = item.link;
             String text = FeedReader.html2text(item.description);
-//            text = handleCapitalizedSubject(text);
-            String image = findImage(pageUrl);
+            text = pruneCapitalizedSubject(text);
+            String image = findImage(item);
             String html = null;
             Instant publishedDate = Chrono.parse(item.pubDate, Rss.PUB_DATE_FORMAT);
             Document document = new Document(title, text, html, pageUrl, image, publishedDate, NAME, URL);
             document.extra = item.category;
             return document;
+        }
+
+        private String findImage(Item item) {
+            if (item.mrssContent != null) {
+                if (item.mrssContent.type != null && item.mrssContent.type.startsWith("image")) {
+                    return item.mrssContent.url;
+                    // TODO: image caption
+                }
+            }
+            return findImage(item.link);
         }
     }
 }

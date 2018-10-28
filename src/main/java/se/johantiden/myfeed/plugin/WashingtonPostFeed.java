@@ -53,6 +53,16 @@ public class WashingtonPostFeed extends Feed {
                 return src;
             }
 
+            Elements divPowaShowImage = doc.select("div.powa-shot-image");
+            if (!divPowaShowImage.isEmpty()) {
+                String style = divPowaShowImage.attr("style");
+                if (style != null) {
+                    String[] split = style.split("'");
+                    String imgUrl = split[1];
+                    return imgUrl;
+                }
+            }
+
             return null;
         }
 
