@@ -23,6 +23,7 @@ public interface FeedReader {
         unescaped = unescaped.replaceAll("&mdash;", "—");
         unescaped = unescaped.replaceAll("â€™", "'");
         unescaped = unescaped.replaceAll("&quot;", "\"");
+        unescaped = unescaped.replaceAll("&nbsp;", " ");
 
 //        if(!unescaped.equals(string)) {
 //            log.debug("Unescaped! {} -> {}", string, unescaped);
