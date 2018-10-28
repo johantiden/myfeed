@@ -125,6 +125,7 @@ public class SubjectClassifier {
                 Subject argentina = add("Argentina", "Argentin", sydAmerika);
                 add("Buenos Aires", "Buenos Aires", argentina);
                 add("Chile", "Chile", sydAmerika);
+                add("Honduras", "Hondura", sydAmerika);
 
                 Subject brasilien = add("Brasilien", l("brasil","brazil"), sydAmerika);
                 add("Jair Bolsonaro", "bolsonaro", brasilien);
@@ -249,7 +250,7 @@ public class SubjectClassifier {
                     add("Ulf Kristersson", "Ulf Kristersson", moderaterna);
 
                     Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik, alliansen);
-                    add("Annie Lööf", "Annie Lööf", centerpartiet);
+                    add("Annie Lööf", "Lööf", centerpartiet);
 
                     Subject socialdemokraterna = add("Socialdemokraterna", "socialdemokraterna", inrikespolitik);
                     add("Stefan Löfven", "Stefan Löfven", socialdemokraterna);
@@ -462,6 +463,9 @@ public class SubjectClassifier {
             add("Google", "Google", biz, tech);
             addRegex("#IBM", "IBM", biz, tech);
             add("Warner", "warner", biz);
+            add("Nokia", "nokia", biz);
+            addRegex("#SEB", "SEB", biz);
+            add("Nordea", "nordea", biz);
             add("Microsoft", "Microsoft", biz, tech);
             add("Snapchat", "Snapchat", biz, tech);
 
