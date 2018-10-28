@@ -2,16 +2,15 @@ package se.johantiden.myfeed.plugin;
 
 
 import org.jsoup.Jsoup;
-import org.jsoup.parser.TokenQueue;
 import se.johantiden.myfeed.persistence.Document;
 
 import java.util.List;
 
-import static org.jsoup.parser.TokenQueue.unescape;
 
 public interface FeedReader {
 
     static String unescape(String string) {
+
         String unescaped = string.replaceAll("&#38;", "&");
         unescaped = unescaped.replaceAll("&#34;", "\"");
         unescaped = unescaped.replaceAll("&#039;", "'");
@@ -33,7 +32,7 @@ public interface FeedReader {
     }
 
     static String html2text(String html) {
-        return TokenQueue.unescape(Jsoup.parse(html).text());
+        return unescape(Jsoup.parse(html).text());
     }
 
     static String pruneUntrustedHtml(String text) {

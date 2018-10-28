@@ -96,10 +96,10 @@ public class SvenskaDagbladetFeed extends Feed {
 
         @Override
         public Document toDocument(Item item) {
-            String title = item.title;
+            String title = FeedReader.unescape(item.title);
             String pageUrl = item.link;
             boolean paywalled = isPaywalled(pageUrl);
-            String text = FeedReader.unescape(FeedReader.html2text(item.description));
+            String text = FeedReader.html2text(item.description);
             String imageUrl = paywalled ? null : findImage(pageUrl);
             Instant publishedDate = Chrono.parse(item.pubDate, Rss.PUB_DATE_FORMAT);
             String html = null;
