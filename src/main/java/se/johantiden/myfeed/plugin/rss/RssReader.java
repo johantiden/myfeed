@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -45,6 +46,35 @@ public class RssReader<T> {
             });
 
             Object unmarshal = unmarshaller.unmarshal(url);
+
+            return clazz.cast(unmarshal);
+        } catch (JAXBException e) {
+            log.error("Could not parse document", e);
+            return null;
+        }
+    }
+
+
+    public static <T> T read(InputStream input, Class<T> clazz) {
+
+        try {
+            JAXBContext context = JAXBContext.newInstance(clazz);
+
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            ValidationEventHandler defaultEventHandler = unmarshaller.getEventHandler();
+            unmarshaller.setEventHandler(e -> {
+                boolean b = defaultEventHandler.handleEvent(e);
+                if (e.getSeverity() >= ValidationEvent.WARNING) {
+                    if (e.getSeverity() == ValidationEvent.WARNING) {
+                        boolean a = true;
+                    }
+                    return false;
+                }
+                return b;
+
+            });
+
+            Object unmarshal = unmarshaller.unmarshal(input);
 
             return clazz.cast(unmarshal);
         } catch (JAXBException e) {
