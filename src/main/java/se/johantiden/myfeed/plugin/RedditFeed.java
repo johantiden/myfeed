@@ -39,7 +39,7 @@ public class RedditFeed extends Feed {
     }
 
     static String getRssUrl(String subreddit) {
-        return "https://www.reddit.com/" + subreddit + "/top.rss?t=month";
+        return "https://www.reddit.com/" + subreddit + ".rss?t=month";
     }
 
     static String getFeedUrl(String subreddit) {
