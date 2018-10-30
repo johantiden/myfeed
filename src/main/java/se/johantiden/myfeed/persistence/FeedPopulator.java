@@ -1,7 +1,6 @@
 package se.johantiden.myfeed.persistence;
 
 import se.johantiden.myfeed.plugin.AlJazeeraFeed;
-import se.johantiden.myfeed.plugin.DagensIndustriFeed;
 import se.johantiden.myfeed.plugin.EngadgetFeed;
 import se.johantiden.myfeed.plugin.NewYorkTimesWorldFeed;
 import se.johantiden.myfeed.plugin.OmniFeed;
@@ -48,7 +47,6 @@ public class FeedPopulator {
         feeds.add(new HackerNewsFeed());
         feeds.add(new SlashdotFeed());
         feeds.add(new SvenskaDagbladetFeed());
-        feeds.add(new DagensIndustriFeed());
         feeds.add(new DagensNyheterFeed());
         feeds.add(new ReutersFeed());
         feeds.add(new AlJazeeraFeed());
