@@ -19,6 +19,7 @@ public class RssV1AtomDoc {
     public Author author;
     public Category category;
     public String logo;
+    public String icon;
 
     @XmlElement(namespace = "http://purl.org/rss/1.0/modules/syndication/", name = "updatePeriod")
     public String syndUpdatePeriod;
@@ -33,6 +34,7 @@ public class RssV1AtomDoc {
     public static class Author {
         public String name;
         public String email;
+        public String uri;
     }
 
     public static class Category {
@@ -54,6 +56,7 @@ public class RssV1AtomDoc {
         public String title;
         public Link link;
         public Summary summary;
+        public Content content;
         public String updated;
         public Author author;
         public Category category;
@@ -69,6 +72,13 @@ public class RssV1AtomDoc {
         public String slashComments;
 
         public static class Summary {
+            @XmlAttribute
+            public String type;
+            @XmlValue
+            public String body;
+        }
+
+        public static class Content {
             @XmlAttribute
             public String type;
             @XmlValue

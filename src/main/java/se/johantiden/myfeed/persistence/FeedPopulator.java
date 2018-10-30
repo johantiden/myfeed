@@ -1,6 +1,5 @@
 package se.johantiden.myfeed.persistence;
 
-import com.google.common.util.concurrent.RateLimiter;
 import se.johantiden.myfeed.plugin.AlJazeeraFeed;
 import se.johantiden.myfeed.plugin.DagensIndustriFeed;
 import se.johantiden.myfeed.plugin.EngadgetFeed;
@@ -61,20 +60,16 @@ public class FeedPopulator {
         feeds.add(new SVTNyheterFeed());
         feeds.add(new NewYorkTimesWorldFeed());
 
-        feeds.add(new WashingtonPostFeed(
-        ));
-
         feeds.add(new WashingtonPostFeed());
-
-//        feeds.add(createReddit(redditRateLimiter, "r/worldnews", 1000));
-//        feeds.add(createReddit(redditRateLimiter, "r/AskReddit", 1000));
-//        feeds.add(createReddit(redditRateLimiter, "r/ProgrammerHumor", 600));
-//        feeds.add(createReddit(redditRateLimiter, "r/science", 1000));
-//        feeds.add(createReddit(redditRateLimiter, "top", 1000));
-//        feeds.add(createReddit(redditRateLimiter, "r/all", REDDIT_MIN_SCORE));
-//        feeds.add(createReddit(redditRateLimiter, "r/announcements", 10000));
-
         feeds.add(new TheLocalFeed());
+
+        feeds.add(createReddit("r/worldnews", 1000));
+        feeds.add(createReddit("r/AskReddit", 1000));
+        feeds.add(createReddit("r/ProgrammerHumor", 600));
+        feeds.add(createReddit("r/science", 1000));
+        feeds.add(createReddit("top", 1000));
+        feeds.add(createReddit("r/all", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/announcements", 10000));
 
         feeds.forEach(feedService::put);
     }
@@ -83,8 +78,8 @@ public class FeedPopulator {
         return new GenericRssFeed(feedName, webUrl, rssUrl);
     }
 
-    private static Feed createReddit(RateLimiter rateLimiter, String subreddit, double minScore) {
-        return new RedditFeed(rateLimiter, subreddit, scoreMoreThan(minScore));
+    private static Feed createReddit(String subreddit, double minScore) {
+        return new RedditFeed(subreddit, scoreMoreThan(minScore));
     }
 
     private static Predicate<Document> scoreMoreThan(double score) {
