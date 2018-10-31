@@ -81,7 +81,7 @@ public class FeedReaderJob {
 
     private static String oldestInstantDebug(List<Document> filtered) {
 
-        Optional<Document> max = filtered.stream().max(Comparator.comparing(Document::getPublishDate).reversed());
+        Optional<Document> max = filtered.stream().max(Comparator.comparing(Document::getPublishedDate).reversed());
 
         return max.map(Document::getPublishedShortString).orElse("null");
 

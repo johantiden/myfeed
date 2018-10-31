@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 public class WashingtonPostFeed extends Feed {
 
@@ -40,9 +41,11 @@ public class WashingtonPostFeed extends Feed {
         MyRss2FeedReader() {super(URL_RSS);}
 
         static String findImage(String pageUrl) {
+            Objects.requireNonNull(pageUrl);
             URL url = getUrl(pageUrl);
-            org.jsoup.nodes.Document doc = getJsoupDocument(url);
 
+            org.jsoup.nodes.Document doc = getJsoupDocument(url);
+            Objects.requireNonNull(doc);
             Elements img = doc.select(".article-main-img");
             if(!img.isEmpty()) {
                 String srcRelative = img.attr("src");

@@ -105,6 +105,7 @@ public class SvenskaDagbladetFeed extends Feed {
             String html = null;
             Document document = new Document(title, text, html, pageUrl, imageUrl, publishedDate, NAME, URL);
             document.isPaywalled = paywalled;
+            document.extra = item.category;
             return document;
         }
     }

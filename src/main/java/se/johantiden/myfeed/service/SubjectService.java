@@ -32,8 +32,7 @@ public class SubjectService {
             documentService.setRead(document.getId());
         }
 
-        document.getSubjects().clear();
-        document.getSubjects().addAll(matchingRules);
+        document.addSubjects(matchingRules);
 
         documentService.put(document);
     }

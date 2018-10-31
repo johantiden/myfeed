@@ -26,8 +26,16 @@ decodeSubjects = list decodeSubject
 
 decodeSubject : Decoder Subject
 decodeSubject =
-    map4 Subject
-        (field "name" string)
-        (field "hashTag" bool)
-        (field "showAsTab" bool)
-        (field "depth" int)
+    succeed Subject
+            |> andMap (field "name" string)
+            |> andMap (field "hashTag" bool)
+            |> andMap (field "showAsTab" bool)
+            |> andMap (field "depth" int)
+            |> andMap (field "subjectType" decodeSubjectType)
+
+decodeSubjectType : Decoder SubjectType
+decodeSubjectType =
+    succeed SubjectType
+            |> andMap (field "constant" string)
+            |> andMap (field "title" string)
+            |> andMap (field "order" int)

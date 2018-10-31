@@ -37,7 +37,7 @@ viewTop model =
     [ viewTopRow model
 --    , viewTabs model
 --    , hr [] []
-    , viewTabs2 model
+    , viewTabs3 model
     ]
 
 viewLogo : Html Msg
@@ -56,6 +56,20 @@ viewTabs2 model =
             |> List.take 20
             |> List.map (viewTab model.search)
         )
+
+
+viewTabs3 : Model -> Html Msg
+viewTabs3 model =
+    div []
+        (model.documents
+            |> extractSubjects
+            |> List.filter .showAsTab
+            |> groupSubjectsByType
+            |> List.sortBy (\(subjectType, subjects) -> subjectType.order)
+            |> List.filter (\(subjectType, subjects) -> (List.length subjects) > 0)
+            |> List.map (viewTabRowByType model)
+        )
+
 viewTabs : Model -> Html Msg
 viewTabs model =
     div []
@@ -65,7 +79,6 @@ viewTabs model =
             |> groupSubjectsByDepth
             |> List.map (viewTabRow model)
         )
-
 
 viewTabRow : Model -> (Int, List Subject) -> Html Msg
 viewTabRow model (depth, subjects) =
@@ -77,6 +90,20 @@ viewTabRow model (depth, subjects) =
             |> List.take 5
             |> List.map (viewTab model.search)
         )
+
+viewTabRowByType : Model -> (SubjectType, List Subject) -> Html Msg
+viewTabRowByType model (subjectType, subjects) =
+    div [css []] [
+        span [] [text subjectType.title]
+        , div [css []]
+            (subjects
+                |> List.map (\s -> ((countMatching s.name model.documents), s))
+--                |> List.filter (\(hitCount, _) -> hitCount > 2)
+                |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
+                |> List.take 5
+                |> List.map (viewTab model.search)
+            )
+    ]
 
 viewTab : String -> (Int, Subject)-> Html Msg
 viewTab search (hitCount, subject) =
