@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,7 @@ public class IndexController {
 
     public IndexController(DocumentService documentService) {this.documentService = Objects.requireNonNull(documentService);}
 
-    @RequestMapping(value = "/rest/index/keys", method = GET)
+    @GetMapping(value = "/rest/index/keys")
     public Collection<Long> indexKeys() {
 
         Set<Document> documents = documentService.getReadyDocuments();
@@ -50,7 +51,7 @@ public class IndexController {
         return ids;
     }
 
-    @RequestMapping(value = "/rest/index/documents", method = GET)
+    @GetMapping(value = "/rest/index/documents")
     public List<DocumentBean> indexDocuments() {
 
         Set<Document> documents = documentService.getReadyDocuments();

@@ -1,11 +1,11 @@
 package se.johantiden.myfeed.persistence;
 
 
+import se.johantiden.myfeed.persistence.Subject.SubjectType;
 import se.johantiden.myfeed.util.DocumentPredicates;
 import se.johantiden.myfeed.util.JPredicates;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -14,579 +14,590 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static se.johantiden.myfeed.persistence.Subject.ROOT;
+import static se.johantiden.myfeed.persistence.Subject.ALL;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.BASE;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.CATEGORY;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.LOCAL;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.CONTINENT;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.COUNTRY;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.EVENT;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.FEED;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.ORGANIZATION;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.PERSON;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.SUBJECT;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.SUB_FEED;
 
-public class SubjectClassifier {
+public final class SubjectClassifier {
 
     private static final Set<Subject> SUBJECTS = new HashSet<>();
     public static final boolean HIDE_SPORT = true;
     public static final boolean HIDE_CULTURE = true;
     public static final boolean HIDE_BAD = true;
 
+    private SubjectClassifier() {}
+
     public static Set<Subject> getSubjects() {
-        SUBJECTS.add(ROOT);
+        SUBJECTS.add(ALL);
 
-        Subject fun = addWithoutExpression("#Fun", ROOT);
-        Subject comics = addWithoutExpression("Comics", fun);
-        add("xkcd", "xkcd", comics);
-        add("Ernie", "serier/ernie", comics);
+        Subject fun = addWithoutExpression("#Fun", CATEGORY, ALL);
+        Subject comics = addWithoutExpression("Comics", SUBJECT, fun);
+        add("Ernie", l("serier/ernie"), SUBJECT, comics);
 
-        Subject reddit = add("Reddit", "reddit.com", fun);
-        add("r/funny", "reddit.com/r/funny", reddit);
+        add("Reddit", l("reddit"), FEED, ALL);
+        Subject news = add("Nyheter", l("news.slashdot"), CATEGORY, ALL);
+        Subject meToo = add("#metoo", l("metoo"), SUBJECT, news);
 
+        add("Harvey Weinstein", l("Harvey Weinstein"), PERSON, meToo);
 
-
-        Subject news = addWithoutExpression("Nyheter", ROOT);
-        Subject meToo = add("#metoo", "metoo", news);
-
-        add("Harvey Weinstein", "Harvey Weinstein", meToo);
-
-        Subject opinion = addWithoutExpression("Opinion", news);
-        addInvisible("riktlinje", opinion);
-        addInvisible("DEBATT", opinion);
-        addInvisible("dn.se/asikt", opinion);
-
+        add("Opinion",
+                l(
+                        "riktlinje",
+                        "DEBATT",
+                        "dn.se/asikt"
+                ), CATEGORY, ALL);
 
         {
-            Subject sjuk = add("Sjukdom & Hälsa", "sjukdom", news);
-            add("Influenza", "Influenza", sjuk);
-            add("Leukemi", "leukemi", sjuk);
-            add("Cancer", "cancer", sjuk);
-            add("Klimakterie", "klimakterie", sjuk);
+            Subject sjuk = add("Sjukdom & Hälsa", l("sjukdom"), SUBJECT, news);
+            add("Influenza", l("Influenza"), SUBJECT, sjuk);
+            add("Leukemi", l("leukemi"), SUBJECT, sjuk);
+            add("Cancer", l("cancer"), SUBJECT, sjuk);
+            add("Klimakterie", l("klimakterie"), SUBJECT, sjuk);
         }
 
-        Subject tech = add("Tech", "tech ", ROOT);
-        {
-            {
-                Subject science = add("Science", "science", tech);
-                addInvisible("phys.org", science);
-                addInvisible("quantum", science);
-                addInvisible("transistor", science);
-                addInvisible("research", science);
-                addInvisible("polymer", science);
-                addInvisible("forskare", science);
-                addInvisible("forskning", science);
-                add("Ultraljud", "ultrasound", science);
-            }
-
-            add("Show HN", "Show HN", tech);
-
-
-            Subject miljo = add("Mijlö", l("klimat", "climate"), news);
-            addInvisible("environment", miljo);
-            add("Återvinning", "återvinning", miljo);
-
-
-            Subject internet = add("Internet", "internet", tech);
-            Subject linux = add("Linux", "linux", tech);
-            addInvisible("Ubuntu", linux);
-            addInvisible("Linus Torvalds", linux);
-            addInvisible("KDE", linux);
-            Subject ai = add("Artificial Intelligence", l("artificial intelligence","artificial-intelligence"), tech);
-            addInvisible("robot", ai);
-            Subject machineLearning = add("Machine Learning", "machine learning", ai);
-            add("Neural Networks", "neural net", machineLearning);
-            add("Cellular Automata", "cellular automata", machineLearning);
-
-            add("Niklas Zennström", "Zennström", tech);
-            addInvisible("ycombinator", tech);
-
-            Subject software = add("Software", "software", tech);
-            addInvisible("programming", software);
-            addInvisible("programmer", software);
-            addInvisible("web framework", software);
-            addInvisible("database", software);
-            addInvisible("computation", software);
-            addInvisible("clojure", software);
-            addInvisible("haskell", software);
-            addInvisible("open source", software);
-            addInvisible("Javascript", l("javascript",".js"), software);
-
-            addInvisible("World Wide Web", internet);
-            addInvisible("Engadget", tech);
-            Subject facebook = add("Facebook", "Facebook", tech);
-            add("Cambridge Analytica", "Cambridge Analytica", facebook, tech);
-
-            add("Tim Berners-Lee", "Tim Berners-Lee", internet);
-
-            addInvisible("science.slashdot", tech);
-            addInvisible("news.slashdot", news);
-            addInvisible("developers.slashdot", software);
-        }
-
-
+        Subject tech = add("Tech", l(
+                "tech ",
+                "ycombinator",
+                "Engadget"
+        ), CATEGORY, ALL);
 
         {
+            add("Science",
+                    l(
+                            "science",
+                            "science.slashdot",
+                            "phys.org",
+                            "quantum",
+                            "transistor",
+                            "research",
+                            "polymer",
+                            "forskare",
+                            "forskning",
+                            "ultrasound"
+                    ), CATEGORY, tech);
+
+            add("Show HN", l("Show HN"), SUB_FEED, tech);
+
+
+            Subject miljo = add("Mijlö", l("klimat", "climate", "environment"), SUBJECT, news);
+            add("Återvinning", l("återvinning"), SUBJECT, miljo);
+
+
+            Subject internet = add("Internet",
+                    l("internet", "World Wide Web"), SUBJECT, tech);
+            add("Tim Berners-Lee", l("Tim Berners-Lee"), PERSON, internet);
+
+            add("Linux",
+                    l(
+                            "linux",
+                            "Ubuntu",
+                            "Linus Torvalds",
+                            "KDE"
+                    ), SUBJECT, tech);
+
+            add("Artificial Intelligence",
+                    l(
+                            "artificial intelligence",
+                            "artificial-intelligence",
+                            "robot",
+                            "machine learning",
+                            "neural net",
+                            "cellular automata"
+                    ), SUBJECT, tech);
+
+
+            add("Niklas Zennström", l("Zennström"), PERSON, tech);
+
+            add("Software",
+                    l("software", "programming", "programmer", "web framework",
+                            "database", "computation", "clojure", "haskell",
+                            "open source", "javascript", ".js", "developers.slashdot"), SUBJECT, tech);
+
+            Subject facebook = add("Facebook", l("Facebook"), ORGANIZATION, tech);
+            add("Cambridge Analytica", l("Cambridge Analytica"), ORGANIZATION, facebook, tech);
 
-
-            {
-                Subject sydAmerika = addWithoutExpression("Sydamerika", news);
-
-                Subject argentina = add("Argentina", "Argentin", sydAmerika);
-                add("Buenos Aires", "Buenos Aires", argentina);
-                add("Chile", "Chile", sydAmerika);
-                add("Honduras", "Hondura", sydAmerika);
-
-                Subject brasilien = add("Brasilien", l("brasil","brazil"), sydAmerika);
-                add("Jair Bolsonaro", "bolsonaro", brasilien);
-                add("Bolivia", "Bolivia", sydAmerika);
-                add("Guatemala", "Guatemala", sydAmerika);
-
-                add("Mexiko", l("Mexico","Mexiko"), sydAmerika);
-                add("Colombia", "colombia", sydAmerika);
-
-                add("El Salvador", "El Salvador", sydAmerika);
-            }
-
-            {
-                Subject afrika = add("Afrika", l("Afrika","Africa"), news);
-
-                add("Algeriet", l("algeria", "algeriet"), afrika);
-                add("Sudan", "Sudan", afrika);
-                add("Botswana", "Botswana", afrika);
-                add("Burkina Faso", "Burkina Faso", afrika);
-                add("Demokratiska Republiken Kongo", l("Democratic Republic of Congo","Demokratiska Republiken Kongo"), afrika);
-                add("Egypt", "Egypt", afrika);
-                add("Eritrea", "eritrea", afrika);
-                add("Elfenbenskusten", l("ivory coast","elfenbenfskusten"), afrika);
-                add("Etiopien", l("ethiopia","etiop"), afrika);
-                add("Gabon", "Gabon", afrika);
-                add("Kongo", "Kongo", afrika);
-                add("Libyen", l("libya","libyen"), afrika);
-                add("Nigeria", "nigeria", afrika);
-                add("Kamerun", l("kamerun","cameroon"), afrika);
-                Subject kenya = add("Kenya", "Kenya", afrika); add("Nairobi", "Nairobi", kenya);
-                add("Senegal", "Senegal", afrika);
-                add("Tunisien", "tunisia", afrika);
-                add("Uganda", "uganda", afrika);
-            }
-
-
-            {
-                Subject europe = add("Europa", l("europe", "europa"), news);
-                add("#EU", "European Union", europe);
-
-                add("Georgien", l("Georgia", "Georgien"), europe);
-                {
-                    Subject turkiet = add("Turkiet", "Turkiet", europe);
-                    add("Erdogan", "Erdogan", turkiet);
-                    addInvisible("Turkey", turkiet);
-                }
-
-                add("Grekland", l("grekland","grekisk","greece"), europe);
-                add("Cypern", l("cypern","cyprus","cypriot"), europe);
-                add("Frankrike", l("Frankrike","France","french","fransk"), europe);
-
-                add("Slovakien", "Slovak", europe);
-                add("Norge", l("norsk", "norge", "norway", "norwegian"), europe);
-
-                add("Malta", l("Malta","Maltese"), europe);
-
-                add("Lettland", l("lettland","latvia"), europe);
-                add("Bulgarien", "bulgari", europe);
-                add("Serbien", l("serbisk","serbien","serbia"), europe);
-                {
-                    Subject greatBritain = add("Storbritannien", l("Great Britain","Storbritannien","British"), europe);
-                    addRegex("Tories", "Tories", greatBritain);
-                    add("Prince Harry", "Prince Harry", greatBritain);
-                    addInvisible("U.K.", greatBritain);
-
-                    add("Brexit", "Brexit", greatBritain);
-                    add("Leicester", "Leicester", greatBritain);
-                    add("Theresa May", "Theresa May", greatBritain);
-                    add("London", "London", greatBritain);
-                    add("Birmingham", "Birmingham", greatBritain);
-                }
-
-                add("Ukraina", "Ukrain", europe);
-                add("Portugal", "portugal", europe);
-
-                Subject makedonien = add("Makedonien", "macedoni", europe);
-                addInvisible("Makedoni", makedonien);
-
-                {
-
-                    Subject spanien = add("Spanien", "Spanien", europe);
-                    addInvisible("Spain", spanien);
-                    add("Barcelona", "Barcelona", spanien);
-                    add("Katalonien", l("Katalonien","Catala"), spanien);
-                    add("Mallorca", "Mallorca", spanien);
-                }
-                add("Italien", l("Italien","Italian","Italy"), europe);
-                add("Nederländerna", l("Nederländerna","Netherlands","Dutch","Holland","Holländ"), europe);
-
-                Subject tyskland = add("Tyskland", l("German","Tysk"), europe);
-                add("Angela Merkel", "merkel", tyskland);
-
-                Subject ungern = add("Ungern", l("Ungern","Hungary"), europe);
-                add("Bosnien", l("Bosnien","Bosnia"), europe);
-                add("Rumänien", l("rumän","romania"), europe);
-                Subject danmark = add("Danmark", l("danmark", "dansk", "denmark", "danish"), europe);
-                add("Budapest", "Budapest", ungern);
-                add("Köpenhamn", l("Köpenhamn", "Copenhagen"), danmark);
-
-                add("Polen", l("polen", "poland", "polish", "polsk"), europe);
-
-
-                {
-                    Subject sverige = add("Sverige", l("sverige", "swedish", "sweden"), news);
-                    addInvisible("svensk", sverige);
-                    addInvisible("TheLocal", sverige);
-                    Subject inrikespolitik = add("Inrikespolitik", "Inrikespolitik", sverige);
-                    addInvisible("svensk politik", inrikespolitik);
-
-                    Subject fi = add("Feministiskt initiativ", "Feministiskt initiativ", inrikespolitik);
-                    add("Gudrun Schyman", "Gudrun Schyman", fi);
-
-                    add("Vänsterpartiet", "Vänsterpartiet", inrikespolitik);
-                    Subject miljopartiet = add("Miljöpartiet", "miljöpartiet", inrikespolitik);
-                    add("Gustav Fridolin", "Fridolin", miljopartiet);
-
-                    add("Bildt", "bildt", inrikespolitik);
-
-                    Subject alliansen = add("Alliansen", "Alliansparti", inrikespolitik);
-
-                    Subject moderaterna = add("Moderatena", "Moderaterna", inrikespolitik, alliansen);
-                    add("Ulf Kristersson", "Ulf Kristersson", moderaterna);
-
-                    Subject centerpartiet = add("Centerpartiet", "Centerpartiet", inrikespolitik, alliansen);
-                    add("Annie Lööf", "Lööf", centerpartiet);
-
-                    Subject socialdemokraterna = add("Socialdemokraterna", "socialdemokraterna", inrikespolitik);
-                    add("Stefan Löfven", "Stefan Löfven", socialdemokraterna);
-
-                    Subject sverigedemokraterna = add("Sverigedemokraterna", "Sverigedemokraterna", inrikespolitik);
-                    add("Jimmie Åkesson", "Jimmie Åkesson", sverigedemokraterna);
-                    Subject talmannen = add("Talmannen", "talmannen", inrikespolitik);
-                    add("Andreas Norlén", "Andreas Norlén", talmannen, inrikespolitik);
-                    addInvisible("landsting", inrikespolitik);
-                    addInvisible("kommuner", inrikespolitik);
-                    addInvisible("justitieombudsman", inrikespolitik);
-                    addInvisible("Försäkringskassan", inrikespolitik);
-
-                    addInvisible("inrikes", sverige);
-                    addInvisible("tågtrafik", sverige);
-                    addInvisible("kolmården", sverige);
-
-                    Subject stockholm = add("Stockholm", "Stockholm", sverige);
-                    add("Arlanda", "Arlanda", stockholm);
-                    add("Kalix", "Kalix", sverige);
-                    add("Skövde", "Skövde", sverige);
-                    add("Malmö", "Malmö", sverige);
-                    add("Arvidsjaur", "Arvidsjaur", sverige);
-                    add("Göteborg", l("Göteborg", "Gothenburg"), sverige);
-
-                    addRegex("SF-Bio", "SF.*[Bb]io", sverige);
-
-                    add("Studiemedel", l("CSN", "studiemedel", "studielån"), sverige);
-
-
-                    {
-                        Subject nobelpriset = add("Nobelpriset", "nobel", sverige);
-                        addInvisible("nobel pri", nobelpriset);
-                        Subject svenskaAkademien = add("Svenska Akademien", l("Svenska Akademien", "Swedish Academy"), sverige);
-                        add("Jean-Claude Arnault", "Jean-Claude Arnault", svenskaAkademien, meToo);
-                    }
-                }
-
-            }
-
-
-            {
-                Subject asien = add("Asien", l("asien", "asia"), news);
-
-                add("Maldives", "Maldives", asien);
-                add("Thailand", l("thailand", "thailänd"), asien);
-                add("Sri Lanka", "sri lank", asien);
-                add("Kashmir", "Kashmir", asien);
-
-                Subject myanmar = add("Myanmar", "Myanmar", asien);
-                add("Aung San Suu Kyi", "Aung San Suu Kyi", myanmar);
-                add("Rohingya", "Rohingya", myanmar);
-
-                Subject japan = add("Japan", "Japan", asien);
-                add("Shinzo Abe", "Shinzo Abe", japan);
-                add("Okinawa", "Okinawa", japan);
-                add("Tokyo", "Tokyo", japan);
-
-                add("Malaysia", "malaysia", asien);
-
-                Subject ryssland = add("Ryssland", l("Russia", "Ryssland", "rysk"), asien);
-                add("Moskva", l("Moscow", "Moskva"), ryssland);
-                add("Vladimir Putin", "Putin", ryssland);
-                add("Indien", l("indien", "india"), asien);
-                add("Pakistan", "pakistan", asien);
-                add("Indonesien", l("indonesien", "indonesia"), asien);
-
-                add("Kina", l("Kina", "China", "kines", "chinee"), asien);
-
-                Subject nordkorea = add("Nordkorea", l("nordkorea", "north korea"), asien);
-                add("Kim Jong-Un", l("Kim Jong-Un", "Kim Jong Un"), nordkorea);
-
-                Subject sydkorea = add("Sydkorea", l("sydkorea", "south korea"), asien);
-                add("Pyeongchang", "Pyeongchang", sydkorea);
-                add("Moon Jae-in", "moon jae-in", sydkorea);
-
-                add("Singapore", "Singapore", asien);
-            }
-
-
-            {
-                Subject middleEast = add("Mellanöstern", l("mellanöstern", "middle east"), news);
-                Subject israel = add("Israel", "Israel", middleEast);
-                Subject palestina = add("Palestina", "Palestin", middleEast);
-                add("Gaza", "Gaza", israel, palestina);
-                add("Libanon", l("libanon", "lebanon"), middleEast);
-
-                add("Afghanistan", l("Afghan", "Afgan"), middleEast);
-
-
-                Subject syrien = add("Syrien", l("syria", "syrien"), middleEast);
-                add("Idlib", "Idlib", syrien);
-
-                add("Jordanien", "jordan", middleEast);
-
-                Subject saudiarabien = add("Saudiarabien", "saudi", middleEast);
-                add("Jamal Khashoggi", "khashoggi", saudiarabien);
-
-                add("Qatar", "Qatar", middleEast);
-
-
-                add("Yemen", "Yemen", middleEast);
-                add("Iran", "Iran", middleEast);
-                add("Irak", l("iraq", "irak"), middleEast);
-                add("Kurder", "kurd", middleEast);
-
-
-                Subject uae = add("Förenade Arabemiraten", "Förenade Arabemiraten", middleEast);
-                addInvisible("UAE", uae);
-            }
-
-            {
-                Subject oceanien = addWithoutExpression("Oceanien", news);
-                add("Mikronesien", l("Mikronesien", "micronesia"), oceanien);
-                add("Nauru", "Nauru", oceanien);
-                add("Australien", l("australia", "australien"), oceanien);
-                add("Nya Zealand", l("New Zealand", "Nya Zeeland"), oceanien);
-
-            }
-
-
-            {
-                Subject nordAmerika = addWithoutExpression("Nordamerika", news);
-                {
-                    Subject usa = add("#USA", l("USA", "U.S.", "US election"), nordAmerika);
-                    add("Florida", "Florida", usa);
-                    Subject pittsburgh = add("Pittsburgh", "Pittsburgh", usa);
-                    add("Robert Bowers", "Robert Bowers", pittsburgh);
-                    add("Kalifornien", l("kaliforni", "californi"), usa);
-                    add("Hawaii", "hawaii", usa);
-                    Subject arizona = add("Arizona", "Arizona", usa);
-                    add("Ohio", l("Ohio", "Cincinnati"), usa);
-                    add("Texas", "Texas", usa);
-
-                    Subject usaPolitik = add("USA-politik", "USA-politik", usa);
-                    addInvisible("Planned Parenthood", usaPolitik);
-
-                    add("Jeff Flake", "Jeff Flake", usaPolitik, arizona);
-                    add("Brett Kavanaugh", "Kavanaugh", usaPolitik);
-                    add("Bernie Sanders", "Sanders", usaPolitik);
-                    add("Paul Ryan", "Paul Ryan", usaPolitik);
-                    add("Mike Pompeo", "pompeo", usaPolitik);
-
-                    add("Trump", "Trump", usa);
-                    add("Bill Clinton", "Bill Clinton", usa);
-                    add("NAFTA", "NAFTA", usaPolitik);
-                    Subject usRepuplicans = addRegex("Republikanerna", "washington.*republican", usaPolitik);
-                    addInvisible("GOP", usRepuplicans);
-
-                    add("Obamacare", "Obamacare", usaPolitik);
-                }
-
-                add("Kanada", l("Canada", "Kanada", "Kanadens", "Canadian"), nordAmerika);
-                add("Haiti", "haiti", nordAmerika);
-
-            }
-        }
-
-        {
-            Subject weather = addWithoutExpression("Weather & Disasters", ROOT);
-            addInvisible("temperatur", weather);
-            addInvisible("varmare väder", weather);
-            addInvisible("kallare väder", weather);
-            addInvisible("snöfall", weather);
-            addInvisible("blötsnö", weather);
-            addInvisible("snömängd", weather);
-            addInvisible("meteorolog", weather);
-            addInvisible("väderinstitut", weather);
-            addInvisible("smhi", weather);
-            addInvisible("grader varmt", weather);
-            addInvisible("vinterdäck", weather);
-            add("Tsunami", "tsunami", weather);
-            add("Tyfon", l("tyfon", "typhoon"), weather);
-            add("Jordbävning", l("jordbävning", "earth quake", "earthquake"), weather);
-            add("Skogsbrand", "skogsbrand", weather);
-            add("Flooding", "floodwater", weather);
-            add("Jordskred", l("jordskred", "landslide"), weather);
         }
 
 
-        Subject violence = add("Våldsbrott", l("violence", "Våldsbrott"), news);
-        add("Mord", l("mord", "murder"), violence);
-        addInvisible("Död person", violence);
-        addInvisible("våldtäkt", violence);
-        Subject hateCrime = add("Hatbrott", l("hatbrott", "hate crime"), violence);
-        addInvisible("racism", hateCrime);
-        addInvisible("judehat", hateCrime);
-        addInvisible("antisemitism", hateCrime);
-        addInvisible("anti-semitic", hateCrime);
-        Subject terrorism = add("Terrorism", "terror", violence);
-        add("Boko Haram", "boko haram", terrorism);
-        Subject isil = add("ISIL", l("islamic state"), terrorism);
-        addInvisibleRegex("ISIL", isil);
-        addInvisibleRegex("ISIS", isil);
 
-        Subject un = add("United Nations", "UN peacekeeper", news);
-        addInvisibleRegex("the UN", un);
+        Subject sydAmerika = addWithoutExpression("Sydamerika", CONTINENT, news);
 
+        Subject argentina = add("Argentina", l("Argentin"), COUNTRY, sydAmerika);
+        add("Buenos Aires", l("Buenos Aires"), COUNTRY, argentina);
+        add("Chile", l("Chile"), COUNTRY, sydAmerika);
+        Subject honduras = add("Honduras", l("Hondura"), COUNTRY, sydAmerika);
+
+        Subject brasilien = add("Brasilien", l("brasil","brazil").or(regex("Rio")), COUNTRY, sydAmerika);
+        add("Jair Bolsonaro", l("bolsonaro"), PERSON, brasilien);
+        add("Bolivia", l("Bolivia"), COUNTRY, sydAmerika);
+        add("Guatemala", l("Guatemala"), COUNTRY, sydAmerika);
+
+        Subject mexico = add("Mexiko", l("Mexico", "Mexiko"), COUNTRY, sydAmerika);
+        add("Colombia", l("colombia"), COUNTRY, sydAmerika);
+
+        add("El Salvador", l("El Salvador"), COUNTRY, sydAmerika);
+
+        Subject afrika = add("Afrika", l("Afrika","Africa"), CONTINENT, news);
+
+        add("Algeriet", l("algeria", "algeriet"), COUNTRY, afrika);
+        add("Sudan", l("Sudan"), COUNTRY, afrika);
+        add("Botswana", l("Botswana"), COUNTRY, afrika);
+        add("Burkina Faso", l("Burkina Faso"), COUNTRY, afrika);
+        add("Demokratiska Republiken Kongo", l("Democratic Republic of Congo","Demokratiska Republiken Kongo"), COUNTRY, afrika);
+        add("Egypt", l("Egypt"), COUNTRY, afrika);
+        add("Eritrea", l("eritrea"), COUNTRY, afrika);
+        add("Elfenbenskusten", l("ivory coast","elfenbenfskusten"), COUNTRY, afrika);
+        add("Etiopien", l("ethiopia","etiop"), COUNTRY, afrika);
+        add("Gabon", l("Gabon"), COUNTRY, afrika);
+        add("Kongo", l("Kongo"), COUNTRY, afrika);
+        add("Libyen", l("libya","libyen"), COUNTRY, afrika);
+        add("Nigeria", l("nigeria"), COUNTRY, afrika);
+        add("Kamerun", l("kamerun","cameroon"), COUNTRY, afrika);
+        Subject kenya = add("Kenya", l("Kenya"), COUNTRY, afrika);
+        add("Nairobi", l("Nairobi"), LOCAL, kenya);
+        add("Senegal", l("Senegal"), COUNTRY, afrika);
+        add("Tunisien", l("tunisia"), COUNTRY, afrika);
+        add("Uganda", l("uganda"), COUNTRY, afrika);
+
+
+        Subject europe = add("Europa", l("europe", "europa"), CONTINENT, news);
+        add("#EU", l("European Union"), ORGANIZATION, europe);
+
+        add("Georgien", l("Georgia", "Georgien"), COUNTRY, europe);
         {
-            Subject biz = addWithoutExpression("Business", ROOT);
-            add("Elon Musk", "Elon Musk", tech, biz);
-            add("Tesla", "Tesla", tech, biz);
-            add("e-handel", "e-handel", tech, biz);
-            add("aktie", "aktie", biz);
-            add("tillväxt", "tillväxt", biz);
-            add("#BMW", "BMW", tech, biz);
-            add("Hubble", "Hubble", tech);
-            add("Nordnet", "Nordnet", biz);
-            add("Ekonomi", "dn.se/ekonomi", biz);
-
-            add("Google", "Google", biz, tech);
-            addRegex("#IBM", "IBM", biz, tech);
-            add("Warner", "warner", biz);
-            add("Nokia", "nokia", biz);
-            addRegex("#SEB", "SEB", biz);
-            add("Nordea", "nordea", biz);
-            add("Microsoft", "Microsoft", biz, tech);
-            add("Snapchat", "Snapchat", biz, tech);
-
-            Subject apple = add("Apple", "Apple", biz, tech);
-            add("Steve Jobs", "Steve Jobs", apple);
-
-            add("Amazon", "Amazon", biz, tech);
+            Subject turkiet = add("Turkiet", l("Turkiet", "turkey"), COUNTRY, europe);
+            add("Erdogan", l("Erdogan"), PERSON, turkiet);
         }
 
+        add("Finland", l("Finland"), COUNTRY, news);
+
+        add("Grekland", l("grekland","grekisk","greece"), COUNTRY, europe);
+        add("Cypern", l("cypern","cyprus","cypriot"), COUNTRY, europe);
+        add("Frankrike", l("Frankrike","France","french","fransk"), COUNTRY, europe);
+
+        add("Slovakien", l("Slovak"), COUNTRY, europe);
+        add("Norge", l("norsk", "norge", "norway", "norwegian"), COUNTRY, europe);
+
+        add("Malta", l("Malta","Maltese"), COUNTRY, europe);
+
+        add("Lettland", l("lettland","latvia"), COUNTRY, europe);
+        add("Bulgarien", l("bulgari"), COUNTRY, europe);
+        add("Serbien", l("serbisk","serbien","serbia"), COUNTRY, europe);
+        {
+            Subject greatBritain = add("Storbritannien", l("Great Britain","Storbritannien","British", "U.K."), COUNTRY, europe);
+            add("Tories", regex("Tories"), ORGANIZATION, greatBritain);
+            add("Prince Harry", l("Prince Harry"), PERSON, greatBritain);
+
+            add("Brexit", l("Brexit"), EVENT, greatBritain);
+            add("Leicester", l("Leicester"), LOCAL, greatBritain);
+            add("Theresa May", l("Theresa May"), PERSON, greatBritain);
+            add("London", l("London"), LOCAL, greatBritain);
+            add("Birmingham", l("Birmingham"), LOCAL, greatBritain);
+        }
+
+        add("Ukraina", l("Ukrain"), COUNTRY, europe);
+        add("Portugal", l("portugal"), COUNTRY, europe);
+
+        add("Makedonien", l("macedoni", "Makedoni"), COUNTRY, europe);
 
         {
-            Subject sport = add("Sport", "sport", HIDE_SPORT, ROOT);
+
+            Subject spanien = add("Spanien", l("Spanien", "Spain"), COUNTRY, europe);
+            add("Barcelona", l("Barcelona"), LOCAL, spanien);
+            add("Katalonien", l("Katalonien","Catala"), LOCAL, spanien);
+            add("Mallorca", l("Mallorca"), LOCAL, spanien);
+        }
+        add("Italien", l("Italien","Italian","Italy"), COUNTRY, europe);
+        add("Nederländerna", l("Nederländerna","Netherlands","Dutch","Holland","Holländ"), COUNTRY, europe);
+
+        Subject tyskland = add("Tyskland", l("German","Tysk"), COUNTRY, europe);
+        add("Angela Merkel", l("merkel"), PERSON, tyskland);
+
+        Subject ungern = add("Ungern", l("Ungern","Hungary"), COUNTRY, europe);
+        add("Bosnien", l("Bosnien","Bosnia"), COUNTRY, europe);
+        add("Rumänien", l("rumän","romania"), COUNTRY, europe);
+        Subject danmark = add("Danmark", l("danmark", "dansk", "denmark", "danish"), COUNTRY, europe);
+        add("Köpenhamn", l("Köpenhamn", "Copenhagen"), LOCAL, danmark);
+        add("Budapest", l("Budapest"), LOCAL, ungern);
+
+        add("Polen", l("polen", "poland", "polish", "polsk"), COUNTRY, europe);
+
+
+        {
+            Subject sverige = add("Sverige",
+                    l(
+                            "sverige",
+                            "swedish",
+                            "sweden",
+                            "svensk",
+                            "TheLocal",
+                            "inrikes",
+                            "tågtrafik",
+                            "kolmården"
+                    ), COUNTRY, news);
+
+            Subject inrikespolitik = add("Inrikespolitik",
+                    l(
+                            "Inrikespolitik",
+                            "svensk politik",
+                            "landsting",
+                            "kommuner",
+                            "justitieombudsman",
+                            "Försäkringskassan"
+                    ), SUBJECT, sverige);
+
+
+            Subject fi = add("Feministiskt initiativ", l("Feministiskt initiativ"), ORGANIZATION, inrikespolitik);
+            add("Gudrun Schyman", l("Gudrun Schyman"), PERSON, fi);
+
+            add("Vänsterpartiet", l("Vänsterpartiet"), ORGANIZATION, inrikespolitik);
+            Subject miljopartiet = add("Miljöpartiet", l("miljöpartiet"), ORGANIZATION, inrikespolitik);
+            add("Gustav Fridolin", l("Fridolin"), PERSON, miljopartiet);
+
+            add("Bildt", l("bildt"), PERSON, inrikespolitik);
+
+            Subject alliansen = add("Alliansen", l("Alliansparti"), ORGANIZATION, inrikespolitik);
+
+            Subject moderaterna = add("Moderatena", l("Moderaterna"), ORGANIZATION, inrikespolitik, alliansen);
+            add("Ulf Kristersson", l("Ulf Kristersson"), PERSON, moderaterna);
+
+            Subject centerpartiet = add("Centerpartiet", l("Centerpartiet"), ORGANIZATION, inrikespolitik, alliansen);
+            add("Annie Lööf", l("Lööf"), PERSON, centerpartiet);
+
+            Subject socialdemokraterna = add("Socialdemokraterna", l("socialdemokraterna"), ORGANIZATION, inrikespolitik);
+            add("Stefan Löfven", l("Stefan Löfven"), PERSON, socialdemokraterna);
+
+            Subject sverigedemokraterna = add("Sverigedemokraterna", l("Sverigedemokraterna"), ORGANIZATION, inrikespolitik);
+            add("Jimmie Åkesson", l("Jimmie Åkesson"), PERSON, sverigedemokraterna);
+            Subject talmannen = add("Talmannen", l("talmannen"), PERSON, inrikespolitik);
+            add("Andreas Norlén", l("Andreas Norlén"), PERSON, talmannen, inrikespolitik);
+
+            Subject stockholm = add("Stockholm",
+                    l(
+                            "Stockholm",
+                            "dn.se/sthlm"
+                    ), LOCAL, sverige);
+            add("Arlanda", l("Arlanda"), LOCAL, stockholm);
+            add("Bromma flygplats", l("Bromma flygplats"), LOCAL, stockholm);
+            add("Kalix", l("Kalix"), LOCAL, sverige);
+            add("Skövde", l("Skövde"), LOCAL, sverige);
+            add("Malmö", l("Malmö"), LOCAL, sverige);
+            add("Arvidsjaur", l("Arvidsjaur"), LOCAL, sverige);
+            add("Göteborg", l("Göteborg", "Gothenburg"), LOCAL, sverige);
+
+            add("SF-Bio", regex("SF.*[Bb]io"), ORGANIZATION, sverige);
+
+            add("Studiemedel", l("CSN", "studiemedel", "studielån"), SUBJECT, sverige);
+
+
             {
-                addInvisible("Sportbladet", sport);
-                addInvisible("målchans", sport);
-                add("#AIK", "AIK", sport);
-                add("landslag", "landslag", sport);
-                add("Grand slam", "grand slam", sport);
-                add("OS-guld", "OS-guld", sport);
-                addInvisible("VM-titel", sport);
-                addInvisible("världscup", sport);
-                addInvisible("50 meter fritt", sport);
-                addInvisible("guldstrid", sport);
-                addInvisible("SM-guld", sport);
-                addInvisible("VM-guld", sport);
-                addInvisible("OS-guld", sport);
-                addInvisible("avgörande mål", sport);
-                addInvisible("straffområde", sport);
-                addInvisible("olympic games", sport);
-                add("Rallycross", "rallycross", sport);
-                add("Gymnastik", l("gymnastics", "gymnastik"), sport);
+                add("Nobelpriset", l("nobel"), SUBJECT, sverige);
+                Subject svenskaAkademien = add("Svenska Akademien", l("Svenska Akademien", "Swedish Academy"), ORGANIZATION, sverige);
+                add("Jean-Claude Arnault", l("Jean-Claude Arnault"), PERSON, svenskaAkademien, meToo);
             }
+        }
 
 
 
-            {
-                Subject fotboll = add("Fotboll", "fotboll", sport);
-                addInvisible("Manchester United", fotboll);
-                addInvisible("soccer", fotboll);
-                addInvisible("mittback", fotboll);
-                addInvisible("Brommapojkarna", fotboll);
-                addInvisible("Paul Pogba", fotboll);
-                addInvisible("första halvlek", fotboll);
-                addInvisible("andra halvlek", fotboll);
-                add("Zlatan", "zlatan", fotboll);
-                addInvisible("Nations League", fotboll);
+        Subject asien = add("Asien", l("asien", "asia"), CONTINENT, news);
 
-            }
+        add("Maldives", l("Maldives"), COUNTRY, asien);
+        add("Thailand", l("thailand", "thailänd"), COUNTRY, asien);
+        add("Sri Lanka", l("sri lank"), COUNTRY, asien);
+        add("Kashmir", l("Kashmir"), COUNTRY, asien);
+        add("Bhutan", l("Bhutan"), COUNTRY, asien);
 
-            Subject golf = add("Golf", l("golftävling", "Ryder Cup", "Henrik Stenson"), sport);
-            add("Tiger Woods", "Tiger Woods", golf);
+        Subject myanmar = add("Myanmar", l("Myanmar"), COUNTRY, asien);
+        add("Aung San Suu Kyi", l("Aung San Suu Kyi"), PERSON, myanmar);
+        add("Rohingya", l("Rohingya"), SUBJECT, myanmar);
 
-            add("Hockey", "hockey", sport);
+        Subject japan = add("Japan", l("Japan"), COUNTRY, asien);
+        add("Shinzo Abe", l("Shinzo Abe"), PERSON, japan);
+        add("Okinawa", l("Okinawa"), LOCAL, japan);
+        add("Tokyo", l("Tokyo"), LOCAL, japan);
+
+        add("Malaysia", l("malaysia"), COUNTRY, asien);
+
+        Subject ryssland = add("Ryssland", l("Russia", "Ryssland", "rysk"), COUNTRY, asien);
+        add("Moskva", l("Moscow", "Moskva"), LOCAL, ryssland);
+        add("Vladimir Putin", l("Putin"), PERSON, ryssland);
+
+        add("Indien", l("indien", "india"), COUNTRY, asien);
+        add("Pakistan", l("pakistan"), COUNTRY, asien);
+        add("Indonesien", l("indonesien", "indonesia"), COUNTRY, asien);
+
+        add("Kina", l("Kina", "China", "kines", "chinee"), COUNTRY, asien);
+
+        Subject nordkorea = add("Nordkorea", l("nordkorea", "north korea"), COUNTRY, asien);
+        add("Kim Jong-Un", l("Kim Jong-Un", "Kim Jong Un"), PERSON, nordkorea);
+
+        Subject sydkorea = add("Sydkorea", l("sydkorea", "south korea"), COUNTRY, asien);
+        add("Pyeongchang", l("Pyeongchang"), LOCAL, sydkorea);
+        add("Moon Jae-in", l("moon jae-in"), PERSON, sydkorea);
+
+        add("Singapore", l("Singapore"), COUNTRY, asien);
+
+
+        Subject middleEast = add("Mellanöstern", l("mellanöstern", "middle east"), CONTINENT, news);
+        Subject israel = add("Israel", l("Israel"), COUNTRY, middleEast);
+        Subject palestina = add("Palestina", l("Palestin"), COUNTRY, middleEast);
+        add("Gaza", l("Gaza"), LOCAL, israel, palestina);
+        add("Libanon", l("libanon", "lebanon"), COUNTRY, middleEast);
+
+        add("Afghanistan", l("Afghan", "Afgan"), COUNTRY, middleEast);
+
+
+        Subject syrien = add("Syrien", l("syria", "syrien"), COUNTRY, middleEast);
+        add("Idlib", l("Idlib"), LOCAL, syrien);
+
+        add("Jordanien", l("jordan"), COUNTRY, middleEast);
+
+        Subject saudiarabien = add("Saudiarabien", l("saudi"), COUNTRY, middleEast);
+        add("Jamal Khashoggi", l("khashoggi"), EVENT, saudiarabien);
+
+        add("Qatar", l("Qatar"), COUNTRY, middleEast);
+
+
+        add("Yemen", l("Yemen"), COUNTRY, middleEast);
+        add("Iran", l("Iran"), COUNTRY, middleEast);
+        add("Irak", l("iraq", "irak"), COUNTRY, middleEast);
+        add("Kurder", l("kurd"), SUBJECT, middleEast);
+
+        add("Förenade Arabemiraten", l("Förenade Arabemiraten", "UAE"), COUNTRY, middleEast);
+
+        Subject oceanien = addWithoutExpression("Oceanien", CONTINENT, news);
+        add("Mikronesien", l("Mikronesien", "micronesia"), COUNTRY, oceanien);
+        add("Nauru", l("Nauru"), COUNTRY, oceanien);
+        add("Australien", l("australia", "australien"), COUNTRY, oceanien);
+        add("Nya Zealand", l("New Zealand", "Nya Zeeland"), COUNTRY, oceanien);
+
+
+
+        Subject nordAmerika = addWithoutExpression("Nordamerika", CONTINENT, news);
+        Subject usa = add("#USA", l("USA", "U.S.", "US election"), COUNTRY, nordAmerika);
+        {
+            add("Florida", l("Florida"), LOCAL, usa);
+            add("Nevada", l("Nevada"), LOCAL, usa);
+            Subject pittsburgh = add("Pittsburgh", l("Pittsburgh"), LOCAL, usa);
+            add("Robert Bowers", l("Robert Bowers"), PERSON, pittsburgh);
+            add("Kalifornien", l("kaliforni", "californi"), LOCAL, usa);
+            add("Hawaii", l("hawaii"), LOCAL, usa);
+            Subject arizona = add("Arizona", l("Arizona"), LOCAL, usa);
+            add("Ohio", l("Ohio", "Cincinnati"), LOCAL, usa);
+            add("Texas", l("Texas"), LOCAL, usa);
+
+            Subject usaPolitik = add("USA-politik", l("USA-politik", "Planned Parenthood", "NAFTA"), SUBJECT, usa);
+
+            add("Jeff Flake", l("Jeff Flake"), PERSON, usaPolitik, arizona);
+            add("Brett Kavanaugh", l("Kavanaugh"), PERSON, usaPolitik);
+            add("Bernie Sanders", l("Sanders"), PERSON, usaPolitik);
+            add("Paul Ryan", l("Paul Ryan"), PERSON, usaPolitik);
+            add("Mike Pompeo", l("pompeo"), PERSON, usaPolitik);
+
+            add("Trump", l("Trump"), PERSON, usa);
+            add("Bill Clinton", l("Bill Clinton"), PERSON, usa);
+            add("Republikanerna", regex("washington.*republican", "GOP"), ORGANIZATION, usaPolitik);
+
+            add("Obamacare", l("Obamacare"), SUBJECT, usaPolitik);
+        }
+        add("Kanada", l("Canada", "Kanada", "Kanadens", "Canadian"), COUNTRY, nordAmerika);
+        add("Haiti", l("haiti"), COUNTRY, nordAmerika);
+
+
+        {
+            Subject weather = add("Weather & Disasters",
+                    l(
+                            "temperatur",
+                            "varmare väder",
+                            "kallare väder",
+                            "snöfall",
+                            "blötsnö",
+                            "snömängd",
+                            "meteorolog",
+                            "väderinstitut",
+                            "smhi",
+                            "grader varmt",
+                            "vinterdäck"
+                    ), CATEGORY, ALL);
+
+            add("Tsunami", l("tsunami"), SUBJECT, weather);
+            add("Tyfon", l("tyfon", "typhoon"), SUBJECT, weather);
+            add("Jordbävning", l("jordbävning", "earth quake", "earthquake"), SUBJECT, weather);
+            add("Skogsbrand", l("skogsbrand"), SUBJECT, weather);
+            add("Flooding", l("floodwater"), SUBJECT, weather);
+            add("Jordskred", l("jordskred", "landslide"), SUBJECT, weather);
+        }
+
+
+        Subject violence = add("Våldsbrott",
+                l(
+                        "violence",
+                        "Våldsbrott",
+                        "våldtäkt",
+                        "våldtagen",
+                        "mord",
+                        "murder",
+                        "Död person"
+                ), SUBJECT, news);
+
+        add("Hatbrott",
+                l(
+                        "hatbrott",
+                        "hate crime",
+                        "racism",
+                        "judehat",
+                        "antisemitism",
+                        "anti-semitic"
+                ), SUBJECT, violence);
+
+        Subject terrorism = add("Terrorism", l("terror"), SUBJECT, violence);
+        add("Boko Haram", l("boko haram"), ORGANIZATION, terrorism);
+        add("ISIL", l("islamic state").or(regex("ISIL", "ISIS")), ORGANIZATION, terrorism);
+
+        add("United Nations", l("UN peacekeeper").or(regex("the UN")), ORGANIZATION, news);
+
+        {
+            Subject biz = add("Business", l("näringsliv", "dn.se/ekonomi", "aktie", "tillväxt"), CATEGORY, ALL);
+            add("Elon Musk", l("Elon Musk"), PERSON, tech, biz);
+            add("Tesla", l("Tesla"), ORGANIZATION, tech, biz);
+            add("e-handel", l("e-handel"), SUBJECT, tech, biz);
+            add("#BMW", l("BMW"), ORGANIZATION, tech, biz);
+            add("Hubble", l("Hubble"), SUBJECT, tech);
+            add("Nordnet", l("Nordnet"), ORGANIZATION, biz);
+
+            add("Google", l("Google"), ORGANIZATION, biz, tech);
+            add("Red Hat", l("Red Hat", "redhat"), ORGANIZATION, biz, tech);
+            add("#IBM", regex("IBM"), ORGANIZATION, biz, tech);
+            add("Warner", l("warner"), ORGANIZATION, biz);
+            add("Nokia", l("nokia"), ORGANIZATION, biz);
+            add("#SEB", regex("SEB"), ORGANIZATION, biz);
+            add("Nordea", l("nordea"), ORGANIZATION, biz);
+            add("Microsoft", l("Microsoft"), ORGANIZATION, biz, tech);
+            add("Snapchat", l("Snapchat"), ORGANIZATION, biz, tech);
+
+            Subject apple = add("Apple", l("Apple"), ORGANIZATION, biz, tech);
+            add("Steve Jobs", l("Steve Jobs"), PERSON, apple);
+
+            add("Amazon", l("Amazon"), ORGANIZATION, biz, tech);
         }
 
         {
-            Subject kultur = addWithoutExpression("Kultur", HIDE_CULTURE, ROOT);
-            add("DN-Kultur&Nöje", "kultur-noje", kultur);
+            Subject sport = add("Sport", l(
+                    "sport",
+                    "Sportbladet",
+                    "målchans",
+                    "AIK",
+                    "landslag",
+                    "grand slam",
+                    "OS-guld",
+                    "VM-titel",
+                    "världscup",
+                    "50 meter fritt",
+                    "guldstrid",
+                    "SM-guld",
+                    "VM-guld",
+                    "OS-guld",
+                    "avgörande mål",
+                    "straffområde",
+                    "olympic games"
+            ), HIDE_SPORT, CATEGORY, ALL);
 
-            Subject books = add("Böcker", "Böcker", kultur);
-            add("DN-Bok", "dnbok", books);
+            add("Rallycross", l("rallycross"), SUBJECT, sport);
+            add("Gymnastik", l("gymnastics", "gymnastik"), SUBJECT, sport);
 
-            Subject music = addWithoutExpression("Musik", kultur);
-            addInvisible("klassisk rock", music);
 
-            Subject konst = addWithoutExpression("Konst", kultur);
-            add("Andy Warhol", "Andy Warhol", konst);
 
-            Subject celebrities = addWithoutExpression("Kändisar", kultur);
-            addRegex("Bono", "U2.*Bono", celebrities);
-            add("Tailor Swift", "Taylor Swift", celebrities);
-            add("Kanye West", "Kanye West", celebrities);
+            add("Fotboll", l(
+                    "fotboll",
+                    "Manchester United",
+                    "soccer",
+                    "mittback",
+                    "Brommapojkarna",
+                    "Paul Pogba",
+                    "första halvlek",
+                    "andra halvlek",
+                    "zlatan",
+                    "Nations League"
+            ), SUBJECT, sport);
 
-            Subject film = addWithoutExpression("Film", kultur);
-            addInvisibleRegex("film.*recension", film);
-            addInvisibleRegex("recension.*film", film);
+
+            Subject golf = add("Golf", l("golftävling", "Ryder Cup", "Henrik Stenson"), SUBJECT, sport);
+            add("Tiger Woods", l("Tiger Woods"), PERSON, golf);
+
+            add("Hockey", l("hockey"), SUBJECT, sport);
         }
 
         {
-            Subject equality = add("Jämställdhet", "jämställdhet", news);
-            Subject hbtq = add("HBTQ", "hbtq", equality);
-            addInvisible("homosexu", hbtq);
+            Subject kultur = addWithoutExpression("Kultur", HIDE_CULTURE, CATEGORY, ALL);
+            add("DN-Kultur&Nöje", l("kultur-noje"), SUBJECT, kultur);
+
+            Subject books = add("Böcker", l("Böcker"), SUBJECT, kultur);
+            add("DN-Bok", l("dnbok"), SUBJECT, books);
+
+            add("Musik", l("klassisk rock"), SUBJECT, kultur);
+
+            add("Konst", l("Andy Warhol"), PERSON, kultur);
+
+            Subject celebrities = addWithoutExpression("Kändisar", SUBJECT, kultur);
+            add("Bono", regex("U2.*Bono"), PERSON, celebrities);
+            add("Tailor Swift", l("Taylor Swift"), PERSON, celebrities);
+            add("Kanye West", l("Kanye West"), PERSON, celebrities);
+            add("Freddie Mercury", l("Freddie Mercury"), PERSON, celebrities);
+
+            add("Film", regex("film.*recension", "recension.*film"), SUBJECT, kultur);
         }
-
-        add("Interpol", "Interpol", news);
-        add("Flyktingar", "flykting", news);
-
-        add("Påven", l("pope", "Påve"), news);
-        add("Journalist", "journalist", news);
-        add("Amnesty", "Amnesty", news);
-
-        Subject fakeNews = add("Fake news", "fake news", news);
-        add("Fact Checker", "Fact Checker", fakeNews);
-
 
         {
-            Subject bad = addWithoutExpression("#Bad", HIDE_BAD, ROOT);
-            add("SVT::Snabbkollen", "snabbkollen", bad);
-            add("TheLocal::WordOfTheDay", "word-of-the-day", bad);
-            addRegex("NYT::Your Briefing", "Your.*Briefing", bad);
-            add("DN::webb-tv", "webb-tv", bad);
-            add("DN::mat-dryck", "mat-dryck", bad);
-            add("DN::Gratulerar", "DN gratulerar", bad);
-            add("DN::Minnesord", "minnesord:", bad);
-            add("DN::livsstil", "www.dn.se/livsstil", bad);
-            add("DN::nutidstestet", "nutidstestet", bad);
-            add("DN::motor", l("se/ekonomi/motor", "se/motor"), bad);
-            addRegex("Engadget::Wirecutter", "engadget.*Wirecutter", bad);
+            Subject equality = add("Jämställdhet", l("jämställdhet"), SUBJECT, news);
+            add("HBTQ", l("hbtq", "homosexu"), SUBJECT, equality);
+        }
+
+        add("Interpol", l("Interpol"), ORGANIZATION, news);
+        add("Flyktingar", l("flykting"), SUBJECT, news);
+
+        add("Påven", l("pope", "Påve"), PERSON, news);
+        add("Journalist", l("journalist"), SUBJECT, news);
+        add("Amnesty", l("Amnesty"), ORGANIZATION, news);
+
+        Subject fakeNews = add("Fake news", l("fake news"), SUBJECT, news);
+        add("Fact Checker", l("Fact Checker"), SUB_FEED, fakeNews);
+
+        add("Ledare", l("ledare"), CATEGORY, news);
+
+        {
+            Subject bad = addWithoutExpression("#Bad", HIDE_BAD, BASE, ALL);
+            add("SVT::Snabbkollen", l("snabbkollen"), SUBJECT, bad);
+            add("TheLocal::WordOfTheDay", l("word-of-the-day"), SUBJECT, bad);
+            add("NYT::Your Briefing", regex("Your.*Briefing"), SUBJECT, bad);
+            add("DN::webb-tv", l("webb-tv"), SUBJECT, bad);
+            add("DN::mat-dryck", l("mat-dryck"), SUBJECT, bad);
+            add("DN::Gratulerar", l("DN gratulerar"), SUBJECT, bad);
+            add("DN::Minnesord", l("minnesord:"), SUBJECT, bad);
+            add("DN::livsstil", l("www.dn.se/livsstil"), SUBJECT, bad);
+            add("DN::nutidstestet", l("nutidstestet"), SUBJECT, bad);
+            add("DN::motor", l("se/ekonomi/motor", "se/motor"), SUBJECT, bad);
+            add("DN::insidan", l("dn.se/insidan"), SUBJECT, bad);
+            add("SVD::PerfectGuide", l("Perfect Guide"), SUBJECT, bad);
+            add("Så...", l(".se/sa-"), SUBJECT, bad);
+            add("Engadget::Wirecutter", regex("engadget.*Wirecutter"), SUBJECT, bad);
         }
 
 
+        add("Migrantkaravanen", l("migrantkaravan").or(regex("[Mm]exi.*[Bb]order","[Bb]order.*[Mm]exic")), EVENT, mexico, usa, honduras);
         return Collections.unmodifiableSet(SUBJECTS);
     }
 
-    private static Subject addRegex(String name, String regex, Subject... parents) {
-        return add(name, DocumentPredicates.matches(regex), false, true, true, parents);
-    }
-
-    private static Subject add(String name, Predicate<Document> predicate, Subject... parents) {
-        return add(name, predicate, false, true, true, parents);
+    private static Predicate<Document> regex(String... regexesOr) {
+        return JPredicates.or(Arrays.stream(regexesOr).map(DocumentPredicates::matches).collect(Collectors.toList()));
     }
 
     private static Predicate<Document> l(String... expressions) {
@@ -594,50 +605,27 @@ public class SubjectClassifier {
         return JPredicates.or(predicates);
     }
 
-    private static Subject add(String name, String expression, boolean hideSport, Subject... parents) {
-        boolean hashTag = true;
-        boolean showAsTab = true;
-        return add(name, DocumentPredicates.has(expression), hideSport, hashTag, showAsTab, parents);
+    private static Subject add(String name, Predicate<Document> predicate, SubjectType type, Subject... parents) {
+        return add(name, predicate, false, true, true, type, parents);
     }
 
-    private static Subject addWithoutExpression(String name, boolean hide, Subject... parents) {
-        boolean hashTag = true;
-        boolean showAsTab = true;
-        return add(name, d -> false, hide, hashTag, showAsTab, parents);
+    private static Subject addWithoutExpression(String name, boolean hide, SubjectType type, Subject... parents) {
+        return add(name, d -> false, hide, type, parents);
     }
 
-    private static Subject addInvisible(String name, Predicate<Document> predicate, Subject... parents) {
-        boolean hide = false;
-        boolean isHashTag = false;
-        boolean showAsTab = false;
-        return add("invisible:"+name, predicate, hide, isHashTag, showAsTab, parents);
+    public static Subject addWithoutExpression(String name, SubjectType type, Subject... parents) {
+        return add(name, d -> false, type, parents);
     }
 
-    private static Subject addInvisibleRegex(String regex, Subject... parents) {
-        return addInvisible(regex, DocumentPredicates.matches(regex), parents);
-    }
-
-    private static Subject addInvisible(String expression, Subject... parents) {
-        return addInvisible(expression, DocumentPredicates.has(expression), parents);
-    }
-
-    public static Subject addWithoutExpression(String name, Subject... parents) {
-        boolean hide = false;
+    private static Subject add(String name, Predicate<Document> predicate, boolean hide, SubjectType type, Subject... parents) {
         boolean isHashTag = true;
         boolean showAsTab = true;
-        return add(name, d -> false, hide, isHashTag, showAsTab, parents);
+        return add(name, predicate, hide, isHashTag, showAsTab, type, parents);
     }
 
-    public static Subject add(String name, @Nullable String expression, Subject... parents) {
-        boolean hide = false;
-        boolean isHashTag = true;
-        boolean showAsTab = true;
-        return add(name, DocumentPredicates.has(expression), hide, isHashTag, showAsTab, parents);
-    }
-
-    private static Subject add(String name, @Nonnull Predicate<Document> predicate, boolean hide, boolean isHashTag, boolean showAsTab, Subject... parents) {
+    private static Subject add(String name, @Nonnull Predicate<Document> predicate, boolean hide, boolean isHashTag, boolean showAsTab, SubjectType type, Subject... parents) {
         int size = SUBJECTS.size();
-        Subject subject = new Subject(Arrays.asList(parents), name, predicate, hide, isHashTag, showAsTab);
+        Subject subject = new Subject(Arrays.asList(parents), name, type, predicate, hide, isHashTag, showAsTab);
         SUBJECTS.add(subject);
         if (size == SUBJECTS.size()) {
             throw new IllegalStateException("Duplicate detected! " + name);

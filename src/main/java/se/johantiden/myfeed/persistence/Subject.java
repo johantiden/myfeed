@@ -1,6 +1,7 @@
 package se.johantiden.myfeed.persistence;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -12,34 +13,40 @@ import static com.google.common.base.Objects.equal;
 
 public class Subject extends BaseEntity<Subject> {
 
-    public static final Subject ROOT = new Subject("All");
-    public static final Subject UNCLASSIFIED = new Subject("Unclassified", ROOT);
+    public static final Subject ALL = new Subject("All", SubjectType.BASE);
+    public static final Subject UNCLASSIFIED = new Subject("Unclassified", ALL, SubjectType.BASE);
 
     private final ImmutableList<Subject> parents;
     private final List<Subject> children = new ArrayList<>();
     private final String name;
+    private final SubjectType type;
     private final Predicate<Document> documentPredicate;
-    private boolean hideDocument;
+    private final boolean hideDocument;
     private final boolean isHashTag;
     private final boolean showAsTab;
 
-    private Subject(String name) {
+    private Subject(String name, SubjectType type) {
         this.parents = ImmutableList.of();
         this.name = name;
+        this.type = type;
         this.documentPredicate = d -> false;
         isHashTag = false;
         showAsTab = true;
+        hideDocument = false;
     }
 
-    private Subject(String name, Subject parent) {
+    private Subject(String name, Subject parent, SubjectType type) {
         this.parents = ImmutableList.of(parent);
         this.name = name;
+        this.type = type;
         this.documentPredicate = d -> false;
         isHashTag = false;
         showAsTab = true;
+        hideDocument = false;
     }
 
-    public Subject(List<Subject> parents, String name, @Nonnull Predicate<Document> documentPredicate, boolean hideDocument, boolean isHashTag, boolean showAsTab) {
+    public Subject(List<Subject> parents, String name, SubjectType type, @Nonnull Predicate<Document> documentPredicate, boolean hideDocument, boolean isHashTag, boolean showAsTab) {
+        this.type = type;
         this.showAsTab = showAsTab;
         Objects.requireNonNull(parents);
         this.parents = ImmutableList.copyOf(parents);
@@ -115,6 +122,10 @@ public class Subject extends BaseEntity<Subject> {
         return showAsTab;
     }
 
+    public SubjectType getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,5 +142,27 @@ public class Subject extends BaseEntity<Subject> {
     @Override
     public int hashCode() {
         return com.google.common.base.Objects.hashCode(name, hideDocument, isHashTag, showAsTab);
+    }
+
+    public enum SubjectType {
+        BASE("BASE", 1),
+        CATEGORY("Categories", 2),
+        FEED("Feeds", 3),
+        SUB_FEED("Subs", 4),
+        CONTINENT("Continents", 5),
+        COUNTRY("Countires", 6),
+        SUBJECT("Subjects", 7),
+        ORGANIZATION("Organizations", 8),
+        LOCAL("Local", 9),
+        PERSON("People", 10),
+        EVENT("Events", 11);
+
+        public final String title;
+        public final int order;
+
+        SubjectType(String title, int order) {
+            this.title = title;
+            this.order = order;
+        }
     }
 }
