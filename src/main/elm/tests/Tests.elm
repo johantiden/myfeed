@@ -18,13 +18,6 @@ suite =
                     (initFakeDocument 2 "2" "Hey" ))
                     |> Expect.equal False)
 
-        , test "Document.toString" <|
-            \() ->
-                (initFakeDocument 1 "1" "Gabba")
-                    |> Document.documentToString
-                    |> Expect.equal "1 Title lorem ipsum,Text lorem ispum dolor sin amet.,google.com,FakeNews,Trump,1,News,0,Fun,0,Gabba,2,False"
-
-
         , test "Document.matches on substrings" <|
             \() ->
                 (initFakeDocument 1 "1" "Gabba")

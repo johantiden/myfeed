@@ -3,6 +3,7 @@ module Update exposing (..)
 import Common exposing (notContains)
 import Http
 import Document exposing (..)
+import Subject exposing (Subject)
 import Model exposing (..)
 import Service
 import List.Extra exposing (..)
@@ -11,7 +12,7 @@ type Msg
       = GetDocuments
       | GotDocuments (Result Http.Error (List Document))
       | HideDocuments (List Document)
-      | SetSearch String
+      | SetSearch Subject
       | DocumentHidden (Result Http.Error String)
 
 
@@ -51,8 +52,8 @@ update msg model =
                     )
 
 
-        SetSearch query ->
-            ({model | search = query, filteredDocuments = Document.filterDocuments query model.documents}, Cmd.none)
+        SetSearch subject ->
+            ({model | search = subject, filteredDocuments = Document.filterDocuments subject model.documents}, Cmd.none)
 
 errorToString : Http.Error -> String
 errorToString error =

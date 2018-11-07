@@ -30,7 +30,6 @@ decodeSubject =
             |> andMap (field "name" string)
             |> andMap (field "hashTag" bool)
             |> andMap (field "showAsTab" bool)
-            |> andMap (field "depth" int)
             |> andMap (field "subjectType" decodeSubjectType)
 
 decodeSubjectType : Decoder SubjectType
