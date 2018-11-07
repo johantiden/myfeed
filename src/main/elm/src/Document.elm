@@ -17,16 +17,6 @@ type alias Document =
     , imageUrl : Maybe String
     }
 
-documentToString : Document -> String
-documentToString d =
-    [d.title,
-        (case d.text of
-            Just text -> text
-            Nothing -> ""
-        ), d.pageUrl, d.feedName, subjectsToString d.subjects]
-        |> delimit ","
-        |> List.foldr (++) ""
-
 boolToString : Bool -> String
 boolToString b =
     case b of
@@ -46,20 +36,20 @@ extractSubjects documents =
         |> List.concat
         |> uniqueBy (\s -> s.name)
 
-countMatching : String -> List Document -> Int
+countMatching : Subject -> List Document -> Int
 countMatching search documents =
     documents
         |> filterDocuments search
         |> List.length
 
-filterDocuments : String -> List Document -> List Document
-filterDocuments search documents =
+filterDocuments : Subject -> List Document -> List Document
+filterDocuments searchSubject documents =
     documents
-        |> List.filter (documentMatches search)
+        |> List.filter (documentMatches searchSubject)
 
-documentMatches : String -> Document -> Bool
-documentMatches search d =
-    String.contains (String.toLower search) (String.toLower (documentToString d))
+documentMatches : Subject -> Document -> Bool
+documentMatches searchSubject d =
+    List.member searchSubject d.subjects
 
 equalId : Document -> Document -> Bool
 equalId a b =

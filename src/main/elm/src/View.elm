@@ -8,7 +8,7 @@ import Common exposing (..)
 import Browser
 import Html
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (css, href, src, placeholder, value)
+import Html.Styled.Attributes exposing (css, href, src, placeholder, value, disabled)
 import Html.Styled.Events exposing (onClick, onInput)
 import Css exposing (..)
 import List.Extra exposing (group)
@@ -42,20 +42,7 @@ viewTop model =
 
 viewLogo : Html Msg
 viewLogo =
-    span [onClick (SetSearch ""), css [cursor pointer]] [img [src "./fidn1.png", css [width (px 80)]] []]
-
-viewTabs2 : Model -> Html Msg
-viewTabs2 model =
-    div []
-        (model.documents
-            |> extractSubjects
-            |> List.filter .showAsTab
-            |> List.map (\s -> ((countMatching s.name model.documents), s))
-            |> List.filter (\(hitCount, _) -> hitCount > 2)
-            |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
-            |> List.take 20
-            |> List.map (viewTab model.search)
-        )
+    span [onClick (SetSearch Model.emptySearch), css [cursor pointer]] [img [src "./fidn1.png", css [width (px 80)]] []]
 
 
 viewTabs3 : Model -> Html Msg
@@ -70,21 +57,11 @@ viewTabs3 model =
             |> List.map (viewTabRowByType model)
         )
 
-viewTabs : Model -> Html Msg
-viewTabs model =
-    div []
-        (model.documents
-            |> extractSubjects
-            |> List.filter .showAsTab
-            |> groupSubjectsByDepth
-            |> List.map (viewTabRow model)
-        )
-
 viewTabRow : Model -> (Int, List Subject) -> Html Msg
 viewTabRow model (depth, subjects) =
     div [css []]
         (subjects
-            |> List.map (\s -> ((countMatching s.name model.documents), s))
+            |> List.map (\s -> ((countMatching s model.documents), s))
             |> List.filter (\(hitCount, _) -> hitCount > 2)
             |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
             |> List.take 5
@@ -97,7 +74,7 @@ viewTabRowByType model (subjectType, subjects) =
         span [] [text subjectType.title]
         , div [css []]
             (subjects
-                |> List.map (\s -> ((countMatching s.name model.documents), s))
+                |> List.map (\s -> ((countMatching s model.documents), s))
 --                |> List.filter (\(hitCount, _) -> hitCount > 2)
                 |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
                 |> List.take 5
@@ -105,13 +82,13 @@ viewTabRowByType model (subjectType, subjects) =
             )
     ]
 
-viewTab : String -> (Int, Subject)-> Html Msg
-viewTab search (hitCount, subject) =
+viewTab : Subject -> (Int, Subject)-> Html Msg
+viewTab searchSubject (hitCount, subject) =
     let
         css_ =
             css (
                 [cursor pointer, margin (px 10), padding2 (px 10) (px 0), display inlineBlock] ++
-                (case search == subject.name of
+                (case searchSubject == subject of
                     True -> [fontWeight bold]
                     False -> []
                 ) ++
@@ -120,7 +97,7 @@ viewTab search (hitCount, subject) =
                 )
     in
         button
-            [onClick (SetSearch subject.name), css_]
+            [onClick (SetSearch subject), css_]
             [text subject.name
             , span [] [text ("(" ++ (String.fromInt hitCount) ++ ")")]
             ]
@@ -153,11 +130,11 @@ viewHideAllButton filteredDocuments =
         button [onClick (HideDocuments filteredDocuments), css (stylesButton (hex "FBFBFB") ++ [margin (px 10)])] [text "ALL"]
 
 
-viewSearchBox : String -> Html Msg
+viewSearchBox : Subject -> Html Msg
 viewSearchBox currentQuery =
     input [ placeholder "Search"
-          , value currentQuery
-          , onInput SetSearch
+          , Html.Styled.Attributes.disabled True
+          , value currentQuery.name
           , css [margin (px 10)]]
           []
 
@@ -223,7 +200,6 @@ viewSubtitleRow document =
 viewSubtitleElements : Document -> List (Html Msg)
 viewSubtitleElements document =
     ([a [href document.pageUrl, css (stylesLink)] [text "link"]
-            , a [onClick (SetSearch document.feedName), css stylesSubtitleLink] [text document.feedName]
             ] ++ (viewSubjectsSubtitle document.subjects))
             ++ [viewPublishedDate document.publishedDateShort]
 
@@ -241,7 +217,7 @@ viewSubjectsSubtitle subjects =
 
 viewSubjectSubtitle : Subject -> Html Msg
 viewSubjectSubtitle subject =
-    span [onClick (SetSearch subject.name), css stylesSubtitleLink] [text subject.name]
+    span [onClick (SetSearch subject), css stylesSubtitleLink] [text subject.name]
 
 viewDelimitedList : String -> List (Html Msg) -> List (Html Msg)
 viewDelimitedList delimiter =

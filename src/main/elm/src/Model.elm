@@ -10,7 +10,7 @@ fakeData = False
 type alias Model =
     { documents : List Document
     , filteredDocuments: List Document
-    , search: String
+    , search: Subject
     , error: Maybe String
     }
 
@@ -19,7 +19,7 @@ initModelFake : Model
 initModelFake =
      { documents = initFakeDocuments
      , filteredDocuments = initFakeDocuments
-     , search = ""
+     , search = fakeSubject "" ""
      , error = Nothing
     }
 
@@ -40,13 +40,20 @@ initFakeDocument id idStr extraSubject =
     , pageUrl = "google.com"
     , feedName = "FakeNews"
     , subjects =
-        [{name = "Trump", hashTag = True, showAsTab = True, subjectType = (fakeSubjectType "PERSON"), depth = 1}
-        , {name = "News", hashTag = True, showAsTab = True, subjectType = (fakeSubjectType "CATEGORY"), depth = 0}
-        , {name = "Fun", hashTag = True, showAsTab = True, subjectType = (fakeSubjectType "CATEGORY"), depth = 0}
-        , {name = extraSubject, hashTag = True, showAsTab = True, subjectType = (fakeSubjectType "SUBJECT"), depth = 2}
+        [fakeSubject "Trump" "PERSON"
+        , fakeSubject "News" "CATEGORY"
+        , fakeSubject "Fun" "CATEGORY"
+        , fakeSubject extraSubject "CATEGORY"
         ]
     , imageUrl = Just "https://www.google.se/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
     }
+
+fakeSubject : String -> String -> Subject
+fakeSubject name subjectType =
+    {name = "Trump"
+    , hashTag = True
+    , showAsTab = True
+    , subjectType = (fakeSubjectType subjectType)}
 
 fakeSubjectType : String -> SubjectType
 fakeSubjectType constant =
@@ -60,6 +67,9 @@ initModel : Model
 initModel =
   { documents = []
   , filteredDocuments = []
-  ,  search = ""
+  ,  search = emptySearch
   ,  error = Nothing
   }
+
+emptySearch : Subject
+emptySearch = fakeSubject "" ""
