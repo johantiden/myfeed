@@ -50,7 +50,7 @@ initFakeDocument id idStr extraSubject =
 
 fakeSubject : String -> String -> Subject
 fakeSubject name subjectType =
-    {name = "Trump"
+    {name = name
     , hashTag = True
     , showAsTab = True
     , subjectType = (fakeSubjectType subjectType)}
@@ -73,3 +73,10 @@ initModel =
 
 emptySearch : Subject
 emptySearch = fakeSubject "" ""
+
+emptySubject : Subject
+emptySubject =
+    {name = ""
+    , hashTag = True
+    , showAsTab = True
+    , subjectType = (fakeSubjectType "")}

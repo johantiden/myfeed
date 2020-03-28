@@ -8,8 +8,8 @@ import se.johantiden.myfeed.persistence.Document;
 import se.johantiden.myfeed.persistence.Feed;
 import se.johantiden.myfeed.plugin.rss.Rss;
 import se.johantiden.myfeed.plugin.rss.Rss2FeedReader;
-import se.johantiden.myfeed.plugin.rss.v2.Rss2Doc.Item;
-import se.johantiden.myfeed.plugin.rss.v2.Rss2Doc.Item.MrssContent;
+import se.johantiden.myfeed.plugin.rss.v2.Item;
+import se.johantiden.myfeed.plugin.rss.v2.Item.MrssContent;
 import se.johantiden.myfeed.util.Chrono;
 
 import java.io.IOException;
