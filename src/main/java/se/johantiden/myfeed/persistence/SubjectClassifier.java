@@ -88,7 +88,7 @@ public final class SubjectClassifier {
             add("Show HN", l("Show HN"), SUB_FEED, tech);
 
 
-            Subject miljo = add("Mijlö", l("klimat", "climate", "environment"), SUBJECT, news);
+            Subject miljo = add("Miljö", l("klimat", "climate", "environment"), SUBJECT, news);
             add("Återvinning", l("återvinning"), SUBJECT, miljo);
 
 
@@ -114,6 +114,20 @@ public final class SubjectClassifier {
                             "cellular automata"
                     ), SUBJECT, tech);
 
+            Subject virus = add("Virus",
+                              l(
+                                      "virus",
+                                      "smittspridning",
+                                      "smitta"
+                              ), SUBJECT, news);
+
+            add("Covid-19",
+                l(
+                    "corona",
+                    "covid",
+                    "sars-cov-2"
+                ), SUBJECT, virus);
+
 
             add("Niklas Zennström", l("Zennström"), PERSON, tech);
 
@@ -123,6 +137,7 @@ public final class SubjectClassifier {
                             "open source", "javascript", ".js", "developers.slashdot"), SUBJECT, tech);
 
             Subject facebook = add("Facebook", l("Facebook"), ORGANIZATION, tech);
+            Subject zoom = add("Zoom", l("Zoom"), ORGANIZATION, tech);
             add("Cambridge Analytica", l("Cambridge Analytica"), ORGANIZATION, facebook, tech);
 
         }
@@ -167,6 +182,7 @@ public final class SubjectClassifier {
         add("Senegal", l("Senegal"), COUNTRY, afrika);
         add("Tunisien", l("tunisia"), COUNTRY, afrika);
         add("Uganda", l("uganda"), COUNTRY, afrika);
+        add("Sydafrika", l("South Africa", "sydafrika"), COUNTRY, afrika);
 
 
         Subject europe = add("Europa", l("europe", "europa"), CONTINENT, news);
@@ -203,6 +219,13 @@ public final class SubjectClassifier {
             add("London", l("London"), LOCAL, greatBritain);
             add("Birmingham", l("Birmingham"), LOCAL, greatBritain);
         }
+
+
+        {
+            Subject venezuela = add("Venezuela", l("Venezuela"), COUNTRY, sydAmerika);
+            add("Nicolás Maduro", l("Maduro"), PERSON, venezuela);
+        }
+
 
         add("Ukraina", l("Ukrain"), COUNTRY, europe);
         add("Portugal", l("portugal"), COUNTRY, europe);
@@ -336,6 +359,7 @@ public final class SubjectClassifier {
         add("Indonesien", l("indonesien", "indonesia"), COUNTRY, asien);
 
         add("Kina", l("Kina", "China", "kines", "chinee"), COUNTRY, asien);
+        add("Taiwan", l("Taiwan"), COUNTRY, asien);
 
         Subject nordkorea = add("Nordkorea", l("nordkorea", "north korea"), COUNTRY, asien);
         add("Kim Jong-Un", l("Kim Jong-Un", "Kim Jong Un"), PERSON, nordkorea);
@@ -367,7 +391,7 @@ public final class SubjectClassifier {
         add("Qatar", l("Qatar"), COUNTRY, middleEast);
 
 
-        add("Yemen", l("Yemen"), COUNTRY, middleEast);
+        add("Yemen", l("Yemen", "jemen"), COUNTRY, middleEast);
         add("Iran", l("Iran"), COUNTRY, middleEast);
         add("Irak", l("iraq", "irak"), COUNTRY, middleEast);
         add("Kurder", l("kurd"), SUBJECT, middleEast);
@@ -444,6 +468,8 @@ public final class SubjectClassifier {
                         "Våldsbrott",
                         "våldtäkt",
                         "våldtagen",
+                        "våld",
+                        "skjutning",
                         "mord",
                         "murder",
                         "Död person"

@@ -72,11 +72,12 @@ initModel =
   }
 
 emptySearch : Subject
-emptySearch = fakeSubject "" ""
+emptySearch = emptySubject
 
 emptySubject : Subject
 emptySubject =
     {name = ""
     , hashTag = True
     , showAsTab = True
-    , subjectType = (fakeSubjectType "")}
+    , subjectType = (fakeSubjectType "BASE")
+    }
