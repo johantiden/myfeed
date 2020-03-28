@@ -53,7 +53,7 @@ viewTabs3 model =
             |> List.filter .showAsTab
             |> groupSubjectsByType
             |> List.sortBy (\(subjectType, subjects) -> subjectType.order)
-            |> List.filter (\(subjectType, subjects) -> (List.length subjects) > 0)
+            |> List.filter (\(subjectType, subjects) -> (List.length subjects) > 1)
             |> List.map (viewTabRowByType model)
         )
 
