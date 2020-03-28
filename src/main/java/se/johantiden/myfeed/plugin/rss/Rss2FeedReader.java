@@ -1,7 +1,7 @@
 package se.johantiden.myfeed.plugin.rss;
 
 import se.johantiden.myfeed.plugin.rss.v2.Rss2Doc;
-import se.johantiden.myfeed.plugin.rss.v2.Rss2Doc.Item;
+import se.johantiden.myfeed.plugin.rss.v2.Item;
 
 import java.util.List;
 
