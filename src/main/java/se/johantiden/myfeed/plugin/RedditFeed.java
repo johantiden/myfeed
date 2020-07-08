@@ -174,12 +174,13 @@ public class RedditFeed extends Feed {
                     RssV1AtomDoc doc = RssReader.read(response.getEntity().getContent(), RssV1AtomDoc.class);
 
                     Objects.requireNonNull(doc);
-                    
-                    return doc.getEntries()
+
+                    List<Document> documents = doc.getEntries()
                             .stream()
                             .map(this::toDocument)
                             .filter(filter)
                             .collect(Collectors.toList());
+                    return documents;
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
