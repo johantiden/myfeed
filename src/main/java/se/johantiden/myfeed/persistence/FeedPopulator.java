@@ -51,23 +51,22 @@ public class FeedPopulator {
 //        feeds.add(new ReutersFeed());
 //        feeds.add(new AlJazeeraFeed());
 //        feeds.add(new EngadgetFeed());
-        feeds.add(new OmniFeed(documentService));
-
-        feeds.add(new XkcdFeed());
-
 //        feeds.add(new SVTNyheterFeed());
 //        feeds.add(new NewYorkTimesWorldFeed());
-
-        feeds.add(new WashingtonPostFeed());
 //        feeds.add(new TheLocalFeed());
 
-//        feeds.add(createReddit("r/worldnews/top", 1000));
-//        feeds.add(createReddit("r/AskReddit/top", 1000));
-//        feeds.add(createReddit("r/ProgrammerHumor/top", 600));
+        feeds.add(new OmniFeed(documentService));
+        feeds.add(new XkcdFeed());
+//        feeds.add(new WashingtonPostFeed());
+
+        feeds.add(createReddit("r/worldnews/top", 1000));
+        feeds.add(createReddit("r/AskReddit/top", 1000));
+        feeds.add(createReddit("r/ProgrammerHumor/top", 600));
 //        feeds.add(createReddit("r/science/top", 1000));
-        feeds.add(createReddit("top/", 1000));
-        feeds.add(createReddit("r/all/top", REDDIT_MIN_SCORE));
 //        feeds.add(createReddit("r/announcements/", 10000));
+
+//        feeds.add(createReddit("top/", 1000));
+        feeds.add(createReddit("r/all/top", REDDIT_MIN_SCORE));
 
         feeds.forEach(feedService::put);
     }
@@ -82,7 +81,7 @@ public class FeedPopulator {
 
     private static Predicate<Document> scoreMoreThan(double score) {
         return d -> {
-            boolean ok = d.getScore() != null && d.getScore() > score;
+            boolean ok = d.getScore() == null || d.getScore() > score;
             return ok;
         };
     }

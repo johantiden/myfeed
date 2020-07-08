@@ -61,6 +61,8 @@ public class RssV1AtomDoc {
         public Author author;
         public Category category;
 
+        @XmlElement(namespace = "http://search.yahoo.com/mrss/", name = "thumbnail")
+        public String yahooThumbnail;
 
         @XmlElement(namespace = "http://purl.org/rss/1.0/modules/slash/", name = "department")
         public String slashDepartment;
