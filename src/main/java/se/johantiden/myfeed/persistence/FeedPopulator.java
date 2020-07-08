@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 @SuppressWarnings("SpellCheckingInspection")
 public class FeedPopulator {
 
-    public static final int REDDIT_MIN_SCORE = 20000;
+    public static final int REDDIT_MIN_SCORE = 50000;
     public static final Duration INVALIDATION_PERIOD = Duration.ofMinutes(10);
 
     private final FeedService feedService;
@@ -44,30 +44,30 @@ public class FeedPopulator {
 
         List<Feed> feeds = new ArrayList<>();
 
-        feeds.add(new HackerNewsFeed());
-        feeds.add(new SlashdotFeed());
-        feeds.add(new SvenskaDagbladetFeed());
-        feeds.add(new DagensNyheterFeed());
-        feeds.add(new ReutersFeed());
-        feeds.add(new AlJazeeraFeed());
-        feeds.add(new EngadgetFeed());
+//        feeds.add(new HackerNewsFeed());
+//        feeds.add(new SlashdotFeed());
+//        feeds.add(new SvenskaDagbladetFeed());
+//        feeds.add(new DagensNyheterFeed());
+//        feeds.add(new ReutersFeed());
+//        feeds.add(new AlJazeeraFeed());
+//        feeds.add(new EngadgetFeed());
         feeds.add(new OmniFeed(documentService));
 
         feeds.add(new XkcdFeed());
 
-        feeds.add(new SVTNyheterFeed());
-        feeds.add(new NewYorkTimesWorldFeed());
+//        feeds.add(new SVTNyheterFeed());
+//        feeds.add(new NewYorkTimesWorldFeed());
 
         feeds.add(new WashingtonPostFeed());
-        feeds.add(new TheLocalFeed());
+//        feeds.add(new TheLocalFeed());
 
-        feeds.add(createReddit("r/worldnews/top", 1000));
-        feeds.add(createReddit("r/AskReddit/top", 1000));
-        feeds.add(createReddit("r/ProgrammerHumor/top", 600));
-        feeds.add(createReddit("r/science/top", 1000));
+//        feeds.add(createReddit("r/worldnews/top", 1000));
+//        feeds.add(createReddit("r/AskReddit/top", 1000));
+//        feeds.add(createReddit("r/ProgrammerHumor/top", 600));
+//        feeds.add(createReddit("r/science/top", 1000));
         feeds.add(createReddit("top/", 1000));
         feeds.add(createReddit("r/all/top", REDDIT_MIN_SCORE));
-        feeds.add(createReddit("r/announcements/", 10000));
+//        feeds.add(createReddit("r/announcements/", 10000));
 
         feeds.forEach(feedService::put);
     }

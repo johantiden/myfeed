@@ -18,6 +18,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static se.johantiden.myfeed.plugin.FeedReader.unescape;
+
 public class OmniFeed extends Feed {
 
     public static final String HTTPS_WWW_OMNI_SE = "https://www.omni.se";
@@ -70,7 +72,7 @@ public class OmniFeed extends Feed {
 
             Elements titleDoms = parse.select(".resource.resource--title");
             Element titleDom = titleDoms.get(0);
-            String title = titleDom.html();
+            String title = unescape(titleDom.html());
 
             Elements textDoms = parse.select(".resource.resource--text");
             Element textDom = textDoms.get(0);

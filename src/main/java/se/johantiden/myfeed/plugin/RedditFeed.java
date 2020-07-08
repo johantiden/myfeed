@@ -22,6 +22,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -172,6 +173,8 @@ public class RedditFeed extends Feed {
 
                     RssV1AtomDoc doc = RssReader.read(response.getEntity().getContent(), RssV1AtomDoc.class);
 
+                    Objects.requireNonNull(doc);
+                    
                     return doc.getEntries()
                             .stream()
                             .map(this::toDocument)
