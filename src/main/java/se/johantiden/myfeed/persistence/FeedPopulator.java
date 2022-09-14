@@ -1,19 +1,9 @@
 package se.johantiden.myfeed.persistence;
 
-import se.johantiden.myfeed.plugin.AlJazeeraFeed;
-import se.johantiden.myfeed.plugin.EngadgetFeed;
-import se.johantiden.myfeed.plugin.NewYorkTimesWorldFeed;
-import se.johantiden.myfeed.plugin.OmniFeed;
-import se.johantiden.myfeed.plugin.ReutersFeed;
-import se.johantiden.myfeed.plugin.DagensNyheterFeed;
-import se.johantiden.myfeed.plugin.HackerNewsFeed;
-import se.johantiden.myfeed.plugin.RedditFeed;
 import se.johantiden.myfeed.plugin.GenericRssFeed;
-import se.johantiden.myfeed.plugin.SlashdotFeed;
-import se.johantiden.myfeed.plugin.SvenskaDagbladetFeed;
+import se.johantiden.myfeed.plugin.RedditFeed;
 import se.johantiden.myfeed.plugin.SVTNyheterFeed;
-import se.johantiden.myfeed.plugin.TheLocalFeed;
-import se.johantiden.myfeed.plugin.WashingtonPostFeed;
+import se.johantiden.myfeed.plugin.SlashdotFeed;
 import se.johantiden.myfeed.plugin.XkcdFeed;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
@@ -24,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-@SuppressWarnings("SpellCheckingInspection")
 public class FeedPopulator {
 
     public static final int REDDIT_MIN_SCORE = 50000;
@@ -45,28 +34,28 @@ public class FeedPopulator {
         List<Feed> feeds = new ArrayList<>();
 
 //        feeds.add(new HackerNewsFeed());
-//        feeds.add(new SlashdotFeed());
+        feeds.add(new SlashdotFeed());
 //        feeds.add(new SvenskaDagbladetFeed());
 //        feeds.add(new DagensNyheterFeed());
 //        feeds.add(new ReutersFeed());
 //        feeds.add(new AlJazeeraFeed());
 //        feeds.add(new EngadgetFeed());
-//        feeds.add(new SVTNyheterFeed());
+        feeds.add(new SVTNyheterFeed());
 //        feeds.add(new NewYorkTimesWorldFeed());
 //        feeds.add(new TheLocalFeed());
 
-        feeds.add(new OmniFeed(documentService));
+//        feeds.add(new OmniFeed(documentService));
         feeds.add(new XkcdFeed());
 //        feeds.add(new WashingtonPostFeed());
 
-        feeds.add(createReddit("r/worldnews/top", 1000));
-        feeds.add(createReddit("r/AskReddit/top", 1000));
-        feeds.add(createReddit("r/ProgrammerHumor/top", 600));
+//        feeds.add(createReddit("r/worldnews/top", 1000));
+//        feeds.add(createReddit("r/AskReddit/top", 1000));
+//        feeds.add(createReddit("r/ProgrammerHumor/top", 600));
 //        feeds.add(createReddit("r/science/top", 1000));
 //        feeds.add(createReddit("r/announcements/", 10000));
 
 //        feeds.add(createReddit("top/", 1000));
-        feeds.add(createReddit("r/all/top", REDDIT_MIN_SCORE));
+//        feeds.add(createReddit("r/all/top", REDDIT_MIN_SCORE));
 
         feeds.forEach(feedService::put);
     }

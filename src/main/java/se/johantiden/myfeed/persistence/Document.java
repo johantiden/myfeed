@@ -5,13 +5,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import se.johantiden.myfeed.persistence.Subject.SubjectType;
 
-import javax.annotation.Nonnull;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
+import javax.annotation.Nonnull;
 
 public class Document extends BaseEntity<Document> {
     public String title;
@@ -48,8 +48,8 @@ public class Document extends BaseEntity<Document> {
         this.pageUrl = Objects.requireNonNull(pageUrl);
         this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
-        this.subjects = Sets.newHashSet(subjectForFeed(feedName));
         this.feedName = Objects.requireNonNull(feedName);
+        this.subjects = Sets.newHashSet(subjectForFeed(feedName));
         this.feedUrl = Objects.requireNonNull(feedUrl);
     }
 

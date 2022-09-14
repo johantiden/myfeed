@@ -4,14 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.johantiden.myfeed.plugin.rss.v1.atom.RssV1AtomDoc;
 
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class RssReader<T> {
 
