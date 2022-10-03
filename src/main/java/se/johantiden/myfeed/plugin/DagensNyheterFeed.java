@@ -64,10 +64,10 @@ public class DagensNyheterFeed extends Feed {
             String title = item.title;
             String text = item.description;
             String pageUrl = item.link;
-            String imageUrl = findImage(item);
+//            String imageUrl = findImage(item);
             Instant publishedDate = Chrono.parse(item.pubDate, Rss.PUB_DATE_FORMAT);
             String html = null;
-            return new Document(title, text, html, pageUrl, imageUrl, publishedDate, NAME, URL);
+            return new Document(title, text, html, pageUrl, null, publishedDate, NAME, URL);
         }
 
         private String findImage(Item item) {

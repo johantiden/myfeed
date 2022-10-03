@@ -5,7 +5,6 @@ import se.johantiden.myfeed.persistence.Subject.SubjectType;
 import se.johantiden.myfeed.util.DocumentPredicates;
 import se.johantiden.myfeed.util.JPredicates;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,15 +12,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 
 import static se.johantiden.myfeed.persistence.Subject.ALL;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.BASE;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.CATEGORY;
-import static se.johantiden.myfeed.persistence.Subject.SubjectType.LOCAL;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.CONTINENT;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.COUNTRY;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.EVENT;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.FEED;
+import static se.johantiden.myfeed.persistence.Subject.SubjectType.LOCAL;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.ORGANIZATION;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.PERSON;
 import static se.johantiden.myfeed.persistence.Subject.SubjectType.SUBJECT;
@@ -31,7 +31,7 @@ public final class SubjectClassifier {
 
     private static final Set<Subject> SUBJECTS = new HashSet<>();
     public static final boolean HIDE_SPORT = true;
-    public static final boolean HIDE_CULTURE = true;
+    public static final boolean HIDE_CULTURE = false;
     public static final boolean HIDE_BAD = true;
 
     private SubjectClassifier() {}
@@ -64,11 +64,21 @@ public final class SubjectClassifier {
             add("Klimakterie", l("klimakterie"), SUBJECT, sjuk);
         }
 
-        Subject tech = add("Tech", l(
-                "tech ",
-                "ycombinator",
-                "Engadget"
-        ), CATEGORY, ALL);
+        Subject sverige = add("Sverige",
+                l(
+                        "sverige",
+                        "swedish",
+                        "sweden",
+                        "svensk",
+                        "TheLocal",
+                        "inrikes",
+                        "tågtrafik",
+                        "kolmården"
+                ), COUNTRY, news);
+
+        Subject östersjön = add("Östersjön", l("Baltic Sea", "östersjön"), SUBJECT, sverige);
+
+        Subject tech = add("Tech", regex("tech |ycombinator|Engadget"), CATEGORY, ALL);
 
         {
             add("Science",
@@ -114,20 +124,6 @@ public final class SubjectClassifier {
                             "cellular automata"
                     ), SUBJECT, tech);
 
-            Subject virus = add("Virus",
-                              l(
-                                      "virus",
-                                      "smittspridning",
-                                      "smitta"
-                              ), SUBJECT, news);
-
-            add("Covid-19",
-                l(
-                    "corona",
-                    "covid",
-                    "sars-cov-2"
-                ), SUBJECT, virus);
-
 
             add("Niklas Zennström", l("Zennström"), PERSON, tech);
 
@@ -137,12 +133,37 @@ public final class SubjectClassifier {
                             "open source", "javascript", ".js", "developers.slashdot"), SUBJECT, tech);
 
             Subject facebook = add("Facebook", l("Facebook"), ORGANIZATION, tech);
-            Subject zoom = add("Zoom", l("Zoom"), ORGANIZATION, tech);
+            Subject meta = add("Meta", l("Meta l"), ORGANIZATION, tech, facebook);
             add("Cambridge Analytica", l("Cambridge Analytica"), ORGANIZATION, facebook, tech);
 
+            Subject zoom = add("Zoom", l("Zoom"), ORGANIZATION, tech);
+
+            add("Hacker", l("cyberattack", "hacker", "spyware"), SUBJECT, tech);
+
+            Subject streaming = add("Streaming", l("streaming"), SUBJECT, tech);
+            add("Viaplay", l("Viaplay"), ORGANIZATION, streaming);
+            add("Netflix", l("Netflix"), ORGANIZATION, streaming);
+            add("Telia", l("Telia"), ORGANIZATION, tech, sverige);
         }
 
 
+        Subject medicine = add("Medicin", l("medicine", "medicin"), SUBJECT, news);
+        {
+            Subject virus = add("Virus",
+                    l(
+                            "virus",
+                            "smittspridning",
+                            "smitta"
+                    ), SUBJECT, medicine, news);
+            Subject vaccin = add("Vaccin", l("vaccin"), SUBJECT, virus);
+
+            add("Covid-19",
+                    l(
+                            "corona",
+                            "covid",
+                            "sars-cov-2"
+                    ), SUBJECT, virus);
+        }
 
         Subject sydAmerika = addWithoutExpression("Sydamerika", CONTINENT, news);
 
@@ -163,6 +184,7 @@ public final class SubjectClassifier {
 
         Subject afrika = add("Afrika", l("Afrika","Africa"), CONTINENT, news);
 
+        add("Guinea", l("Guinea").and(l("africa", "afrika")), COUNTRY, afrika);
         add("Algeriet", l("algeria", "algeriet"), COUNTRY, afrika);
         add("Sudan", l("Sudan"), COUNTRY, afrika);
         add("Botswana", l("Botswana"), COUNTRY, afrika);
@@ -186,13 +208,16 @@ public final class SubjectClassifier {
 
 
         Subject europe = add("Europa", l("europe", "europa"), CONTINENT, news);
-        add("#EU", l("European Union"), ORGANIZATION, europe);
+        add("#EU", l("European Union", "E.U."), ORGANIZATION, europe);
 
         add("Georgien", l("Georgia", "Georgien"), COUNTRY, europe);
         {
             Subject turkiet = add("Turkiet", l("Turkiet", "turkey"), COUNTRY, europe);
             add("Erdogan", l("Erdogan"), PERSON, turkiet);
         }
+
+        Subject belgien = add("Belgien", l("Belgien", "Belgium"), COUNTRY, europe);
+        add("Bryssel", l("Brussels", "Bryssel"), LOCAL, belgien);
 
         add("Finland", l("Finland"), COUNTRY, news);
 
@@ -208,8 +233,10 @@ public final class SubjectClassifier {
         add("Lettland", l("lettland","latvia"), COUNTRY, europe);
         add("Bulgarien", l("bulgari"), COUNTRY, europe);
         add("Serbien", l("serbisk","serbien","serbia"), COUNTRY, europe);
+
+        Predicate<Document> isBritain = l("Great Britain", "Storbritannien", "British", "U.K.", "the UK", "Britain");
+        Subject greatBritain = add("Storbritannien", isBritain, COUNTRY, europe);
         {
-            Subject greatBritain = add("Storbritannien", l("Great Britain","Storbritannien","British", "U.K."), COUNTRY, europe);
             add("Tories", regex("Tories"), ORGANIZATION, greatBritain);
             add("Prince Harry", l("Prince Harry"), PERSON, greatBritain);
 
@@ -218,6 +245,7 @@ public final class SubjectClassifier {
             add("Theresa May", l("Theresa May"), PERSON, greatBritain);
             add("London", l("London"), LOCAL, greatBritain);
             add("Birmingham", l("Birmingham"), LOCAL, greatBritain);
+
         }
 
 
@@ -226,8 +254,10 @@ public final class SubjectClassifier {
             add("Nicolás Maduro", l("Maduro"), PERSON, venezuela);
         }
 
-
-        add("Ukraina", l("Ukrain"), COUNTRY, europe);
+        Subject ukraina = add("Ukraina", l("Ukrain"), COUNTRY, europe);
+        {
+            add("Volodymyr Zelensky", l("Zelensky"), PERSON, ukraina);
+        }
         add("Portugal", l("portugal"), COUNTRY, europe);
 
         add("Makedonien", l("macedoni", "Makedoni"), COUNTRY, europe);
@@ -242,10 +272,12 @@ public final class SubjectClassifier {
         add("Italien", l("Italien","Italian","Italy"), COUNTRY, europe);
         add("Nederländerna", l("Nederländerna","Netherlands","Dutch","Holland","Holländ"), COUNTRY, europe);
 
-        Subject tyskland = add("Tyskland", l("German","Tysk"), COUNTRY, europe);
+        Subject tyskland = add("Tyskland", l("German", "Tysk", "Berlin"), COUNTRY, europe);
         add("Angela Merkel", l("merkel"), PERSON, tyskland);
 
         Subject ungern = add("Ungern", l("Ungern","Hungary"), COUNTRY, europe);
+        Subject orban = add("Viktor Orbán", l("Viktor Orbán", "orban"), PERSON, ungern);
+
         add("Bosnien", l("Bosnien","Bosnia"), COUNTRY, europe);
         add("Rumänien", l("rumän","romania"), COUNTRY, europe);
         Subject danmark = add("Danmark", l("danmark", "dansk", "denmark", "danish"), COUNTRY, europe);
@@ -255,51 +287,33 @@ public final class SubjectClassifier {
         add("Polen", l("polen", "poland", "polish", "polsk"), COUNTRY, europe);
 
 
+        Subject inrikespolitik = add("Inrikespolitik",
+                l(
+                        "Inrikespolitik",
+                        "svensk politik",
+                        "landsting",
+                        "kommuner",
+                        "justitieombudsman",
+                        "Försäkringskassan"
+                ), SUBJECT, sverige);
         {
-            Subject sverige = add("Sverige",
-                    l(
-                            "sverige",
-                            "swedish",
-                            "sweden",
-                            "svensk",
-                            "TheLocal",
-                            "inrikes",
-                            "tågtrafik",
-                            "kolmården"
-                    ), COUNTRY, news);
-
-            Subject inrikespolitik = add("Inrikespolitik",
-                    l(
-                            "Inrikespolitik",
-                            "svensk politik",
-                            "landsting",
-                            "kommuner",
-                            "justitieombudsman",
-                            "Försäkringskassan"
-                    ), SUBJECT, sverige);
-
-
-            Subject fi = add("Feministiskt initiativ", l("Feministiskt initiativ"), ORGANIZATION, inrikespolitik);
-            add("Gudrun Schyman", l("Gudrun Schyman"), PERSON, fi);
-
             add("Vänsterpartiet", l("Vänsterpartiet"), ORGANIZATION, inrikespolitik);
             Subject miljopartiet = add("Miljöpartiet", l("miljöpartiet"), ORGANIZATION, inrikespolitik);
             add("Gustav Fridolin", l("Fridolin"), PERSON, miljopartiet);
 
             add("Bildt", l("bildt"), PERSON, inrikespolitik);
 
-            Subject alliansen = add("Alliansen", l("Alliansparti"), ORGANIZATION, inrikespolitik);
-
-            Subject moderaterna = add("Moderatena", l("Moderaterna"), ORGANIZATION, inrikespolitik, alliansen);
+            Subject moderaterna = add("Moderatena", l("Moderaterna"), ORGANIZATION, inrikespolitik);
             add("Ulf Kristersson", l("Ulf Kristersson"), PERSON, moderaterna);
 
-            Subject centerpartiet = add("Centerpartiet", l("Centerpartiet"), ORGANIZATION, inrikespolitik, alliansen);
+            Subject centerpartiet = add("Centerpartiet", l("Centerpartiet"), ORGANIZATION, inrikespolitik);
             add("Annie Lööf", l("Lööf"), PERSON, centerpartiet);
+            add("Emma Wiesner", l("Emma Wiesner"), PERSON, centerpartiet);
 
-            Subject socialdemokraterna = add("Socialdemokraterna", l("socialdemokraterna"), ORGANIZATION, inrikespolitik);
+            Subject socialdemokraterna = add("Socialdemokraterna", l("socialdemokrat"), ORGANIZATION, inrikespolitik);
             add("Stefan Löfven", l("Stefan Löfven"), PERSON, socialdemokraterna);
 
-            Subject sverigedemokraterna = add("Sverigedemokraterna", l("Sverigedemokraterna"), ORGANIZATION, inrikespolitik);
+            Subject sverigedemokraterna = add("Sverigedemokraterna", l("Sverigedemokrat"), ORGANIZATION, inrikespolitik);
             add("Jimmie Åkesson", l("Jimmie Åkesson"), PERSON, sverigedemokraterna);
             Subject talmannen = add("Talmannen", l("talmannen"), PERSON, inrikespolitik);
             add("Andreas Norlén", l("Andreas Norlén"), PERSON, talmannen, inrikespolitik);
@@ -311,6 +325,7 @@ public final class SubjectClassifier {
                     ), LOCAL, sverige);
             add("Arlanda", l("Arlanda"), LOCAL, stockholm);
             add("Bromma flygplats", l("Bromma flygplats"), LOCAL, stockholm);
+            add("Södertälje", l("Södertälje"), LOCAL, sverige);
             add("Kalix", l("Kalix"), LOCAL, sverige);
             add("Skövde", l("Skövde"), LOCAL, sverige);
             add("Malmö", l("Malmö"), LOCAL, sverige);
@@ -329,7 +344,7 @@ public final class SubjectClassifier {
             }
         }
 
-
+        Subject elkris = add("Elkrisen", l("elpris"), SUBJECT, news);
 
         Subject asien = add("Asien", l("asien", "asia"), CONTINENT, news);
 
@@ -350,7 +365,7 @@ public final class SubjectClassifier {
 
         add("Malaysia", l("malaysia"), COUNTRY, asien);
 
-        Subject ryssland = add("Ryssland", l("Russia", "Ryssland", "rysk"), COUNTRY, asien);
+        Subject ryssland = add("Ryssland", l("Russia", "Ryssland", "rysk"), COUNTRY, news);
         add("Moskva", l("Moscow", "Moskva"), LOCAL, ryssland);
         add("Vladimir Putin", l("Putin"), PERSON, ryssland);
 
@@ -358,7 +373,7 @@ public final class SubjectClassifier {
         add("Pakistan", l("pakistan"), COUNTRY, asien);
         add("Indonesien", l("indonesien", "indonesia"), COUNTRY, asien);
 
-        add("Kina", l("Kina", "China", "kines", "chinee"), COUNTRY, asien);
+        add("Kina", l("Kina", "China", "kines", "chinee").and(l("burkina").negate()), COUNTRY, asien);
         add("Taiwan", l("Taiwan"), COUNTRY, asien);
 
         Subject nordkorea = add("Nordkorea", l("nordkorea", "north korea"), COUNTRY, asien);
@@ -377,8 +392,8 @@ public final class SubjectClassifier {
         add("Gaza", l("Gaza"), LOCAL, israel, palestina);
         add("Libanon", l("libanon", "lebanon"), COUNTRY, middleEast);
 
-        add("Afghanistan", l("Afghan", "Afgan"), COUNTRY, middleEast);
-
+        Subject afghanistan = add("Afghanistan", l("Afghan", "Afgan"), COUNTRY, middleEast);
+        add("Taliban", l("Taliban"), ORGANIZATION, afghanistan);
 
         Subject syrien = add("Syrien", l("syria", "syrien"), COUNTRY, middleEast);
         add("Idlib", l("Idlib"), LOCAL, syrien);
@@ -407,7 +422,7 @@ public final class SubjectClassifier {
 
 
         Subject nordAmerika = addWithoutExpression("Nordamerika", CONTINENT, news);
-        Subject usa = add("#USA", l("USA", "U.S.", "US election"), COUNTRY, nordAmerika);
+        Subject usa = add("#USA", l("USA", "U.S.", "US election", "Pentagon", "Biden administration").or(regex("CIA")), COUNTRY, nordAmerika);
         {
             add("Florida", l("Florida"), LOCAL, usa);
             add("Nevada", l("Nevada"), LOCAL, usa);
@@ -430,6 +445,8 @@ public final class SubjectClassifier {
             add("Trump", l("Trump"), PERSON, usa);
             add("Bill Clinton", l("Bill Clinton"), PERSON, usa);
             add("Republikanerna", regex("washington.*republican", "GOP"), ORGANIZATION, usaPolitik);
+
+            add("Joe Biden", l("Biden").and(l("Biden administration").negate()), PERSON, usa);
 
             add("Obamacare", l("Obamacare"), SUBJECT, usaPolitik);
         }
@@ -489,10 +506,11 @@ public final class SubjectClassifier {
         add("Boko Haram", l("boko haram"), ORGANIZATION, terrorism);
         add("ISIL", l("islamic state").or(regex("ISIL", "ISIS")), ORGANIZATION, terrorism);
 
-        add("United Nations", l("UN peacekeeper").or(regex("the UN")), ORGANIZATION, news);
+        add("United Nations", l("UN peacekeeper", "U.N.").or(regex("the UN")), ORGANIZATION, news);
 
+
+        Subject biz = add("Business", l("näringsliv", "aktie"), CATEGORY, ALL);
         {
-            Subject biz = add("Business", l("näringsliv", "dn.se/ekonomi", "aktie", "tillväxt"), CATEGORY, ALL);
             add("Elon Musk", l("Elon Musk"), PERSON, tech, biz);
             add("Tesla", l("Tesla"), ORGANIZATION, tech, biz);
             add("e-handel", l("e-handel"), SUBJECT, tech, biz);
@@ -514,7 +532,12 @@ public final class SubjectClassifier {
             add("Steve Jobs", l("Steve Jobs"), PERSON, apple);
 
             add("Amazon", l("Amazon"), ORGANIZATION, biz, tech);
-        }
+
+            add("Metro Goldwyn Mayer", l("mgm"), ORGANIZATION, biz);
+            add("eBay", l("eBay"), ORGANIZATION, biz);
+
+    }
+        add("Pfizer", l("Pfizer"), ORGANIZATION, biz, tech, medicine);
 
         {
             Subject sport = add("Sport", l(
@@ -580,12 +603,22 @@ public final class SubjectClassifier {
             add("Freddie Mercury", l("Freddie Mercury"), PERSON, celebrities);
 
             add("Film", regex("film.*recension", "recension.*film"), SUBJECT, kultur);
+            add("Museum", l("museum", "museet", "musei"), SUBJECT, kultur);
         }
 
+        Subject equality = add("Jämställdhet", l("jämställdhet"), SUBJECT, news);
+        add("HBTQ", l("hbtq", "homosexu"), SUBJECT, equality);
+        Subject feminism = add("Feminism", l("First Female", "Feminist", "Feminism"), SUBJECT, equality);
+        Subject fi = add("Feministiskt initiativ", l("Feministiskt initiativ"), ORGANIZATION, feminism, inrikespolitik);
+        add("Gudrun Schyman", l("Gudrun Schyman"), PERSON, fi);
+
+        Predicate<Document> isBritishPound = l("pound").and(isBritain);
+        Subject economy = add("Ekonomi", l("ekonomi", "economy", "Börsuppgång", "WallStreetBets", "börsindex", "börsen", "S&P 500").or(isBritishPound), CATEGORY, ALL);
         {
-            Subject equality = add("Jämställdhet", l("jämställdhet"), SUBJECT, news);
-            add("HBTQ", l("hbtq", "homosexu"), SUBJECT, equality);
+            add("Inflation", l("inflation"), SUBJECT, economy);
         }
+
+        add("Nordstream", l("Nordstream", "Nord Stream"), SUBJECT, ryssland, östersjön, news);
 
         add("Interpol", l("Interpol"), ORGANIZATION, news);
         add("Flyktingar", l("flykting"), SUBJECT, news);
@@ -613,8 +646,12 @@ public final class SubjectClassifier {
             add("DN::motor", l("se/ekonomi/motor", "se/motor"), SUBJECT, bad);
             add("DN::insidan", l("dn.se/insidan"), SUBJECT, bad);
             add("SVD::PerfectGuide", l("Perfect Guide"), SUBJECT, bad);
+            add("SVD::SenasteNyttOm", l("Senaste nytt om"), SUBJECT, bad);
             add("Så...", l(".se/sa-"), SUBJECT, bad);
             add("Engadget::Wirecutter", regex("engadget.*Wirecutter"), SUBJECT, bad);
+            add("Aljazeera::keyEvents", regex("List of key events"), SUBJECT, bad);
+            add("nytimes::whattoknow", regex("What to Know"), SUBJECT, bad);
+            add("nytimes::whatweknow", regex("What We Know"), SUBJECT, bad);
         }
 
 

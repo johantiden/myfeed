@@ -19,6 +19,8 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static se.johantiden.myfeed.plugin.FeedReader.unescape;
+
 
 public class SvenskaDagbladetFeed extends Feed {
 
@@ -96,7 +98,7 @@ public class SvenskaDagbladetFeed extends Feed {
 
         @Override
         public Document toDocument(Item item) {
-            String title = FeedReader.unescape(item.title);
+            String title = unescape(item.title);
             String pageUrl = item.link;
             boolean paywalled = isPaywalled(pageUrl);
             String text = FeedReader.html2text(item.description);
@@ -105,7 +107,7 @@ public class SvenskaDagbladetFeed extends Feed {
             String html = null;
             Document document = new Document(title, text, html, pageUrl, imageUrl, publishedDate, NAME, URL);
             document.isPaywalled = paywalled;
-            document.extra = item.category;
+            document.extra = unescape(item.category);
             return document;
         }
     }

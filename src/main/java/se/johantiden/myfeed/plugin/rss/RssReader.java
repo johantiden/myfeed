@@ -54,7 +54,6 @@ public class RssReader<T> {
         }
     }
 
-
     public static <T> T read(InputStream input, Class<T> clazz) {
 
         try {

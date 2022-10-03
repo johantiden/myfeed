@@ -2,11 +2,11 @@ package se.johantiden.myfeed.plugin.rss.v1.atom;
 
 import se.johantiden.myfeed.plugin.rss.atom.Link;
 
+import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
-import java.util.List;
 
 @XmlRootElement(name = "feed")
 public class RssV1AtomDoc {
@@ -58,6 +58,7 @@ public class RssV1AtomDoc {
         public Summary summary;
         public Content content;
         public String updated;
+        public String published;
         public Author author;
         public Category category;
 

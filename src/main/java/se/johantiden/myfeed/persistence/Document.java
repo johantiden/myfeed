@@ -41,8 +41,12 @@ public class Document extends BaseEntity<Document> {
             @Nonnull String feedName,
             String feedUrl) {
 
+        title = cleanup(title);
+        text = cleanup(text);
+
+        verifyTextIsClean(text);
+        verifyTextIsClean(title);
         this.title = title;
-        verifyNoHtml(text);
         this.text = text;
         this.html = html;
         this.pageUrl = Objects.requireNonNull(pageUrl);
@@ -53,12 +57,24 @@ public class Document extends BaseEntity<Document> {
         this.feedUrl = Objects.requireNonNull(feedUrl);
     }
 
-    private static void verifyNoHtml(String text) {
+    private static String cleanup(String text) {
+        if (text == null) {
+            return text;
+        }
+        return text
+                .replaceAll("•", "")
+                .trim();
+    }
+
+    private static void verifyTextIsClean(String text) {
         if (text == null) {
             return;
         }
         if (text.contains("<") || text.contains(">")) {
             throw new RuntimeException("Text cannot contain html objects! Text: " + text);
+        }
+        if (text.contains("•")) {
+            throw new RuntimeException("Text cannot contain text styling! Text: " + text);
         }
     }
 

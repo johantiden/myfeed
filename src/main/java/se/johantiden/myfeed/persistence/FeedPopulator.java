@@ -1,9 +1,14 @@
 package se.johantiden.myfeed.persistence;
 
+import se.johantiden.myfeed.plugin.AlJazeeraFeed;
+import se.johantiden.myfeed.plugin.DagensNyheterFeed;
 import se.johantiden.myfeed.plugin.GenericRssFeed;
+import se.johantiden.myfeed.plugin.NewYorkTimesWorldFeed;
 import se.johantiden.myfeed.plugin.RedditFeed;
 import se.johantiden.myfeed.plugin.SVTNyheterFeed;
 import se.johantiden.myfeed.plugin.SlashdotFeed;
+import se.johantiden.myfeed.plugin.SvenskaDagbladetFeed;
+import se.johantiden.myfeed.plugin.TheLocalFeed;
 import se.johantiden.myfeed.plugin.XkcdFeed;
 import se.johantiden.myfeed.service.DocumentService;
 import se.johantiden.myfeed.service.FeedService;
@@ -35,27 +40,26 @@ public class FeedPopulator {
 
 //        feeds.add(new HackerNewsFeed());
         feeds.add(new SlashdotFeed());
-//        feeds.add(new SvenskaDagbladetFeed());
-//        feeds.add(new DagensNyheterFeed());
-//        feeds.add(new ReutersFeed());
-//        feeds.add(new AlJazeeraFeed());
+        feeds.add(new SvenskaDagbladetFeed());
+        feeds.add(new DagensNyheterFeed());
+        feeds.add(new AlJazeeraFeed());
 //        feeds.add(new EngadgetFeed());
         feeds.add(new SVTNyheterFeed());
-//        feeds.add(new NewYorkTimesWorldFeed());
-//        feeds.add(new TheLocalFeed());
+        feeds.add(new NewYorkTimesWorldFeed());
+        feeds.add(new TheLocalFeed());
 
 //        feeds.add(new OmniFeed(documentService));
         feeds.add(new XkcdFeed());
 //        feeds.add(new WashingtonPostFeed());
 
-//        feeds.add(createReddit("r/worldnews/top", 1000));
+        feeds.add(createReddit("r/worldnews/top", 10000));
 //        feeds.add(createReddit("r/AskReddit/top", 1000));
 //        feeds.add(createReddit("r/ProgrammerHumor/top", 600));
 //        feeds.add(createReddit("r/science/top", 1000));
 //        feeds.add(createReddit("r/announcements/", 10000));
 
-//        feeds.add(createReddit("top/", 1000));
-//        feeds.add(createReddit("r/all/top", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("top/", REDDIT_MIN_SCORE));
+        feeds.add(createReddit("r/all/top", REDDIT_MIN_SCORE));
 
         feeds.forEach(feedService::put);
     }

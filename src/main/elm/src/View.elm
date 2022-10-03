@@ -57,17 +57,6 @@ viewTabs3 model =
             |> List.map (viewTabRowByType model)
         )
 
-viewTabRow : Model -> (Int, List Subject) -> Html Msg
-viewTabRow model (depth, subjects) =
-    div [css []]
-        (subjects
-            |> List.map (\s -> ((countMatching s model.documents), s))
-            |> List.filter (\(hitCount, _) -> hitCount > 2)
-            |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
-            |> List.take 5
-            |> List.map (viewTab model.search)
-        )
-
 viewTabRowByType : Model -> (SubjectType, List Subject) -> Html Msg
 viewTabRowByType model (subjectType, subjects) =
     div [css []] [
@@ -75,7 +64,7 @@ viewTabRowByType model (subjectType, subjects) =
         , div [css []]
             (subjects
                 |> List.map (\s -> ((countMatching s model.documents), s))
---                |> List.filter (\(hitCount, _) -> hitCount > 2)
+--                |> List.filter (\(hitCount, _) -> hitCount > 3)
                 |> Common.sortDescendingBy (\(hitCount, _) -> hitCount)
                 |> List.take 5
                 |> List.map (viewTab model.search)
@@ -127,7 +116,7 @@ viewTopRow model =
 
 viewHideAllButton : List Document -> Html Msg
 viewHideAllButton filteredDocuments =
-        button [onClick (HideDocuments filteredDocuments), css (stylesButton (hex "FBFBFB") ++ [margin (px 10)])] [text "ALL"]
+        button [onClick (HideDocuments filteredDocuments), css (stylesButton (hex "FBFBFB") ++ [margin (px 10)])] [text "X ALL"]
 
 
 viewSearchBox : Subject -> Html Msg

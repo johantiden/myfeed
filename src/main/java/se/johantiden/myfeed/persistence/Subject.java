@@ -1,13 +1,12 @@
 package se.johantiden.myfeed.persistence;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
+import javax.annotation.Nonnull;
 
 import static com.google.common.base.Objects.equal;
 
@@ -17,7 +16,7 @@ public class Subject extends BaseEntity<Subject> {
     public static final Subject UNCLASSIFIED = new Subject("Unclassified", ALL, SubjectType.BASE);
 
     private final ImmutableList<Subject> parents;
-    private final List<Subject> children = new ArrayList<>();
+    private final CopyOnWriteArrayList<Subject> children = new CopyOnWriteArrayList<>();
     private final String name;
     private final SubjectType type;
     private final Predicate<Document> documentPredicate;
